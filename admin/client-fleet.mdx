@@ -1,0 +1,31 @@
+---
+title: "Client fleet"
+description: "Enterprise controls to view, revoke, and require registered AI clients across the workspace."
+---
+
+Client fleet controls are part of the **Enterprise workspace control plane**. Free and Pro members manage their own AI Clients under **For me**; stored fleet policy is retained on downgrade but is not enforced until Enterprise is active again.
+
+## Workspace clients
+
+On Enterprise, open **Clients** and use the **Workspace clients** tab to see installs across people. You can search, drill into a person, spot stale clients, and revoke a device so that connection must sign in again.
+
+Members can always revoke their own devices from their personal AI Clients view. Workspace-wide listing and admin revoke require Enterprise.
+
+## Require registered clients
+
+Under workspace **Settings → AI client access**, Enterprise admins can:
+
+- **Allow dynamic clients** — whether unrecognized client identifiers may connect.
+- **Require registered AI clients** — only clients Passport recognizes (or you have registered) may attach.
+
+On Free and Pro, effective policy stays permissive (`requireRegisteredClients` off, dynamic clients allowed) even if older Enterprise values remain stored.
+
+## Team client defaults
+
+Client defaults decide which granted MCPs appear by default in a given AI client for a team. They do not grant new access; passes still decide what a person can reach. See [Client defaults](/admin/client-defaults).
+
+## Related
+
+- [Member quickstart](/quickstart/member) for connecting a client
+- [People and teams](/admin/people-and-teams) for roles and lifecycle
+- [Network and egress](/security/network) for how the desktop app and bridge talk to Passport

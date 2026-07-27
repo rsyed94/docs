@@ -1,0 +1,33 @@
+---
+title: "Safety preferences"
+description: "Personal brakes for write and destructive actions that sit on top of workspace policy."
+---
+
+Safety preferences are personal controls on every plan. They never widen what your workspace already allows; they only narrow it further for your own AI clients.
+
+## Where to find them
+
+Open **Settings → Safety**. You will see two selects:
+
+| Preference | Choices | Default |
+| --- | --- | --- |
+| Write actions | Allow / Ask me / Never | Allow |
+| Destructive actions | Allow / Ask me / Never | Ask me |
+
+Reads are not configurable here. Workspace passes, guardrails, and catalog policy still apply first.
+
+## What each choice does
+
+When you call a tool through the gateway, Passport classifies the risk, then applies your preference:
+
+- **Allow** — proceed if workspace policy already permits the call.
+- **Ask me** — hold the call and raise an action-time approval for you to allow once, allow for a session scope, or deny. An **Approvals** item appears in navigation while something is waiting.
+- **Never** — block the call immediately.
+
+Agent identities (headless `pak_` keys) do not raise Ask-me prompts; they are non-interactive and follow their assigned pass only. Use a member profile when a call must pause for a human decision.
+
+## How this relates to workspace policy
+
+Personal Safety sits **on top of** passes and guardrails. If your pass is already read-only, a write tool stays hidden regardless of Safety. If a workspace guardrail would block a secret, Safety cannot override that. Prefer Safety when you want a personal brake on writes or destructive tools without changing workspace rules for everyone else.
+
+See also [Guardrails](/admin/guardrails) and [Catalog access and passes](/admin/approvals-and-requests).

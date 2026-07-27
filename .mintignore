@@ -1,0 +1,24 @@
+# Mintlify automatically ignores these files and directories:
+# .git, .github, .claude, .agents, .idea, node_modules,
+# README.md, LICENSE.md, CHANGELOG.md, CONTRIBUTING.md
+
+# Draft content
+drafts/
+*.draft.mdx
+
+# Never publish monorepo-only operator/archive markdown if it appears here
+*.md
+!README.md
+!AGENTS.md
+COMPOSIO-COMPETITIVE-AUDIT-*
+LAUNCH-READINESS-*
+PRODUCT_SPEC_*
+production-v1.md
+10-10-readiness.md
+BRAND.md
+CONTEXT-EFFICIENCY.md
+DEPLOY.md
+OPERATIONS.md
+PASSPORT-CLI-SPEC.md
+PRODUCTION-RESTORE-EVIDENCE-*
+RELEASING.md

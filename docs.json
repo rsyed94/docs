@@ -1,0 +1,93 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Passport",
+  "description": "Documentation for Passport, the governed MCP gateway for companies.",
+  "colors": {
+    "primary": "#E8467C",
+    "light": "#FF8A5C",
+    "dark": "#C93A6B"
+  },
+  "favicon": "/favicon.svg",
+  "appearance": {
+    "default": "light"
+  },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Get started",
+        "pages": [
+          "index",
+          "quickstart/admin",
+          "quickstart/member",
+          "quickstart/cli"
+        ]
+      },
+      {
+        "group": "Concepts",
+        "pages": [
+          "concepts/model",
+          "concepts/discovery"
+        ]
+      },
+      {
+        "group": "For members",
+        "pages": [
+          "member/safety"
+        ]
+      },
+      {
+        "group": "Administration",
+        "pages": [
+          "admin/people-and-teams",
+          "admin/approvals-and-requests",
+          "admin/bundles",
+          "admin/guardrails",
+          "admin/client-defaults",
+          "admin/client-fleet",
+          "admin/activity-and-audit"
+        ]
+      },
+      {
+        "group": "Enterprise",
+        "pages": [
+          "enterprise/sso-oidc",
+          "enterprise/scim",
+          "enterprise/siem-export"
+        ]
+      },
+      {
+        "group": "Deploy and operate",
+        "pages": [
+          "self-host",
+          "security/network"
+        ]
+      },
+      {
+        "group": "Reference",
+        "pages": [
+          "benchmarks/context-efficiency",
+          "billing",
+          "troubleshooting"
+        ]
+      }
+    ]
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Privacy",
+        "href": "https://passportmcp.com/privacy"
+      },
+      {
+        "label": "Security",
+        "href": "https://passportmcp.com/security"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "passportmcp.com",
+      "href": "https://passportmcp.com"
+    }
+  }
+}

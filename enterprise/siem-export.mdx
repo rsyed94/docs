@@ -1,0 +1,42 @@
+---
+title: "SIEM and OTLP export"
+description: "Stream your workspace's audit and security events to your SIEM over HTTP, or to an OpenTelemetry collector."
+---
+
+Passport can stream each workspace's audit and security events to your own SIEM and to an OpenTelemetry collector. Each workspace reads its own targets, so a tenant's events only ever go to that tenant's endpoints. Export is available on the Enterprise plan.
+
+## Configure the targets
+
+Both targets are set per workspace in Settings. Enter one or both:
+
+<CardGroup cols={2}>
+  <Card title="SIEM HTTP endpoint" icon="server">
+    An HTTP intake for a SIEM such as Splunk, Datadog, or Microsoft Sentinel. Passport POSTs a JSON body of the shape `{ "source": "mcp-passport", "events": [ ... ] }`.
+  </Card>
+  <Card title="OTLP endpoint" icon="diagram-project">
+    An OpenTelemetry collector base URL. Passport POSTs OTLP/JSON logs to `<endpoint>/v1/logs`, one log record per event, with a resource attribute `service.name = mcp-passport`.
+  </Card>
+</CardGroup>
+
+<Warning>
+  Both endpoints are validated when you save them and again every time they fire. In production they must be public HTTPS endpoints. Passport resolves the host and refuses private, loopback, link-local, and cloud-metadata addresses, and re-checks across any redirect it follows.
+</Warning>
+
+## Delivery behavior
+
+Export is durable and batched, tuned so a slow or down endpoint never affects the gateway hot path.
+
+- Each event is appended to the workspace's durable event log (`siemExport` rows) before delivery is attempted.
+- A cross-replica lock claims the oldest batch; Passport flushes on a 5 second tick, up to 200 events per batch.
+- Rows are removed only after every configured target accepts the batch, so a transient outage retries rather than losing events (at-least-once across restarts and rolling deploys).
+- When both targets are configured, a batch counts as delivered only once every configured target accepts it.
+- If an endpoint stays down, Passport backs off up to about 5 minutes between attempts.
+- There is no drop-oldest memory cap: undelivered events remain in durable storage until they succeed, the targets are cleared, or an operator intervenes.
+
+<Note>
+  Delivery health is surfaced, not hidden. The exporter tracks consecutive failures and the last error; queue depth is read from durable storage by operational tooling rather than approximated in process memory.
+</Note>
+
+## Related: alert webhook
+
+Separately from the full event stream, a workspace can set an alert webhook URL (Slack-style) that receives a one-line JSON payload when a guardrail fires or an MCP's tool set changes. You can send a sample alert from Settings to verify the wiring before a real event. It is validated the same way as the export endpoints.

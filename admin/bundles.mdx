@@ -1,0 +1,39 @@
+---
+title: "Bundles"
+description: "Create a curated virtual MCP from tools across several apps, with its own endpoint and passes."
+---
+
+A bundle is an **Enterprise** virtual MCP: a named subset of tools drawn from across several connected apps, exposed on its own gateway endpoint. Use a bundle when an AI client should see a tight, curated tool set instead of everything a person can reach.
+
+## Create a bundle
+
+On Enterprise, open **Apps → New bundle**, then:
+
+1. Name the bundle and optionally describe it.
+2. Select tools from the apps already in the workspace.
+3. Set access (workspace, teams, or selected people) and the default pass. New bundles start **read-only** for the workspace scope unless you widen them.
+4. Save. Passport assigns a stable key and a target of the form `bundle:<key>`.
+
+Bundles expose tools only; they do not advertise upstream resources or prompts.
+
+## Connect an AI client
+
+Point the client at the bundle endpoint:
+
+```
+https://<your-passport-host>/b/<bundle-key>/mcp
+```
+
+The same OAuth and agent-key patterns as the workspace endpoint apply. Members whose resolved pass for the bundle is `none` do not see it. Bundle endpoints always stay **flat** for tool discovery; they ignore the workspace flat/apps/compact mode. See [Tool discovery modes](/concepts/discovery).
+
+## Passes and rollout
+
+Bundle access uses the same pass model as apps (full, read-only, none), with workspace default, per-team, and per-person layers. Disabling or deleting a bundle removes its tools from clients immediately. Removing an app from the workspace also drops that app's tools from every bundle.
+
+Free and Pro do not create or serve bundles; the gateway returns a plan error if a non-Enterprise workspace is asked for one.
+
+## Related
+
+- [The Passport model](/concepts/model) for how bundles fit with apps and passes
+- [Catalog access and passes](/admin/approvals-and-requests)
+- [Passport CLI](/quickstart/cli) for governed calls against a workspace or curated endpoint
