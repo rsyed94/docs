@@ -31,9 +31,9 @@ Deactivating someone signs them out everywhere and revokes their connected accou
 
 In the product, **Apps** is where you browse and connect tools your AI assistants can use — GitHub, Linear, Stripe, and so on.
 
-Under the hood many of those tools speak **MCP** (Model Context Protocol). You usually do not need that word day to day; these docs use "app" unless the technical detail matters.
+Under the hood, Passport may reach the provider through **MCP** (Model Context Protocol) or through a reviewed API driver. You usually do not need that distinction day to day: both use the same Connect, access, safety, and Activity experience, and both reach AI assistants through Passport's MCP endpoint. These docs use "app" unless the technical detail matters.
 
-Apps can connect in different ways: by URL, as a hosted command, as a demo for evaluation, or as install-on-your-machine instructions that do not go through Passport's gateway.
+Apps can connect in different ways: through a managed API driver, by MCP URL, as a hosted MCP command, as a demo for evaluation, or as install-on-your-machine instructions that do not go through Passport's gateway. See [Managed API integrations](/admin/managed-api-integrations).
 
 Each app has a short key (for example `github`) and an auth mode:
 

@@ -1,0 +1,80 @@
+---
+title: "Managed API integrations"
+description: "Connect provider APIs through the same Passport policy, safety, and audit layer as MCP apps."
+---
+
+Passport treats an app as an integration, independent of how Passport reaches the provider. An integration may use an upstream MCP server or a reviewed API driver. Both appear in **Apps**, use the same Connect experience, and are delivered to AI clients through the same Passport MCP endpoint.
+
+The initial native API integrations are:
+
+- **GitHub API** — repositories, code search, issues, comments, and pull requests
+- **Google Workspace** — Gmail, Drive, and Calendar
+- **Slack API** — channels, messages, threads, users, reactions, and direct messages
+
+Passport can also load reviewed long-tail connectors from an operator-configured provider adapter.
+
+## What stays the same
+
+The transport does not change the control plane. Managed API actions use the same:
+
+- catalog request and admin approval flow
+- per-person OAuth connection and reconnect flow
+- Full, Read-only, and None passes
+- team, person, client, and bundle visibility
+- per-tool switches, action classes, and drift alerts
+- member Safety choices and action-time approvals
+- argument and result guardrails
+- Activity, audit, metrics, and health views
+- workspace, single-app, CLI, desktop, and hosted-client surfaces
+
+If an API driver exposes resources or prompts, Passport namespaces and governs those with the same read pipeline used for MCP resources and prompts.
+
+## OAuth setup
+
+Each provider needs an OAuth client whose callback is:
+
+```text
+https://<your-passport-host>/auth/connect-app/callback
+```
+
+The hosted service can configure a managed client with:
+
+```text
+PASSPORT_OAUTH_GITHUB_API_CLIENT_ID
+PASSPORT_OAUTH_GITHUB_API_CLIENT_SECRET
+PASSPORT_OAUTH_GOOGLE_WORKSPACE_CLIENT_ID
+PASSPORT_OAUTH_GOOGLE_WORKSPACE_CLIENT_SECRET
+PASSPORT_OAUTH_SLACK_API_CLIENT_ID
+PASSPORT_OAUTH_SLACK_API_CLIENT_SECRET
+```
+
+When a managed client is absent, an admin can add the provider-issued client ID and secret in the app setup. Members then connect their own accounts through the same consent screen. Provider access and refresh tokens are encrypted at rest and are never returned to the AI client.
+
+<Note>
+  Choose the provider scopes required by the actions you enable. Passport's passes and approvals narrow what an AI client can invoke, but they do not replace least-privilege OAuth scopes at the provider.
+</Note>
+
+## Provider-backed catalog
+
+Self-hosted operators can supply a non-secret manifest in `PASSPORT_CONNECTOR_PROVIDER_CATALOG` and configure the provider relay with `PASSPORT_CONNECTOR_PROVIDER_URL` and `PASSPORT_CONNECTOR_PROVIDER_TOKEN`.
+
+The manifest fixes the connector identity, OAuth endpoints, action schemas, read/write/destructive annotations, and optional resources/prompts capabilities before request time. Passport refuses insecure OAuth endpoints and does not accept provider-supplied action definitions dynamically during an AI call.
+
+The relay contract uses these paths:
+
+| Path | Purpose |
+| --- | --- |
+| `/v1/connectors/{providerKey}/execute` | Execute a reviewed action |
+| `/v1/connectors/{providerKey}/identity` | Resolve a provider-verified account label |
+| `/v1/connectors/{providerKey}/probe` | Check whether a member grant is healthy |
+| `/v1/connectors/{providerKey}/resources/list` | List resources when advertised |
+| `/v1/connectors/{providerKey}/resources/templates/list` | List resource templates |
+| `/v1/connectors/{providerKey}/resources/read` | Read one resource |
+| `/v1/connectors/{providerKey}/prompts/list` | List prompts when advertised |
+| `/v1/connectors/{providerKey}/prompts/get` | Build one prompt |
+
+Passport authenticates itself to the relay with the provider token. The member credential is sent only inside the bounded relay request and is never logged. Provider responses are size-limited and validated before they reach the shared governance pipeline.
+
+## Compatibility
+
+Existing MCP app records and URLs are unchanged. The stored `apps` aggregate remains stable; older records infer their protocol from their existing kind. API integrations are additive, so MCP clients, bundles, passes, and existing desktop connections continue to work without migration.

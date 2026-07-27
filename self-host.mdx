@@ -115,6 +115,9 @@ Per-workspace SSO is configured in Settings (see [SSO](/enterprise/sso-oidc)). T
 | `PASSPORT_GITHUB_CLIENT_ID` / `PASSPORT_GITHUB_CLIENT_SECRET` | (empty) | The GitHub OAuth app for the per-user "connect your own GitHub" broker. Register a GitHub OAuth app with callback `${PUBLIC_URL}/auth/connect-app/callback`. |
 | `PASSPORT_GITHUB_SCOPE` | `read:user` | Scopes for that GitHub broker. |
 | `PASSPORT_OAUTH_<KEY>_CLIENT_ID` / `PASSPORT_OAUTH_<KEY>_CLIENT_SECRET` | (empty) | A Passport-managed ("verified app") OAuth client for a connector, so members connect with zero admin setup. `<KEY>` is the connector key uppercased with non-alphanumerics collapsed to underscores (for example `hubspot` becomes `HUBSPOT`). Cloud-only; a self-hosted appliance leaves these unset and uses admin-supplied clients. |
+| `PASSPORT_CONNECTOR_PROVIDER_CATALOG` | (empty) | JSON manifest for reviewed provider-backed API integrations. Action schemas and risk annotations are fixed here, not learned during a call. |
+| `PASSPORT_CONNECTOR_PROVIDER_URL` | (empty) | Base URL for the optional long-tail connector relay. HTTPS is required in production. |
+| `PASSPORT_CONNECTOR_PROVIDER_TOKEN` | (empty) | Passport-to-relay bearer credential. Keep it out of manifests and logs. |
 
 You can also let a person sign into Passport itself with Google or GitHub by setting the `PASSPORT_LOGIN_GOOGLE_*` and `PASSPORT_LOGIN_GITHUB_*` pairs. A provider is available only when both its client ID and secret are set.
 
@@ -198,6 +201,8 @@ These have sensible defaults and rarely need changing.
 | `PASSPORT_UPSTREAM_REAP_MS` | `60000` | How often the connection pool reaps idle connections. |
 | `PASSPORT_RESOURCE_LIST_MS` | `10000` | Timeout for listing an upstream's resources. |
 | `PASSPORT_RESOURCE_BLOB_MAX` | `8000000` | Maximum characters in a resource blob the gateway will return. |
+| `PASSPORT_CONNECTOR_TIMEOUT_MS` | `30000` | Timeout for one managed API or provider-relay request. |
+| `PASSPORT_CONNECTOR_RESPONSE_BYTES` | `2097152` | Maximum response bytes Passport buffers from a managed API or provider relay. |
 | `PASSPORT_RELEASES_REPO` | `rsyed94/passport-releases` | The public GitHub repo the download page resolves desktop-app releases from. |
 
 <Note>

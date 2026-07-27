@@ -5,20 +5,20 @@ description: "Choose how members connect catalog apps, grant scoped passes, and 
 
 Every plan can browse the same verified catalog. Free and Pro make verified catalog apps self-service and read-only by default. Enterprise admins can keep that open experience or require review and apply rollout rules.
 
-## Add an MCP
+## Add an app
 
-Add an MCP two ways:
+Add an app from the catalog, or add a custom MCP endpoint:
 
 <CardGroup cols={2}>
   <Card title="From the catalog" icon="grid">
-    Choose a probe-verified connector. Members click Connect; Passport applies the workspace's catalog policy automatically.
+    Choose a reviewed managed API integration or a probe-verified MCP connector. Members click Connect; Passport applies the workspace's catalog policy automatically.
   </Card>
   <Card title="By URL" icon="link">
     Point Passport at any MCP server by URL. It connects, discovers the tools, and scans them.
   </Card>
 </CardGroup>
 
-Each MCP authenticates upstream in one of three ways: a single company account for everyone (`org`), each person's own account (`member`, through an OAuth broker), or no auth (`none`).
+Each app authenticates upstream in one of three ways: a single company account for everyone (`org`), each person's own account (`member`, through an OAuth broker), or no auth (`none`). Managed API integrations use per-person OAuth.
 
 <Note>
   Some connectors need a one-time company OAuth client before anyone can connect them (when the provider does not support dynamic registration). Passport shows a "needs admin setup" state and the callback URL to register, rather than a dead-end member sign-in.
@@ -34,17 +34,17 @@ Approval defaults to the requesters with a read-only pass. An admin can widen it
 
 ## Passes and access
 
-A pass is what a person can do with an MCP:
+A pass is what a person can do with an app:
 
 - **Full**: every tool, including writes.
 - **Read-only**: only the tools marked read-only. Write tools are hidden from the tool list entirely, so an AI client never sees a capability its user cannot call.
-- **None**: no access; the MCP is not advertised to that person.
+- **None**: no access; the app is not advertised to that person.
 
 Access resolves from three layers, strongest last:
 
 <Steps>
   <Step title="Workspace default or selected scope">
-    Grant a default pass to everyone, or scope the MCP to selected teams and people only.
+    Grant a default pass to everyone, or scope the app to selected teams and people only.
   </Step>
   <Step title="Per-team passes">
     Give a team its own pass, for example read-only GitHub for Support.
@@ -60,7 +60,7 @@ Access resolves from three layers, strongest last:
 
 ## Per-tool control and drift
 
-Within an MCP you can turn individual tools on or off, workspace-wide, and choose whether newly discovered tools default on or off. Passport snapshots each MCP's tool set and detects drift, so you are alerted when an upstream's tools change rather than silently gaining new capabilities.
+Within an app you can turn individual tools on or off, workspace-wide, and choose whether newly discovered tools default on or off. Passport snapshots each integration's tool set and detects drift, so you are alerted when an upstream MCP or reviewed API manifest changes rather than silently gaining new capabilities.
 
 ## Requests
 
