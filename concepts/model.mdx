@@ -1,111 +1,99 @@
 ---
-title: "The Passport model"
-description: "Workspaces, MCPs, passes, teams, bundles, AI clients, and the gateway that ties them together."
+title: "How Passport fits together"
+description: "Workspaces, apps, access, teams, AI assistants, and how they connect — in plain language."
 ---
 
-Passport has a small set of concepts. Once they click, the rest of the product reads plainly.
+A few ideas make the rest of Passport easier. You can skim this once, then jump back to the quickstarts.
 
 ## Workspace
 
-A workspace is a company tenant. It owns its members, connected MCPs, catalog policy, teams, guardrails, settings, audit trail, and billing. Nothing in one workspace is visible to another. A person can belong to more than one workspace and switch between them.
+A workspace is your team's space in Passport. It holds people, connected apps, teams, settings, Activity, and billing. One workspace cannot see another. You can belong to more than one and switch between them.
 
-## Members and roles
+## People and roles
 
-A member is a person (or a governed agent identity) in a workspace. There are three roles:
+Everyone in a workspace is a member (or an automation identity). There are three roles:
 
 <CardGroup cols={3}>
   <Card title="Admin" icon="user-shield">
-    Approves MCPs, manages people and teams, sets guardrails and policy, and sees the audit trail.
+    Approves apps, manages people and teams, sets rules, and can see the audit trail. The first person in a workspace is an admin.
   </Card>
-
   <Card title="Member" icon="user">
-    Connects their AI clients and uses the MCPs their passes permit.
+    Connects AI assistants and uses the apps their access allows.
   </Card>
-
   <Card title="Agent" icon="robot">
-    A non-human identity for background automation. Authenticates with an agent key (a `pak_` bearer) rather than a browser session.
+    An automation identity for scripts and CI. Signs in with an agent key instead of a browser session.
   </Card>
 </CardGroup>
 
-Deactivating a member (by an admin or through SCIM) signs them out everywhere and revokes their connected-account grants immediately.
+Deactivating someone signs them out everywhere and revokes their connected accounts right away.
 
-## MCP
+## Apps (and MCP)
 
-An MCP is a tool server your team connects to. In Passport an MCP can be one of several kinds:
+In the product, **Apps** is where you browse and connect tools your AI assistants can use — GitHub, Linear, Stripe, and so on.
 
-| Kind | What it is |
-| --- | --- |
-| `remote` | An MCP server reached by URL. |
-| `hosted` | A command Passport runs and bridges (a stdio MCP server). |
-| `demo` | A built-in MCP that works offline, for evaluation. |
-| `local` | Install instructions shown in the catalog; runs on each person's machine and is not routed through the gateway. |
+Under the hood many of those tools speak **MCP** (Model Context Protocol). You usually do not need that word day to day; these docs use "app" unless the technical detail matters.
 
-Each MCP has a stable `key` that namespaces its tools (for example `github`), and an authentication mode:
+Apps can connect in different ways: by URL, as a hosted command, as a demo for evaluation, or as install-on-your-machine instructions that do not go through Passport's gateway.
 
-- `org` uses a single company account for everyone.
-- `member` has each person connect their own account (through a real OAuth broker where one is available, or the standard MCP OAuth scheme).
-- `none` needs no upstream auth.
+Each app has a short key (for example `github`) and an auth mode:
 
-Admins can turn individual tools on or off per MCP, and choose whether newly discovered tools default on or off.
+- **Company account** — one shared login for everyone
+- **Your account** — each person connects their own (Passport opens the provider sign-in when needed)
+- **None** — no upstream login
 
-## Passes
+Admins can turn individual tools on or off inside an app.
 
-A pass is what a person is allowed to do with an MCP. There are three values:
+## Access (passes)
+
+A **pass** is what a person may do with an app:
 
 <CardGroup cols={3}>
   <Card title="Full" icon="unlock">
-    Every tool the MCP exposes, including writes.
+    Every tool, including writes.
   </Card>
-
   <Card title="Read-only" icon="glasses">
-    Only the tools marked read-only. Write tools are hidden entirely, not just refused.
+    Only tools that are clearly read-only. Write tools are hidden, not just refused.
   </Card>
-
   <Card title="None" icon="ban">
-    No access. The MCP is not advertised to this person at all.
+    No access. The app is not shown to that person.
   </Card>
 </CardGroup>
 
-Access is resolved from three layers, strongest last: a workspace-wide default (or an explicit "selected people only" scope), then per-team passes, then per-person overrides. Because a read-only pass hides write tools from the tool list, an AI client never sees a capability its user is not permitted to call.
+Access is layered: workspace default (or selected people only), then team rules, then per-person overrides. The most specific rule wins.
 
 ## Teams
 
-A team groups members (it is a member's department). Teams are the unit you grant passes to, so "Support gets read-only GitHub" is one rule rather than one rule per person. When you provision through SCIM, IdP groups map to Passport teams.
+A team groups people (stored as each person's department). Grant access by team — for example "Support gets read-only GitHub" — instead of person by person. With SCIM, IdP groups map to Passport teams.
 
 ## Bundles
 
-A bundle is an Enterprise virtual MCP: a named subset of tools drawn from across several MCPs, with its own endpoint (`/b/{bundleKey}/mcp`). Bundles let you hand an AI client a tight, curated tool set instead of everything a person can reach. See [Bundles](/admin/bundles) for how to create and connect one.
+A **bundle** (Enterprise) is a curated set of tools from several apps, with its own connection URL. Use it when an AI assistant should see a tight tool set instead of everything a person can reach. See [Bundles](/admin/bundles).
 
 ## AI clients
 
-An AI client is the app that calls the gateway. Passport recognizes these clients and knows how each connects:
+An **AI client** is the assistant that calls Passport — Claude, Cursor, ChatGPT, VS Code, Codex, Passport CLI, and others. Local apps can connect through the setup Passport shows or the optional macOS desktop app. Hosted apps use a connection URL and browser sign-in. Terminal and CI can use [Passport CLI](/quickstart/cli).
 
-| Client | How it connects |
-| --- | --- |
-| Claude (desktop) | Account-synced custom connector, with a local bridge fallback |
-| Claude Code | Native MCP or Passport CLI, with a local bridge fallback |
-| Cursor | Native MCP URL or one-click attach, with a local bridge fallback |
-| VS Code | Native MCP URL or one-click attach, with a local bridge fallback |
-| Codex | Native MCP or Passport CLI, with a local bridge fallback |
-| Claude.ai | Hosted connector URL |
-| ChatGPT | Hosted connector URL |
-| Passport CLI | Terminal and CI, directly to the governed workspace gateway |
+Admins can require recognized clients only, and allow or block unlisted ones. See [Client fleet](/admin/client-fleet).
 
-Local and GUI clients can attach through native MCP or the Passport bridge. Hosted clients connect straight to the cloud gateway with browser OAuth. Terminal and headless agents can use Passport CLI, which calls the gateway's existing governed meta-tools instead of defining a second execution path.
+## How a call flows
 
-For CLI calls, Passport keeps three concepts separate: the `cli` **surface** chooses the compact protocol, the **client** drives policy and per-client app selection, and an optional **caller** adds self-reported display detail such as `codex`. The member or agent key remains the authenticated identity.
+When an AI assistant uses a tool through Passport, Passport:
 
-An admin can require that only recognized clients connect, and can allow or forbid members from connecting unlisted clients.
+1. Checks who is calling and what they are allowed to use
+2. Scans the request with guardrails
+3. Calls the app on their behalf
+4. Scans the result
+5. Records the call in Activity
+6. Returns the result
 
-## The gateway
+There are a few connection shapes (workspace, single app, or bundle). Disabling an app removes its tools from every client right away. A person's own pause switch does the same for just them.
 
-The gateway is the single endpoint both MCP clients and Passport CLI talk to. It authenticates the caller, resolves which tools their passes permit, runs guardrails over the arguments, calls the upstream MCP, runs guardrails over the result, records the call, and returns it. There are a few endpoint shapes:
+<Accordion title="Technical connection URLs">
+  | URL | Purpose |
+  | --- | --- |
+  | `/mcp` or `/w/{workspace}/mcp` | Whole workspace (hosted connectors use the `/w/…` form) |
+  | `/s/{appKey}/mcp` | One app |
+  | `/b/{bundleKey}/mcp` | One bundle |
 
-| Endpoint | Purpose |
-| --- | --- |
-| `/mcp` | The default workspace endpoint. The caller's bearer token identifies the workspace and person. |
-| `/w/{workspace}/mcp` | The workspace endpoint addressed by path, used by hosted connectors so their OAuth metadata is discoverable. |
-| `/s/{appKey}/mcp` | A single MCP, exposed on its own endpoint. |
-| `/b/{bundleKey}/mcp` | A bundle, exposed on its own endpoint. |
-
-Disabling an MCP in the admin console removes its tools from every client immediately. A member's own master pause switch does the same for just that person.
+  For CLI agent keys, set `PASSPORT_ENDPOINT` to the workspace URL (`/w/ws_…/mcp`). See [Passport CLI](/quickstart/cli).
+</Accordion>

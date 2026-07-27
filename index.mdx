@@ -1,82 +1,77 @@
 ---
 title: "Passport"
-description: "A governed gateway for your tools. Connect through MCP or Passport CLI, with every call attributed, scanned, and audited."
+description: "Connect your work apps to Claude, Cursor, ChatGPT, and more — safely, with a clear record of what happened."
 ---
 
-Passport connects your apps to AI clients through one governed gateway. Start with the focused personal product: choose an app, connect your account, attach an AI client through native MCP or Passport CLI, and see every call in Activity. Enterprise adds workspace-wide policy and rollout without changing that personal setup flow.
+Passport is the place your team connects work apps to AI assistants. You connect GitHub, Linear, Stripe, and other tools once. Then Claude, Cursor, ChatGPT, and the rest use them through Passport, with your company's rules and a clear Activity log.
 
-In these docs, **Apps** is the product surface where you browse and connect tool servers. **MCP** is the protocol and server kind those apps expose to AI clients. The first person in a workspace is its **admin** (often called the workspace owner in casual speech); Free and Pro keep admin work lightweight under **Manage workspace**, while Enterprise adds the full control plane.
+You do not need to understand protocols to get started. Connect an app, add an AI assistant, and check that it worked.
 
-## Personal first, workspace controls when needed
-
-Free and Pro stay focused on getting a person connected. Enterprise admins are users too: Apps and AI Clients open on **For me**, while **Manage workspace** and the Workspace controls navigation expose the organization-wide control plane.
+## Who this is for
 
 <CardGroup cols={2}>
-  <Card title="Your Passport" icon="plug">
-    Browse the full verified catalog, connect your accounts and AI clients, choose personal [safety preferences](/member/safety), and review your own Activity. Included on every plan.
+  <Card title="Using Passport" icon="user">
+    Join your workspace, connect the apps you use, add Claude / Cursor / ChatGPT, and review what your assistants did. Start with the [member quickstart](/quickstart/member).
   </Card>
-
-  <Card title="Enterprise workspace controls" icon="shield-halved">
-    Manage [people and teams](/admin/people-and-teams), [catalog approvals](/admin/approvals-and-requests), [bundles](/admin/bundles), [client fleets](/admin/client-fleet), custom [guardrails](/admin/guardrails), and organization-wide [audit](/admin/activity-and-audit).
+  <Card title="Managing a workspace" icon="building">
+    Invite people, decide which apps are available, and (on Enterprise) set company-wide rules. Start with the [workspace owner quickstart](/quickstart/admin).
   </Card>
 </CardGroup>
 
-Both experiences use the same gateway. It exposes only the tools a person or agent can use, calls the upstream MCP on their behalf, and records the result. Enterprise controls narrow that same execution path; they do not create a separate one.
-
-## What Passport gives you
+## What you get
 
 <CardGroup cols={2}>
-  <Card title="Attribution" icon="fingerprint">
-    Every call is tied to a real person or a named agent identity, not a shared key.
+  <Card title="One place to connect" icon="plug">
+    Browse apps, connect your own accounts, and use them from every supported AI assistant.
   </Card>
-
-  <Card title="Guardrails" icon="filter">
-    Inputs and results are scanned. Built-in secret detection protects every plan; Enterprise custom rules can block, redact, or alert.
+  <Card title="Your credentials stay protected" icon="lock">
+    You sign in as yourself. Your AI assistant never sees passwords or tokens.
   </Card>
-
-  <Card title="Least privilege" icon="key">
-    Read-only access hides write tools entirely. Enterprise can add team rules, per-person overrides, and managed rollout.
+  <Card title="A clear Activity log" icon="list">
+    See what each person or automation did, which app was used, and whether it succeeded.
   </Card>
-
-  <Card title="Audit and export" icon="file-export">
-    Personal Activity shows what your AI clients did. Enterprise adds workspace-wide export, the privileged-action audit trail, and [SIEM or OTLP streaming](/enterprise/siem-export).
+  <Card title="Safety controls" icon="hand">
+    Built-in secret scanning on every plan, plus personal [Safety preferences](/member/safety) so Passport can ask before write or destructive actions.
   </Card>
 </CardGroup>
 
-## Quickstart
+Free and Pro focus on getting people connected. Enterprise adds company-wide controls for people, approvals, clients, and audit export — without changing the everyday setup flow.
+
+## Get started in three steps
 
 <Steps>
-  <Step title="Browse apps">
-    Create a workspace, browse Apps, and connect the account you want to use. See the [workspace owner quickstart](/quickstart/admin).
+  <Step title="Connect an app">
+    Open **Apps**, pick something you use (for example GitHub), and choose **Connect**. See the [workspace owner quickstart](/quickstart/admin) if you are setting up the workspace.
   </Step>
-  <Step title="Add an AI client">
-    On Windows, Linux, or macOS, use the client-native setup shown in Passport, run `passport login` for [Passport CLI](/quickstart/cli), or paste the workspace connector URL into a supported client. The macOS desktop app is an optional accelerator for several local clients. See the [member quickstart](/quickstart/member).
+  <Step title="Add an AI assistant">
+    Open **AI Clients → Add client**. Follow the steps for Claude, Cursor, ChatGPT, or another supported client. On Windows, Linux, and macOS the browser path works the same; the macOS desktop app is optional. See the [member quickstart](/quickstart/member).
   </Step>
-  <Step title="Prove the governed path">
-    On **Home** or **AI Clients**, run the built-in read-only setup check. It advances only after a real policy-checked Activity record succeeds, then opens Activity so you can verify it.
+  <Step title="Check that everything works">
+    On **Home** or **AI Clients**, choose **Run setup check**. Passport runs a safe test and opens **Activity** when it succeeds, so you can see the result.
   </Step>
 </Steps>
 
 ## Keep reading
 
 <CardGroup cols={2}>
-  <Card title="The Passport model" icon="sitemap" href="/concepts/model">
-    Workspaces, MCPs, passes, teams, bundles, and the gateway.
+  <Card title="How Passport fits together" icon="sitemap" href="/concepts/model">
+    Workspaces, apps, access, teams, and AI clients — in plain language.
   </Card>
-
   <Card title="Plans and billing" icon="credit-card" href="/billing">
-    Free, Pro, and Enterprise limits, seats, and agents.
+    Free, Pro, and Enterprise: what you get and how seats work.
   </Card>
-
-  <Card title="Client defaults" icon="sliders" href="/admin/client-defaults">
-    Enterprise presets for which granted apps appear in each client.
+  <Card title="Safety preferences" icon="hand" href="/member/safety">
+    Choose when Passport should ask before write or destructive actions.
   </Card>
-
-  <Card title="Network and egress" icon="shield" href="/security/network">
-    SSRF posture for admin-supplied URLs and desktop/bridge egress.
+  <Card title="Troubleshooting" icon="wrench" href="/troubleshooting">
+    Common issues and how to fix them.
   </Card>
 </CardGroup>
 
 <Note>
-  Passport is available as a hosted service at [passportmcp.com](https://passportmcp.com) and as a container you can self-host. See [Self-host](/self-host) for the single-container deployment. Hosted [Privacy](https://passportmcp.com/privacy) and [Security](https://passportmcp.com/security) pages cover trust commitments for the cloud product.
+  Passport is available at [passportmcp.com](https://passportmcp.com), and you can also [self-host](/self-host) it. See [Privacy](https://passportmcp.com/privacy) and [Security](https://passportmcp.com/security) for the hosted product.
 </Note>
+
+<Accordion title="A note on terminology">
+  In the product, **Apps** is where you browse and connect tools. Those tools often speak **MCP** (Model Context Protocol) under the hood — that is the technical name for the connection. These docs lead with everyday language and introduce MCP where it helps. The first person in a workspace is an **admin** (sometimes called the owner); Free and Pro keep admin work under **Manage workspace**, while Enterprise adds fuller **Workspace controls**.
+</Accordion>

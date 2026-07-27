@@ -1,62 +1,61 @@
 ---
 title: "Plans and billing"
-description: "What each plan includes, how seats are counted, and how to change or cancel a plan."
+description: "What Free, Pro, and Enterprise include, how seats work, and how to change or cancel."
 ---
 
-Passport has three plans. Every plan includes the full verified catalog and the focused personal product: Apps, AI Clients, personal Activity, safety preferences, the desktop app, Passport CLI, and the shared gateway. Pro removes the usage caps. Enterprise adds the workspace control plane for managed catalog policy, people and teams, client fleet controls, workspace guardrails, and organization-wide audit.
+Passport has three plans. Every plan includes the full app catalog, Apps and AI Clients, your personal Activity log, Safety preferences, the desktop app (macOS), Passport CLI, and the shared connection path. Pro removes the Free caps. Enterprise adds company-wide controls for people, approvals, clients, guardrails, and audit export.
 
 ## Plans
 
 <CardGroup cols={3}>
   <Card title="Free" icon="gift">
-    **\$0 forever.** The full verified catalog for small teams. Up to 5 members and 5 connected MCPs, with self-service Connect, the desktop app, Passport CLI, and every supported AI client.
+    **$0 forever.** Full catalog for small teams. Up to 5 people and 5 connected apps, self-service Connect, and every supported AI assistant.
   </Card>
-
   <Card title="Pro" icon="rocket">
-    **\$15 per member per month.** Everything in Free without the caps. Unlimited members and MCPs, with the verified catalog available through one-step Connect.
+    **$15 per person per month.** Everything in Free without the caps. Unlimited people and apps, still one-step Connect for verified apps.
   </Card>
-
   <Card title="Enterprise" icon="building">
-    **\$30 per member per month.** Everything in Pro, plus workspace controls for people, teams, clients, and guardrails; a managed catalog; approval workflows; scoped rollout rules; SSO with your own IdP; SCIM provisioning; SIEM and OTLP audit streaming; a DPA on request; and annual invoicing by email. Still self-serve, card in.
+    **$30 per person per month.** Everything in Pro, plus workspace controls for people, teams, clients, and guardrails; approval workflows; SSO; SCIM; audit streaming; a DPA on request; and annual invoicing. Still self-serve with a card.
   </Card>
 </CardGroup>
 
-The Enterprise plan is also what gates tenant-authored custom middleware where an operator has enabled it.
+## How apps work on each plan
 
-## Catalog access and control
+On Free and Pro, verified catalog apps are open: choose **Connect**, and Passport either finishes the connection or asks an admin when a shared company credential is required. Free's five-app limit counts **connected** apps, not everything you can browse. Pausing an app does not free a slot.
 
-Free and Pro use the verified catalog in **open** mode. A member chooses **Connect** and Passport either connects the app immediately or asks the workspace owner for a shared credential when the provider technically requires one. Free's five-MCP limit applies to connected MCPs, not what you can discover. Pausing one does not free a slot.
+On Enterprise, admins can keep the catalog open, require review, or set rules by app, category, and team. Access usually starts read-only, and an app is not marked ready until required company setup is done.
 
-Enterprise admins can keep the catalog open, require review for new apps, or apply rollout rules by app, category, and team. Requests are grouped, access starts read-only, and an app is not announced as ready until required company setup is complete.
+On every plan, workspace admins can finish technical setup (company API keys, OAuth clients, custom URLs, removing apps). Built-in secret scanning and personal Safety preferences also stay on every plan. Enterprise adds custom guardrails, team and client rules, and company-wide audit export.
 
-Workspace owners can finish technical setup on every plan: company API keys, manual OAuth clients, custom endpoints, and app removal stay available without mounting the Enterprise control plane. The built-in credential scanner and each person's action-time safety preferences also stay on every plan. Enterprise adds custom workspace guardrails, scoped rollout, team and fleet policy, and organization-wide audit export.
-
-Passport CLI is included on every plan. It uses the same governed gateway as MCP-connected clients and does not create a second billing, policy, or audit path.
+Passport CLI is included on every plan and uses the same rules and Activity log as other connections.
 
 ## How seats are counted
 
-Anyone who can sign in counts as a member, admin or not. Agent identities you create for automation are **not billed seats on Pro or Enterprise**, but on Free they **do consume one of the five member slots**. A paid plan never charges Stripe for an agent.
+Anyone who can sign in counts as a person (admin or member).
 
-On a paid plan, your seat count is the number of active people (admins and members). Passport reconciles that count onto your Stripe subscription automatically as membership grows or shrinks, and Stripe prorates the difference. You do not manage seat quantities by hand.
+- **Pro and Enterprise:** automation identities (agents) are **not** billed seats.
+- **Free:** agents **do** use one of the five member slots.
+
+On paid plans, Passport updates your Stripe subscription as people join or leave and prorates the difference. You do not manage seat quantities by hand.
 
 ## At the Free limit
 
-The Free plan includes 5 members and 5 connected MCPs. Agents count toward those five member slots. You can still browse the entire verified catalog. Adding a sixth member or agent, or connecting a sixth MCP, is blocked until you upgrade to Pro. Nothing is deleted, and everyone already on the workspace keeps working.
+Free includes 5 people and 5 connected apps. Agents count toward those five people. You can still browse the whole catalog. Adding a sixth person or agent, or connecting a sixth app, is blocked until you upgrade to Pro. Nothing is deleted, and everyone already on the workspace keeps working.
 
 ## Upgrade, change, or cancel
 
 <Steps>
   <Step title="Upgrade">
-    In the app, open Settings, then Billing, and upgrade. You are taken to Stripe Checkout to enter a card.
+    Open **Settings → Billing** and upgrade. Stripe Checkout asks for a card.
   </Step>
   <Step title="Change plan">
-    A plan change on an existing subscription happens through the Stripe customer portal, which edits your one subscription in place and prorates. Passport never opens a second checkout on an existing customer, so you are never double-billed on an upgrade.
+    Plan changes on an existing subscription go through the Stripe customer portal. Passport edits your one subscription in place and prorates — it never opens a second checkout, so you are not double-billed.
   </Step>
   <Step title="Cancel">
-    Cancel yourself anytime from Settings, Billing through the Stripe portal, no email required. You keep your paid plan until the current period ends, then move to Free. Your data stays until you delete the workspace.
+    Cancel anytime from **Settings → Billing** in the Stripe portal. You keep the paid plan until the period ends, then move to Free. Your data stays until you delete the workspace.
   </Step>
 </Steps>
 
 <Note>
-  On a self-hosted deployment with no Stripe key configured, billing does not exist and every workspace has everything unlocked. See [Self-host](/self-host).
+  On a self-hosted deployment with no Stripe key, billing is off and every workspace is unlocked. See [Self-host](/self-host).
 </Note>

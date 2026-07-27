@@ -1,62 +1,69 @@
 ---
 title: "Workspace owner quickstart"
-description: "Connect your first MCP and AI client, invite people, and watch the first governed call land in Activity."
+description: "Create a workspace, connect an app, invite people, and confirm the first successful Activity row."
 ---
 
-Free and Pro open directly in the personal Apps experience and keep workspace ownership lightweight. Enterprise keeps the same personal setup under **For me** and adds a separate control plane for policy and managed rollout.
+If you are setting up Passport for your team, start here. You will connect one app, add an AI assistant, invite people, and confirm everything works.
+
+Free and Pro keep workspace management light under **Settings → Workspace essentials**. Enterprise keeps the same personal setup under **For me**, and adds fuller **Workspace controls** for company-wide rules.
 
 ## Create your workspace
 
-Sign up at [passportmcp.com](https://passportmcp.com) and confirm your email, or stand up your own deployment (see [Self-host](/self-host)). The first person in a workspace is its admin. Joining is invite-only by default, so no one else can appear in your workspace until you add them.
+Sign up at [passportmcp.com](https://passportmcp.com) and confirm your email, or [self-host](/self-host) your own deployment.
 
-## 1. Connect your first MCP
+You become the workspace admin. By default, joining is invite-only — nobody else appears until you add them.
 
-Connect the first MCP you want to use. You have two paths:
+## 1. Connect your first app
+
+Open **Apps** and connect something useful:
 
 <CardGroup cols={2}>
   <Card title="From the catalog" icon="grid">
-    Pick from the probe-verified catalog. Free and Pro use one-step self-service Connect. Enterprise can keep that flow open or require review.
+    Pick a verified app and choose **Connect**. On Free and Pro this is usually one step. Enterprise can keep that open or require review.
   </Card>
-
   <Card title="By URL" icon="link">
-    Point Passport at any MCP server by URL. Passport connects, discovers its tools, and scans them.
+    Point Passport at any tool server by URL. Passport connects, finds its tools, and scans them.
   </Card>
 </CardGroup>
 
-Catalog apps start read-only. Free and Pro keep verified apps self-service; Enterprise can require review and scoped rollout. Details live in [Catalog access and passes](/admin/approvals-and-requests) rather than in this quickstart.
+New catalog apps start **read-only**, so an AI assistant cannot see write actions a person is not allowed to use. For approval rules and rollout, see [Catalog access and passes](/admin/approvals-and-requests).
 
-## 2. Connect an AI client
+## 2. Add an AI assistant
 
-Open **AI Clients → Add client**. On Windows, Linux, or macOS, use the offered client-native setup, `passport login`, or the workspace connector URL (`/w/ws_…/mcp`). The optional macOS app can wire several supported local clients at once; there is no Windows or Linux desktop app to install. See the [member quickstart](/quickstart/member).
+Open **AI Clients → Add client**. On Windows, Linux, or macOS, use the setup Passport shows, run `passport login`, or paste the connection URL.
+
+The connection URL looks like `/w/ws_…/mcp`. The macOS desktop app can configure several local assistants at once; there is no Windows or Linux desktop app. Details: [member quickstart](/quickstart/member).
 
 ## 3. Invite your team
 
-On Free and Pro, open **Settings → Workspace essentials → Manage workspace** to invite and manage members. On Enterprise, open **Workspace controls → People** to assign roles and teams, manage lifecycle, and apply organization-wide policy. See [People and teams](/admin/people-and-teams).
+- **Free and Pro:** **Settings → Workspace essentials → Manage workspace**
+- **Enterprise:** **Workspace controls → People** (roles, teams, and company-wide policy)
 
-## 4. See your first governed call
+See [People and teams](/admin/people-and-teams).
 
-On **Home** (Getting started) or **AI Clients**, open the personal activation checklist and choose **Run setup check** on the **Prove the governed path** step. The read-only diagnostic crosses authentication, current workspace policy, and the append-only Activity path without contacting a provider. Passport opens Activity only after a real successful record exists; a failure leaves the milestone incomplete and offers a retry.
+## 4. Check that everything works
+
+On **Home** or **AI Clients**, open the checklist and choose **Run setup check** on **Prove the governed path**.
+
+Passport runs a safe test (no call out to the app provider). When it succeeds, **Activity** opens so you can see the row. If something is wrong, the step stays incomplete and you can retry.
 
 <Note>
-  Activity is live and attributable for every plan. Workspace-wide CSV/JSONL export and the privileged audit trail are Enterprise controls. See [Activity and audit](/admin/activity-and-audit).
+  Everyone can see their own Activity on every plan. Company-wide CSV/JSONL export and the admin audit trail are Enterprise. See [Activity and audit](/admin/activity-and-audit).
 </Note>
 
 ## Next
 
 <CardGroup cols={2}>
-  <Card title="Understand guardrails" icon="filter" href="/admin/guardrails">
-    Built-in secret detection protects every plan. Enterprise adds custom block, redact, and alert rules.
+  <Card title="Guardrails" icon="filter" href="/admin/guardrails">
+    Built-in secret detection on every plan; custom rules on Enterprise.
   </Card>
-
   <Card title="Client fleet" icon="laptop" href="/admin/client-fleet">
-    View and revoke workspace clients, and require registered AI clients on Enterprise.
+    See and revoke AI clients across the workspace (Enterprise).
   </Card>
-
   <Card title="Plans and billing" icon="credit-card" href="/billing">
-    Free, Pro, and Enterprise limits, including how agents count on Free.
+    Free, Pro, and Enterprise — including how agents count on Free.
   </Card>
-
   <Card title="Enterprise controls" icon="building" href="/enterprise/sso-oidc">
-    Connect SSO, provision with SCIM, and stream audit events to your SIEM.
+    SSO, SCIM, and audit streaming when you need them.
   </Card>
 </CardGroup>

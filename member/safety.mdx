@@ -1,33 +1,38 @@
 ---
 title: "Safety preferences"
-description: "Personal brakes for write and destructive actions that sit on top of workspace policy."
+description: "Choose when Passport should ask before write or destructive actions."
 ---
 
-Safety preferences are personal controls on every plan. They never widen what your workspace already allows; they only narrow it further for your own AI clients.
+Safety preferences are your personal brakes. They never give you more access than your workspace already allows — they only make things stricter for your own AI assistants.
 
 ## Where to find them
 
-Open **Settings → Safety**. You will see two selects:
+Open **Settings → Safety**. You will see two choices:
 
 | Preference | Choices | Default |
 | --- | --- | --- |
 | Write actions | Allow / Ask me / Never | Allow |
 | Destructive actions | Allow / Ask me / Never | Ask me |
 
-Reads are not configurable here. Workspace passes, guardrails, and catalog policy still apply first.
+Read-only actions are not controlled here. Workspace rules (who can use which app, and company guardrails) still apply first.
 
-## What each choice does
+## What each choice means
 
-When you call a tool through the gateway, Passport classifies the risk, then applies your preference:
+When your AI assistant tries an action through Passport:
 
-- **Allow** — proceed if workspace policy already permits the call.
-- **Ask me** — hold the call and raise an action-time approval for you to allow once, allow for a session scope, or deny. An **Approvals** item appears in navigation while something is waiting.
-- **Never** — block the call immediately.
+- **Allow** — go ahead, if your workspace already permits it.
+- **Ask me** — pause and wait for your decision (allow once, allow for this session, or deny). An **Approvals** item appears in the navigation while something is waiting.
+- **Never** — block it immediately.
 
-Agent identities (headless `pak_` keys) do not raise Ask-me prompts; they are non-interactive and follow their assigned pass only. Use a member profile when a call must pause for a human decision.
+Automation identities (agent keys) do not get Ask-me prompts — they are non-interactive. Use your normal member sign-in when a human should decide.
 
-## How this relates to workspace policy
+## How this works with company rules
 
-Personal Safety sits **on top of** passes and guardrails. If your pass is already read-only, a write tool stays hidden regardless of Safety. If a workspace guardrail would block a secret, Safety cannot override that. Prefer Safety when you want a personal brake on writes or destructive tools without changing workspace rules for everyone else.
+Personal Safety sits on top of workspace access and guardrails:
+
+- If your access is already read-only, write tools stay hidden no matter what Safety says.
+- If a company guardrail would block a secret, Safety cannot override that.
+
+Use Safety when you want a personal check before writes or risky actions, without changing rules for everyone else.
 
 See also [Guardrails](/admin/guardrails) and [Catalog access and passes](/admin/approvals-and-requests).

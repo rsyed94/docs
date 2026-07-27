@@ -1,23 +1,28 @@
 ---
 title: "Activity and audit"
-description: "Personal Activity on every plan, plus Enterprise workspace export, privileged audit, and SIEM streaming."
+description: "See what AI assistants did, export company-wide logs on Enterprise, and stream to your SIEM."
 ---
 
-Passport keeps two records: an activity log of every tool call that flows through the gateway, and an audit log of privileged admin actions. Personal Activity is available on every plan. Workspace-wide export, the privileged audit trail, and SIEM streaming are Enterprise workspace controls.
+Passport keeps two kinds of records:
+
+- **Activity** — what AI assistants did through Passport (every plan; you always see your own)
+- **Audit** — privileged admin actions (Enterprise)
+
+Company-wide export and SIEM streaming are Enterprise controls.
 
 ## Activity
 
-Every governed tool call lands in Activity, live and attributable. Each entry carries the person, their email and team, the MCP, the tool, the AI client the call came from, the outcome (ok, error, or blocked), the duration, and a summary.
+Every tool call through Passport lands in Activity. Each row shows who did it, their team, the app, the tool, which AI assistant was used, the outcome (ok, error, or blocked), how long it took, and a short summary.
 
-On Free and Pro, each person sees their own Activity. On Enterprise, admins can browse the workspace-wide Activity view, filter it, and export it.
+On Free and Pro, each person sees their own Activity. On Enterprise, admins can browse the whole workspace, filter it, and export it.
 
-Passport CLI calls can also carry a cooperative caller label, shown as **via CLI** and explicitly marked self-reported. This helps distinguish a shell call made by Codex from one made by Claude Code without treating an environment hint as an authenticated identity. The member or agent and the policy client remain authoritative.
+Passport CLI calls can show an optional **via CLI** label (self-reported) so you can tell Codex apart from Claude Code in the log. The signed-in person or agent, and the AI client policy, remain authoritative.
 
-Because `blocked` is a distinct outcome, you can see guardrails working as intended rather than mistaking policy enforcement for errors.
+A **blocked** outcome means a guardrail or policy stopped the call — not a random error.
 
 ### Filters and deep links
 
-Enterprise admins can filter activity by person, MCP, and outcome, and the filter is encoded in the URL, so a filtered view is a shareable link. Guardrail alerts, for instance, deep-link straight into the matching, pre-filtered activity view.
+Enterprise admins can filter by person, app, and outcome. Filters live in the URL, so you can share a view. Guardrail alerts can deep-link into a matching filtered view.
 
 ## Audit
 
@@ -29,7 +34,6 @@ The audit log is an **Enterprise** trail of privileged actions: approving or rem
   <Card title="Enterprise activity export" icon="table">
     `GET /export/activity.csv` and `GET /export/activity.jsonl` require Enterprise workspace controls. Both accept the same `member`, `app`, `outcome`, and `department` filters as the activity view (`department` is the team name). The JSONL export is SIEM-shaped, one JSON object per line.
   </Card>
-
   <Card title="Enterprise audit export" icon="file-lines">
     `GET /export/audit.csv` exports the privileged-action trail and also requires Enterprise.
   </Card>

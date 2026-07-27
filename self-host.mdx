@@ -28,7 +28,6 @@ Add `-e DATABASE_URL='postgres://…'` for durable multi-replica Postgres. Witho
   <Card title="The container" icon="box">
     One Passport container, listening on `PORT` (default 8790).
   </Card>
-
   <Card title="Postgres" icon="database">
     A Postgres database for durable, backed-up state that survives redeploys. Without it, state lives in a JSON file you must persist on a mounted volume.
   </Card>
@@ -68,7 +67,7 @@ When `NODE_ENV=production`, Passport fails closed: a misconfigured deployment re
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
-| `PASSPORT_ENCRYPTION_KEY` | (empty) | The primary at-rest key (AES-256-GCM) for upstream OAuth tokens, company auth headers, OAuth and OIDC client secrets, and device tokens. Any long random string (32\+ characters). Required in production, and it must stay stable: if you lose it, everything encrypted under it becomes undecryptable. |
+| `PASSPORT_ENCRYPTION_KEY` | (empty) | The primary at-rest key (AES-256-GCM) for upstream OAuth tokens, company auth headers, OAuth and OIDC client secrets, and device tokens. Any long random string (32+ characters). Required in production, and it must stay stable: if you lose it, everything encrypted under it becomes undecryptable. |
 | `PASSPORT_ENCRYPTION_KEYS` | (empty) | Optional comma-separated list of old keys kept only so their ciphertext still decrypts during a rotation. |
 | `PASSPORT_SECURE_COOKIES` | `true` in production | Send Secure cookies. |
 | `PASSPORT_ALLOWED_ORIGINS` | (empty) | Comma-separated extra origins allowed to make credentialed (cookie) requests, in addition to `PUBLIC_URL` and the built-in local and desktop origins. |
@@ -164,9 +163,27 @@ Per-workspace and per-token caps on the gateway, plus a per-replica concurrency 
 | `PASSPORT_ALERT_MIN_CALLS` | `20` | Minimum calls in the window before the error rate is judged. |
 | `PASSPORT_LOG` | (unset) | Set to `1` to enable per-request structured logging outside production. |
 
-Sentry is entirely optional for a self-hosted deployment. With both DSNs unset, no Sentry telemetry leaves the instance. `VITE_*` and the browser copy of `SENTRY_RELEASE` are image-build inputs. For source maps, first run the web build locally with `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_REPOSITORY`, and the same release, then build the image without the token. Omitting that local upload simply means browser frames have no source maps. The entrypoint removes any platform-injected runtime token before Node starts, and only public browser settings are compiled into assets.
+Sentry is entirely optional for a self-hosted deployment. With both DSNs unset,
+no Sentry telemetry leaves the instance. `VITE_*` and the browser copy of
+`SENTRY_RELEASE` are image-build inputs. For source maps, first run the web build
+locally with `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT`,
+`SENTRY_REPOSITORY`, and the same release, then build the image without the
+token. Omitting that local upload simply means browser frames have no source
+maps. The entrypoint removes any platform-injected runtime token before Node
+starts, and only public browser settings are compiled into assets.
 
-When enabled, Passport sends normalized route/status/latency data, stack traces, operational spans/logs/metrics, MCP app/tool/client identifiers and outcomes, and opaque member/workspace IDs. Collection of query strings, cookies, authorization headers, HTTP bodies, database statements, MCP inputs/outputs, and AI content is disabled. Passport does not deliberately attach names or emails, and its scrubbers redact email-like values and credential patterns found in diagnostic text. Browser Replay is intentionally disabled because its rrweb metadata can serialize hash/query URLs before event hooks can scrub them. Do not enable it until URL metadata can be guaranteed safe before serialization. Sentry retention is controlled by your Sentry plan and organization settings, independently of Passport's event-log retention. For staging verification of Sentry releases and source maps, see `docs/DEPLOY.md` and `docs/OPERATIONS.md` in the repository.
+When enabled, Passport sends normalized route/status/latency data, stack traces,
+operational spans/logs/metrics, MCP app/tool/client identifiers and outcomes, and
+opaque member/workspace IDs. Collection of query strings, cookies, authorization
+headers, HTTP bodies, database statements, MCP inputs/outputs, and AI content is
+disabled. Passport does not deliberately attach names or emails, and its
+scrubbers redact email-like values and credential patterns found in diagnostic
+text. Browser Replay is intentionally disabled because its rrweb metadata can
+serialize hash/query URLs before event hooks can scrub them. Do not enable it
+until URL metadata can be guaranteed safe before serialization. Sentry retention
+is controlled by your Sentry plan and organization settings, independently of
+Passport's event-log retention. For staging verification of Sentry releases and
+source maps, see `docs/DEPLOY.md` and `docs/OPERATIONS.md` in the repository.
 
 ## Advanced tuning
 

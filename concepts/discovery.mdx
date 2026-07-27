@@ -1,11 +1,11 @@
 ---
 title: "Tool discovery modes"
-description: "How the workspace gateway exposes tools as your fleet grows: flat, apps, compact, and auto."
+description: "How Passport shows tools to AI assistants as you connect more apps: flat, apps, compact, and auto."
 ---
 
-Tool definitions cost context on every request, and an AI client's tool selection gets worse as the count climbs. Passport controls how the workspace endpoint presents tools so a large fleet stays usable. The inventory of what a person can reach stays visible at every tier; only the full tool definitions become lazy.
+AI assistants work better when they are not flooded with hundreds of tool definitions at once. Passport controls how tools are presented so a large setup stays usable. You can still see which apps you can reach; only the detailed tool lists become on-demand as things grow.
 
-The default mode is `auto`. Free and Pro stay on that default. Enterprise workspace Settings can show a pinned non-auto mode if one was previously set, with a control to switch back to `auto`.
+The default is `auto`. Free and Pro stay on that default. Enterprise Settings can show a pinned mode if one was set earlier, with a way to switch back to `auto`.
 
 ## The three tiers
 
@@ -13,11 +13,9 @@ The default mode is `auto`. Free and Pro stay on that default. Enterprise worksp
   <Card title="Flat" icon="list">
     Every permitted tool is defined up front. Best experience with no indirection, for small setups.
   </Card>
-
   <Card title="Apps" icon="grip">
     One meta-tool per MCP, named for the MCP (for example `github`, `supabase`). The tool list itself is the readable inventory; each MCP's tool definitions load on demand inside its meta-tool.
   </Card>
-
   <Card title="Compact" icon="magnifying-glass">
     Two global meta-tools (a search and a call) whose descriptions carry the MCP manifest. For very large fleets.
   </Card>
