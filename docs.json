@@ -18,10 +18,6 @@
         "group": "Get started",
         "pages": [
           "index",
-          "quickstart",
-          "quickstart/admin",
-          "quickstart/member",
-          "quickstart/cli",
           "quickstart/admin",
           "quickstart/member",
           "quickstart/cli"
@@ -74,72 +70,8 @@
           "billing",
           "troubleshooting"
         ]
-      },
-      {
-        "group": "Concepts",
-        "pages": [
-          "concepts/model",
-          "concepts/discovery"
-        ]
-      },
-      {
-        "group": "For members",
-        "pages": [
-          "member/safety"
-        ]
-      },
-      {
-        "group": "Administration",
-        "pages": [
-          "admin/people-and-teams",
-          "admin/approvals-and-requests",
-          "admin/bundles",
-          "admin/guardrails",
-          "admin/client-defaults",
-          "admin/client-fleet",
-          "admin/activity-and-audit"
-        ]
-      },
-      {
-        "group": "Enterprise",
-        "pages": [
-          "enterprise/sso-oidc",
-          "enterprise/scim",
-          "enterprise/siem-export"
-        ]
-      },
-      {
-        "group": "Deploy and operate",
-        "pages": [
-          "self-host",
-          "security/network"
-        ]
-      },
-      {
-        "group": "Reference",
-        "pages": [
-          "benchmarks/context-efficiency",
-          "billing",
-          "troubleshooting"
-        ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "icon": "book-open-cover",
-          "hidden": true,
-          "href": "https://mintlify.com/docs"
-        },
-        {
-          "anchor": "Blog",
-          "icon": "newspaper",
-          "hidden": true,
-          "href": "https://mintlify.com/blog"
-        }
-      ]
-    }
+    ]
   },
   "navbar": {
     "links": [
@@ -150,14 +82,6 @@
       {
         "label": "Security",
         "href": "https://passportmcp.com/security"
-      },
-      {
-        "href": "https://passportmcp.com/privacy",
-        "label": "Privacy"
-      },
-      {
-        "href": "https://passportmcp.com/security",
-        "label": "Security"
       }
     ],
     "primary": {
