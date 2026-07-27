@@ -29,6 +29,7 @@ The audit log is an **Enterprise** trail of privileged actions: approving or rem
   <Card title="Enterprise activity export" icon="table">
     `GET /export/activity.csv` and `GET /export/activity.jsonl` require Enterprise workspace controls. Both accept the same `member`, `app`, `outcome`, and `department` filters as the activity view (`department` is the team name). The JSONL export is SIEM-shaped, one JSON object per line.
   </Card>
+
   <Card title="Enterprise audit export" icon="file-lines">
     `GET /export/audit.csv` exports the privileged-action trail and also requires Enterprise.
   </Card>

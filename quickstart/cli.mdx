@@ -92,9 +92,7 @@ Every command accepts `--profile`, `--json`, `--timeout`, `--quiet`, and `--call
 
 ## Diagnose and complete
 
-`doctor` returns every check even when one fails. Human output includes a safe,
-actionable fix; `--json` returns a stable report suitable for support automation.
-Neither form prints credential values, response bodies, or member identity.
+`doctor` returns every check even when one fails. Human output includes a safe, actionable fix; `--json` returns a stable report suitable for support automation. Neither form prints credential values, response bodies, or member identity.
 
 ```sh
 passport doctor
@@ -132,7 +130,7 @@ With `--json`, stdout contains exactly one JSON value. Hints and warnings go to 
 ```
 
 | Exit | Meaning |
-| ---: | --- |
+| --: | --- |
 | 0 | Success. |
 | 1 | Network, server, or ambiguous execution error. Do not retry automatically. |
 | 2 | Authentication is missing, expired, or revoked. Run `passport login`. |
@@ -177,9 +175,7 @@ passport run sentry_list_issues '{"status":"unresolved"}' --json
 
 Agent keys can inspect status and call allowed tools, but cannot mint a person's sign-in link. Use `passport connect` from an interactive member profile when an app needs personal OAuth.
 
-Agent keys are also non-interactive: they do not create action-time member
-approval prompts. Use a member profile for an operation that must pause for a
-human's one-off approval.
+Agent keys are also non-interactive: they do not create action-time member approval prompts. Use a member profile for an operation that must pause for a human's one-off approval.
 
 <Note>
   The CLI never wraps provider APIs directly and never bypasses the gateway. It calls Passport's governed meta-tools and MCP resource/prompt methods, so CLI and MCP usage share one policy and audit pipeline.

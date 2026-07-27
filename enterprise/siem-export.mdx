@@ -13,6 +13,7 @@ Both targets are set per workspace in Settings. Enter one or both:
   <Card title="SIEM HTTP endpoint" icon="server">
     An HTTP intake for a SIEM such as Splunk, Datadog, or Microsoft Sentinel. Passport POSTs a JSON body of the shape `{ "source": "mcp-passport", "events": [ ... ] }`.
   </Card>
+
   <Card title="OTLP endpoint" icon="diagram-project">
     An OpenTelemetry collector base URL. Passport POSTs OTLP/JSON logs to `<endpoint>/v1/logs`, one log record per event, with a resource attribute `service.name = mcp-passport`.
   </Card>
