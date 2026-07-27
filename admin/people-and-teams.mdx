@@ -3,7 +3,7 @@ title: "People and teams"
 description: "Use Enterprise workspace controls to manage people, roles, teams, and lifecycle."
 ---
 
-People and Teams are part of the **Enterprise workspace control plane**. Free and Pro owners reach the lightweight Workspace page from **Settings → Workspace essentials** to invite people and manage ownership; Enterprise adds roles, teams, directory policy, scoped access, and lifecycle controls.
+People and Teams are part of Enterprise company-wide administration. Free and Pro owners reach the lightweight Workspace page from **Settings → Workspace essentials** to invite people and manage ownership; Enterprise adds a **People** page with roles, teams, directory policy, scoped access, and lifecycle controls.
 
 ## Roles
 
@@ -45,6 +45,6 @@ Deactivating a member immediately signs them out everywhere and revokes their co
 
 ## Agent identities
 
-Agent keys are available to owners on every plan under **Settings → Advanced → Headless & CI**. Creating a key also creates a governed agent identity. The `pak_` bearer is shown once and stored only as a hash; its calls have their own access and Activity attribution, and revoking the key retires the identity. On Free, agents count toward the member cap; on paid plans they are not billed as seats.
+Agent keys are available to owners on every plan from **Settings**. On Free and Pro, open **Settings → Advanced → Headless & CI**. On Enterprise, open **Settings** and use the **Headless & CI** card. Creating a key also creates a governed agent identity. The `pak_` bearer is shown once and stored only as a hash; its calls have their own access and Activity attribution, and revoking the key retires the identity. On Free, agents count toward the member cap; on paid plans they are not billed as seats.
 
 Passport CLI accepts an agent key through `PASSPORT_AGENT_KEY` with the governed workspace endpoint in `PASSPORT_ENDPOINT` (`https://…/w/ws_…/mcp`). This mode writes no local credential file, so it is the recommended attach surface for CI, cron, and headless jobs. See [Passport CLI](/quickstart/cli).

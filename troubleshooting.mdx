@@ -9,7 +9,7 @@ What to do depends on how you connected:
 
 - **Local apps set up through Passport Desktop or the local bridge** (Claude Desktop, Cursor, VS Code, and similar): new apps usually appear within about 15 seconds. If nothing shows, restart the AI app once. Passport says this when you connect: "will pick this up in ~15 seconds (restart if it doesn't appear)."
 - **ChatGPT or Claude.ai:** refresh or reconnect the connector in that product after an approval or account change.
-- **Passport CLI:** run `passport status`, then `passport search` again. If an app is missing, check that it is enabled for that client under **AI Clients** in Passport.
+- **Passport CLI:** run `passport status`, then `passport search` again. If an app is missing, check that it is enabled for that client under **Clients** in Passport.
 - **Claude Code or Codex** connected the native way: start a new session so tools refresh.
 
 ## Restart the AI app once after connecting
@@ -28,7 +28,7 @@ Some apps (Mintlify is one example) only allow sign-ins that return to domains y
 
 Add your Passport domain (or the full callback URL) to their allowed redirect settings:
 
-```text
+```
 https://<your-passport-domain>/auth/connect-app/callback
 ```
 

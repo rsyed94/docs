@@ -5,7 +5,7 @@ description: "Create a workspace, connect an app, invite people, and confirm the
 
 If you are setting up Passport for your team, start here. You will connect one app, add an AI assistant, invite people, and confirm everything works.
 
-Free and Pro keep workspace management light under **Settings → Workspace essentials**. Enterprise keeps the same personal setup under **For me**, and adds fuller **Workspace controls** for company-wide rules.
+Free and Pro keep workspace management light under **Settings → Workspace essentials**. Enterprise keeps the same personal setup under **For me** / **My clients**, and adds company-wide pages for **People**, **Guardrails**, **Audit**, and **Settings**.
 
 ## Create your workspace
 
@@ -21,7 +21,6 @@ Open **Apps** and connect something useful:
   <Card title="From the catalog" icon="grid">
     Pick a verified app and choose **Connect**. On Free and Pro this is usually one step. Enterprise can keep that open or require review.
   </Card>
-
   <Card title="By URL" icon="link">
     Point Passport at any tool server by URL. Passport connects, finds its tools, and scans them.
   </Card>
@@ -31,22 +30,22 @@ New catalog apps start **read-only**, so an AI assistant cannot see write action
 
 ## 2. Add an AI assistant
 
-Open **AI Clients → Add client**. On Windows, Linux, or macOS, use the setup Passport shows, run `passport login`, or paste the connection URL.
+Open **Clients → Add client**. On Windows, Linux, or macOS, use the setup Passport shows, run `passport login`, or paste the connection URL.
 
 The connection URL looks like `/w/ws_…/mcp`. The macOS desktop app can configure several local assistants at once; there is no Windows or Linux desktop app. Details: [member quickstart](/quickstart/member).
 
 ## 3. Invite your team
 
 - **Free and Pro:** **Settings → Workspace essentials → Manage workspace**
-- **Enterprise:** **Workspace controls → People** (roles, teams, and company-wide policy)
+- **Enterprise:** **People** (roles, teams, and company-wide policy)
 
 See [People and teams](/admin/people-and-teams).
 
 ## 4. Check that everything works
 
-On **Home** or **AI Clients**, open the checklist and choose **Run setup check** on **Prove the governed path**.
+On **Clients** (or **Getting started** during first-run setup), open the checklist and choose **Run setup check** on **Prove the governed path**.
 
-Passport runs a safe test (no call out to the app provider). When it succeeds, **Activity** opens so you can see the row. If something is wrong, the step stays incomplete and you can retry.
+Passport runs a safe test (no call out to the app provider). When it succeeds, your activity log opens so you can see the row (**Activity** for members; **Audit** in the Enterprise admin nav). If something is wrong, the step stays incomplete and you can retry.
 
 <Note>
   Everyone can see their own Activity on every plan. Company-wide CSV/JSONL export and the admin audit trail are Enterprise. See [Activity and audit](/admin/activity-and-audit).
@@ -58,15 +57,12 @@ Passport runs a safe test (no call out to the app provider). When it succeeds, *
   <Card title="Guardrails" icon="filter" href="/admin/guardrails">
     Built-in secret detection on every plan; custom rules on Enterprise.
   </Card>
-
   <Card title="Client fleet" icon="laptop" href="/admin/client-fleet">
     See and revoke AI clients across the workspace (Enterprise).
   </Card>
-
   <Card title="Plans and billing" icon="credit-card" href="/billing">
     Free, Pro, and Enterprise — including how agents count on Free.
   </Card>
-
   <Card title="Enterprise controls" icon="building" href="/enterprise/sso-oidc">
     SSO, SCIM, and audit streaming when you need them.
   </Card>

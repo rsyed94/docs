@@ -5,16 +5,18 @@ description: "See what AI assistants did, export company-wide logs on Enterprise
 
 Passport keeps two kinds of records:
 
-- **Activity** — what AI assistants did through Passport (every plan; you always see your own)
-- **Audit** — privileged admin actions (Enterprise)
+- **Tool-call activity** — what AI assistants did through Passport (every plan; you always see your own)
+- **Privileged admin audit** — admin changes such as approvals, role edits, and guardrail updates (Enterprise)
 
 Company-wide export and SIEM streaming are Enterprise controls.
 
+In the product, the member nav label is **Activity** (page title **Your activity**). On Enterprise, the company-wide tool-call log lives under the nav label **Audit**. Privileged admin actions are also available from **Settings → Admin activity**.
+
 ## Activity
 
-Every tool call through Passport lands in Activity. Each row shows who did it, their team, the app, the tool, which AI assistant was used, the outcome (ok, error, or blocked), how long it took, and a short summary.
+Every tool call through Passport lands in the activity log. Each row shows who did it, their team, the app, the tool, which AI assistant was used, the outcome (ok, error, or blocked), how long it took, and a short summary.
 
-On Free and Pro, each person sees their own Activity. On Enterprise, admins can browse the whole workspace, filter it, and export it.
+On Free and Pro, each person sees their own Activity. On Enterprise, admins can browse the whole workspace from **Audit**, filter it, and export it.
 
 Passport CLI calls can show an optional **via CLI** label (self-reported) so you can tell Codex apart from Claude Code in the log. The signed-in person or agent, and the AI client policy, remain authoritative.
 
@@ -34,7 +36,6 @@ The audit log is an **Enterprise** trail of privileged actions: approving or rem
   <Card title="Enterprise activity export" icon="table">
     `GET /export/activity.csv` and `GET /export/activity.jsonl` require Enterprise workspace controls. Both accept the same `member`, `app`, `outcome`, and `department` filters as the activity view (`department` is the team name). The JSONL export is SIEM-shaped, one JSON object per line.
   </Card>
-
   <Card title="Enterprise audit export" icon="file-lines">
     `GET /export/audit.csv` exports the privileged-action trail and also requires Enterprise.
   </Card>
