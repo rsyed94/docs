@@ -44,6 +44,7 @@
           "admin/managed-api-integrations",
           "admin/bundles",
           "admin/guardrails",
+          "admin/discover",
           "admin/client-defaults",
           "admin/client-fleet",
           "admin/activity-and-audit"

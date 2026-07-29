@@ -1,0 +1,49 @@
+---
+title: "Discover direct MCP connections"
+description: "Find MCPs configured outside Passport, collect owner context, and guide them behind workspace controls."
+---
+
+Passport Discover helps Enterprise workspaces find MCP connections already configured directly in supported local AI clients. It turns those findings into an admin action queue: approve the direct setup, ask the owner to route it through Passport, or ask them to remove it.
+
+<Note>
+  Discover reports configuration, not usage. A finding means an MCP entry was present when Passport Desktop scanned that client. It does not prove that the MCP was called.
+</Note>
+
+## What members do
+
+<Steps>
+  <Step title="Open Discover in Passport Desktop">
+    The member explicitly enables local scanning. Passport does not scan before consent.
+  </Step>
+  <Step title="Review grouped findings">
+    One MCP configured in several clients appears as one decision with a separate occurrence for each client.
+  </Step>
+  <Step title="Share purpose">
+    The member can mark the MCP as Work, Evaluating, Personal, or Not needed. This is owner-provided context, not inferred behavior.
+  </Step>
+  <Step title="Follow remediation">
+    Supported remote HTTP and SSE entries can use guided migration. Passport verifies the governed MCP and client selection immediately before removing the exact reviewed direct entry. When an admin requests removal instead, the member can explicitly back up and remove the reviewed local entry without creating a replacement. Both flows verify that sibling configuration is unchanged.
+  </Step>
+</Steps>
+
+## What admins see
+
+Open **Governance → Discover** to review:
+
+- unique MCPs and direct configuration occurrences;
+- reporting computers and client-source coverage;
+- owner-provided purpose;
+- whether a supported entry can be migrated automatically;
+- admin decisions and migration or removal queues.
+
+A computer must run Passport Desktop and opt into Discover before it can report. Project-level configuration, hosted clients, and computers without Passport Desktop are outside current coverage. Sources older than seven days stop counting as reporting coverage, but their last findings remain visible.
+
+## Privacy boundary
+
+Enterprise reporting includes only the authenticated member and Desktop installation identifiers, installation label, client, safe MCP name, transport class, remote hostname or safe executable class, protected-settings presence, and scan status and timestamps.
+
+Discover does not upload configuration paths, commands or arguments, environment variables, headers, tokens, endpoint paths, query strings, prompts, files, tool inputs or outputs, or network traffic. A complete remote endpoint leaves the computer only after the member reviews and confirms a migration.
+
+Failed or permission-denied scans update coverage but never erase an existing finding. Passport requires two successful scans without an entry before marking it no longer found.
+
+An explicit Desktop removal is reflected immediately after the local backup, exact-entry removal, and verification succeed. If the same entry reappears later, Discover opens it again instead of treating the previous resolution as permanent.
