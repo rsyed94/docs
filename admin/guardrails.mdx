@@ -3,7 +3,29 @@ title: "Guardrails"
 description: "Built-in secret scanning on every plan, with Enterprise custom block, redact, and alert rules."
 ---
 
-Guardrails scan every tool call that flows through the gateway, both the arguments going out and the results coming back. They run server-side, so an AI client cannot talk its way past them. Built-in secret detection protects every plan; creating custom workspace rules requires Enterprise.
+Guardrails scan every tool call that flows through the gateway, both the arguments going out and the results coming back. They run server-side, so an AI client cannot talk its way past them. Built-in secret detection protects every plan; custom rules and Runtime Security require Enterprise.
+
+## Runtime Security
+
+Runtime Security detects high-confidence malicious behavior that fixed secret and regex rules do not describe well. It can inspect:
+
+- tool names and descriptions before a tool is exposed;
+- call arguments before execution;
+- text-bearing tool results before they reach the model.
+
+It recognizes explainable categories such as instruction override, hidden instruction characters, direct secret-exfiltration instructions, access-control bypass attempts, destructive commands, and resource abuse.
+
+| Mode | Behavior |
+| --- | --- |
+| Off | No runtime threat inspection. |
+| Observe | Record findings without changing the call. This is the recommended rollout mode. |
+| Enforce | Block high-confidence, blockable findings. Lower-confidence destructive or resource-abuse signals remain observed. |
+
+Passport inspects content in memory but stores only the app, tool, phase, category, severity, action, bounded reason, and a one-way fingerprint. It never stores the matching definition, arguments, or result in a security finding.
+
+<Warning>
+  Runtime Security v1 is deterministic and explainable, not a claim that every malicious instruction will be detected. Start in Observe, review findings, then enable Enforce. Opaque image, audio, and binary content is size-bounded but not semantically classified.
+</Warning>
 
 ## The engine
 
@@ -55,6 +77,6 @@ On Enterprise, a custom rule matches a regular expression, or a plain phrase if 
 
 ## Alerts and the audit log
 
-A guardrail hit raises an alert in the app. Enterprise workspaces can also send it to a configured alert webhook (see [SIEM and OTLP export](/enterprise/siem-export)).
+A guardrail hit raises an alert in the app. Runtime Security findings appear in the same Guardrails area and export as metadata-only security events. Enterprise workspaces can also send configured events to their security systems (see [SIEM and OTLP export](/enterprise/siem-export)).
 
 Guardrails also protect the audit trail itself. Whatever a guardrail would flag, including a blocked secret, is scrubbed from the persisted activity entry before it is written, so a credential never survives in the Activity table, the member API, or the CSV and JSONL exports. The one exception is a custom alert-only rule, whose whole purpose is to surface the matched content for review.
