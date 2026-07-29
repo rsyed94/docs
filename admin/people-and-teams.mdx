@@ -47,4 +47,15 @@ Deactivating a member immediately signs them out everywhere and revokes their co
 
 Agent keys are available to owners on every plan from **Settings**. On Free and Pro, expand **Advanced** and open **Headless & CI** (there is also a **CLI guide** link there). On Enterprise, **Headless & CI** is a top-level Settings card. Creating a key also creates a governed agent identity. The `pak_` bearer is shown once and stored only as a hash; its calls have their own access and Activity attribution, and revoking the key retires the identity. On Free, agents count toward the member cap; on paid plans they are not billed as seats.
 
+Choose an identity model when you create the key:
+
+| Model | Effective access |
+| --- | --- |
+| Autonomous | The agent identity's own app passes, tool policy, and client selection. |
+| Delegated | The intersection of the agent's policy and one active human's policy. The agent uses that person's connected account where member OAuth is required. |
+
+Delegation can only narrow access: an app or tool unavailable to either principal is unavailable to the agent. The same intersection applies to tools, resources, prompts, connection status, bundles, and personal client selection. Activity and Runtime Security findings record both the agent and delegated person.
+
+Delegated keys require Enterprise and expire after 1–365 days. If the delegated person is deactivated, or the key expires or is revoked, authentication fails immediately. Create a replacement key to rotate it; the old bearer is never shown again.
+
 Passport CLI accepts an agent key through `PASSPORT_AGENT_KEY` with the governed workspace endpoint in `PASSPORT_ENDPOINT` (`https://…/w/ws_…/mcp`). This mode writes no local credential file, so it is the recommended attach surface for CI, cron, and headless jobs. See [Passport CLI](/quickstart/cli).
