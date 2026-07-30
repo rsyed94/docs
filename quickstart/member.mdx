@@ -1,141 +1,65 @@
 ---
-title: "Member quickstart"
-description: "Accept your invite, connect an app, add Claude or Cursor, and check that everything works."
+title: "Get connected"
+description: "Connect a work app, add your AI client, and confirm your first Passport action."
 ---
 
-This guide gets you from invite to a working AI assistant in a few minutes. The same path works on Windows, Linux, and macOS. The macOS desktop app is optional — handy if you want to wire several local apps at once, not required.
+This is the shortest path from sign-in to a working AI client. It works on Windows, Linux, and macOS. You do not need the Passport desktop app.
 
-## Accept your invite
+## 1. Sign in
 
-Open the invite email and click the link. That signs you into your workspace.
+Open your invite, or sign in at [passportmcp.com](https://passportmcp.com). If your company uses single sign-on, Passport will send you to your company's sign-in page.
 
-Keep the link: any Passport link that includes your workspace works to sign in later (your invite link or your workspace page URL).
+After signing in, you should see **Apps**, **Clients**, **Activity**, and **Settings**.
 
-## 1. Connect an app
+## 2. Connect a work app
 
-Open **Apps**, choose an app you use (for example GitHub), and select **Connect**.
+Open **Apps**.
 
-- If your workspace allows it, Passport connects right away.
-- If review or company setup is needed, Passport explains what is left.
+- Choose an app you already have access to and select **Connect**.
+- Complete the provider sign-in in the Passport Connect window.
+- If your workspace requires approval or company setup, Passport shows that instead of pretending the app is ready.
 
-When an app uses your own account, Passport opens the provider's sign-in page in your browser. You approve as yourself. Your AI assistant never sees a password or token — those stay in Passport.
+Your provider credentials stay in Passport. They are not copied into Claude, Cursor, ChatGPT, Codex, or another AI client.
 
-## 2. Add an AI assistant
+## 3. Add your AI client
 
-Open **Clients → Add client** and pick what you use:
+Open **Clients**, choose **Add client**, then pick where you want to use Passport.
 
-- **ChatGPT or Claude.ai** — paste the connection URL Passport shows, then approve in the browser.
-- **Cursor, VS Code, Claude Desktop, and similar** — use the one-click link or setup steps Passport shows, then finish in the browser.
-- **Terminal tools (Claude Code, Codex, scripts)** — install [Passport CLI](/quickstart/cli), run `passport login`, and confirm in the browser.
-- **Several local apps on macOS** — optionally use the desktop app to set them up together.
+Passport shows current instructions for each client:
 
-<Tabs>
-  <Tab title="Windows">
-    1. Open Passport in your browser and choose **Add client**.
-    2. Follow the setup Passport shows for your AI app, or install Node.js 20+ and Passport CLI.
-    3. Finish browser sign-in, then ask your AI assistant to list the tools it can use.
-  </Tab>
-  <Tab title="Linux">
-    1. Open Passport in your browser and choose **Add client**.
-    2. Follow the setup Passport shows for your AI app, or install Node.js 20+ and Passport CLI.
-    3. Finish browser sign-in, then ask your AI assistant to list the tools it can use.
-  </Tab>
-  <Tab title="macOS">
-    1. Use the same browser path as Windows and Linux.
-    2. Optionally install Passport Desktop if you want to configure several local apps in one pass.
-    3. Finish browser confirmation and check each client in the install hub.
-  </Tab>
-</Tabs>
+- **Cursor and VS Code** have one-click setup.
+- **Claude Code and Codex** use their own MCP command and browser sign-in.
+- **Claude Desktop, Claude.ai, and ChatGPT** use the connector address Passport gives you.
+- **Terminal and automation** can use [Passport CLI](/quickstart/cli).
+- **Other clients** can copy the advanced connector address if they support remote MCP and browser sign-in.
 
-### ChatGPT and Claude.ai
+Follow the steps in Passport and finish the browser sign-in. No provider token should be pasted into your AI client.
 
-These run in the browser, so they connect with a **connection URL** instead of a local install. Passport shows and copies it under **Clients → Add client**. It looks like:
+<Note>
+  On macOS, Passport Desktop is optional. It can set up several local clients and help discover direct MCP connections. **Desktop compatibility** is also available when a client's normal browser sign-in cannot reach a localhost, private, or self-hosted Passport server.
+</Note>
 
-```
-https://<your-passport-host>/w/<your-workspace-id>/mcp
-```
+## 4. Confirm the connection
 
-Your workspace id is the `ws_…` part of that path (and of your Passport browser URL).
+Keep the AI client open and ask:
 
-<Tabs>
-  <Tab title="ChatGPT">
-    <Steps>
-      <Step title="Turn on Developer mode">
-        In ChatGPT on the web, open **Settings → Security and login** and turn on **Developer mode**. OpenAI currently offers this on Plus, Pro, Business, Enterprise, and Education plans. Workspace admins may also need to allow it.
-      </Step>
-      <Step title="Create the app">
-        Use the plus button to create a developer-mode app, paste the Passport connection URL as the remote MCP server URL, and continue.
-      </Step>
-      <Step title="Allow">
-        A Passport page opens. Click Allow. You approve as yourself; ChatGPT never sees a token or password. In a chat, choose **Developer mode** from the plus menu and select the app when you want Passport tools available.
-      </Step>
-    </Steps>
-  </Tab>
-  <Tab title="Claude.ai">
-    <Steps>
-      <Step title="Open connector settings">
-        Go to Claude.ai's connector settings and click Add custom connector. Anthropic currently allows custom connectors on Free (one connector) as well as Pro, Max, Team, and Enterprise. If the button is missing, check the limit in your Claude account.
-      </Step>
-      <Step title="Paste the URL">
-        Paste the connection URL as the server URL and continue.
-      </Step>
-      <Step title="Allow">
-        A Passport page opens. Click Allow. You approve as yourself; Claude.ai never sees a token or password.
-      </Step>
-    </Steps>
-  </Tab>
-</Tabs>
+> List my available Passport tools.
 
-### Optional: macOS desktop app
+Return to **Clients**. Passport marks the client connected after it sees real activity. Then choose **Run setup check** in the checklist. The check is safe, does not contact the app provider, and opens **Activity** so you can see the result.
 
-If you use several local apps (Claude Desktop, Claude Code, Cursor, VS Code, Codex), the desktop app can configure them in one pass. It needs macOS 11 or later.
+If setup stays pending, open that client in **Clients** and use **Troubleshoot**. See [Troubleshooting](/troubleshooting) for common fixes.
 
-<Steps>
-  <Step title="Download and open">
-    Download from your workspace's download page, drag Passport to Applications, then right-click and choose Open the first time.
-  </Step>
-  <Step title="Sign in">
-    Paste any Passport link that includes your workspace. Confirm the short code in your browser and approve.
-  </Step>
-  <Step title="Connect local apps">
-    Choose each AI app you want Passport to set up. Passport keeps a backup and will not overwrite a config it cannot understand.
-  </Step>
-</Steps>
+## Make it yours
 
-<Warning>
-  If you use both the Claude desktop connection and the Claude.ai connector, Claude may show each tool twice. Keep just one. See [Troubleshooting](/troubleshooting).
-</Warning>
-
-### Terminal and automation
-
-For Claude Code, Codex CLI, scripts, and CI, use [Passport CLI](/quickstart/cli):
-
-```sh
-npm i -g passport-bridge
-passport login --cloud https://passportmcp.com --workspace <workspace-id>
-passport search "issues"
-passport run github_search_issues '{"query":"SSO"}'
-```
-
-## 3. Check that everything works
-
-Open **Clients** (or **Getting started** during first-run setup). On the checklist step **Prove the governed path**, choose **Run setup check**.
-
-Passport runs a safe, read-only test against your current workspace rules. It does not contact the app provider. When it succeeds, Passport opens **Activity** so you can see the result. If something changed (for example a client was disconnected), the step stays incomplete and you can try again.
-
-## Next
+- Open a connected client to choose which of your available apps it can see.
+- Open [Safety preferences](/member/safety) to ask before write or destructive actions.
+- Open **Activity** to review what your clients did and whether Passport allowed, blocked, or failed the action.
 
 <CardGroup cols={2}>
-  <Card title="Safety preferences" icon="hand" href="/member/safety">
-    Ask Passport to check with you before write or destructive actions.
-  </Card>
   <Card title="Passport CLI" icon="terminal" href="/quickstart/cli">
-    Use Passport from the terminal, scripts, and CI.
-  </Card>
-  <Card title="Plans and billing" icon="credit-card" href="/billing">
-    What Free, Pro, and Enterprise include.
+    Use Passport from a terminal agent, script, or CI job.
   </Card>
   <Card title="Troubleshooting" icon="wrench" href="/troubleshooting">
-    Tools missing, duplicate Claude tools, and other common fixes.
+    Fix sign-in, missing apps, or a duplicate compatibility connection.
   </Card>
 </CardGroup>

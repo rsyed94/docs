@@ -1,38 +1,33 @@
 ---
 title: "Safety preferences"
-description: "Choose when Passport should ask before write or destructive actions."
+description: "Choose when Passport should allow, ask about, or block actions for you."
 ---
 
-Safety preferences are your personal brakes. They never give you more access than your workspace already allows — they only make things stricter for your own AI assistants.
+Safety preferences are personal checks for actions your AI clients try through Passport. They can make your access stricter, but never broader.
 
-## Where to find them
+Open **Settings** and find **Safety**.
 
-Open **Settings**. The **Safety** card is near the top of the page. You will see two choices:
-
-| Preference | Choices | Default |
-| --- | --- | --- |
-| Write actions | Allow / Ask me / Never | Allow |
-| Destructive actions | Allow / Ask me / Never | Ask me |
-
-Read-only actions are not controlled here. Workspace rules (who can use which app, and company guardrails) still apply first.
-
-## What each choice means
-
-When your AI assistant tries an action through Passport:
+For both write actions and destructive actions, choose:
 
 - **Allow** — go ahead, if your workspace already permits it.
-- **Ask me** — pause and wait for your decision (allow once, allow for this session, or deny). An **Approvals** item appears in the navigation while something is waiting.
+- **Ask me** — pause so you can allow it once, allow it for the session, or deny it. **Approvals** appears in the navigation while something is waiting.
 - **Never** — block it immediately.
 
-Automation identities (agent keys) do not get Ask-me prompts — they are non-interactive. Use your normal member sign-in when a human should decide.
+The defaults are:
 
-## How this works with company rules
+| Action | Default |
+| --- | --- |
+| Write | Allow |
+| Destructive | Ask me |
 
-Personal Safety sits on top of workspace access and guardrails:
+Read-only actions are not controlled here.
 
-- If your access is already read-only, write tools stay hidden no matter what Safety says.
-- If a company guardrail would block a secret, Safety cannot override that.
+## How Safety combines with workspace rules
 
-Use Safety when you want a personal check before writes or risky actions, without changing rules for everyone else.
+- If your app access is read-only, write tools stay hidden even if Safety says **Allow**.
+- If a workspace guardrail blocks an action, Safety cannot override it.
+- Agent identities used by scripts and CI cannot answer **Ask me** prompts. Use a normal member connection when a human needs to decide.
+
+Use Safety when you want an extra personal check without changing anyone else's access.
 
 See also [Guardrails](/admin/guardrails) and [Catalog access and passes](/admin/approvals-and-requests).

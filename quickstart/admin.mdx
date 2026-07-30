@@ -1,69 +1,64 @@
 ---
-title: "Workspace owner quickstart"
-description: "Create a workspace, connect an app, invite people, and confirm the first successful Activity row."
+title: "Set up a workspace"
+description: "Connect the first app, add your AI client, invite people, and confirm the setup."
 ---
 
-If you are setting up Passport for your team, start here. You will connect one app, add an AI assistant, invite people, and confirm everything works.
+Start here if you created the workspace. You will connect one useful app, prove the setup yourself, and then invite other people.
 
-Free and Pro keep workspace management light: open **Settings**, then under **Workspace essentials** choose **Manage workspace**. Enterprise keeps the same personal setup under **For me** / **My clients**, and adds company-wide pages for **People**, **Guardrails**, **Audit**, and **Settings**.
+Free and Pro keep administration inside **Settings**. Enterprise adds organization-wide pages for **People**, **Discover**, **Guardrails**, **Audit**, and **Settings**.
 
-## Create your workspace
+## 1. Connect an app
 
-Sign up at [passportmcp.com](https://passportmcp.com) and confirm your email, or [self-host](/self-host) your own deployment.
+Open **Apps**, then **Browse apps**.
 
-You become the workspace admin. By default, joining is invite-only — nobody else appears until you add them.
+- Pick an app you already use.
+- Choose **Connect**.
+- Complete your own provider sign-in, or finish any company setup Passport asks for.
 
-## 1. Connect your first app
+Verified catalog apps are self-service on Free and Pro. Enterprise can keep that flow open, require review, or apply catalog rules by app, category, publisher, and team.
 
-Open **Apps** and connect something useful:
+## 2. Add your AI client
 
-<CardGroup cols={2}>
-  <Card title="From the catalog" icon="grid">
-    Pick a verified app and choose **Connect**. On Free and Pro this is usually one step. Enterprise can keep that open or require review.
-  </Card>
-  <Card title="By URL" icon="link">
-    Point Passport at any tool server by URL. Passport connects, finds its tools, and scans them.
-  </Card>
-</CardGroup>
+Open **Clients**, choose **Add client**, and follow the instructions Passport shows. The normal path uses the AI client's own remote MCP support and browser sign-in; no Passport desktop app is required.
 
-New catalog apps start **read-only**, so an AI assistant cannot see write actions a person is not allowed to use. For approval rules and rollout, see [Catalog access and passes](/admin/approvals-and-requests).
+Ask the client to list its Passport tools, then return to **Clients** and choose **Run setup check**. Passport opens **Activity** when the safe check succeeds.
 
-## 2. Add an AI assistant
+Do this before inviting the team. It proves the full connection and gives you a known-good example.
 
-Open **Clients → Add client**. On Windows, Linux, or macOS, use the setup Passport shows, run `passport login`, or paste the connection URL.
+## 3. Invite people
 
-The connection URL looks like `/w/ws_…/mcp`. The macOS desktop app can configure several local assistants at once; there is no Windows or Linux desktop app. Details: [member quickstart](/quickstart/member).
+- **Free and Pro:** open **Settings → Workspace essentials → Manage workspace**.
+- **Enterprise:** open **People**.
 
-## 3. Invite your team
+Add people individually or in a batch. Invites are tied to the intended email address and expire after 14 days. On Enterprise, assign roles and teams as part of the rollout.
 
-- **Free and Pro:** **Settings** → **Workspace essentials** → **Manage workspace**
-- **Enterprise:** **People** (roles, teams, and company-wide policy)
+See [People and teams](/admin/people-and-teams) for roles, deactivation, teams, and agent identities.
 
-See [People and teams](/admin/people-and-teams).
+## 4. Choose the right level of control
 
-## 4. Check that everything works
+You can start simple:
 
-On **Clients** (or **Getting started** during first-run setup), open the checklist and choose **Run setup check** on **Prove the governed path**.
+- Personal [Safety preferences](/member/safety) are available on every plan.
+- Built-in secret detection protects every plan.
+- Enterprise adds company-wide app rollout, approvals, client policy, Discover, Runtime Security, custom guardrails, and audit export.
 
-Passport runs a safe test (no call out to the app provider). When it succeeds, your activity log opens so you can see the row (**Activity** for members; **Audit** in the Enterprise admin nav). If something is wrong, the step stays incomplete and you can retry.
+Start with the default behavior, watch real usage in **Activity** or **Audit**, and add controls when there is a clear need.
 
 <Note>
-  Everyone can see their own Activity on every plan. Company-wide CSV/JSONL export and the admin audit trail are Enterprise. See [Activity and audit](/admin/activity-and-audit).
+  Everyone can see their own Activity. Enterprise admins can review and export company-wide Activity from **Audit**, and can review privileged admin changes under **Settings → Admin activity**.
 </Note>
 
-## Next
-
 <CardGroup cols={2}>
-  <Card title="Guardrails" icon="filter" href="/admin/guardrails">
-    Built-in secret detection on every plan; custom rules on Enterprise.
+  <Card title="App access and approvals" icon="key" href="/admin/approvals-and-requests">
+    Decide who can connect each app and what they can do.
   </Card>
-  <Card title="Client fleet" icon="laptop" href="/admin/client-fleet">
-    See and revoke AI clients across the workspace (Enterprise).
+  <Card title="Guardrails" icon="filter" href="/admin/guardrails">
+    Understand secret checks, Runtime Security, and custom rules.
   </Card>
   <Card title="Plans and billing" icon="credit-card" href="/billing">
-    Free, Pro, and Enterprise — including how agents count on Free.
+    Compare Free, Pro, and Enterprise.
   </Card>
-  <Card title="Enterprise controls" icon="building" href="/enterprise/sso-oidc">
-    SSO, SCIM, and audit streaming when you need them.
+  <Card title="Get connected" icon="user" href="/quickstart/member">
+    Share the everyday setup guide with your team.
   </Card>
 </CardGroup>

@@ -1,52 +1,62 @@
 ---
-title: "Discover direct MCP connections"
-description: "Find MCPs configured outside Passport, collect owner context, and guide them behind workspace controls."
+title: "Find connections outside Passport"
+description: "Find direct MCP connections, understand why they exist, and bring them under workspace control."
 ---
 
-Passport Discover helps Enterprise workspaces find MCP connections already configured directly in supported local AI clients. It turns those findings into an admin action queue: approve the direct setup, require the owner to route it through Passport, grant a temporary exception, or ask them to remove it.
+Discover helps Enterprise admins find MCP connections that people configured directly in supported local AI clients.
 
-<Note>
-  Discover reports configuration, not usage. A finding means an MCP entry was present when Passport Desktop scanned that client. It does not prove that the MCP was called.
-</Note>
+Each finding becomes a clear decision:
 
-## What members do
+- approve the direct connection;
+- ask the owner to move it behind Passport;
+- allow it temporarily; or
+- ask the owner to remove it.
 
-<Steps>
-  <Step title="Open Discover in Passport Desktop">
-    The member explicitly enables local scanning. Passport does not scan before consent.
-  </Step>
-  <Step title="Review grouped findings">
-    One MCP configured in several clients appears as one decision with a separate occurrence for each client.
-  </Step>
-  <Step title="Share purpose">
-    The member can mark the MCP as Work, Evaluating, Personal, or Not needed. This is owner-provided context, not inferred behavior.
-  </Step>
-  <Step title="Follow remediation">
-    Supported remote HTTP and SSE entries can use guided migration. Passport verifies the governed MCP and client selection immediately before removing the exact reviewed direct entry. When an admin requests removal instead, the member can explicitly back up and remove the reviewed local entry without creating a replacement. Both flows verify that sibling configuration is unchanged.
-  </Step>
-</Steps>
+<Warning>
+  Discover reports configuration, not usage. A finding means a connection was present during a scan. It does not prove that anyone used it.
+</Warning>
 
-## What admins see
+## Review the action queue
 
-Open **Governance → Discover** to review:
+Open **Discover**. The action queue appears first and groups the same MCP found in several clients into one decision.
 
-- unique MCPs and direct configuration occurrences;
-- reporting computers and client-source coverage;
-- owner-provided purpose;
-- whether a supported entry can be migrated automatically;
-- admin decisions and migration or removal queues.
+For each item, review:
 
-## Personal and managed deployment
+- who owns it and how they described its purpose;
+- which supported clients contain it;
+- whether Passport can guide a safe move; and
+- the current admin decision.
 
-**Personal · opt-in** keeps the existing Desktop experience: each member decides whether to enable local scanning.
+Members can describe a connection as **Work**, **Evaluating**, **Personal**, or **Not needed**. This is context they provide, not a conclusion Passport draws from their activity.
 
-**Managed fleet** adds a cross-platform, headless scanner for endpoint management:
+## What happens on a member's computer
+
+Passport Desktop scans only after the member enables Discover.
+
+For a supported remote connection, Desktop can guide a move behind Passport. Before changing anything, it checks that the reviewed entry, the governed replacement, and the client's app selection still match. It creates a backup, changes only the reviewed entry, and verifies the result.
+
+If an admin asks for removal, the member can use the same reviewed backup-and-verify flow without creating a replacement. Passport never silently edits the file.
+
+## Coverage and Fleet policy
+
+The Discover page shows reporting computers and supported client sources. Project-level configuration, hosted clients, and computers without Passport Desktop discovery or the managed scanner are outside coverage.
+
+Choose **Fleet policy** in the page header to switch between:
+
+- **Personal · opt-in** — each member decides whether Desktop scans.
+- **Managed fleet** — administrators deploy the scanner through endpoint management.
+
+Sources older than seven days stop counting as current coverage, but their last findings remain visible.
+
+## Managed scanner
+
+For a managed Windows, Linux, or macOS fleet, schedule:
 
 ```sh
 passport discover
 ```
 
-The command scans supported global configuration for Claude Desktop, Claude Code, Cursor, VS Code, and Codex on macOS, Windows, and Linux, then submits the same privacy-minimized report as Desktop. It uses the signed-in CLI profile on that computer. Deploy that profile and schedule the command with your existing MDM or endpoint-management system.
+The command scans supported global configuration for Claude Desktop, Claude Code, Cursor, VS Code, and Codex, then submits the same limited report as Desktop. It uses the signed-in Passport CLI profile on that computer.
 
 Managed policy has three responses:
 
@@ -56,20 +66,18 @@ Managed policy has three responses:
 | Require Passport route | Exit `5` while any active direct connection lacks an explicit approval or exception. |
 | Fail denied managed scans | Exit `5` when an active direct connection has an admin decision of **Remove**. |
 
-The nonzero exit is the verified enforcement boundary: endpoint management can quarantine, notify, or run its own remediation policy. Passport does not silently edit client configuration. Desktop migration and removal remain explicit, reviewed actions with backup and verification.
+Your endpoint-management system decides what to do with exit code `5`, such as notify, quarantine, or start its own remediation. Passport does not silently edit a managed device.
 
 <Note>
-  Managed mode does not silently enable the Desktop scanner. Use `passport discover` for administrator-deployed reporting; Desktop remains a member-controlled local experience.
+  Managed mode does not turn on Desktop scanning. Use `passport discover` for administrator-deployed reporting; Desktop remains controlled by the member.
 </Note>
 
-Project-level configuration, hosted clients, and computers that run neither Passport Desktop discovery nor the managed scanner are outside current coverage. Sources older than seven days stop counting as reporting coverage, but their last findings remain visible.
+## What Discover does not upload
 
-## Privacy boundary
+Discover reports the authenticated member and installation, installation label, client, safe MCP name, transport type, remote hostname or safe executable class, whether the settings are protected, and scan status and time.
 
-Enterprise reporting includes only the authenticated member and installation identifiers, installation label, client, safe MCP name, transport class, remote hostname or safe executable class, protected-settings presence, and scan status and timestamps.
+It does **not** upload configuration paths, commands, arguments, environment variables, headers, tokens, endpoint paths, query strings, prompts, files, tool inputs or outputs, or network traffic. A full remote address leaves the computer only after the member reviews and confirms a move.
 
-Discover does not upload configuration paths, commands or arguments, environment variables, headers, tokens, endpoint paths, query strings, prompts, files, tool inputs or outputs, or network traffic. A complete remote endpoint leaves the computer only after the member reviews and confirms a migration.
+Failed or permission-denied scans update coverage but do not erase a finding. Passport needs two successful scans without the entry before marking it no longer found.
 
-Failed or permission-denied scans update coverage but never erase an existing finding. Passport requires two successful scans without an entry before marking it no longer found.
-
-An explicit Desktop removal is reflected immediately after the local backup, exact-entry removal, and verification succeed. If the same entry reappears later, Discover opens it again instead of treating the previous resolution as permanent.
+If a removed entry appears again later, Discover reopens it for review.

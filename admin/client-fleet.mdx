@@ -1,31 +1,44 @@
 ---
-title: "Client fleet"
-description: "See which AI assistants are connected, revoke devices, and require registered clients (Enterprise)."
+title: "Manage connected clients"
+description: "See connected AI clients, remove access, and set workspace client policy."
 ---
 
-On Enterprise, admins can see AI assistants across the whole workspace, revoke connections, and require only recognized clients. Free and Pro members manage their own Clients page. On Enterprise, personal devices live under **Clients → My clients**. Company-wide fleet rules are kept if you downgrade, but they are not enforced until Enterprise is active again.
+Everyone can manage their own connections from **Clients**. Enterprise admins can also see and manage connections across the workspace.
 
-## See workspace clients
+## Manage your own clients
 
-On Enterprise, open **Clients** and use the **Workspace clients** tab. You can search, open a person, spot stale clients, and revoke a device so it must sign in again.
+Open **Clients → My clients** to:
 
-Anyone can revoke their own devices from **Clients** (or **My clients** on Enterprise). Listing everyone and admin revoke need Enterprise.
+- add a client;
+- see whether Passport has observed it;
+- choose which available apps it can see;
+- troubleshoot or reconnect it;
+- remove a duplicate Desktop compatibility connection; or
+- disconnect it immediately.
 
-## Require registered clients
+Free and Pro use the same personal page without the two tabs.
 
-Under **Settings**, in the **AI client access** card, Enterprise admins can:
+## Manage the workspace
+
+On Enterprise, open **Clients → Workspace clients**. You can search by person or client, inspect clients that are unused or out of date, and revoke a connection so it must sign in again.
+
+The workspace list shows real observed connections. Opening setup instructions alone does not create a connected-client record.
+
+## Set client policy
+
+Open **Settings → AI client access**:
 
 - **Allow dynamic clients** — whether unrecognized clients may connect
 - **Require registered AI clients** — only clients Passport recognizes (or you have registered) may connect
 
-On Free and Pro, policy stays open even if older Enterprise settings are still stored.
+These controls require Enterprise. If the workspace downgrades, the saved policy is not enforced until Enterprise is active again.
 
 ## Team defaults
 
-[Client defaults](/admin/client-defaults) choose which allowed apps appear by default in a given AI assistant for a team. They do not grant new access — passes still decide what someone can reach.
+[Client defaults](/admin/client-defaults) choose which already-allowed apps appear by default in a client for a team. They never grant access.
 
 ## Related
 
-- [Member quickstart](/quickstart/member) — connecting an AI assistant
+- [Get connected](/quickstart/member) — connecting an AI client
 - [People and teams](/admin/people-and-teams) — roles and lifecycle
-- [Network and egress](/security/network) — how the desktop app talks to Passport
+- [Discover](/admin/discover) — finding connections configured outside Passport

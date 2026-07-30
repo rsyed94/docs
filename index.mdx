@@ -1,77 +1,66 @@
 ---
 title: "Passport"
-description: "Connect your work apps to Claude, Cursor, ChatGPT, and more — safely, with a clear record of what happened."
+description: "Connect your work apps to AI assistants with one sign-in, clear access rules, and a record of every action."
 ---
 
-Passport is the place your team connects work apps to AI assistants. You connect GitHub, Linear, Stripe, and other tools once. Then Claude, Cursor, ChatGPT, and the rest use them through Passport, with your company's rules and a clear Activity log.
+Passport gives Claude, Cursor, ChatGPT, Codex, and other AI assistants a safe way to use your work apps.
 
-You do not need to understand protocols to get started. Connect an app, add an AI assistant, and check that it worked.
+Connect GitHub, Linear, Stripe, and other apps once. Passport keeps the credentials, applies your workspace rules, and records what happened. Your AI assistant never receives the provider password or token.
 
-## Who this is for
+You do not need to know how MCP works. Most people can get started from **Apps** and **Clients** in a few minutes.
 
 <CardGroup cols={2}>
-  <Card title="Using Passport" icon="user">
-    Join your workspace, connect the apps you use, add Claude / Cursor / ChatGPT, and review what your assistants did. Start with the [member quickstart](/quickstart/member).
+  <Card title="I want to use Passport" icon="user" href="/quickstart/member">
+    Connect an app, add your AI client, and check your first action.
   </Card>
-  <Card title="Managing a workspace" icon="building">
-    Invite people, decide which apps are available, and (on Enterprise) set company-wide rules. Start with the [workspace owner quickstart](/quickstart/admin).
+  <Card title="I manage the workspace" icon="building" href="/quickstart/admin">
+    Set up the workspace, invite people, and choose how apps are shared.
   </Card>
 </CardGroup>
 
-## What you get
+## What Passport does
 
 <CardGroup cols={2}>
-  <Card title="One place to connect" icon="plug">
-    Browse apps, connect your own accounts, and use them from every supported AI assistant.
+  <Card title="Connect once" icon="plug">
+    Use the same app connections from every supported AI client.
   </Card>
-  <Card title="Your credentials stay protected" icon="lock">
-    You sign in as yourself. Your AI assistant never sees passwords or tokens.
+  <Card title="Keep credentials out of AI clients" icon="lock">
+    Passport stores provider credentials and calls apps on your behalf.
   </Card>
-  <Card title="A clear Activity log" icon="list">
-    See what each person or automation did, which app was used, and whether it succeeded.
+  <Card title="See what happened" icon="list">
+    Activity shows the person, AI client, app, action, and outcome.
   </Card>
-  <Card title="Safety controls" icon="hand">
-    Built-in secret scanning on every plan, plus personal [Safety preferences](/member/safety) so Passport can ask before write or destructive actions.
+  <Card title="Add the right checks" icon="hand">
+    Personal Safety can ask before writes. Workspace controls can narrow access, block risky content, and require review.
   </Card>
 </CardGroup>
 
-Free and Pro focus on getting people connected. Enterprise adds company-wide controls for people, approvals, clients, and audit export — without changing the everyday setup flow.
+## The two parts of Passport
 
-## Get started in three steps
+Most people use four pages:
 
-<Steps>
-  <Step title="Connect an app">
-    Open **Apps**, pick something you use (for example GitHub), and choose **Connect**. See the [workspace owner quickstart](/quickstart/admin) if you are setting up the workspace.
-  </Step>
-  <Step title="Add an AI assistant">
-    Open **Clients → Add client**. Follow the steps for Claude, Cursor, ChatGPT, or another supported client. On Windows, Linux, and macOS the browser path works the same; the macOS desktop app is optional. See the [member quickstart](/quickstart/member).
-  </Step>
-  <Step title="Check that everything works">
-    On **Clients** (or **Getting started** during first-run setup), choose **Run setup check**. Passport runs a safe test and opens **Activity** when it succeeds, so you can see the result.
-  </Step>
-</Steps>
+- **Apps** — browse and connect work apps
+- **Clients** — add Claude, Cursor, ChatGPT, Codex, or another AI client
+- **Activity** — review your own actions
+- **Settings** — manage Safety, sessions, and your account
 
-## Keep reading
+Enterprise admins also get organization-wide pages for **People**, **Discover**, **Guardrails**, **Audit**, and **Settings**. Those controls do not change the everyday member flow.
 
 <CardGroup cols={2}>
-  <Card title="How Passport fits together" icon="sitemap" href="/concepts/model">
-    Workspaces, apps, access, teams, and AI clients — in plain language.
+  <Card title="Get connected" icon="arrow-right" href="/quickstart/member">
+    Go from sign-in to your first recorded action.
   </Card>
-  <Card title="Plans and billing" icon="credit-card" href="/billing">
-    Free, Pro, and Enterprise: what you get and how seats work.
+  <Card title="How Passport works" icon="sitemap" href="/concepts/model">
+    A plain-language guide to apps, clients, access, and Activity.
   </Card>
   <Card title="Safety preferences" icon="hand" href="/member/safety">
-    Choose when Passport should ask before write or destructive actions.
+    Ask before writes or block them for yourself.
   </Card>
   <Card title="Troubleshooting" icon="wrench" href="/troubleshooting">
-    Common issues and how to fix them.
+    Fix missing apps, incomplete sign-in, or duplicate connections.
   </Card>
 </CardGroup>
 
 <Note>
-  Passport is available at [passportmcp.com](https://passportmcp.com), and you can also [self-host](/self-host) it. See [Privacy](https://passportmcp.com/privacy) and [Security](https://passportmcp.com/security) for the hosted product.
+  Passport is available at [passportmcp.com](https://passportmcp.com). You can also [self-host](/self-host). See the hosted service's [Privacy](https://passportmcp.com/privacy) and [Security](https://passportmcp.com/security) pages.
 </Note>
-
-<Accordion title="A note on terminology">
-  In the product, **Apps** is where you browse and connect tools. Those tools often speak **MCP** (Model Context Protocol) under the hood — that is the technical name for the connection. These docs lead with everyday language and introduce MCP where it helps. The first person in a workspace is an **admin** (sometimes called the owner). Free and Pro keep light admin work in **Settings** under **Workspace essentials** (**Manage workspace**). Enterprise keeps the same personal flow under **For me** / **My clients**, and adds company-wide pages for **People**, **Guardrails**, **Audit**, and **Settings**.
-</Accordion>

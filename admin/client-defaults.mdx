@@ -1,28 +1,32 @@
 ---
 title: "Client defaults"
-description: "Use Enterprise workspace controls to preset which granted MCPs appear in each team's AI clients."
+description: "Choose which allowed apps appear by default in each team's AI clients."
 ---
 
-Client defaults are an **Enterprise workspace control**. A person's passes decide which MCPs they can reach; client defaults decide which of those MCPs appear by default in a given AI client. Free and Pro members choose their own visible apps directly.
+Client defaults are an Enterprise workspace control. They choose which already-allowed apps appear in a client for a team.
 
 ## How it works
 
-A client default is a rule per AI client, per team: for example, "in Cursor, the Engineering team sees GitHub and Linear." It narrows the set of granted MCPs presented in that client. It never grants anything beyond a person's passes; it only chooses which of their granted MCPs appear.
+For example: “In Cursor, Engineering starts with GitHub and Linear.”
 
-When Passport resolves which MCPs to present to a person in a client, it applies, strongest first:
+This is a focus setting, not an access grant. If someone does not have access to Linear, adding Linear to their client default does nothing.
+
+Passport chooses the visible apps in this order:
 
 <Steps>
   <Step title="The person's own choice">
-    A member can override which of their MCPs appear in a client, and that wins.
+    A member can customize the apps shown in their client. Their choice wins.
   </Step>
   <Step title="The team default for that client">
-    Otherwise, the admin default for the person's team in that client applies (or an all-teams default if you set one).
+    Otherwise, Passport uses the team's default for that client, or an all-teams default.
   </Step>
   <Step title="Everything granted">
-    With no override and no default, the client shows every MCP the person can reach.
+    With no personal choice or team default, the client shows every app the person can use.
   </Step>
 </Steps>
 
 ## Set a default
 
-Open **Clients → Workspace clients**, then set the defaults for an AI client and team and choose which enabled MCPs that team should see. Passport keeps only MCP keys that still exist, so removing an MCP cleans up the defaults that referenced it. Clearing a rule returns that team, in that client, to seeing everything they are granted.
+Open **Clients → Workspace clients**, choose the client and team, then select the apps that should appear. Clear the rule to return that team to all apps they are allowed to use.
+
+When an app is removed from Passport, it is also removed from any defaults that referenced it.

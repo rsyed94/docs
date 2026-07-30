@@ -4,7 +4,7 @@
   "name": "Passport",
   "description": "Connect your work apps to Claude, Cursor, ChatGPT, and more — safely, with a clear record of what happened.",
   "colors": {
-    "primary": "#E8467C",
+    "primary": "#C93A6B",
     "light": "#FF8A5C",
     "dark": "#C93A6B"
   },
@@ -15,29 +15,26 @@
   "navigation": {
     "groups": [
       {
-        "group": "Get started",
+        "group": "Start here",
         "pages": [
           "index",
-          "quickstart/admin",
           "quickstart/member",
+          "quickstart/admin",
           "quickstart/cli"
         ]
       },
       {
-        "group": "Concepts",
+        "group": "Using Passport",
         "pages": [
           "concepts/model",
-          "concepts/discovery"
+          "member/safety",
+          "admin/activity-and-audit",
+          "billing",
+          "troubleshooting"
         ]
       },
       {
-        "group": "For members",
-        "pages": [
-          "member/safety"
-        ]
-      },
-      {
-        "group": "Administration",
+        "group": "Manage a workspace",
         "pages": [
           "admin/people-and-teams",
           "admin/approvals-and-requests",
@@ -46,12 +43,11 @@
           "admin/guardrails",
           "admin/discover",
           "admin/client-defaults",
-          "admin/client-fleet",
-          "admin/activity-and-audit"
+          "admin/client-fleet"
         ]
       },
       {
-        "group": "Enterprise",
+        "group": "Enterprise security",
         "pages": [
           "enterprise/sso-oidc",
           "enterprise/scim",
@@ -59,18 +55,17 @@
         ]
       },
       {
-        "group": "Deploy and operate",
+        "group": "Self-hosting",
         "pages": [
           "self-host",
           "security/network"
         ]
       },
       {
-        "group": "Reference",
+        "group": "Technical reference",
         "pages": [
-          "benchmarks/context-efficiency",
-          "billing",
-          "troubleshooting"
+          "concepts/discovery",
+          "benchmarks/context-efficiency"
         ]
       }
     ]

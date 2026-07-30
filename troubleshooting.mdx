@@ -1,30 +1,38 @@
 ---
 title: "Troubleshooting"
-description: "Common problems and how to fix them."
+description: "Fix incomplete sign-in, missing apps, duplicate connections, and common CLI errors."
 ---
 
-## Tools do not show up after connecting
+## A client stays on "Setup pending"
 
-What to do depends on how you connected:
+Passport marks a client connected only after it observes real activity. Opening or copying the setup instructions is not enough.
 
-- **Local apps set up through Passport Desktop or the local bridge** (Claude Desktop, Cursor, VS Code, and similar): new apps usually appear within about 15 seconds. If nothing shows, restart the AI app once. Passport says this when you connect: "will pick this up in ~15 seconds (restart if it doesn't appear)."
-- **ChatGPT or Claude.ai:** refresh or reconnect the connector in that product after an approval or account change.
-- **Passport CLI:** run `passport status`, then `passport search` again. If an app is missing, check that it is enabled for that client under **Clients** in Passport.
-- **Claude Code or Codex** connected the native way: start a new session so tools refresh.
+1. Keep the AI client open.
+2. Finish its browser sign-in.
+3. Ask it to list your Passport tools.
+4. Return to **Clients**, open the client, and choose **Refresh** or **Troubleshoot**.
 
-## Restart the AI app once after connecting
+Passport's client-specific troubleshooting shows the exact check for Claude Code, Cursor, VS Code, Codex, Claude, ChatGPT, and Passport CLI.
 
-Some local AI apps remember their tool list from launch. After you connect an account or an admin enables an app, if tools have not appeared within about 15 seconds, restart that app once. ChatGPT, Claude.ai, and Passport CLI do not use this local refresh path.
+## An app is missing from one client
 
-## Claude shows every tool twice
+Open **Clients**, select that client, and check **App visibility**.
 
-You probably have both the Claude desktop connection and the Claude.ai connector turned on. The Claude.ai connector also syncs into Claude Desktop, so running both duplicates tools.
+- Turn on the app if it is available but hidden.
+- If it says **Not connected yet**, open **Apps** and finish the app connection.
+- If the app is not listed, you may not have access to it. Ask a workspace admin.
 
-The desktop app warns on the Claude row: "Also covered by your Claude.ai connector. Remove one to avoid duplicate tools." Disconnect one of the two.
+After a visibility or access change, ask the client to refresh its tools. Starting a new chat or session can also help clients that cache their tool list.
+
+## Tools appear twice
+
+You probably have both the normal connection and **Desktop compatibility** configured for the same client.
+
+Open **Clients**, choose the affected client, and remove the compatibility connection. Keep the normal browser-sign-in connection when it works.
 
 ## "Redirect URI is not allowed" when signing into an app
 
-Some apps (Mintlify is one example) only allow sign-ins that return to domains you have allowlisted in **their** settings. The fix is in that provider's dashboard, not in Passport.
+Some providers allow sign-in to return only to approved domains. The fix is in that provider's dashboard, not in Passport.
 
 Add your Passport domain (or the full callback URL) to their allowed redirect settings:
 
@@ -32,9 +40,9 @@ Add your Passport domain (or the full callback URL) to their allowed redirect se
 https://<your-passport-domain>/auth/connect-app/callback
 ```
 
-Admins can copy this from the app's Manage panel under "Sign-in service", or from the Add-an-app screen when the app signs in per person ("Callback URL").
+Admins can copy this from the app's setup screen under **Sign-in service** or **Callback URL**.
 
-On Mintlify: Admin → MCP → "Allowed OAuth redirect URIs" → Add domain. That is different from Mintlify's "custom domain" DNS screen for hosting docs. If your org has more than one Mintlify deployment, allow the redirect on each one, or pick the specific deployment on the consent screen.
+For Mintlify, use **Admin → MCP → Allowed OAuth redirect URIs**. This is different from the custom-domain DNS settings. If your organization has several Mintlify deployments, allow the redirect on each one or choose the intended deployment during consent.
 
 ## "A different workspace" / reconnect prompts
 
@@ -43,11 +51,11 @@ Passport will not attribute your activity to the wrong workspace. If this machin
 - In the desktop app: "Connected to another workspace (...). Reconnect to use ..."
 - From the bridge: "This machine's Passport credential now belongs to a different workspace. Reconnect this client from the Passport app."
 
-Reconnect that client from Passport. This often happens after signing the same computer into a second workspace.
+Reconnect that client from **Clients** in the intended workspace. This often happens after the same computer signs into another workspace.
 
 ## "This connection isn't signed in"
 
-Your AI assistant's connection is no longer signed in. Open Passport and reconnect that AI client.
+Open **Clients**, select the client, and reconnect it. Finish the browser sign-in before retrying.
 
 ## "This account has been deactivated"
 
@@ -56,11 +64,23 @@ A deactivated person cannot sign in or use Passport. You may see:
 - From a connection: "This account has been deactivated."
 - On the sign-in page: "Your account has been deactivated. Contact your workspace admin."
 
-An admin can reactivate you in People; then reconnect your own accounts.
+An admin can reactivate you in **People**. Then sign in again and reconnect any accounts that need it.
 
 ## Rate limited
 
-Passport limits how fast connections can call tools. When you hit a limit, wait a moment and try again. The message says whether it is this connection, the whole workspace, or too many requests at once. Self-host operators can tune the caps; see [Self-host](/self-host).
+Wait a moment and try again. The message says whether the limit applies to the connection, workspace, or number of calls happening at once. Self-host operators can tune these limits; see [Self-host](/self-host).
+
+## Passport CLI cannot connect
+
+Run:
+
+```sh
+passport doctor
+passport status
+passport search ""
+```
+
+`doctor` checks the runtime, credential store, endpoint, sign-in, and protocol without printing credentials. If it asks you to sign in, run the `passport login` command shown under **Clients → Add client → Terminal & automation**.
 
 ## Passport CLI exits with an error code
 
@@ -73,6 +93,6 @@ Stable exit codes help scripts and agents:
 | `4` | Approval is pending |
 | `5` | Blocked by policy, a guardrail, client selection, or a denied approval |
 | `6` | Invalid command or tool name |
-| `1` | Other failure (including unclear network errors) — do not auto-retry |
+| `1` | Other failure, including an unclear network error; do not auto-retry |
 
 Run with `--json` for a structured `cause` and any approval or app hint.

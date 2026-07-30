@@ -1,50 +1,45 @@
 ---
 title: "Guardrails"
-description: "Built-in secret scanning on every plan, with Enterprise custom block, redact, and alert rules."
+description: "Inspect tool traffic, protect secrets, and block or redact risky content."
 ---
 
-Guardrails scan every tool call that flows through the gateway, both the arguments going out and the results coming back. They run server-side, so an AI client cannot talk its way past them. Built-in secret detection protects every plan; custom rules and Runtime Security require Enterprise.
+Guardrails inspect calls that pass through Passport. They can check the request before an app receives it and the result before an AI client sees it.
 
-## Runtime Security
+Built-in secret detection protects every plan. Runtime Security and custom rules require Enterprise.
 
-Runtime Security detects high-confidence malicious behavior that fixed secret and regex rules do not describe well. It can inspect:
+## Start with Runtime Security
+
+Open **Guardrails**. In the **Runtime Security** card, choose a mode and what to inspect:
 
 - tool names and descriptions before a tool is exposed;
 - call arguments before execution;
-- text-bearing tool results before they reach the model.
+- text results before they reach the AI client.
 
-It recognizes explainable categories such as instruction override, hidden instruction characters, direct secret-exfiltration instructions, access-control bypass attempts, destructive commands, and resource abuse.
+Start with **Observe**. It records findings without changing calls, so you can see what would happen before turning on enforcement.
 
 | Mode | Behavior |
 | --- | --- |
-| Off | No runtime threat inspection. |
-| Observe | Record findings without changing the call. This is the recommended rollout mode. |
-| Enforce | Block high-confidence, blockable findings. Lower-confidence destructive or resource-abuse signals remain observed. |
+| Off | Do not run Runtime Security checks. |
+| Observe | Record findings but allow the call. Recommended first. |
+| Enforce | Block high-confidence threats. Lower-confidence signals remain observations. |
 
-Passport inspects content in memory but stores only the app, tool, phase, category, severity, action, bounded reason, and a one-way fingerprint. It never stores the matching definition, arguments, or result in a security finding.
+The results card shows observed, blocked, and critical counts, plus recent findings.
 
 <Warning>
-  Runtime Security v1 is deterministic and explainable, not a claim that every malicious instruction will be detected. Start in Observe, review findings, then enable Enforce. Opaque image, audio, and binary content is size-bounded but not semantically classified.
+  Runtime Security is explainable and intentionally conservative. It does not claim to detect every malicious instruction. Images, audio, and binary content are size-limited but are not understood semantically.
 </Warning>
 
-## The engine
+## What it looks for
 
-For each call, applicable rules run in two passes:
+Runtime Security recognizes categories such as instruction override, hidden instruction characters, secret-exfiltration instructions, access-control bypass, destructive commands, and resource abuse.
 
-<Steps>
-  <Step title="Blocks, against the original text">
-    Block rules are checked first, on the unmodified content, so an earlier redaction cannot hide a match from a later block. A match refuses the call and raises an alert.
-  </Step>
-  <Step title="Redactions and alerts">
-    Redact rules replace each match with a redaction marker on the wire. Alert-only rules let the content through but log that they matched.
-  </Step>
-</Steps>
+Passport checks block rules against the original content before applying redactions. That prevents one rule from hiding a match from another.
 
-A rule can scan arguments, results, or both, and can apply to all MCPs or only named ones.
+Security findings store only bounded metadata: app, tool, phase, category, severity, action, reason, and a one-way fingerprint. Passport does not store the matching request or result in the finding.
 
 ## Built-in secret detection
 
-Every workspace has a built-in secrets rule that catches credentials before they cross the wire in either direction. It detects, among others:
+Every workspace has a rule that catches common credentials before they cross the wire in either direction, including:
 
 - AWS access keys
 - GitHub tokens
@@ -55,28 +50,32 @@ Every workspace has a built-in secrets rule that catches credentials before they
 - Passport's own session, access, refresh, and agent-key tokens
 - password assignments
 
-These patterns are vetted to run in linear time, so the rule scans the whole payload (up to a 5 MB ceiling). A secret deep inside a large tool result, such as a file read or a database dump, is still caught.
+The rule scans the full text payload up to 5 MB, including secrets deep inside a file read or database result.
 
-## Actions
+## Rule actions
 
 <CardGroup cols={3}>
   <Card title="Block" icon="ban">
-    Refuse the call when a match is found, and raise an alert.
+    Stop the call and raise an alert.
   </Card>
   <Card title="Redact" icon="eye-slash">
-    Replace matches with a redaction marker and let the (now clean) call through.
+    Replace the match with a marker and allow the cleaned call.
   </Card>
   <Card title="Alert" icon="bell">
-    Let the call through, but log that the rule matched.
+    Allow the call and record the match.
   </Card>
 </CardGroup>
 
-## Enterprise custom rules
+## Add a custom rule
 
-On Enterprise, a custom rule matches a regular expression, or a plain phrase if the pattern is not valid regex. Passport rejects patterns that are unsafe to run on every call: a pattern longer than 200 characters, or one with the classic catastrophic-backtracking shape (a repeated group inside a repeat). Custom patterns are also bounded in how much text they scan, so a slow pattern can never wedge the gateway.
+In the **Rules** card, choose **Add from library** or **New rule**. A rule can inspect arguments, results, or both, and can apply everywhere or only to selected apps.
 
-## Alerts and the audit log
+Custom rules accept a regular expression or a plain phrase. Passport rejects patterns that are too long or unsafe to run on every call, and limits how much text a custom pattern scans.
 
-A guardrail hit raises an alert in the app. Runtime Security findings appear in the same Guardrails area and export as metadata-only security events. Enterprise workspaces can also send configured events to their security systems (see [SIEM and OTLP export](/enterprise/siem-export)).
+## Alerts and stored records
 
-Guardrails also protect the audit trail itself. Whatever a guardrail would flag, including a blocked secret, is scrubbed from the persisted activity entry before it is written, so a credential never survives in the Activity table, the member API, or the CSV and JSONL exports. The one exception is a custom alert-only rule, whose whole purpose is to surface the matched content for review.
+A match raises an alert. Runtime Security findings can also be exported as metadata-only security events or streamed to a security system.
+
+Guardrails protect Activity itself: content that a guardrail flags is scrubbed before the record is stored, so a blocked credential cannot reappear in Activity or an export. The exception is a custom alert-only rule, which is explicitly meant to surface the matched content for review.
+
+See [SIEM and OTLP export](/enterprise/siem-export).
