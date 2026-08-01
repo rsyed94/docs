@@ -57,6 +57,16 @@ Reconnect that client from **Clients** in the intended workspace. This often hap
 
 Open **Clients**, select the client, and reconnect it. Finish the browser sign-in before retrying.
 
+## An agent says an app needs sign-in
+
+The agent should offer a **Connect** or **Reconnect** action. Depending on the AI client, this appears as a built-in prompt or as a secure Passport link in the conversation.
+
+1. Open the link and confirm that it uses your Passport domain.
+2. Sign in to the provider in the browser. Do not paste a password, API key, or provider token into the chat.
+3. Wait for Passport to say **All set**, then return to the agent. It can retry the original action.
+
+If there is no link, the app may need one-time company setup, or the agent may be an autonomous background agent with no person attached. Open **Apps** to see the next step or ask your workspace admin.
+
 ## "This account has been deactivated"
 
 A deactivated person cannot sign in or use Passport. You may see:

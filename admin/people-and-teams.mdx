@@ -56,6 +56,8 @@ Choose an identity model when you create the key:
 
 Delegation can only narrow access: an app or tool unavailable to either principal is unavailable to the agent. The same intersection applies to tools, resources, prompts, connection status, bundles, and personal client selection. Activity and Runtime Security findings record both the agent and delegated person.
 
+When a delegated person's app sign-in is missing or expires, the agent can present a secure connection link bound to that person. The person completes sign-in directly in Passport and the agent can then retry. Autonomous agents do not receive these links because there is no human identity to bind them to; use a delegated identity, a normal member connection, or company-managed authentication instead.
+
 Delegated keys require Enterprise and expire after 1–365 days. If the delegated person is deactivated, or the key expires or is revoked, authentication fails immediately. Create a replacement key to rotate it; the old bearer is never shown again.
 
 Passport CLI accepts an agent key through `PASSPORT_AGENT_KEY` with the governed workspace endpoint in `PASSPORT_ENDPOINT` (`https://…/w/ws_…/mcp`). This mode writes no local credential file, so it is the recommended attach surface for CI, cron, and headless jobs. See [Passport CLI](/quickstart/cli).
