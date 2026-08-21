@@ -61,7 +61,11 @@ Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer. No desktop a
     passport doctor
     ```
 
-    Passport Cloud is the default when `--workspace` is provided. Self-hosted deployments also pass `--cloud <origin>`. Add `--no-open` when the browser must be opened manually.
+    Passport Cloud is the default when `--workspace` is provided. Self-hosted deployments also pass `--cloud <origin>`. On SSH, CI, or another headless host, add `--no-open` so Passport prints the verification URL instead of trying to launch a browser:
+
+    ```sh
+    passport login --workspace ws_… --profile cli@ws_… --no-open
+    ```
 
     To switch later on a machine with more than one profile, inspect and select the local active profile explicitly:
 
@@ -88,7 +92,7 @@ Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer. No desktop a
 | `passport status` | Show the workspace, profile, policy client, and visible MCP connection states. |
 | `passport doctor` | Check the runtime, credential-store safety, endpoint, authentication, and exact CLI protocol without exposing credentials. |
 | `passport search [query]` | Discover allowed, namespaced tools. An empty query lists the visible catalog. |
-| `passport describe <tool>` | Print a tool's description, read-only flag, and full parameters schema. |
+| `passport describe <tool>` | Print a tool's description, read-only flag, and full parameters schema. JSON also exposes `name` and `inputSchema` aliases. |
 | `passport run <tool> [json-args]` | Execute a governed tool call. Use `--args -` for stdin or repeat `--set` / `--set-json`. |
 | `passport connect [app...]` | Get or open a personal-account connection flow. Add `--wait <sec>` to wait for completion. |
 | `passport resources [uri]` | List resources or read one URI. |
@@ -97,6 +101,7 @@ Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer. No desktop a
 | `passport completion <bash\|zsh\|fish>` | Generate shell completion locally without a profile or network request. |
 | `passport profiles` / `use <name>` | List local profiles or select the active profile without network access. |
 | `passport login` / `logout` | Create or revoke a named local profile. |
+| `passport ready --json` | Report machine-readable local readiness for automation. |
 | `passport help [verb]` / `version` | Inspect the CLI without a profile or network connection. |
 
 Every command accepts `--profile`, `--json`, `--timeout`, `--quiet`, and `--caller`.
@@ -113,6 +118,13 @@ Neither form prints credential values, response bodies, or member identity.
 passport doctor
 passport doctor --json
 ```
+
+`passport version --json` is also offline. It returns `version`, `profileCount`,
+`profileSelected`, `selectionSource`, `next`, and optional `endpoint`/`profile`
+fields. `passport ready --json` runs the local, authentication, server, and
+exact CLI-protocol preflight and returns `ready`, `ok`, auth/profile context,
+`server`, and `checks`; gate on its `ready` value and exit code rather than
+parsing human output.
 
 Install generated completion in the standard location for your shell:
 
@@ -160,9 +172,14 @@ With `--json`, stdout contains exactly one JSON value. Hints and warnings go to 
 
 `passport run --wait <sec>` retries only a definite `approval_pending` response. It never retries a timeout or network failure because the execution outcome could be ambiguous.
 
+For `passport describe <tool> --json`, `tool` and `parameters` remain the
+Passport-native fields. The response also includes the conventional aliases
+`name` (same value as `tool`) and `inputSchema` (same value as `parameters`);
+agents can use either vocabulary without translating tool definitions.
+
 ## Profiles and attribution
 
-The default profile uses `cli` as its policy client. Login activates the newly completed profile. When several profiles are stored, `passport profiles` lists them and `passport use <name>` changes the local active profile without contacting Passport. Resolution is explicit `--profile`, then `PASSPORT_PROFILE`, then the active profile, then the sole stored profile; scripts should use an explicit selector so they cannot accidentally run against another workspace.
+The default profile uses `cli` as its policy client. Login activates the newly completed profile. When no explicit or environment selector and no valid active profile are present, CLI 0.8.1 detects exactly one CLI-owned profile (`client: "cli"` or the exact legacy `cli@<workspace>` shape) and makes that existing profile active. When several profiles are stored, `passport profiles` lists them and `passport use <name>` changes the local active profile without contacting Passport. If more than one CLI candidate remains, Passport refuses to guess and asks for an explicit selector. Scripts should use an explicit selector so they cannot accidentally run against another workspace.
 
 ```sh
 passport profiles
@@ -200,6 +217,8 @@ export PASSPORT_ENDPOINT='https://passportmcp.com/w/ws_…/mcp'
 passport status --json
 passport search "failed builds" --json
 passport run sentry_list_issues '{"status":"unresolved"}' --json
+passport version --json
+passport ready --json
 ```
 
 Agent keys can inspect status and call allowed tools, but cannot mint a person's sign-in link. Use `passport connect` from an interactive member profile when an app needs personal OAuth.
