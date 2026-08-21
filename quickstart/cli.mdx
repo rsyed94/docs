@@ -9,14 +9,14 @@ Prefer the normal **Add client** setup for apps with a GUI (Cursor chat, VS Code
 
 ## Install and sign in
 
-Works on Windows, Linux, and macOS. Needs Node.js 20 or newer. No desktop app required.
+Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer. No desktop app required.
 
 <Tabs>
   <Tab title="Windows (PowerShell)">
     ```powershell
     npm install --global passport-bridge
     passport version
-    passport login --cloud https://passportmcp.com --workspace <workspace-id>
+    passport login --workspace <workspace-id> --profile cli@<workspace-id>
     passport status
     passport search ""
     ```
@@ -25,7 +25,7 @@ Works on Windows, Linux, and macOS. Needs Node.js 20 or newer. No desktop app re
     ```sh
     npm install --global passport-bridge
     passport version
-    passport login --cloud https://passportmcp.com --workspace <workspace-id>
+    passport login --workspace <workspace-id> --profile cli@<workspace-id>
     passport status
     passport search ""
     ```
@@ -34,7 +34,7 @@ Works on Windows, Linux, and macOS. Needs Node.js 20 or newer. No desktop app re
     ```sh
     npm install --global passport-bridge
     passport version
-    passport login --cloud https://passportmcp.com --workspace <workspace-id>
+    passport login --workspace <workspace-id> --profile cli@<workspace-id>
     passport status
     passport search ""
     ```
@@ -52,13 +52,22 @@ Works on Windows, Linux, and macOS. Needs Node.js 20 or newer. No desktop app re
     passport version
     ```
   </Step>
-  <Step title="Sign in once per machine">
-    Copy the workspace id (`ws_…`) from your Passport browser URL or from the connector URL under **Clients → Add client** (`/w/ws_…/mcp`). Login opens a browser and stores the resulting refresh credential in the existing `~/.passport/credentials.json` profile store with owner-only permissions.
+  <Step title="Sign in once per workspace">
+    Copy the workspace id (`ws_…`) from your Passport browser URL or from the connector URL under **Clients → Add client** (`/w/ws_…/mcp`). Login opens a browser and stores the resulting refresh credential in the existing `~/.passport/credentials.json` profile store with owner-only permissions. A successful login activates the profile it creates.
 
     ```sh
-    passport login --cloud https://passportmcp.com --workspace ws_…
+    passport login --workspace ws_… --profile cli@ws_…
     passport status
     passport doctor
+    ```
+
+    Passport Cloud is the default when `--workspace` is provided. Self-hosted deployments also pass `--cloud <origin>`. Add `--no-open` when the browser must be opened manually.
+
+    To switch later on a machine with more than one profile, inspect and select the local active profile explicitly:
+
+    ```sh
+    passport profiles
+    passport use cli@ws_…
     ```
   </Step>
   <Step title="Search, inspect, and run">
@@ -86,6 +95,7 @@ Works on Windows, Linux, and macOS. Needs Node.js 20 or newer. No desktop app re
 | `passport prompts [name]` | List prompts or get one, with repeatable `--set key=value` arguments. |
 | `passport discover` | Scan supported global MCP configuration and submit privacy-minimized inventory. Managed-policy violations exit `5`. |
 | `passport completion <bash\|zsh\|fish>` | Generate shell completion locally without a profile or network request. |
+| `passport profiles` / `use <name>` | List local profiles or select the active profile without network access. |
 | `passport login` / `logout` | Create or revoke a named local profile. |
 | `passport help [verb]` / `version` | Inspect the CLI without a profile or network connection. |
 
@@ -130,7 +140,11 @@ With `--json`, stdout contains exactly one JSON value. Hints and warnings go to 
   "cause": "approval_pending",
   "exitCode": 4,
   "approvalId": "optional",
-  "app": "optional"
+  "app": "optional",
+  "hint": "optional safe remediation",
+  "next": [{ "argv": ["passport", "status"], "description": "optional concrete action" }],
+  "retry": { "command": "run", "tool": "optional", "waitSeconds": 120, "arguments": "reuse_original" },
+  "remediation": { "action": "optional_machine_action", "description": "safe guidance" }
 }
 ```
 
@@ -138,8 +152,8 @@ With `--json`, stdout contains exactly one JSON value. Hints and warnings go to 
 | ---: | --- |
 | 0 | Success. |
 | 1 | Network, server, or ambiguous execution error. Do not retry automatically. |
-| 2 | Authentication is missing, expired, or revoked. Run `passport login`. |
-| 3 | A personal app connection is required. Run `passport connect <app>`. |
+| 2 | Authentication or profile selection is missing. Run `passport profiles`, `passport use <name>`, or `passport login`. |
+| 3 | A personal app connection or member action is required. Follow `next` or `remediation`; agent keys fail fast instead of waiting for browser OAuth. |
 | 4 | Approval is pending. The result includes the approval id. |
 | 5 | Policy, a guardrail, client selection, or approval denial blocked the call. |
 | 6 | Usage error or unknown tool. |
@@ -148,7 +162,16 @@ With `--json`, stdout contains exactly one JSON value. Hints and warnings go to 
 
 ## Profiles and attribution
 
-The default profile uses `cli` as its policy client. To keep app selection and Activity distinct for a specific terminal agent, create a per-agent profile:
+The default profile uses `cli` as its policy client. Login activates the newly completed profile. When several profiles are stored, `passport profiles` lists them and `passport use <name>` changes the local active profile without contacting Passport. Resolution is explicit `--profile`, then `PASSPORT_PROFILE`, then the active profile, then the sole stored profile; scripts should use an explicit selector so they cannot accidentally run against another workspace.
+
+```sh
+passport profiles
+passport use cli@work
+passport status --profile cli@work
+passport search "issues" --profile cli@work
+```
+
+To keep app selection and Activity distinct for a specific terminal agent, create a per-agent profile:
 
 ```sh
 passport login \
@@ -158,6 +181,7 @@ passport login \
   --profile claude-code@work
 
 PASSPORT_PROFILE=claude-code@work passport search "issues"
+passport status --profile claude-code@work
 ```
 
 Passport can also add cooperative caller detail from known agent environment variables. `--caller <id>` takes precedence. Activity labels it as self-reported, for example **Passport CLI · Codex via CLI**; the authenticated member or agent and the policy client remain separate identities.
