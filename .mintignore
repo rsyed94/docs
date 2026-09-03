@@ -8,16 +8,4 @@ drafts/
 
 # Repo-only operator and archive material (never customer docs)
 *.md
-!README.md
-COMPOSIO-COMPETITIVE-AUDIT-*
-LAUNCH-READINESS-*
-PRODUCT_SPEC_*
-production-v1.md
-10-10-readiness.md
-BRAND.md
-CONTEXT-EFFICIENCY.md
-DEPLOY.md
-OPERATIONS.md
-PASSPORT-CLI-SPEC.md
-PRODUCTION-RESTORE-EVIDENCE-*
-RELEASING.md
+**/*.md

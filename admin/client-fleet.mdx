@@ -24,6 +24,20 @@ On Enterprise, open **Clients → Workspace clients**. You can search by person 
 
 The workspace list shows real observed connections. Opening setup instructions alone does not create a connected-client record.
 
+## Understand client names
+
+For a dynamic client, Passport uses the name or title reported by the MCP client,
+falling back to its registered connection label. A reported version is retained
+when available. Recognized clients keep Passport's standard name.
+
+These names help identify connections in Clients, Activity, approvals, and
+exports. They are self-reported context: claiming the name of a recognized client
+does not satisfy registered-client policy or grant access.
+
+If a connection still appears as **AI client**, keep it open and ask it to list
+Passport tools, then refresh Clients. A client that supplies no identity and has
+no specific connection label keeps the generic name.
+
 ## Set client policy
 
 Open **Settings → AI client access**:

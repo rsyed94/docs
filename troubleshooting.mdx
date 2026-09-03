@@ -14,6 +14,17 @@ Passport marks a client connected only after it observes real activity. Opening 
 
 Passport's client-specific troubleshooting shows the exact check for Claude Code, Cursor, VS Code, Codex, Claude, ChatGPT, and Passport CLI.
 
+## A connection has a generic or unfamiliar client name
+
+Dynamic clients can report their own MCP name, title, and version. Passport
+shows that context in Clients and Activity; it does not use the claimed name to
+grant access. If the client supplies no usable identity or connection label,
+Passport shows **AI client**.
+
+Ask the client to list Passport tools, then refresh **Clients**. Review the
+connection's owner and activity before disconnecting it. See
+[client names](/admin/client-fleet#understand-client-names).
+
 ## An app is missing from one client
 
 Open **Clients**, select that client, and check **App visibility**.
@@ -55,11 +66,15 @@ Reconnect that client from **Clients** in the intended workspace. This often hap
 
 ## "This connection isn't signed in"
 
-Open **Clients**, select the client, and reconnect it. Finish the browser sign-in before retrying.
+This means the AI client's Passport sign-in expired. It is separate from an individual app or integration needing reconnect.
+
+If Claude Desktop uses **Desktop compatibility**, ask Claude to reconnect Passport. The bridge stays available in a restricted recovery mode and exposes a **Reconnect Passport** action. Open its Passport link, confirm the device code, and finish browser sign-in. Passport restores the tools in the existing Claude session; you do not need to restart Claude.
+
+You can also open **Clients**, select Claude Desktop, and choose **Reconnect to Passport**. Other client connection types may require this route when they cannot present the recovery action in chat.
 
 ## An agent says an app needs sign-in
 
-The agent should offer a **Connect** or **Reconnect** action. Depending on the AI client, this appears as a built-in prompt or as a secure Passport link in the conversation.
+This means one integration's sign-in expired, not the AI client's Passport sign-in. The agent should offer a **Connect** or **Reconnect** action. Depending on the AI client, this appears as a built-in prompt or as a secure Passport link in the conversation.
 
 1. Open the link and confirm that it uses your Passport domain.
 2. Sign in to the provider in the browser. Do not paste a password, API key, or provider token into the chat.
@@ -96,13 +111,13 @@ passport search ""
 
 Stable exit codes help scripts and agents:
 
-| Code | Meaning |
-| --- | --- |
-| `2` | Sign in again |
-| `3` | Connect the named app |
-| `4` | Approval is pending |
-| `5` | Blocked by policy, a guardrail, client selection, or a denied approval |
-| `6` | Invalid command or tool name |
-| `1` | Other failure, including an unclear network error; do not auto-retry |
+| Code | Meaning                                                                |
+| ---- | ---------------------------------------------------------------------- |
+| `2`  | Select a profile or sign in                                                          |
+| `3`  | Complete the required app connection or member action                                                  |
+| `4`  | Approval is pending                                                    |
+| `5`  | Blocked by policy, a guardrail, client selection, or a denied approval |
+| `6`  | Invalid command or tool name                                           |
+| `1`  | Other failure, including an unclear network error; do not auto-retry   |
 
 Run with `--json` for a structured `cause` and any approval or app hint.
