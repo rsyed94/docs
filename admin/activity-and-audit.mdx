@@ -20,9 +20,14 @@ Everyone can open **Activity** to see their own calls. A row shows the app, acti
 
 ## Workspace Audit
 
-On Enterprise, admins open **Audit** to review calls across the workspace. Filters cover person, app, team, and outcome. Filtered views have shareable URLs, and Guardrail findings can open the relevant view.
+On Enterprise, admins open **Audit** to review calls across the workspace. Filters cover person, apps, team, client, outcome, time, and search text. You can select several apps at once. Filtered views have shareable URLs, and Guardrail findings can open the relevant view.
 
 Passport CLI may add an optional **via CLI** label so the record can distinguish tools such as Codex and Claude Code. That label is self-reported; the signed-in person or agent and the client policy remain authoritative.
+
+Dynamic MCP clients can appear by their reported name or title, with their
+reported version retained when available. Like the CLI caller label, this is
+self-reported context; it does not change the authenticated identity or grant
+access. See [client names](/admin/client-fleet#understand-client-names).
 
 ## Admin activity
 
@@ -40,7 +45,7 @@ Each entry records the actor, action, target, time, and a concise description of
 
 <CardGroup cols={2}>
   <Card title="Enterprise activity export" icon="table">
-    `GET /export/activity.csv` and `GET /export/activity.jsonl` require Enterprise. They accept the same `member`, `app`, `outcome`, and `department` filters as Audit. In this API, `department` means team.
+    `GET /export/activity.csv` and `GET /export/activity.jsonl` require Enterprise. They accept the same `member`, `app`, `outcome`, `department`, `via`, `since`, and `q` filters as Audit. Repeat `app` to include several apps. In this API, `department` means team, `via` means client, and `q` is search text.
   </Card>
   <Card title="Enterprise audit export" icon="file-lines">
     `GET /export/audit.csv` exports the privileged-action trail and also requires Enterprise.

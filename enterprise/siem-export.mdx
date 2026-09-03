@@ -19,24 +19,27 @@ Both targets are set per workspace in Settings. Enter one or both:
 </CardGroup>
 
 <Warning>
-  Both endpoints are validated when you save them and again every time they fire. In production they must be public HTTPS endpoints. Passport resolves the host and refuses private, loopback, link-local, and cloud-metadata addresses, and re-checks across any redirect it follows.
+  Both endpoints are validated when you save them and again every time they fire. In production they must be public
+  HTTPS endpoints. Passport resolves the host and refuses private, loopback, link-local, and cloud-metadata addresses,
+  and re-checks across any redirect it follows.
 </Warning>
 
 ## Delivery behavior
 
-Export is durable and batched, tuned so a slow or down endpoint never affects the gateway hot path.
+Export is durable and causal, tuned so a slow or down endpoint never affects the gateway hot path.
 
-- Each event is appended to the workspace's durable event log (`siemExport` rows) before delivery is attempted.
-- A cross-replica lock claims the oldest batch; Passport flushes on a 5 second tick, up to 200 events per batch.
-- Rows are removed only after every configured target accepts the batch, so a transient outage retries rather than losing events (at-least-once across restarts and rolling deploys).
-- When both targets are configured, a batch counts as delivered only once every configured target accepts it.
-- If an endpoint stays down, Passport backs off up to about 5 minutes between attempts.
-- There is no drop-oldest memory cap: undelivered events remain in durable storage until they succeed, the targets are cleared, or an operator intervenes.
+- The authoritative audit or security event and one delivery row per configured target commit together. Passport never acknowledges the governed request while only half of that state is durable.
+- SIEM, OTLP, and alert-webhook rows are acknowledged independently. A successful SIEM request is not repeated merely because the OTLP collector is unavailable.
+- Each row keeps one stable delivery ID across retries and sends it as the HTTP `idempotency-key`, closing the provider-accepted/process-restarted window for destinations that honor idempotency keys.
+- A cross-replica workspace claim ensures two Passport replicas do not intentionally deliver the same row concurrently. Delivery is at least once across process loss, restarts, and rolling deploys.
+- Rejections back off from one second to one hour. Each row snapshots a content-free destination generation. A mismatching rolling replica defers the row for a persisted six-hour retirement window so the generation that owns it can drain it. A continuously removed or replaced target then becomes explicit `destination-removed` or `destination-reconfigured` terminal evidence; it is never reported as provider-accepted and never replays merely because a target is later re-enabled.
+- After the retry window, Passport replaces the delivery payload with content-free dead-letter evidence. The authoritative audit or security event follows its separate retention policy.
 
 <Note>
-  Delivery health is surfaced, not hidden. The exporter tracks consecutive failures and the last error; queue depth is read from durable storage by operational tooling rather than approximated in process memory.
+  Delivery health is surfaced, not hidden. Aggregate queue depth, oldest age, target outcomes, bounded-batch saturation,
+  warnings, and recovery transitions come from durable storage without recipient, member, or workspace labels.
 </Note>
 
 ## Related: alert webhook
 
-Separately from the full event stream, a workspace can set an alert webhook URL (Slack-style) that receives a one-line JSON payload when a guardrail fires or an MCP's tool set changes. You can send a sample alert from Settings to verify the wiring before a real event. It is validated the same way as the export endpoints.
+Separately from the full event stream, a workspace can set an alert webhook URL (Slack-style) that receives a one-line JSON payload when a guardrail fires or an MCP's tool set changes. The alert authority and its webhook row share the same request commit, and webhook acknowledgement is independent of SIEM and OTLP. You can send a sample alert from Settings to verify the wiring before a real event. It is validated the same way as the export endpoints.

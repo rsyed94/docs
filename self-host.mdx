@@ -7,20 +7,32 @@ Passport ships as one container image. The same image runs locally and in produc
 
 ## Build and run
 
-There is no public pull-by-tag registry image today. Build from this repository, then run the container:
+There is no public pull-by-tag registry image today. Build from your Passport source checkout. Supply `PASSPORT_ENCRYPTION_KEY` through your secret manager or local environment before running the container; generate it once and retain it across restarts and upgrades.
 
 ```sh
 docker build -t passport .
 docker run -p 8790:8790 \
   -v passport-data:/data \
-  -e PASSPORT_ENCRYPTION_KEY='<long-random-string>' \
+  -e PASSPORT_ENCRYPTION_KEY \
   -e PUBLIC_URL='https://passport.example.com' \
   -e NODE_ENV=production \
   -e PASSPORT_DEMO=off \
+  -e PASSPORT_BILLING_MODE=self-hosted \
+  -e PASSPORT_SIGNUP_MODE=off \
   passport
 ```
 
-Add `-e DATABASE_URL='postgres://…'` for durable multi-replica Postgres. Without it, state lives under `/data` and must be on a mounted volume. For production bring-up checklists beyond this page, see `docs/DEPLOY.md` and `docs/OPERATIONS.md` in the repository.
+Terminate HTTPS at the configured `PUBLIC_URL`. This initial example disables new workspace signup. Before inviting new users to create a workspace, configure [verified email or Google/GitHub login](#signup-and-demo), then explicitly choose `PASSPORT_SIGNUP_MODE=open` or `domain`.
+
+For a new Postgres database, supply `DATABASE_URL` through your environment and run the compiled migrator from the same image before starting the application:
+
+```sh
+docker run --rm -e DATABASE_URL passport npm run migrate:compiled --workspace server
+```
+
+Pass the same database and any required TLS settings to the migrator and application; add `-e DATABASE_URL` to the application command. Startup checks schema compatibility and never runs migrations itself. Existing deployments must follow the supported upgrade sequence in `docs/DEPLOY.md` from the source repository, including any required intermediate releases.
+
+Without Postgres, state lives under `/data` and must be on a mounted volume; use a single application instance. For production bring-up checklists, see `docs/DEPLOY.md` and `docs/OPERATIONS.md` in the source repository.
 
 ## What you need
 
@@ -29,7 +41,8 @@ Add `-e DATABASE_URL='postgres://…'` for durable multi-replica Postgres. Witho
     One Passport container, listening on `PORT` (default 8790).
   </Card>
   <Card title="Postgres" icon="database">
-    A Postgres database for durable, backed-up state that survives redeploys. Without it, state lives in a JSON file you must persist on a mounted volume.
+    A Postgres database for durable, backed-up state that survives redeploys. Without it, state lives in a JSON file you
+    must persist on a mounted volume.
   </Card>
 </CardGroup>
 
@@ -37,143 +50,245 @@ Add `-e DATABASE_URL='postgres://…'` for durable multi-replica Postgres. Witho
 
 When `NODE_ENV=production`, Passport fails closed: a misconfigured deployment refuses to boot rather than run with plaintext secrets, open unverified signup, or mock data on a real domain. Startup exits with a named error unless all of the following hold:
 
-- `PASSPORT_ENCRYPTION_KEY` is set. Without it, upstream OAuth tokens and company keys would be stored in plaintext.
+- `PASSPORT_ENCRYPTION_KEY` contains at least 32 bytes of random key material. Without it, upstream OAuth tokens and company keys would be stored in plaintext.
 - `PUBLIC_URL` is set and starts with `https://`. Otherwise OAuth callbacks and CORS would trust the `Host` header.
 - `PASSPORT_DEMO` is explicit, either `off` (recommended) or `on`.
-- If signup is enabled, configure either verified email or Google/GitHub identity login. With `PASSPORT_EMAIL_VERIFY=off`, production becomes provider-only: typed email addresses cannot create sessions or workspaces.
+- `PASSPORT_BILLING_MODE` is explicit. Use `self-hosted` to intentionally unlock Enterprise without Stripe, or `hosted` with a complete Stripe configuration.
+- `PASSPORT_SIGNUP_MODE` is explicit: `off`, `open`, or `domain`. If signup is enabled, configure either verified email or Google/GitHub identity login. With `PASSPORT_EMAIL_VERIFY=off`, production becomes provider-only: typed email addresses cannot create sessions or workspaces.
 
 <Warning>
-  A single escape hatch, `PASSPORT_UNSAFE_OVERRIDE=i-accept-the-risk`, bypasses these checks for a throwaway staging bring-up. It logs loudly every time it is used. Do not use it in production.
+  A single escape hatch, `PASSPORT_UNSAFE_OVERRIDE=i-accept-the-risk`, bypasses these checks for a throwaway staging
+  bring-up only when `RAILWAY_ENVIRONMENT_NAME` or `SENTRY_ENVIRONMENT` explicitly identifies `staging`. It logs every time it is used and is rejected for production or an unspecified environment.
 </Warning>
 
 ## Core
 
-| Variable | Default | Meaning |
-| --- | --- | --- |
-| `NODE_ENV` | (unset) | Set to `production` to enable Secure cookies, proxy trust, structured request logs, and the boot posture check. |
-| `PORT` | `8790` | Port the server listens on. |
-| `HOST` | `0.0.0.0` in production, `127.0.0.1` locally | Bind address. Use `0.0.0.0` in a container. |
-| `PUBLIC_URL` | (empty) | The external HTTPS origin of this deployment. Used for OAuth callbacks, CORS, the SCIM base URL, and email links. Required in production. |
+| Variable     | Default                                      | Meaning                                                                                                                                   |
+| ------------ | -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `NODE_ENV`   | (unset)                                      | Set to `production` to enable Secure cookies, proxy trust, structured request logs, and the boot posture check.                           |
+| `PORT`       | `8790`                                       | Port the server listens on.                                                                                                               |
+| `HOST`       | `0.0.0.0` in production, `127.0.0.1` locally | Bind address. Use `0.0.0.0` in a container.                                                                                               |
+| `PUBLIC_URL` | (empty)                                      | The external HTTPS origin of this deployment. Used for OAuth callbacks, CORS, the SCIM base URL, and email links. Required in production. |
 
 ## Persistence
 
-| Variable | Default | Meaning |
-| --- | --- | --- |
-| `DATABASE_URL` | (empty) | Postgres connection string. When set, state persists to Postgres (durable, multi-replica). Leave unset to use the JSON file backend. |
-| `PASSPORT_DATA` | a `data` directory next to the server | JSON file backend location, used only when `DATABASE_URL` is unset. Mount a volume here. |
-| `PGSSL` | (unset) | Set to `1` to force TLS on the Postgres connection when the URL does not already request `sslmode=require`. |
+| Variable                                                                                                                                           | Default                               | Meaning                                                                                                                                                                                        |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`                                                                                                                                     | (empty)                               | Postgres connection string. When set, state persists to Postgres (durable, multi-replica). Leave unset to use the JSON file backend.                                                           |
+| `PASSPORT_DATA`                                                                                                                                    | a `data` directory next to the server | JSON file backend location, used only when `DATABASE_URL` is unset. Mount a volume here.                                                                                                       |
+| `PGSSL` / `PGSSLMODE`                                                                                                                              | (unset)                               | Set `PGSSL=1`, `PGSSLMODE=require`, or `PGSSLMODE=verify-full` to enable verified TLS. `require` is deliberately strengthened to certificate and hostname verification.                        |
+| `PASSPORT_POSTGRES_CA_CERT`                                                                                                                        | (unset)                               | PEM CA certificate for a private/self-hosted Postgres CA. Valid only when verified TLS is enabled; system trust is used otherwise.                                                             |
+| `PASSPORT_POSTGRES_MAIN_POOL_MAX` / `PASSPORT_POSTGRES_LOCK_POOL_MAX` / `PASSPORT_POSTGRES_OPERATION_POOL_MAX` / `PASSPORT_POSTGRES_RATE_POOL_MAX` | `8` / `8` / `4` / `4`                 | Per-replica hard maxima for ordinary queries, workspace advisory locks, resumable-operation locks, and shared rate limiting.                                                                   |
+| `PASSPORT_POSTGRES_CONNECTION_BUDGET`                                                                                                              | `24`                                  | Aggregate per-replica ceiling. Startup fails if the four configured pool maxima exceed it.                                                                                                     |
+| `PASSPORT_EARLY_ACCESS_MAX_LEADS`                                                                                                                  | `1000000`                             | Global PostgreSQL early-access lead ceiling. Admission is transactionally serialized and returns retryable backpressure at the limit. File mode instead has a fixed 1,000-lead / 16 MiB bound. |
 
 ## Security and encryption
 
-| Variable | Default | Meaning |
-| --- | --- | --- |
-| `PASSPORT_ENCRYPTION_KEY` | (empty) | The primary at-rest key (AES-256-GCM) for upstream OAuth tokens, company auth headers, OAuth and OIDC client secrets, and device tokens. Any long random string (32+ characters). Required in production, and it must stay stable: if you lose it, everything encrypted under it becomes undecryptable. |
-| `PASSPORT_ENCRYPTION_KEYS` | (empty) | Optional comma-separated list of old keys kept only so their ciphertext still decrypts during a rotation. |
-| `PASSPORT_SECURE_COOKIES` | `true` in production | Send Secure cookies. |
-| `PASSPORT_ALLOWED_ORIGINS` | (empty) | Comma-separated extra origins allowed to make credentialed (cookie) requests, in addition to `PUBLIC_URL` and the built-in local and desktop origins. |
-| `PASSPORT_ALLOW_CODE` | `false` | Enable tenant-authored JavaScript middleware. Off by default because it is unsafe on a shared host. Single-tenant operators can opt in. |
-| `PASSPORT_UNSAFE_OVERRIDE` | (unset) | Set to `i-accept-the-risk` to bypass the boot posture check. Staging only. |
+| Variable                   | Default              | Meaning                                                                                                                                                                                                                                                                                                  |
+| -------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PASSPORT_ENCRYPTION_KEY`  | (empty)              | The primary at-rest key (AES-256-GCM) for upstream OAuth tokens, company auth headers, OAuth and OIDC client secrets, and device tokens. At least 32 bytes of random key material. Required in production, and it must stay stable: if you lose it, everything encrypted under it becomes undecryptable. |
+| `PASSPORT_ENCRYPTION_KEYS` | (empty)              | Optional comma-separated list of old keys kept only so their ciphertext still decrypts during a rotation.                                                                                                                                                                                                |
+| `PASSPORT_OPERATOR_TOKEN`  | (empty)              | Optional 32+ byte bearer enabling throttled, content-free-audited, no-store early-access contact lookup/deletion by opaque lead ID at `/operations/early-access/leads/:id`. Unset disables the surface with 404.                                                                                         |
+| `PASSPORT_SECURE_COOKIES`  | `true` in production | Send Secure cookies.                                                                                                                                                                                                                                                                                     |
+| `PASSPORT_ALLOWED_ORIGINS` | (empty)              | Comma-separated extra origins allowed to make credentialed (cookie) requests, in addition to `PUBLIC_URL` and the built-in local and desktop origins.                                                                                                                                                    |
+| `PASSPORT_ALLOW_CODE`      | `false`              | Enable tenant-authored JavaScript middleware. Off by default because it is unsafe on a shared host. Single-tenant operators can opt in.                                                                                                                                                                  |
+| `PASSPORT_UNSAFE_OVERRIDE` | (unset)              | Set to `i-accept-the-risk` to bypass the boot posture check. Staging only.                                                                                                                                                                                                                               |
 
 <Note>
-  **Key rotation.** Set `PASSPORT_ENCRYPTION_KEY` to the new key, move the old key into `PASSPORT_ENCRYPTION_KEYS`, deploy, then from the repository run `cd server && npm run rekey` to re-encrypt every stored secret under the new primary, then drop the old key. A value whose key is absent is left untouched, never overwritten, so nothing is lost mid-rotation.
+  **Key rotation.** Set `PASSPORT_ENCRYPTION_KEY` to the new key, move the old key into `PASSPORT_ENCRYPTION_KEYS`,
+  deploy, then from the repository run `cd server && npm run rekey` to re-encrypt workspace documents, live resumable
+  operation checkpoints, queued delivery payloads, and global leads under the new primary. Then drop the old key and run
+  `rekey` once more to remove retired early-access blind-index aliases. A value whose key is absent is left untouched,
+  never overwritten, so nothing is lost mid-rotation.
 </Note>
 
 ## Signup and demo
 
-| Variable | Default | Meaning |
-| --- | --- | --- |
-| `PASSPORT_SIGNUP_MODE` | `open` | `open` lets anyone self-create an account, `domain` restricts to `PASSPORT_EMAIL_DOMAINS`, `off` allows only people already provisioned (recommended for production). |
-| `PASSPORT_EMAIL_DOMAINS` | (empty) | Comma-separated domains allowed when `PASSPORT_SIGNUP_MODE=domain`. |
-| `PASSPORT_EMAIL_VERIFY` | on in production when email is configured | Whether browser sign-in on a real workspace uses an emailed one-time link. `on` or `off` overrides. In production, `off` disables typed-email sign-in and signup; a signup-enabled deployment must then configure Google or GitHub identity login. |
-| `PASSPORT_DEMO` | `off` in production (opt in with `on`); on locally | Whether the seeded demo workspace exists. Set `off` in production so no mock data is ever served. Must be explicit in production. |
+| Variable                 | Default                                            | Meaning                                                                                                                                                                                                                                            |
+| ------------------------ | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PASSPORT_SIGNUP_MODE`   | `off` in production, `open` locally                                             | `open` lets anyone self-create an account, `domain` restricts to `PASSPORT_EMAIL_DOMAINS`, `off` allows only people already provisioned (recommended for production).                                                                              |
+| `PASSPORT_EMAIL_DOMAINS` | (empty)                                            | Comma-separated domains allowed when `PASSPORT_SIGNUP_MODE=domain`.                                                                                                                                                                                |
+| `PASSPORT_EMAIL_VERIFY`  | on in production when email is configured          | Whether browser sign-in on a real workspace uses an emailed one-time link. `on` or `off` overrides. In production, `off` disables typed-email sign-in and signup; a signup-enabled deployment must then configure Google or GitHub identity login. |
+| `PASSPORT_DEMO`          | `off` in production (opt in with `on`); on locally | Whether the seeded demo workspace exists. Set `off` in production so no mock data is ever served. Must be explicit in production.                                                                                                                  |
 
 ## Email
 
 Email is provider-agnostic. Setting a transport enables features that require email (verified sign-in, invites, request notifications).
 
-| Variable | Default | Meaning |
-| --- | --- | --- |
-| `RESEND_API_KEY` | (empty) | Deliver mail through Resend's HTTP API. Presence enables the email transport. |
-| `PASSPORT_EMAIL_FROM` | `Passport <onboarding@resend.dev>` | The From header on outgoing mail. |
-| `PASSPORT_EMAIL_FILE` | (empty) | For development and tests: append messages as JSON lines to this file instead of sending. |
+| Variable              | Default                            | Meaning                                                                                   |
+| --------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------- |
+| `RESEND_API_KEY`      | (empty)                            | Deliver mail through Resend's HTTP API. Presence enables the email transport.             |
+| `PASSPORT_EMAIL_FROM` | `Passport <onboarding@resend.dev>` | The From header on outgoing mail.                                                         |
+| `PASSPORT_EMAIL_FILE` | (empty)                            | For development and tests: append messages as JSON lines to this file instead of sending. |
 
 ## Single sign-on (OIDC) fallback
 
 Per-workspace SSO is configured in Settings (see [SSO](/enterprise/sso-oidc)). These environment variables provide a global fallback for the single-tenant or appliance case.
 
-| Variable | Default | Meaning |
-| --- | --- | --- |
-| `PASSPORT_OIDC_ISSUER` | (empty) | Fallback IdP issuer URL. |
-| `PASSPORT_OIDC_CLIENT_ID` | (empty) | Fallback client ID. |
-| `PASSPORT_OIDC_CLIENT_SECRET` | (empty) | Fallback client secret. |
-| `PASSPORT_OIDC_SCOPE` | `openid email profile` | Requested scopes. |
+| Variable                      | Default                | Meaning                  |
+| ----------------------------- | ---------------------- | ------------------------ |
+| `PASSPORT_OIDC_ISSUER`        | (empty)                | Fallback IdP issuer URL. |
+| `PASSPORT_OIDC_CLIENT_ID`     | (empty)                | Fallback client ID.      |
+| `PASSPORT_OIDC_CLIENT_SECRET` | (empty)                | Fallback client secret.  |
+| `PASSPORT_OIDC_SCOPE`         | `openid email profile` | Requested scopes.        |
 
 ## Connecting upstream accounts
 
-| Variable | Default | Meaning |
-| --- | --- | --- |
-| `PASSPORT_GITHUB_CLIENT_ID` / `PASSPORT_GITHUB_CLIENT_SECRET` | (empty) | The GitHub OAuth app for the per-user "connect your own GitHub" broker. Register a GitHub OAuth app with callback `${PUBLIC_URL}/auth/connect-app/callback`. |
-| `PASSPORT_GITHUB_SCOPE` | `read:user` | Scopes for that GitHub broker. |
-| `PASSPORT_OAUTH_<KEY>_CLIENT_ID` / `PASSPORT_OAUTH_<KEY>_CLIENT_SECRET` | (empty) | A Passport-managed ("verified app") OAuth client for a connector, so members connect with zero admin setup. `<KEY>` is the connector key uppercased with non-alphanumerics collapsed to underscores (for example `hubspot` becomes `HUBSPOT`). Cloud-only; a self-hosted appliance leaves these unset and uses admin-supplied clients. |
-| `PASSPORT_CONNECTOR_PROVIDER_CATALOG` | (empty) | JSON manifest for reviewed provider-backed API integrations. Action schemas and risk annotations are fixed here, not learned during a call. |
-| `PASSPORT_CONNECTOR_PROVIDER_URL` | (empty) | Base URL for the optional long-tail connector relay. HTTPS is required in production. |
-| `PASSPORT_CONNECTOR_PROVIDER_TOKEN` | (empty) | Passport-to-relay bearer credential. Keep it out of manifests and logs. |
+| Variable                                                                | Default     | Meaning                                                                                                                                                                                                                                                                                                                                |
+| ----------------------------------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PASSPORT_GITHUB_CLIENT_ID` / `PASSPORT_GITHUB_CLIENT_SECRET`           | (empty)     | The GitHub OAuth app for the per-user "connect your own GitHub" broker. Register a GitHub OAuth app with callback `${PUBLIC_URL}/auth/connect-app/callback`.                                                                                                                                                                           |
+| `PASSPORT_GITHUB_SCOPE`                                                 | `read:user` | Scopes for that GitHub broker.                                                                                                                                                                                                                                                                                                         |
+| `PASSPORT_OAUTH_<KEY>_CLIENT_ID` / `PASSPORT_OAUTH_<KEY>_CLIENT_SECRET` | (empty)     | A Passport-managed ("verified app") OAuth client for a connector, so members connect with zero admin setup. `<KEY>` is the connector key uppercased with non-alphanumerics collapsed to underscores (for example `hubspot` becomes `HUBSPOT`). Cloud-only; a self-hosted appliance leaves these unset and uses admin-supplied clients. |
+| `PASSPORT_CONNECTOR_PROVIDER_CATALOG`                                   | (empty)     | JSON manifest for reviewed provider-backed API integrations. Action schemas and risk annotations are fixed here, not learned during a call.                                                                                                                                                                                            |
+| `PASSPORT_CONNECTOR_PROVIDER_URL`                                       | (empty)     | Base URL for the optional long-tail connector relay. HTTPS is required in production.                                                                                                                                                                                                                                                  |
+| `PASSPORT_CONNECTOR_PROVIDER_TOKEN`                                     | (empty)     | Passport-to-relay bearer credential. Keep it out of manifests and logs.                                                                                                                                                                                                                                                                |
 
 You can also let a person sign into Passport itself with Google or GitHub by setting the `PASSPORT_LOGIN_GOOGLE_*` and `PASSPORT_LOGIN_GITHUB_*` pairs. A provider is available only when both its client ID and secret are set.
 
 ## Billing (Stripe)
 
-Leave `STRIPE_SECRET_KEY` unset on a self-hosted appliance: with no key, every workspace gets everything unlocked and billing does not exist.
+Set `PASSPORT_BILLING_MODE=self-hosted` to intentionally unlock Enterprise for every workspace without Stripe. Production refuses an omitted mode, and self-hosted mode rejects dormant Stripe settings so a deployment cannot silently mix the appliance and hosted billing contracts.
 
-| Variable | Default | Meaning |
-| --- | --- | --- |
-| `STRIPE_SECRET_KEY` | (empty) | Presence turns billing on. |
-| `STRIPE_WEBHOOK_SECRET` | (empty) | Verifies `POST /webhooks/stripe` signatures. |
-| `STRIPE_PRICE_TEAM` | (empty) | Per-seat price ID for the public Pro tier. |
-| `STRIPE_PRICE_BUSINESS` | (empty) | Per-seat price ID for the public Enterprise tier. |
-| `PASSPORT_PLAN_OVERRIDES` | (empty) | Operator plan grants that bypass Stripe, for example `ws_x:business,ws_y:team`. These outrank a paid subscription. |
+For a hosted service, set `PASSPORT_BILLING_MODE=hosted` and configure the key, webhook secret, and both distinct Stripe price IDs. Production refuses to start when any part is missing or inconsistent. It also forbids redirecting `STRIPE_API_BASE` away from Stripe; that override is only for local tests.
+
+| Variable                  | Default                          | Meaning                                                                                                            |
+| ------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `PASSPORT_BILLING_MODE`   | inferred only outside production | Required in production: `hosted` or `self-hosted`.                                                                 |
+| `STRIPE_SECRET_KEY`       | (empty)                          | Required in hosted mode; authorizes Stripe API calls.                                                              |
+| `STRIPE_WEBHOOK_SECRET`   | (empty)                          | Required in hosted mode; verifies `POST /webhooks/stripe` signatures.                                              |
+| `STRIPE_PRICE_TEAM`       | (empty)                          | Required in hosted mode; distinct per-seat price ID for the public Pro tier.                                       |
+| `STRIPE_PRICE_BUSINESS`   | (empty)                          | Required in hosted mode; distinct per-seat price ID for the public Enterprise tier.                                |
+| `PASSPORT_PLAN_OVERRIDES` | (empty)                          | Operator plan grants that bypass Stripe, for example `ws_x:business,ws_y:team`. These outrank a paid subscription. |
 
 ## Gateway rate limits
 
-Per-workspace and per-token caps on the gateway, plus a per-replica concurrency guard. These fail open: a rate-limiter error never blocks the gateway.
+Per-workspace and per-token caps on the gateway, plus a per-replica concurrency guard. A shared rate-counter failure does not block the gateway; the local concurrency guard remains a finite hard bound and returns retryable backpressure at capacity.
 
-| Variable | Default | Meaning |
-| --- | --- | --- |
-| `PASSPORT_GATEWAY_RL_WINDOW_MS` | `60000` | The rate-limit window, in milliseconds. |
-| `PASSPORT_GATEWAY_RL_PER_WS` | `600` | Requests per workspace per window. |
-| `PASSPORT_GATEWAY_RL_PER_TOKEN` | `240` | Requests per connection token per window. |
-| `PASSPORT_GATEWAY_MAX_CONCURRENT` | `32` | Simultaneous in-flight gateway requests per workspace per replica. `0` disables the concurrency guard. |
+| Variable                                 | Default | Meaning                                                                                                                          |
+| ---------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `PASSPORT_GATEWAY_RL_WINDOW_MS`          | `60000` | The rate-limit window, in milliseconds.                                                                                          |
+| `PASSPORT_GATEWAY_RL_PER_WS`             | `600`   | Requests per workspace per window.                                                                                               |
+| `PASSPORT_GATEWAY_RL_PER_TOKEN`          | `240`   | Requests per connection token per window.                                                                                        |
+| `PASSPORT_GATEWAY_MAX_CONCURRENT`        | `32`    | Simultaneous in-flight gateway requests per workspace per replica. It cannot be disabled.                                        |
+| `PASSPORT_GATEWAY_MAX_CONCURRENT_GLOBAL` | `512`   | Simultaneous in-flight gateway requests across all workspaces on one replica. It cannot be lower than the per-workspace ceiling. |
+
+## Fail-closed operational bounds
+
+The following operator-controlled limits accept only base-10 integers in their
+inclusive supported range, except the logical database budget thresholds, which
+accept finite base-10 decimals from 0–1. Passport refuses to start when a value is blank,
+fractional where an integer is required, non-finite, zero where disallowed, out of
+range, or inconsistent with a related bound; it never silently falls back from a
+malformed production setting.
+
+| Variable                                         |    Default |                                                                      Inclusive range |
+| ------------------------------------------------ | ---------: | -----------------------------------------------------------------------------------: |
+| `PORT`                                           |     `8790` |                                                                            `1–65535` |
+| `PASSPORT_CONNECTOR_RESPONSE_BYTES`              |  `2097152` |                                                                     `65536–67108864` |
+| `PASSPORT_CONNECTOR_TIMEOUT_MS`                  |    `30000` |                                                                        `1000–300000` |
+| `PASSPORT_GATEWAY_RL_WINDOW_MS`                  |    `60000` |                                                                       `1000–3600000` |
+| `PASSPORT_GATEWAY_RL_PER_WS`                     |      `600` |                                                                          `1–1000000` |
+| `PASSPORT_GATEWAY_RL_PER_TOKEN`                  |      `240` |                                                                          `1–1000000` |
+| `PASSPORT_GATEWAY_MAX_CONCURRENT`                |       `32` |                                                                            `1–10000` |
+| `PASSPORT_GATEWAY_MAX_CONCURRENT_GLOBAL`         |      `512` |                                      `1–100000` and at least the per-workspace limit |
+| `PASSPORT_EARLY_ACCESS_MAX_LEADS`                |  `1000000` |                                                                          `1–1000000` |
+| `PASSPORT_CONNECT_LINK_TTL_MS`                   |   `600000` |                                                                      `1000–86400000` |
+| `PASSPORT_CONNECT_PLAN_TTL_MS`                   |  `1800000` |                                                                      `1000–86400000` |
+| `PASSPORT_MAX_ACTIVE_CONNECT_PLANS_PER_MEMBER`   |       `64` |                                                                           `11–10000` |
+| `PASSPORT_MAX_RETAINED_CONNECT_PLANS_PER_MEMBER` |      `128` |                                        `11–20000` and at least the active-plan limit |
+| `PASSPORT_TOOL_BINARY_MAX`                       |  `8000000` |                                                                     `64000–64000000` |
+| `PASSPORT_TOOL_STRUCTURED_MAX`                   |  `8000000` |                                                                     `64000–64000000` |
+| `PASSPORT_RESULT_TEXT_MAX`                       |  `5000000` |                                                                     `64000–64000000` |
+| `PASSPORT_RESOURCE_BLOB_MAX`                     |  `8000000` |                                                                     `64000–64000000` |
+| `PASSPORT_EVENT_BUFFER_MAX`                      |    `10000` |                                                                         `100–100000` |
+| `PASSPORT_HEALTH_THROTTLE_MS`                    |   `300000` |                                                                         `0–86400000` |
+| `PASSPORT_HEALTH_PROBE_CONCURRENCY`              |        `4` |                                                                                `1–8` |
+| `PASSPORT_HEALTH_PROBE_MAX`                      |        `8` |                                           `1–256` and at least the probe concurrency |
+| `PASSPORT_APPROVAL_HOLD_MS`                      |    `55000` |                                                                         `100–300000` |
+| `PASSPORT_APPROVAL_POLL_MS`                      |     `1000` |                                             `10–10000` and no greater than hold time |
+| `PASSPORT_REFRESH_GRACE_MS`                      |   `300000` |                                                                         `0–86400000` |
+| `PASSPORT_OAUTH_DCR_CACHE_MS`                    |  `1800000` |                                                                         `0–86400000` |
+| `PASSPORT_CONNECTOR_HEALTH_INTERVAL_MS`          | `21600000` |                                                                   `3600000–86400000` |
+| `PASSPORT_SHUTDOWN_GRACE_MS`                     |    `60000` |                                                                       `15000–600000` |
+| `PASSPORT_DATABASE_LOGICAL_BUDGET_BYTES`         |        `0` |                                                                 `0–1125899906842624` |
+| `PASSPORT_DATABASE_LOGICAL_WARNING_RATIO`        |      `0.7` |                                                             `0–1` and below critical |
+| `PASSPORT_DATABASE_LOGICAL_CRITICAL_RATIO`       |     `0.85` |                                                              `0–1` and above warning |
+| `PASSPORT_DATABASE_CAPACITY_BYTES` (deprecated)  |        `0` |   logical-budget compatibility alias; must match the canonical value if both are set |
+| `PASSPORT_DATABASE_WARNING_RATIO` (deprecated)   |      `0.7` |  logical-warning compatibility alias; must match the canonical value if both are set |
+| `PASSPORT_DATABASE_CRITICAL_RATIO` (deprecated)  |     `0.85` | logical-critical compatibility alias; must match the canonical value if both are set |
+| `PASSPORT_UPSTREAM_CIRCUIT_FAILURES`             |        `2` |                                                                               `1–10` |
+| `PASSPORT_UPSTREAM_CIRCUIT_COOLDOWN_MS`          |    `15000` |                                                                         `250–300000` |
+| `PASSPORT_UPSTREAM_CIRCUIT_MAX_ENTRIES`          |     `2048` |                                                                           `16–20000` |
+| `PASSPORT_UPSTREAM_CIRCUIT_STATE_TTL_MS`         |   `600000` |                                              `250–3600000` and at least the cooldown |
+| `PASSPORT_RESOURCE_LIST_MS`                      |    `10000` |                                                                          `500–60000` |
+| `PASSPORT_CONNECT_WAIT_POLL_MS`                  |     `2000` |                                                                          `100–10000` |
+| `PASSPORT_BRIDGE_POLL_MS`                        |    `15000` |                                                                         `1000–60000` |
 
 ## Metrics, monitoring, and paging
 
-| Variable | Default | Meaning |
-| --- | --- | --- |
-| `PASSPORT_METRICS_TOKEN` | (unset) | Enables the Prometheus `/metrics` endpoint. Off by default (the endpoint returns 404). When set, `/metrics` requires `Authorization: Bearer <token>`. |
-| `SENTRY_DSN` | (unset) | Server-project DSN. Enables privacy-filtered errors, traces, logs, metrics, and optional profiling. Unset disables server Sentry completely. |
-| `VITE_SENTRY_DSN` | (unset) | Browser-project DSN. Public by design and compiled into the SPA; unset disables browser Sentry completely. |
-| `SENTRY_ENVIRONMENT` | Railway environment, then production/development | Environment shared by server and browser events. |
-| `SENTRY_RELEASE` | Railway commit SHA on the server | Immutable release shared by server, browser, commits, deploy and source maps. Set it explicitly for container builds. |
-| `SENTRY_TRACES_SAMPLE_RATE` | `1` | Server trace sampling from 0–1. Health/readiness/metrics probes are excluded. |
-| `VITE_SENTRY_TRACES_SAMPLE_RATE` | `1` | Browser trace sampling from 0–1. |
-| `SENTRY_PROFILE_SESSION_SAMPLE_RATE` / `VITE_SENTRY_PROFILE_SESSION_SAMPLE_RATE` | `0` | Server/browser profiling sampling from 0–1; off by default. Pass a browser value above 0 at both image build and container runtime so the server emits the required `Document-Policy: js-profiling` header. |
-| `SENTRY_AUTH_TOKEN` | (unset) | Narrow `org:ci` source-map upload token for a separate local web build; it is not a Docker build argument. Never expose it to browser code. |
-| `SENTRY_ORG` / `SENTRY_PROJECT` | `passport-23` / `passport-web` | Sentry destination for source-map uploads. Override both for your own Sentry organization and browser project. |
-| `SENTRY_REPOSITORY` | `rsyed94/mcp-passport` | GitHub `owner/repo` used for release commit association. Set this to the fork authorized in your Sentry GitHub integration. |
-| `SENTRY_VERIFY_ON_START` / `VITE_SENTRY_VERIFY_ON_START` | `0` | One-shot verification events. Enable for one staging build/deploy, verify, then disable. |
-| `PASSPORT_OPS_WEBHOOK` | (empty) | POST a one-line operator alert (Slack, PagerDuty, ntfy, etc.) on a fatal error and on a gateway error-rate spike. |
-| `PASSPORT_OPS_EMAIL` | (empty) | Email the same operator alerts through the transactional transport, for teams that page by inbox. Rate-limited to one message per alert kind per 30 minutes. |
-| `PASSPORT_ALERT_ERROR_RATE` | `0.25` | The trailing-5-minute gateway error rate that triggers a page. |
-| `PASSPORT_ALERT_MIN_CALLS` | `20` | Minimum calls in the window before the error rate is judged. |
-| `PASSPORT_LOG` | (unset) | Set to `1` to enable per-request structured logging outside production. |
+`pg_database_size()` is a logical PostgreSQL footprint, not physical host or
+provider-volume usage. Passport therefore exposes
+`passport_database_logical_size_bytes`,
+`passport_database_logical_budget_bytes`, and
+`passport_database_logical_budget_utilization_ratio`; the configured budget is
+for growth planning only. A self-hosted operator must monitor filesystem-volume
+capacity independently at the host/provider layer. The deprecated
+`passport_database_storage_*` time series preserve dashboard compatibility but
+carry the same logical values and explicitly do not represent volume capacity.
+
+### Workspace mutable-state ceilings
+
+Each workspace's mutable control-plane document has a fixed 8 MiB serialized
+ceiling. Live state is capped at 10,000 members, 5,000 apps, 1,000 bundles,
+2,000 app requests, 10,000 invites, 10,000 join requests, and 5,000 agent
+keys. Terminal requests, invites, join requests, and agent keys are retained for
+at most 90 days and 500 rows per kind; a terminal request retains at most 100
+requesters. Passport compacts terminal history before every file or PostgreSQL
+write. The append-only activity/audit log is separate and remains authoritative.
+
+At 80% of any hard ceiling, Passport increments
+`passport_workspace_document_pressure_observations_total{reason}`. Compaction
+events and removed bytes are exposed through
+`passport_workspace_document_compactions_total{reason}` and
+`passport_workspace_document_compacted_bytes_total{reason}`. If live state
+still exceeds a ceiling after compaction, the write fails closed with retryable
+503 backpressure and increments
+`passport_workspace_document_capacity_rejected_total{reason}`. Alert on any
+pressure increase before raising a limit; see the repository runbook for the
+response procedure.
+
+| Variable                                                                         | Default                                          | Meaning                                                                                                                                                                                                     |
+| -------------------------------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PASSPORT_METRICS_TOKEN`                                                         | (unset)                                          | Enables the Prometheus `/metrics` endpoint. Off by default (the endpoint returns 404). When set, `/metrics` requires `Authorization: Bearer <token>`.                                                       |
+| `SENTRY_DSN`                                                                     | (unset)                                          | Server-project DSN. Enables privacy-filtered errors, traces, logs, metrics, and optional profiling. Unset disables server Sentry completely.                                                                |
+| `VITE_SENTRY_DSN`                                                                | (unset)                                          | Browser-project DSN. Public by design and served through `/api/browser-runtime-config.js`; unset disables browser Sentry completely.                                                                                                  |
+| `SENTRY_ENVIRONMENT`                                                             | Railway environment, then production/development | Environment shared by server and browser events.                                                                                                                                                            |
+| `SENTRY_RELEASE`                                                                 | Railway commit SHA on the server                 | Immutable release shared by server, browser, commits, deploy and source maps. Set it explicitly for container builds.                                                                                       |
+| `SENTRY_TRACES_SAMPLE_RATE`                                                      | `0.05`                                           | Server trace ceiling from 0–1. Governed MCP roots use the ceiling; application/public roots use 25%/5%. Probes/static assets are excluded.                                                                  |
+| `VITE_SENTRY_TRACES_SAMPLE_RATE`                                                 | `0.10`                                           | Browser trace sampling from 0–1. Sampled same-origin API requests continue as one server trace.                                                                                                             |
+| `SENTRY_PROFILE_SESSION_SAMPLE_RATE` / `VITE_SENTRY_PROFILE_SESSION_SAMPLE_RATE` | `0`                                              | Server/browser profiling sampling from 0–1; off by default. Set a browser value above 0 at container runtime so the server emits the required `Document-Policy: js-profiling` header. |
+| `SENTRY_AUTH_TOKEN`                                                              | (unset)                                          | Narrow `org:ci` source-map upload token for a separate local web build; it is not a Docker build argument. Never expose it to browser code.                                                                 |
+| `SENTRY_ORG` / `SENTRY_PROJECT`                                                  | `passport-23` / `passport-web`                   | Sentry destination for source-map uploads. Override both for your own Sentry organization and browser project.                                                                                              |
+| `SENTRY_REPOSITORY`                                                              | `rsyed94/mcp-passport`                           | GitHub `owner/repo` used for release commit association. Set this to the fork authorized in your Sentry GitHub integration.                                                                                 |
+| `SENTRY_VERIFY_ON_START` / `VITE_SENTRY_VERIFY_ON_START`                         | `0`                                              | Linked informational log + forced trace for release verification. Server: once per process start. Browser: once per exact full-SHA release in local storage; missing release/storage disables it.                   |
+| `PASSPORT_OPS_WEBHOOK`                                                           | (empty)                                          | POST a one-line operator alert (Slack, PagerDuty, ntfy, etc.) on a fatal error and on a gateway error-rate spike.                                                                                           |
+| `PASSPORT_OPS_EMAIL`                                                             | (empty)                                          | Email the same operator alerts through the transactional transport, for teams that page by inbox. Rate-limited to one message per alert kind per 30 minutes.                                                |
+| `PASSPORT_ALERT_MIN_CALLS`                                                       | `20`                                             | Minimum Passport-owned calls in each paired SLO window before the fixed 14.4x (5m+1h) or 6x (30m+6h) burn policy is judged. Provider failures and policy blocks do not consume the error budget.            |
+| `PASSPORT_LOG`                                                                   | (unset)                                          | Set to `1` to enable per-request structured logging outside production.                                                                                                                                     |
 
 Sentry is entirely optional for a self-hosted deployment. With both DSNs unset,
-no Sentry telemetry leaves the instance. `VITE_*` and the browser copy of
-`SENTRY_RELEASE` are image-build inputs. For source maps, first run the web build
-locally with `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT`,
-`SENTRY_REPOSITORY`, and the same release, then build the image without the
-token. Omitting that local upload simply means browser frames have no source
-maps. The entrypoint removes any platform-injected runtime token before Node
-starts, and only public browser settings are compiled into assets.
+no Sentry telemetry leaves the instance. Browser DSN, environment, sampling,
+and verification settings are read from the running service through
+`/api/browser-runtime-config.js`. Changing those settings requires updating the
+service environment, not rebuilding the browser assets.
+
+Release identity remains an image-build input: build with the exact commit as
+`SENTRY_RELEASE` and keep the same value at runtime. A mismatched runtime release
+is rejected. For source maps, first run the web build locally with
+`SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_REPOSITORY`, and that
+same release, then build the image without the token. Omitting that local upload
+means browser frames have no source maps. The entrypoint removes any
+platform-injected upload token before Node starts.
 
 When enabled, Passport sends normalized route/status/latency data, stack traces,
 operational spans/logs/metrics, MCP app/tool/client identifiers and outcomes, and
@@ -187,24 +302,43 @@ until URL metadata can be guaranteed safe before serialization. Sentry retention
 is controlled by your Sentry plan and organization settings, independently of
 Passport's event-log retention. For staging verification of Sentry releases and
 source maps, see `docs/DEPLOY.md` and `docs/OPERATIONS.md` in the repository.
+The bounded defaults avoid exhausting a shared span allowance; Express
+middleware/router bookkeeping spans are omitted while request roots, database,
+MCP, and outbound HTTP spans remain. If logs and metrics continue but spans stop,
+check the Sentry organization's subscription usage and client-discard reports
+before changing sample rates.
+
+For a dedicated staging instance, both verification flags may remain `1`: the
+server probe is bounded to process startup and the browser probe to one claim
+per exact release. A new release re-arms the browser probe. To retry one release
+after restoring Sentry capacity, remove only
+`passport:sentry-verification:<release-sha>` from browser local storage and
+reload. Keep both flags `0` in production.
 
 ## Advanced tuning
 
 These have sensible defaults and rarely need changing.
 
-| Variable | Default | Meaning |
-| --- | --- | --- |
-| `PASSPORT_UPSTREAM_CONNECT_MS` | `8000` | Timeout to connect to an upstream MCP. |
-| `PASSPORT_UPSTREAM_CALL_MS` | `45000` | Timeout for a single upstream tool call. |
-| `PASSPORT_UPSTREAM_LIST_MS` | `15000` | Timeout for listing an upstream's tools. |
-| `PASSPORT_UPSTREAM_IDLE_MS` | `600000` | How long an idle pooled upstream connection is kept before reaping. |
-| `PASSPORT_UPSTREAM_REAP_MS` | `60000` | How often the connection pool reaps idle connections. |
-| `PASSPORT_RESOURCE_LIST_MS` | `10000` | Timeout for listing an upstream's resources. |
-| `PASSPORT_RESOURCE_BLOB_MAX` | `8000000` | Maximum characters in a resource blob the gateway will return. |
-| `PASSPORT_CONNECTOR_TIMEOUT_MS` | `30000` | Timeout for one managed API or provider-relay request. |
-| `PASSPORT_CONNECTOR_RESPONSE_BYTES` | `2097152` | Maximum response bytes Passport buffers from a managed API or provider relay. |
-| `PASSPORT_RELEASES_REPO` | `rsyed94/passport-releases` | The public GitHub repo the download page resolves desktop-app releases from. |
+| Variable                                                                        | Default                     | Meaning                                                                                                  |
+| ------------------------------------------------------------------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `PASSPORT_UPSTREAM_CONNECT_MS`                                                  | `8000`                      | Timeout to connect to an upstream MCP.                                                                   |
+| `PASSPORT_UPSTREAM_CALL_MS`                                                     | `45000`                     | Timeout for a single upstream tool call.                                                                 |
+| `PASSPORT_UPSTREAM_LIST_MS`                                                     | `15000`                     | Timeout for listing an upstream's tools.                                                                 |
+| `PASSPORT_UPSTREAM_IDLE_MS`                                                     | `600000`                    | How long an idle pooled upstream connection is kept before reaping.                                      |
+| `PASSPORT_UPSTREAM_REAP_MS`                                                     | `60000`                     | How often the connection pool reaps idle connections.                                                    |
+| `PASSPORT_UPSTREAM_ORG_POOL_MAX` / `PASSPORT_UPSTREAM_MEMBER_POOL_MAX`          | `256` / `1024`              | Hard per-replica org/member client-pool limits. Active operations drain before a retired client closes.  |
+| `PASSPORT_UPSTREAM_DIAL_CONCURRENCY` / `PASSPORT_UPSTREAM_DIAL_QUEUE_MAX`       | `16` / `128`                | Global concurrent dials and bounded waiting-room size. Excess cold dials receive retryable backpressure. |
+| `PASSPORT_UPSTREAM_RESPONSE_MAX_BYTES`                                          | `8388608`                   | Maximum decompressed bytes buffered from one untrusted MCP response (SSE is bounded per event).          |
+| `PASSPORT_TENANT_CACHE_MAX`                                                     | `256`                       | Hard resident workspace-store limit per replica, including slots reserved by cold loads.                 |
+| `PASSPORT_TENANT_LOAD_CONCURRENCY` / `PASSPORT_TENANT_LOAD_QUEUE_MAX`           | `8` / `64`                  | Concurrent workspace hydrations and bounded waiting-room size.                                           |
+| `PASSPORT_TENANT_CACHE_IDLE_MS`                                                 | `1800000`                   | Idle time before an unleased workspace store is evicted. In-flight requests are pinned.                  |
+| `PASSPORT_TENANT_DELETE_QUIESCE_MS`                                             | `60000`                     | Maximum wait per deletion phase for active requests, provider work, and local transports to quiesce.     |
+| `PASSPORT_RESOURCE_LIST_MS`                                                     | `10000`                     | Timeout for listing an upstream's resources.                                                             |
+| `PASSPORT_RESOURCE_BLOB_MAX`                                                    | `8000000`                   | Maximum characters in a resource blob the gateway will return.                                           |
+| `PASSPORT_CONNECTOR_TIMEOUT_MS`                                                 | `30000`                     | Timeout for one managed API or provider-relay request.                                                   |
+| `PASSPORT_CONNECTOR_RESPONSE_BYTES`                                             | `2097152`                   | Maximum response bytes Passport buffers from a managed API or provider relay.                            |
+| `PASSPORT_RELEASES_REPO`                                                        | `rsyed94/passport-releases` | The public GitHub repo the download page resolves desktop-app releases from.                             |
 
 <Note>
-  Health checks: `GET /healthz` returns `{"ok":true}` when the process is up. `GET /readyz` runs a cheap storage ping (`SELECT 1` on Postgres) and returns 503 if storage is unreachable. When Postgres is down, Passport fails closed on policy: mutating requests fail (and failed commits return 503 with retry guidance) rather than bypass controls. Some read-only paths may still serve a stale in-memory snapshot until connectivity returns.
+  Health checks: `GET /healthz` returns `{"ok":true}` when the process is up. `GET /readyz` runs a cheap storage ping (`SELECT 1` on Postgres), reports the active `release` and `schemaVersion`, and returns 503 if storage is unreachable. When Postgres is down, Passport fails closed on policy: mutating requests fail (and failed commits return 503 with retry guidance) rather than bypass controls. Some read-only paths may still serve a stale in-memory snapshot until connectivity returns.
 </Note>

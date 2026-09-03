@@ -3,7 +3,7 @@ title: "Guardrails"
 description: "Inspect tool traffic, protect secrets, and block or redact risky content."
 ---
 
-Guardrails inspect calls that pass through Passport. They can check the request before an app receives it and the result before an AI client sees it.
+Guardrails inspect calls that pass through Passport. They check arguments before an app receives them and the complete result before an AI client sees it, including structured data and resource metadata. Images, audio, and binary content are size-limited but are not interpreted as text.
 
 Built-in secret detection protects every plan. Runtime Security and custom rules require Enterprise.
 
@@ -17,16 +17,17 @@ Open **Guardrails**. In the **Runtime Security** card, choose a mode and what to
 
 Start with **Observe**. It records findings without changing calls, so you can see what would happen before turning on enforcement.
 
-| Mode | Behavior |
-| --- | --- |
-| Off | Do not run Runtime Security checks. |
-| Observe | Record findings but allow the call. Recommended first. |
+| Mode    | Behavior                                                                     |
+| ------- | ---------------------------------------------------------------------------- |
+| Off     | Do not run Runtime Security checks.                                          |
+| Observe | Record findings but allow the call. Recommended first.                       |
 | Enforce | Block high-confidence threats. Lower-confidence signals remain observations. |
 
 The results card shows observed, blocked, and critical counts, plus recent findings.
 
 <Warning>
-  Runtime Security is explainable and intentionally conservative. It does not claim to detect every malicious instruction. Images, audio, and binary content are size-limited but are not understood semantically.
+  Runtime Security is explainable and intentionally conservative. It does not claim to detect every malicious
+  instruction. Images, audio, and binary content are size-limited but are not understood semantically.
 </Warning>
 
 ## What it looks for
@@ -50,7 +51,7 @@ Every workspace has a rule that catches common credentials before they cross the
 - Passport's own session, access, refresh, and agent-key tokens
 - password assignments
 
-The rule scans the full text payload up to 5 MB, including secrets deep inside a file read or database result.
+The rule scans the full text payload up to 5 MB, including secrets deep inside a file read or database result. An enforcing rule with a larger payload withholds it instead of passing an uninspected tail.
 
 ## Rule actions
 
@@ -70,7 +71,13 @@ The rule scans the full text payload up to 5 MB, including secrets deep inside a
 
 In the **Rules** card, choose **Add from library** or **New rule**. A rule can inspect arguments, results, or both, and can apply everywhere or only to selected apps.
 
-Custom rules accept a regular expression or a plain phrase. Passport rejects patterns that are too long or unsafe to run on every call, and limits how much text a custom pattern scans.
+Custom rules accept a regular expression or a plain phrase. Regex runs in a bounded, linear-time engine; lookarounds and backreferences are not supported. A phrase that is not valid regex is matched literally and case-insensitively.
+
+Patterns are limited to 200 characters, and at most 32 enabled rules can apply to one call surface. A custom rule inspects up to 100,000 characters. If a blocking or redacting rule receives more, Passport withholds the payload rather than passing an uninspected tail; an alert-only rule records the ceiling event and allows it.
+
+Older custom rules may show **Review required** after an upgrade. Review the displayed pattern before accepting it, including disabled and alert-only rules. If a pattern uses unsupported lookarounds or backreferences, choose **Retire** and replace it with a supported rule. Retiring a rule disables it immediately. Some pattern and enforcement changes are temporarily unavailable while the workspace completes its upgrade.
+
+Rules also inspect sensitive text split across fields or content blocks. If redaction cannot preserve a valid response—for example, because it would change a resource address or object key—Passport withholds the response.
 
 ## Alerts and stored records
 
