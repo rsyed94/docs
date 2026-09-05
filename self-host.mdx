@@ -172,6 +172,15 @@ Per-workspace and per-token caps on the gateway, plus a per-replica concurrency 
 | `PASSPORT_GATEWAY_MAX_CONCURRENT`        | `32`    | Simultaneous in-flight gateway requests per workspace per replica. It cannot be disabled.                                        |
 | `PASSPORT_GATEWAY_MAX_CONCURRENT_GLOBAL` | `512`   | Simultaneous in-flight gateway requests across all workspaces on one replica. It cannot be lower than the per-workspace ceiling. |
 
+These request counts are upper bounds. A separate memory guard can return 503
+with `Retry-After: 1` sooner when workspace snapshots and provider payloads would
+exceed the replica's available memory budget. It uses the lower of the V8 heap
+ceiling and the OS process constraint, with a smaller reservation for sign-in
+status and approval review/decisions so waiting calls do not consume their
+workspace's entire approval capacity. The
+`passport_request_memory_admission_rejected_total` counter records refusals by
+admission phase without member or workspace labels.
+
 ## Fail-closed operational bounds
 
 The following operator-controlled limits accept only base-10 integers in their
@@ -330,6 +339,7 @@ These have sensible defaults and rarely need changing.
 | `PASSPORT_UPSTREAM_DIAL_CONCURRENCY` / `PASSPORT_UPSTREAM_DIAL_QUEUE_MAX`       | `16` / `128`                | Global concurrent dials and bounded waiting-room size. Excess cold dials receive retryable backpressure. |
 | `PASSPORT_UPSTREAM_RESPONSE_MAX_BYTES`                                          | `8388608`                   | Maximum decompressed bytes buffered from one untrusted MCP response (SSE is bounded per event).          |
 | `PASSPORT_TENANT_CACHE_MAX`                                                     | `256`                       | Hard resident workspace-store limit per replica, including slots reserved by cold loads.                 |
+| `PASSPORT_TENANT_CACHE_MAX_BYTES`                                               | `134217728`                 | Cache reservation budget per replica. Each Store reserves 16 MiB for document growth; also capped at 25% of the runtime memory limit. |
 | `PASSPORT_TENANT_LOAD_CONCURRENCY` / `PASSPORT_TENANT_LOAD_QUEUE_MAX`           | `8` / `64`                  | Concurrent workspace hydrations and bounded waiting-room size.                                           |
 | `PASSPORT_TENANT_CACHE_IDLE_MS`                                                 | `1800000`                   | Idle time before an unleased workspace store is evicted. In-flight requests are pinned.                  |
 | `PASSPORT_TENANT_DELETE_QUIESCE_MS`                                             | `60000`                     | Maximum wait per deletion phase for active requests, provider work, and local transports to quiesce.     |
