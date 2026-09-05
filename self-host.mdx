@@ -181,6 +181,17 @@ workspace's entire approval capacity. The
 `passport_request_memory_admission_rejected_total` counter records refusals by
 admission phase without member or workspace labels.
 
+JSON, form, and Stripe webhook bodies enter the same process memory budget
+before parsing. Compressed and chunked uploads reserve against the decoded
+body limit; parsed values remain reserved while their request or provider work
+retains them. Excess uploads receive 503 with `Retry-After: 1`. These memory
+checks can refuse a body below its individual size limit when the replica has
+insufficient capacity.
+
+The HTTP server uses a 60-second request-upload timeout and a 15-second header
+timeout. These upload limits do not shorten the configured approval or provider
+response deadlines.
+
 ## Fail-closed operational bounds
 
 The following operator-controlled limits accept only base-10 integers in their
