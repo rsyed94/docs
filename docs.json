@@ -39,6 +39,7 @@
           "admin/people-and-teams",
           "admin/approvals-and-requests",
           "admin/managed-api-integrations",
+          "admin/agents-and-access",
           "admin/bundles",
           "admin/guardrails",
           "admin/discover",
