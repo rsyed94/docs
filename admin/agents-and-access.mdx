@@ -1,0 +1,97 @@
+---
+title: "Agents and access"
+description: "Give people and AI agents scoped access to organization tools, with approvals and durable receipts."
+---
+
+Open **Agents & access** to manage organization-owned tool access. A person and an agent have separate identities. When an agent works for someone, a delegation records both the acting agent and the person whose authority it uses.
+
+Managed access requires Enterprise workspace controls, PostgreSQL, and the deployment encryption key. The first organization connection supports GitHub App installations: repository details, issue lists, individual issues, issue creation, and issue comments.
+
+## Connect an organization
+
+1. Create a GitHub App and install it on the repositories you want Passport to govern. Give it the repository permissions needed for your selected actions: metadata read, and issues read or write.
+2. In **Agents & access**, enter the GitHub App ID and installation ID, then choose its private PEM file.
+3. Preview the installation, select specific repositories, and create the connection.
+
+Passport verifies the selected repository IDs and encrypts the private key. It requests short-lived installation tokens scoped to the particular repository and permissions needed for each invocation. The private key and provider tokens are never given to the agent.
+
+## Register an agent
+
+1. Create a managed agent and choose an active human owner.
+2. Generate a workload key on the agent's machine:
+
+   ```sh
+   passport access keygen --algorithm ES256
+   ```
+
+   By default this creates `~/.passport/access-workload-key.pem` and the
+   separate `~/.passport/access-workload-key.pem.jwk`. The private file is
+   owner-only and is never uploaded; use `--private-key-file` and
+   `--public-jwk-file` when the workload uses another secret directory.
+3. Register the resulting **public JWK** in Passport. Passport returns a new workspace-prefixed credential ID; use that exact ID as the workload's client ID. Keep the private key on the workload's machine or in its secret manager.
+4. Select the credential's permitted capability tuples. Credentials created in the UI expire after 90 days. Separately create an **allow grant** for the agent with the same intended tuples. A credential alone grants no tool access.
+5. Configure the workload with the Passport origin, credential ID, workspace ID, and local private-key file through `PASSPORT_ENDPOINT`, `PASSPORT_CLIENT_ID`, `PASSPORT_WORKSPACE_ID`, and `PASSPORT_PRIVATE_KEY_FILE`. Set `PASSPORT_CALLER_ID` (or pass `--caller`) to a stable workload invocation ID.
+
+   `PASSPORT_ENDPOINT` is the Passport origin, such as
+   `https://passport.example.com`; do not use the `/w/<workspace-id>/access/mcp`
+   path as the token endpoint. The client assertion uses `iss` and `sub` equal
+   to the credential ID and `aud` equal to
+   `<PASSPORT_ENDPOINT>/oauth/token`.
+
+Suspending the agent, revoking its credential, disabling its connection, or removing its grants prevents new admissions. Pausing or deactivating its owner also blocks the agent.
+
+Existing agents keep their current access until explicitly converted. Conversion revokes their old agent keys and profile credentials. Review their grants and workload setup before converting them.
+
+## Run a task
+
+```sh
+passport access actions --json
+passport access run --input run.json --json
+passport access invoke --input invocation.json --caller build-job --json
+passport access status <invocation-id> --json
+passport access cancel <run-id> --json
+```
+
+The run input contains a non-empty `capabilities` array copied from the available actions, plus optional `callLimit`, `expiresInSeconds`, and `delegationId`. A run only narrows current authority. Runs last at most 24 hours and admit at most 10,000 calls.
+
+An invocation names `runId`, a unique `invocationId`, `appId`, `tool`, `resource`, `connectionId`, and an `args` object matching the selected action schema. Retain the same invocation ID and exact arguments when resuming a definite approval-pending result. After the person approves it in Passport, run the same `access invoke` command again. If the request timed out or returned an unknown outcome, check `access status` before considering another write.
+
+The same workflow is available through MCP tools `passport_actions`, `passport_run`, `passport_invoke`, `passport_status`, and `passport_cancel`, or these workspace HTTP endpoints: `/w/<workspace-id>/actions`, `/w/<workspace-id>/runs`, `/w/<workspace-id>/actions/invoke`, `/w/<workspace-id>/invocations/<invocation-id>`, and `/w/<workspace-id>/runs/<run-id>/cancel`. Workloads authenticate using signed `private_key_jwt` client assertions; Passport issues short-lived, workspace-bound access tokens and never returns provider credentials to the workload.
+
+People use the dedicated managed MCP URL `/w/<workspace-id>/access/mcp` with a current Passport browser session or profile credential. Signed agents can use this URL too. The OAuth resource audience remains `/w/<workspace-id>/mcp`. Existing MCP connections retain their behavior, and access grants determine which organization tools a person can use through the managed endpoint.
+
+## Use the SDK
+
+Install `passport-bridge` as a project dependency and import `accessClientFromEnv` or `AccessGatewayClient` from its access export. The SDK uses the same workload configuration as the CLI:
+
+```js
+import { accessClientFromEnv } from "passport-bridge/access";
+
+const client = accessClientFromEnv(process.env, { callerId: "build-job" });
+const actions = await client.actions();
+```
+
+Choose the exact capability for the intended repository and action. Use `createRun({ capabilities, callLimit, expiresInSeconds })`, then `invoke({ runId, invocationId, appId, tool, resource, connectionId, args })`. Retain the run ID, invocation ID, and exact arguments before dispatch. `status(invocationId)` reads a receipt, and `cancel(runId)` prevents later admissions. The SDK never automatically retries a provider write.
+
+## Approvals and delegation
+
+A grant can require approval for every invocation. Authorized people review the proposed action in **Approvals**. The decision binds the actor, person when delegated, repository, connection revision, tool revision, run, and final arguments.
+
+For delegated work, both the agent and the person need an allow grant. The delegation adds a further scope and expiry. The person's current safety preferences still apply. Delegation supports one person-to-agent hop.
+
+Create the delegation in **Agents & access**, then discover its actions with `passport access actions --delegation-id <id> --json` or `client.actions(delegationId)`. Copy those capabilities into the run and include the same `delegationId` when creating it. Discovery without a delegation ID returns only non-delegated actions.
+
+Proposal contents are encrypted for a short review window and cleared after dispatch, denial, or expiry. Audit records and invocation receipts contain identifiers and outcomes rather than tool inputs or outputs.
+
+## Understand the receipt
+
+| State | Meaning |
+| --- | --- |
+| `pending_approval` | Waiting for a person; nothing has been dispatched. |
+| `ready` | Eligible for a fresh policy check and atomic admission. |
+| `dispatch_claimed` | One request owns dispatch; another request cannot take it over. |
+| `succeeded` / `failed` | A provider result was recorded. Result safety controls may still withhold its content. |
+| `unknown` | Passport cannot confirm the provider outcome. Investigate before submitting another write. |
+| `denied` / `cancelled` | The invocation cannot be admitted. |
+
+An invocation ID prevents duplicate dispatch within its retained run. Passport does not promise exactly-once effects at a third-party provider. Cancelling a run prevents later admissions; an operation already dispatched may complete.
