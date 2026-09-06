@@ -207,7 +207,9 @@ OpenCode is a first-class policy identity too, but it is not listed in the **Add
 
 ## Headless, CI, and cron
 
-Create an agent identity and key in **Settings** (**Advanced → Headless & CI** on Free/Pro; the **Headless & CI** card on Enterprise), then inject both variables through your CI secret store. Environment-key mode wins over local profiles, writes nothing to disk, and works without `passport login`.
+For company accounts and durable one-action approvals, set up an identity in **Agents** and use the [managed access CLI and SDK](/admin/agents-and-access). Its credentials rotate independently of the agent.
+
+For an existing legacy integration, create an agent identity and key in **Settings** (**Advanced → Agent keys (legacy)** on Free/Pro; the **Agent keys (legacy)** card on Enterprise), then inject both variables through your CI secret store. Environment-key mode wins over local profiles, writes nothing to disk, and works without `passport login`.
 
 ```sh
 export PASSPORT_AGENT_KEY='<agent-key>'
@@ -223,7 +225,7 @@ passport ready --json
 
 Agent keys can inspect status and call allowed tools, but cannot mint a person's sign-in link. Use `passport connect` from an interactive member profile when an app needs personal OAuth.
 
-Agent keys are also non-interactive: they do not create action-time member
+Legacy agent keys are non-interactive: they do not create action-time member
 approval prompts. Use a member profile for an operation that must pause for a
 human's one-off approval.
 
