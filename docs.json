@@ -27,6 +27,7 @@
         "group": "Using Passport",
         "pages": [
           "concepts/model",
+          "member/ai-setup",
           "member/safety",
           "admin/activity-and-audit",
           "billing",
@@ -37,6 +38,7 @@
         "group": "Manage a workspace",
         "pages": [
           "admin/people-and-teams",
+          "admin/team-setups",
           "admin/approvals-and-requests",
           "admin/managed-api-integrations",
           "admin/agents-and-access",

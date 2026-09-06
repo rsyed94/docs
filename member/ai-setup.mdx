@@ -1,0 +1,49 @@
+---
+title: "Your AI setup"
+description: "Get the clients, connections, and practical workflows your team has prepared for you."
+---
+
+Open **Setup** in your Passport workspace to see your assigned AI clients and tools. Each item shows what is ready and what needs attention. Your admin publishes the setup for your team; your existing access rules still apply.
+
+## Get ready
+
+1. Open **Clients** to connect an approved AI client. Install the vendor's app and sign in with your existing account when prompted.
+2. Follow **Connect** or **Request access** for tools that need attention. A team setup does not grant access by itself.
+3. Open **Workflows** to find tasks your team has prepared, including their instructions and required tools.
+
+Passport reports what it can verify. A connected client does not prove that every workflow is installed on every computer. Desktop checks the local installation separately.
+
+## Install a workflow on your Mac
+
+In Passport Desktop, open **Workflows**, choose a published workflow and supported client, then review the instructions and local changes before installing. Managed workflow skills support **Claude Code** and **Codex**. Restart or reopen the client if it has not picked up a newly installed skill.
+
+Passport keeps the workflow in its own skill folder. It preserves your other skills and refuses to replace a managed file you edited yourself. You can review an available update, restore the previous installed version, or remove the managed skill.
+
+Your client still needs its normal Passport connection and vendor account. Installing instructions does not bypass approvals or grant new permissions.
+
+## Use the CLI
+
+With Passport CLI 0.10.0 or newer, sign in to the workspace and list your assigned workflows:
+
+```sh
+passport setup list
+passport setup install <setup-id> <workflow-key> --client codex
+```
+
+The install command previews the change. Add `--apply` to install it. Use `--client claude-code` for Claude Code. Managed skill installation supports macOS and Linux; the regular Passport CLI remains available on Windows.
+
+```sh
+passport setup install <setup-id> <workflow-key> --client codex --apply
+passport setup installed
+passport setup rollback <skill-name> --apply
+passport setup remove <skill-name> --apply
+```
+
+The installed inventory, rollback, and removal work offline, including after your team assignment changes. Existing local instructions remain on your computer until removed; access to company tools is always checked by Passport when used.
+
+## When a setup needs attention
+
+- **Needs setup:** finish the indicated connection or installation step.
+- **Blocked:** use the existing access request process or contact your workspace admin.
+- **Locally modified:** move or restore your edited managed file before applying an update. Passport preserves the edit.
+- **Interrupted setup:** review the workflow again and retry. Passport uses its recovery record to finish safely.
