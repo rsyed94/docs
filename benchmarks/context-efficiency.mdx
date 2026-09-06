@@ -7,25 +7,25 @@ Tokenizer: exact `o200k_base` encoding · 3 measured repetitions after warmup.
 
 | scenario                        | surface       | tool-definition tokens | total task-context tokens | MCP body KB (request + response) | p50 ms | p95 ms |
 | ------------------------------- | ------------- | ---------------------: | ------------------------: | -------------------------------: | -----: | -----: |
-| small (8 tools, 1 KB result)    | flat_mcp      |                   1850 |                      2283 |                             10.6 | 115.55 |  122.4 |
-| small (8 tools, 1 KB result)    | automatic_mcp |                   1850 |                      2283 |                             10.6 |  70.58 |  75.73 |
-| small (8 tools, 1 KB result)    | compact_mcp   |                   1244 |                      1965 |                              9.6 |  93.56 | 106.63 |
-| small (8 tools, 1 KB result)    | passport_cli  |                      0 |                      1173 |                             19.9 | 858.66 |  889.7 |
-| medium (48 tools, 8 KB result)  | flat_mcp      |                   8040 |                     10463 |                             44.4 |  99.61 | 109.18 |
-| medium (48 tools, 8 KB result)  | automatic_mcp |                   3354 |                      6043 |                               26 |  99.04 | 136.16 |
-| medium (48 tools, 8 KB result)  | compact_mcp   |                   1324 |                      4039 |                               18 | 106.77 | 153.63 |
-| medium (48 tools, 8 KB result)  | passport_cli  |                      0 |                      3327 |                             29.9 | 761.48 | 917.51 |
-| large (160 tools, 32 KB result) | flat_mcp      |                  25372 |                     34506 |                            143.9 | 127.86 |  162.1 |
-| large (160 tools, 32 KB result) | automatic_mcp |                   1430 |                     10856 |                             45.8 | 107.81 | 112.87 |
-| large (160 tools, 32 KB result) | compact_mcp   |                   1430 |                     10856 |                             45.8 | 105.21 | 115.63 |
-| large (160 tools, 32 KB result) | passport_cli  |                      0 |                     10092 |                             58.9 | 813.72 |  827.1 |
+| small (8 tools, 1 KB result)    | flat_mcp      |                   1850 |                      2283 |                             10.6 |  61.03 |  61.19 |
+| small (8 tools, 1 KB result)    | automatic_mcp |                   1850 |                      2283 |                             10.6 |  57.37 |  61.32 |
+| small (8 tools, 1 KB result)    | compact_mcp   |                   1244 |                      1965 |                              9.6 |  57.56 |  59.35 |
+| small (8 tools, 1 KB result)    | passport_cli  |                      0 |                      1173 |                             19.9 | 546.11 | 557.18 |
+| medium (48 tools, 8 KB result)  | flat_mcp      |                   8040 |                     10463 |                             44.4 |  65.16 |  65.43 |
+| medium (48 tools, 8 KB result)  | automatic_mcp |                   3354 |                      6208 |                             26.9 |   76.2 |  78.36 |
+| medium (48 tools, 8 KB result)  | compact_mcp   |                   1324 |                      4039 |                               18 |  64.67 |  65.13 |
+| medium (48 tools, 8 KB result)  | passport_cli  |                      0 |                      3327 |                             29.9 | 624.28 | 637.95 |
+| large (160 tools, 32 KB result) | flat_mcp      |                  25372 |                     34506 |                            143.9 |  115.5 | 118.99 |
+| large (160 tools, 32 KB result) | automatic_mcp |                   1430 |                     10856 |                             45.8 |  95.86 |  96.97 |
+| large (160 tools, 32 KB result) | compact_mcp   |                   1430 |                     10856 |                             45.8 |  88.97 |  90.84 |
+| large (160 tools, 32 KB result) | passport_cli  |                      0 |                     10092 |                             58.9 | 618.77 | 627.01 |
 
 ## Context ratios versus flat MCP
 
 | scenario | automatic definitions | automatic total | compact definitions | compact total | CLI total |
 | -------- | --------------------: | --------------: | ------------------: | ------------: | --------: |
 | small    |                  100% |            100% |               67.2% |         86.1% |     51.4% |
-| medium   |                 41.7% |           57.8% |               16.5% |         38.6% |     31.8% |
+| medium   |                 41.7% |           59.3% |               16.5% |         38.6% |     31.8% |
 | large    |                  5.6% |           31.5% |                5.6% |         31.5% |     29.2% |
 
 ## Selective output task
@@ -34,9 +34,9 @@ The large fixture returns 100 structured records. The task requests `id`, `title
 
 | surface       | raw result tokens | selected result tokens | result-token saving |  rows | p50 ms |
 | ------------- | ----------------: | ---------------------: | ------------------: | ----: | -----: |
-| flat_mcp      |              5524 |                    528 |               90.4% | 10/10 | 167.93 |
-| automatic_mcp |              5524 |                    528 |               90.4% | 10/10 | 119.41 |
-| compact_mcp   |              5524 |                    528 |               90.4% | 10/10 | 111.64 |
+| flat_mcp      |              5524 |                    528 |               90.4% | 10/10 | 128.84 |
+| automatic_mcp |              5524 |                    528 |               90.4% | 10/10 | 106.16 |
+| compact_mcp   |              5524 |                    528 |               90.4% | 10/10 | 103.56 |
 
 ## Interpretation
 
