@@ -5,6 +5,8 @@ description: "Give people and AI agents scoped access to organization tools, wit
 
 Use **Apps → Workspace** to connect company accounts, **Agents** to configure workloads, and **Approvals** and **Audit → Managed runs** to follow their work. A person and an agent have separate identities. When an agent works for someone, a delegation records both the acting agent and the person whose authority it uses.
 
+Passport Desktop includes company access requests in **Apps**, managed action reviews in **Approvals**, and your run and receipt history in **Activity**. Agent administration and company account setup remain on the web, available through **Settings → Open Passport on the web**.
+
 Managed access requires Enterprise workspace controls, PostgreSQL, and the deployment encryption key. The first organization connection supports GitHub App installations: repository details, issue lists, individual issues, issue creation, and issue comments.
 
 ## Connect an organization
@@ -17,7 +19,7 @@ Passport verifies the selected repository IDs and encrypts the private key. It r
 
 ## Register an agent
 
-1. In **Agents**, create a managed agent with a name, purpose, and active human owner. Open its detail page and select the company account, repository, and actions it needs. Set the grant expiry and whether each action requires approval. New agents have no access until configured.
+1. In **Agents**, create a managed agent with a name, purpose, and active human owner. Open its detail page and select the company account, repository, and actions it needs. Set the grant expiry and whether the grant requires approval for every invocation. New agents have no access until configured.
 2. Generate a workload key on the agent's machine:
 
    ```sh
