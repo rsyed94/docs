@@ -10,15 +10,15 @@ Open **Settings** and find **Safety**.
 For both write actions and destructive actions, choose:
 
 - **Allow** — go ahead, if your workspace already permits it.
-- **Ask me** — pause so you can allow it once, allow it for the session, or deny it. **Approvals** appears in the navigation while something is waiting.
+- **Ask me** — pause so you can allow it once, allow it for one hour, or deny it. Open **Approvals** to decide; its badge shows waiting personal action approvals.
 - **Never** — block it immediately.
 
 The defaults are:
 
-| Action | Default |
-| --- | --- |
-| Write | Allow |
-| Destructive | Ask me |
+| Action      | Default |
+| ----------- | ------- |
+| Write       | Allow   |
+| Destructive | Ask me  |
 
 Read-only actions are not controlled here.
 
@@ -26,8 +26,10 @@ Read-only actions are not controlled here.
 
 - If your app access is read-only, write tools stay hidden even if Safety says **Allow**.
 - If a workspace guardrail blocks an action, Safety cannot override it.
-- Agent identities used by scripts and CI cannot answer **Ask me** prompts. Use a normal member connection when a human needs to decide.
+- Legacy agent keys cannot answer personal **Ask me** prompts. Managed agents use grant-based approvals; see [Agents and access](/admin/agents-and-access).
 
 Use Safety when you want an extra personal check without changing anyone else's access.
+
+An approval stays available for about three minutes. If you choose **Allow for one hour**, matching actions can run without another prompt for one hour; after that, Passport asks again.
 
 See also [Guardrails](/admin/guardrails) and [Catalog access and passes](/admin/approvals-and-requests).
