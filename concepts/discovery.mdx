@@ -14,7 +14,8 @@ The default is `auto`. Free and Pro stay on that default. Enterprise Settings ca
     Every permitted tool is defined up front. Best experience with no indirection, for small setups.
   </Card>
   <Card title="Apps" icon="grip">
-    One meta-tool per MCP, named for the MCP (for example `github`, `supabase`). The tool list itself is the readable inventory; each MCP's tool definitions load on demand inside its meta-tool.
+    One meta-tool per MCP, named for the MCP (for example `github`, `supabase`). The tool list itself is the readable
+    inventory; each MCP's tool definitions load on demand inside its meta-tool.
   </Card>
   <Card title="Compact" icon="magnifying-glass">
     Two global meta-tools (a search and a call) whose descriptions carry the MCP manifest. For very large fleets.
@@ -23,28 +24,61 @@ The default is `auto`. Free and Pro stay on that default. Enterprise Settings ca
 
 ## How auto chooses
 
-When the mode is `auto`, the workspace endpoint picks a tier from the count of permitted tools and MCPs for the caller:
+When the mode is `auto`, the workspace endpoint estimates the serialized tool-definition tokens for the caller and compares that estimate with the discovery token budget. The default budget is 4,096 estimated tokens. This is an approximate selection target for the initial definitions; it excludes server instructions and future tool results, and compact mode can still exceed a very small configured budget because its two meta-tools must remain usable. A separate tool-count threshold (default 40) prevents a small catalog from taking the indirection cost of a wrapper.
 
 <Steps>
-  <Step title="Flat, until the threshold">
-    While the total number of permitted tools is at or below the discovery threshold (default 40), the gateway serves flat.
+  <Step title="Flat for a small budget fit">
+    If the permitted tool count is at or below the threshold and the estimated flat definitions fit the budget, the
+    gateway serves flat.
   </Step>
-  <Step title="Apps, past the threshold">
-    Once the tool count passes the threshold, the gateway switches to one meta-tool per MCP, as long as there are 24 or fewer permitted MCPs.
+  <Step title="Apps for a larger budget fit">
+    If flat is too large but one app wrapper per MCP fits the budget, the gateway serves apps. Apps mode supports up to
+    24 permitted MCPs.
   </Step>
-  <Step title="Compact, for very large fleets">
-    With more than 24 permitted MCPs, the gateway switches to the two global meta-tools.
+  <Step title="Compact when wrappers do not fit">
+    If the app wrappers do not fit, or more than 24 MCPs are permitted, the gateway serves the two global search and
+    call meta-tools.
   </Step>
 </Steps>
 
-Operators can pin a single tier instead of `auto` and change the threshold (any value from 1 to 500) when they need a fixed presentation. Day-to-day Free and Pro workspaces do not expose that control and remain on `auto`.
+Operators can pin a single tier instead of `auto`, change the threshold from 1 to 500, and set the token budget from 512 to 32,768 when they need a fixed presentation. Day-to-day Free and Pro workspaces do not expose that control and remain on `auto`.
 
 <Note>
-  Auto only applies to the workspace endpoint (`/mcp` and `/w/{workspace}/mcp`). A per-MCP endpoint (`/s/{appKey}/mcp`) and a bundle endpoint (`/b/{bundleKey}/mcp`) are already curated slices, so they always stay flat regardless of this setting.
+  Auto only applies to the workspace endpoint (`/mcp` and `/w/{workspace}/mcp`). A per-MCP endpoint (`/s/{appKey}/mcp`)
+  and a bundle endpoint (`/b/{bundleKey}/mcp`) are already curated slices, so they always stay flat regardless of this
+  setting.
 </Note>
 
 ## Why the inventory always stays visible
 
 Hiding the inventory would make an AI client capability-blind. It would answer "I don't have GitHub" on clients that never proactively search. So at every tier the list of MCPs a person can reach stays readable. In `apps` mode the tool list is that inventory. In `compact` mode the meta-tool descriptions carry it. Only the detailed per-tool definitions load on demand, which is what keeps the context cost down.
 
-The [repeatable context-efficiency benchmark](/benchmarks/context-efficiency) measures the definition, task-context, wire, result, CLI-process, and latency costs of flat MCP, compact MCP, and Passport CLI against the same deterministic governed task.
+The [repeatable context-efficiency benchmark](/benchmarks/context-efficiency) measures the definition, task-context, wire, result, CLI-process, and latency costs of automatic, flat, apps, compact MCP, and Passport CLI against the same deterministic governed task.
+
+## Brief search and exact schemas
+
+Broad discovery is deliberately brief. `passport_search_tools` returns at most three brief matches by default and never includes parameter schemas in those hits; callers can request up to ten. An app wrapper behaves the same way with `{find:"keywords"}`. A global search with no query returns a bounded app index with counts; it does not return every tool name. In apps mode, `{}` on one app wrapper returns that app's complete permitted tool-name catalog.
+
+After choosing a name, fetch one schema with `{tool:"github_search_issues",detail:"full"}` or an exact query with `{query:"github_search_issues",detail:"full"}`. In apps mode, use `{describe:"github_search_issues"}`. The exact response contains the parameters for that one permitted tool. CLI search keeps its compatibility defaults and returns full definitions. Search results are subsets of the permitted catalog, so a broad query with no hit is a reason to refine the query or request an exact name.
+
+## Selective output
+
+Result selection is optional and controls what the agent receives after a provider call. It uses bounded RFC 6901 JSON Pointer paths. For compact `passport_call` and app wrappers, pass `output` beside the provider `args`:
+
+```json
+{
+  "tool": "github_list_issues",
+  "args": { "state": "open" },
+  "output": {
+    "itemPath": "/issues",
+    "fields": ["/id", "/title", "/status"],
+    "where": { "path": "/status", "equals": "open" },
+    "offset": 0,
+    "limit": 10
+  }
+}
+```
+
+Direct flat tools expose the same selector through the reserved `_passport_output` argument when the upstream schema does not already use that name. `itemPath` identifies the array to page; if it is omitted, the JSON root is the item list. `fields` projects each selected object, `where` applies scalar equality, `offset` pages from zero, and `limit` is capped at 100.
+
+Passport runs its normal result safety checks before shaping and checks the selected result again. Successful shaping adds bounded `_passportOutput` metadata, including counts, pagination, and `omittedFieldCount`, which counts requested field pointers absent from the selected objects. `offset` slices the provider response for this call; Passport does not cache a snapshot or provider cursor. To retrieve another page, make a new read call; do not repeat a completed write just to change its output selection. For text-only JSON, the selected value is also exposed in a structured `{data: ...,_passportOutput: ...}` envelope; structured provider results keep their existing root with the metadata added. If the content cannot be safely shaped, the original successful result is kept and the response says that selection was not applied.
