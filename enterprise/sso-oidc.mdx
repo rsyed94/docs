@@ -10,7 +10,9 @@ Passport signs people in through your identity provider using OpenID Connect (au
 When SSO is configured, the sign-in page redirects to your IdP. Passport exchanges the authorization code for tokens, then validates the ID token cryptographically: the signature against your IdP's JWKS, plus the issuer, audience, and a per-attempt nonce. The email address is taken from the verified token (falling back to the userinfo endpoint only if the token omits it), and it must be a verified email. This is what proves your IdP actually vouched for the identity rather than trusting an unsigned response.
 
 <Note>
-  Passport does not hard-fail when the IdP omits the `email_verified` claim entirely (Microsoft Entra and some Okta or Google configurations do). Because your admin configured that exact issuer and the ID token is already cryptographically validated, an absent claim is trusted. An explicit `email_verified: false` is still rejected.
+  Passport does not hard-fail when the IdP omits the `email_verified` claim entirely (Microsoft Entra and some Okta or
+  Google configurations do). Because your admin configured that exact issuer and the ID token is already
+  cryptographically validated, an absent claim is trusted. An explicit `email_verified: false` is still rejected.
 </Note>
 
 ## What you need
@@ -20,7 +22,7 @@ When SSO is configured, the sign-in page redirects to your IdP. Passport exchang
     Your IdP's issuer, for example `https://your-org.okta.com`. Passport reads its discovery document at `/.well-known/openid-configuration`.
   </Card>
   <Card title="Client ID and secret" icon="key">
-    From a web application (confidential client) you register in your IdP.
+    From a web application (confidential agent) you register in your IdP.
   </Card>
   <Card title="Redirect URI" icon="arrow-right-to-bracket">
     `https://<your-passport-host>/auth/callback`
@@ -30,7 +32,10 @@ When SSO is configured, the sign-in page redirects to your IdP. Passport exchang
 The requested scopes are `openid email profile`.
 
 <Warning>
-  The issuer URL is validated when you save it. In production it must be a public HTTPS endpoint. Passport resolves the host and refuses issuers that point at private, loopback, link-local, or cloud-metadata addresses, and re-checks on every redirect it follows. An internal or non-HTTPS issuer will be rejected with "That identity-provider URL isn't allowed."
+  The issuer URL is validated when you save it. In production it must be a public HTTPS endpoint. Passport resolves the
+  host and refuses issuers that point at private, loopback, link-local, or cloud-metadata addresses, and re-checks on
+  every redirect it follows. An internal or non-HTTPS issuer will be rejected with "That identity-provider URL isn't
+  allowed."
 </Warning>
 
 ## Configure SSO in Passport
@@ -48,7 +53,9 @@ The requested scopes are `openid email profile`.
 </Steps>
 
 <Note>
-  When a workspace uses its own configured IdP, the IdP vouching for a person is treated as proof they belong to the company, so they auto-join. If the workspace has no admin yet, the first person to sign in through its own IdP becomes the admin.
+  When a workspace uses its own configured IdP, the IdP vouching for a person is treated as proof they belong to the
+  company, so they auto-join. If the workspace has no admin yet, the first person to sign in through its own IdP becomes
+  the admin.
 </Note>
 
 ## Okta walkthrough
@@ -92,5 +99,6 @@ The requested scopes are `openid email profile`.
 </Steps>
 
 <Note>
-  Entra typically omits `email_verified`. Passport handles this correctly, as described above, so Entra sign-in works without extra configuration.
+  Entra typically omits `email_verified`. Passport handles this correctly, as described above, so Entra sign-in works
+  without extra configuration.
 </Note>

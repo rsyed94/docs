@@ -9,11 +9,11 @@ People and Teams are part of Enterprise company-wide administration. Free and Pr
 
 Every member has one of three roles:
 
-| Role | Can do |
-| --- | --- |
-| Admin | Approve MCPs, manage people and teams, set guardrails and policy, and see the audit trail. The first person in a workspace is an admin (sometimes called the owner in product copy). |
-| Member | Connect their AI clients and use the MCPs their passes permit. |
-| Agent | A non-human identity for automation, authenticated by an agent key rather than a browser session. |
+| Role   | Can do                                                                                                                                                                               |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Admin  | Approve MCPs, manage people and teams, set guardrails and policy, and see the audit trail. The first person in a workspace is an admin (sometimes called the owner in product copy). |
+| Member | Connect their agents and use the MCPs their passes permit.                                                                                                                           |
+| Agent  | A non-human identity for automation, authenticated by an agent key rather than a browser session.                                                                                    |
 
 ## Add people
 
@@ -32,7 +32,8 @@ Free and Pro workspaces stay invite-only: only invited members can sign in. Doma
 On Enterprise, joining defaults to invite-only. You can instead allow anyone who verifies an email on a company domain to join as a member (a Slack-style domain policy), and optionally make the workspace discoverable to teammates on those domains. You control this and the list of allowed domains in Settings.
 
 <Note>
-  Consumer and disposable email domains never trigger domain join or domain discovery, so shared providers like gmail.com can never be used to walk into your workspace.
+  Consumer and disposable email domains never trigger domain join or domain discovery, so shared providers like
+  gmail.com can never be used to walk into your workspace.
 </Note>
 
 ## Deactivate and reactivate
@@ -40,26 +41,14 @@ On Enterprise, joining defaults to invite-only. You can instead allow anyone who
 Deactivating a member immediately signs them out everywhere and revokes their connected-account grants, so nothing sits at rest or re-arms later. Reactivating restores access; they reconnect their own accounts. Sign-in attempts by a deactivated member are recorded in the audit trail as a security signal.
 
 <Note>
-  The same lifecycle runs through SCIM. Deprovisioning a user in your IdP does exactly this, and Passport refuses to remove the last active admin. See [SCIM](/enterprise/scim).
+  The same lifecycle runs through SCIM. Deprovisioning a user in your IdP does exactly this, and Passport refuses to
+  remove the last active admin. See [SCIM](/enterprise/scim).
 </Note>
 
-## Agent identities
+## Automation credentials
 
-For company tools, open **Agents** to create a managed identity with an accountable owner, scoped access, and independently managed credentials. See [Agents and access](/admin/agents-and-access) for setup, delegation, approvals, rotation, and run history.
+Connect Claude Code, Codex, Cursor, and other supported agents from **Agents**. There is no separate managed-agent identity setup.
 
-Legacy agent keys remain available to owners on every plan from **Settings**. On Free and Pro, expand **Advanced** and open **Agent keys (legacy)** (there is also a **CLI guide** link there). On Enterprise, **Agent keys (legacy)** is a top-level Settings card. Creating a key also creates a governed agent identity. The `pak_` bearer is shown once and stored only as a hash; its calls have their own access and Activity attribution, and revoking the key retires the identity. On Free, agents count toward the member cap; on paid plans they are not billed as seats.
+For scripts and CI, owners can open **Settings → Automation** (under **Advanced** on Free and Pro). A credential authenticates Passport CLI with its own access, or with access narrowed by a delegated person's permissions. It is shown once and can be revoked from the same dialog.
 
-Choose an identity model when you create a legacy key:
-
-| Model | Effective access |
-| --- | --- |
-| Autonomous | The agent identity's own app passes, tool policy, and client selection. |
-| Delegated | The intersection of the agent's policy and one active human's policy. The agent uses that person's connected account where member OAuth is required. |
-
-Delegation can only narrow access: an app or tool unavailable to either principal is unavailable to the agent. The same intersection applies to tools, resources, prompts, connection status, bundles, and personal client selection. Activity and Runtime Security findings record both the agent and delegated person.
-
-When a delegated person's app sign-in is missing or expires, the agent can present a secure connection link bound to that person. The person completes sign-in directly in Passport and the agent can then retry. Autonomous agents do not receive these links because there is no human identity to bind them to; use a delegated identity, a normal member connection, or company-managed authentication instead.
-
-Delegated keys require Enterprise and expire after 1–365 days. If the delegated person is deactivated, or the key expires or is revoked, authentication fails immediately. Create a replacement key to rotate it; the old bearer is never shown again.
-
-Passport CLI accepts an agent key through `PASSPORT_AGENT_KEY` with the governed workspace endpoint in `PASSPORT_ENDPOINT` (`https://…/w/ws_…/mcp`). This mode writes no local credential file, for existing CI, cron, and headless integrations. Managed workloads use the signed-credential setup described in [Agents and access](/admin/agents-and-access). See [Passport CLI](/quickstart/cli).
+Passport CLI accepts the credential through `PASSPORT_AGENT_KEY` and the workspace endpoint through `PASSPORT_ENDPOINT`. Store these in your CI secret store. This mode works without interactive sign-in and writes no local credential file. See [Passport CLI](/quickstart/cli).

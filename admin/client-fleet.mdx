@@ -1,15 +1,15 @@
 ---
-title: "Manage connected clients"
-description: "See connected AI clients, remove access, and set workspace client policy."
+title: "Manage connected agents"
+description: "See connected agents, remove access, and set workspace agent policy."
 ---
 
-Everyone can manage their own connections from **Clients**. Enterprise admins can also see and manage connections across the workspace.
+Everyone can manage their own connections from **Agents**. Enterprise admins can also see and manage connections across the workspace.
 
-## Manage your own clients
+## Manage your own agents
 
-Open **Clients → My clients** to:
+Open **Agents → My agents** to:
 
-- add a client;
+- add an agent;
 - see whether Passport has observed it;
 - choose which available apps it can see;
 - troubleshoot or reconnect it;
@@ -20,39 +20,39 @@ Free and Pro use the same personal page without the two tabs.
 
 ## Manage the workspace
 
-On Enterprise, open **Clients → Workspace clients**. You can search by person or client, inspect clients that are unused or out of date, and revoke a connection so it must sign in again.
+On Enterprise, open **Agents → Workspace agents**. You can search by person or agent, inspect agents that are unused or out of date, and revoke a connection so it must sign in again.
 
-The workspace list shows real observed connections. Opening setup instructions alone does not create a connected-client record.
+The workspace list shows real observed connections. Opening setup instructions alone does not create a connected-agent record.
 
-## Understand client names
+## Understand agent names
 
-For a dynamic client, Passport uses the name or title reported by the MCP client,
+For a dynamic agent, Passport uses the name or title reported by the MCP agent,
 falling back to its registered connection label. A reported version is retained
-when available. Recognized clients keep Passport's standard name.
+when available. Recognized agents keep Passport's standard name.
 
-These names help identify connections in Clients, Activity, approvals, and
-exports. They are self-reported context: claiming the name of a recognized client
-does not satisfy registered-client policy or grant access.
+These names help identify connections in Agents, Activity, approvals, and
+exports. They are self-reported context: claiming the name of a recognized agent
+does not satisfy registered-agent policy or grant access.
 
-If a connection still appears as **AI client**, keep it open and ask it to list
-Passport tools, then refresh Clients. A client that supplies no identity and has
+If a connection still appears as **agent**, keep it open and ask it to list
+Passport tools, then refresh Agents. An agent that supplies no identity and has
 no specific connection label keeps the generic name.
 
-## Set client policy
+## Set agent policy
 
-Open **Settings → AI client access**:
+Open **Settings → Agent access**:
 
-- **Allow dynamic clients** — whether unrecognized clients may connect
-- **Require registered AI clients** — only clients Passport recognizes (or you have registered) may connect
+- **Allow dynamic agents** — whether unrecognized agents may connect
+- **Require registered agents** — only agents Passport recognizes (or you have registered) may connect
 
 These controls require Enterprise. If the workspace downgrades, the saved policy is not enforced until Enterprise is active again.
 
 ## Team defaults
 
-[Client defaults](/admin/client-defaults) choose which already-allowed apps appear by default in a client for a team. They never grant access.
+[Agent defaults](/admin/client-defaults) choose which already-allowed apps appear by default in an agent for a team. They never grant access.
 
 ## Related
 
-- [Get connected](/quickstart/member) — connecting an AI client
+- [Get connected](/quickstart/member) — connecting an agent
 - [People and teams](/admin/people-and-teams) — roles and lifecycle
 - [Discover](/admin/discover) — finding connections configured outside Passport

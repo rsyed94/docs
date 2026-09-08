@@ -8,11 +8,11 @@ Passport keeps two separate records:
 - **Activity** records calls made through Passport.
 - **Admin activity** records privileged workspace changes.
 
-Keeping them separate makes it clear whether an event came from an AI client or from an administrator changing the workspace.
+Keeping them separate makes it clear whether an event came from an agent or from an administrator changing the workspace.
 
 ## Your Activity
 
-Everyone can open **Activity** to see their own calls. A row shows the app, action, AI client, outcome, and timing.
+Everyone can open **Activity** to see their own calls. A row shows the app, action, agent, outcome, and timing.
 
 - **Allowed** means the call completed.
 - **Blocked** means access, Safety, an approval, or a guardrail stopped it.
@@ -20,14 +20,14 @@ Everyone can open **Activity** to see their own calls. A row shows the app, acti
 
 ## Workspace Audit
 
-On Enterprise, admins open **Audit** to review calls across the workspace. Filters cover person, apps, team, client, outcome, time, and search text. You can select several apps at once. Filtered views have shareable URLs, and Guardrail findings can open the relevant view.
+On Enterprise, admins open **Audit** to review calls across the workspace. Filters cover person, apps, team, agent, outcome, time, and search text. You can select several apps at once. Filtered views have shareable URLs, and Guardrail findings can open the relevant view.
 
-Passport CLI may add an optional **via CLI** label so the record can distinguish tools such as Codex and Claude Code. That label is self-reported; the signed-in person or agent and the client policy remain authoritative.
+Passport CLI may add an optional **via CLI** label so the record can distinguish tools such as Codex and Claude Code. That label is self-reported; the signed-in person or agent and the agent policy remain authoritative.
 
-Dynamic MCP clients can appear by their reported name or title, with their
+Dynamic MCP agents can appear by their reported name or title, with their
 reported version retained when available. Like the CLI caller label, this is
 self-reported context; it does not change the authenticated identity or grant
-access. See [client names](/admin/client-fleet#understand-client-names).
+access. See [agent names](/admin/client-fleet#understand-client-names).
 
 ## Admin activity
 
@@ -36,7 +36,7 @@ Open **Settings → Admin activity** on Enterprise to review changes such as:
 - approving or removing an app;
 - changing a role or team;
 - creating or editing a guardrail;
-- changing client policy; or
+- changing agent policy; or
 - generating or revoking a SCIM token.
 
 Each entry records the actor, action, target, time, and a concise description of the change.
@@ -45,7 +45,9 @@ Each entry records the actor, action, target, time, and a concise description of
 
 <CardGroup cols={2}>
   <Card title="Enterprise activity export" icon="table">
-    `GET /export/activity.csv` and `GET /export/activity.jsonl` require Enterprise. They accept the same `member`, `app`, `outcome`, `department`, `via`, `since`, and `q` filters as Audit. Repeat `app` to include several apps. In this API, `department` means team, `via` means client, and `q` is search text.
+    `GET /export/activity.csv` and `GET /export/activity.jsonl` require Enterprise. They accept the same `member`,
+    `app`, `outcome`, `department`, `via`, `since`, and `q` filters as Audit. Repeat `app` to include several apps. In
+    this API, `department` means team, `via` means agent, and `q` is search text.
   </Card>
   <Card title="Enterprise audit export" icon="file-lines">
     `GET /export/audit.csv` exports the privileged-action trail and also requires Enterprise.
@@ -55,7 +57,8 @@ Each entry records the actor, action, target, time, and a concise description of
 Every plan lets an admin download a full workspace backup. On Free and Pro, use **Settings → Workspace essentials → Manage workspace → Advanced**. On Enterprise, use **Settings → Workspace backup**. A backup is for recovery and support, not for security monitoring.
 
 <Note>
-  Passport scrubs sensitive content before Activity is stored. A blocked credential cannot reappear through an export. See [Guardrails](/admin/guardrails).
+  Passport scrubs sensitive content before Activity is stored. A blocked credential cannot reappear through an export.
+  See [Guardrails](/admin/guardrails).
 </Note>
 
 ## Stream to your SIEM

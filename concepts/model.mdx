@@ -1,9 +1,9 @@
 ---
 title: "How Passport works"
-description: "A plain-language guide to workspaces, apps, clients, access, and Activity."
+description: "A plain-language guide to workspaces, apps, agents, access, and Activity."
 ---
 
-Passport sits between an AI client and the work app it wants to use. It keeps the app credential, checks access and Safety, makes the call, and records the outcome.
+Passport sits between an agent and the work app it wants to use. It keeps the app credential, checks access and Safety, makes the call, and records the outcome.
 
 ## The five things to know
 
@@ -13,13 +13,13 @@ A workspace is your team's private space in Passport. It holds people, apps, set
 
 ### Apps
 
-An app is something your AI client can use through Passport, such as GitHub, Linear, Stripe, or Notion. Open **Apps** to browse, connect, and manage them.
+An app is something your agent can use through Passport, such as GitHub, Linear, Stripe, or Notion. Open **Apps** to browse, connect, and manage them.
 
 Some apps connect through MCP. Others use a reviewed API integration. Passport gives both the same connection, access, Safety, and Activity experience, so most people do not need to care which technology is underneath.
 
-### Clients
+### Agents
 
-A client is where you use AI: Claude, Cursor, ChatGPT, VS Code, Codex, Passport CLI, or another MCP-compatible product. Open **Clients** to add one, see its connection status, disconnect it, or choose which available apps it can see.
+An agent is where you use AI: Claude, Cursor, ChatGPT, VS Code, Codex, Passport CLI, or another MCP-compatible product. Open **Agents** to add one, see its connection status, disconnect it, or choose which available apps it can see.
 
 ### Access
 
@@ -30,34 +30,30 @@ Access answers one question: what may this person do with this app?
     Read and write tools are available.
   </Card>
   <Card title="Read-only" icon="glasses">
-    Write tools are hidden from the client.
+    Write tools are hidden from the agent.
   </Card>
   <Card title="None" icon="ban">
     The app is not shown to that person.
   </Card>
 </CardGroup>
 
-Enterprise admins can set access for the workspace, a team, or a person. A more specific choice wins. A person's client-level app selection can narrow access further, but can never grant more.
+Enterprise admins can set access for the workspace, a team, or a person. A more specific choice wins. A person's agent-level app selection can narrow access further, but can never grant more.
 
 ### Activity
 
-Every call through Passport creates an Activity record with the person, client, app, action, outcome, and timing. Members see their own records. Enterprise admins can review the workspace-wide log in **Audit**.
+Every call through Passport creates an Activity record with the person, agent, app, action, outcome, and timing. Members see their own records. Enterprise admins can review the workspace-wide log in **Audit**.
 
 ## What happens during a call
 
 <Steps>
-  <Step title="Identify the person and client">
+  <Step title="Identify the person and agent">
     Passport checks the signed-in identity and the connection being used.
   </Step>
   <Step title="Apply access and Safety">
     Apps or actions that are not allowed are hidden, blocked, or held for approval.
   </Step>
-  <Step title="Inspect the request">
-    Guardrails check outgoing arguments before Passport contacts the app.
-  </Step>
-  <Step title="Call the app">
-    Passport uses the connected account on the person's behalf.
-  </Step>
+  <Step title="Inspect the request">Guardrails check outgoing arguments before Passport contacts the app.</Step>
+  <Step title="Call the app">Passport uses the connected account on the person's behalf.</Step>
   <Step title="Inspect and record the result">
     Guardrails check the result, then Passport writes Activity and returns the safe response.
   </Step>
@@ -66,16 +62,17 @@ Every call through Passport creates an Activity record with the person, client, 
 ## People, teams, and automation
 
 - **Admins** manage the workspace and its rules.
-- **Members** connect clients and use the apps available to them.
-- **Agents** are identities for scripts and CI. They use an agent key and cannot answer interactive approval prompts.
-- **Teams** let Enterprise admins apply access and client defaults to a group instead of one person at a time.
+- **Members** connect agents and use the apps available to them.
+- **Agents** are the AI tools connected to Passport, such as Claude Code, Codex, or Cursor.
+- **Automation credentials** connect scripts and CI through Passport CLI.
+- **Teams** let Enterprise admins apply access and agent defaults to a group instead of one person at a time.
 
-Deactivating a person revokes their sessions, clients, and connected accounts immediately.
+Deactivating a person revokes their sessions, agents, and connected accounts immediately.
 
 ## Advanced building blocks
 
 - A [bundle](/admin/bundles) combines a curated set of tools from several apps behind one connection.
-- [Tool discovery modes](/concepts/discovery) control how a large tool catalog is presented to an AI client.
+- [Tool discovery modes](/concepts/discovery) control how a large tool catalog is presented to an agent.
 - [Managed API integrations](/admin/managed-api-integrations) connect reviewed provider APIs through the same Passport gateway.
 
 <Accordion title="Technical connection URLs">
@@ -85,5 +82,6 @@ Deactivating a person revokes their sessions, clients, and connected accounts im
   | `/s/{appKey}/mcp` | One app |
   | `/b/{bundleKey}/mcp` | One bundle |
 
-  Most people should copy the connector address shown under **Clients → Add client**. For CLI agent keys, set `PASSPORT_ENDPOINT` to the workspace URL (`/w/ws_…/mcp`). See [Passport CLI](/quickstart/cli).
+Most people should copy the connector address shown under **Agents → Add agent**. For CLI agent keys, set `PASSPORT_ENDPOINT` to the workspace URL (`/w/ws_…/mcp`). See [Passport CLI](/quickstart/cli).
+
 </Accordion>
