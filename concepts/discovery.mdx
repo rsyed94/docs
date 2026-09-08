@@ -51,7 +51,7 @@ Operators can pin a single tier instead of `auto`, change the threshold from 1 t
 
 ## Why the inventory always stays visible
 
-Hiding the inventory would make an AI client capability-blind. It would answer "I don't have GitHub" on clients that never proactively search. So at every tier the list of MCPs a person can reach stays readable. In `apps` mode the tool list is that inventory. In `compact` mode the meta-tool descriptions carry it. Only the detailed per-tool definitions load on demand, which is what keeps the context cost down.
+Hiding the inventory would make an agent capability-blind. It would answer "I don't have GitHub" on agents that never proactively search. So at every tier the list of MCPs a person can reach stays readable. In `apps` mode the tool list is that inventory. In `compact` mode the meta-tool descriptions carry it. Only the detailed per-tool definitions load on demand, which is what keeps the context cost down.
 
 The [repeatable context-efficiency benchmark](/benchmarks/context-efficiency) measures the definition, task-context, wire, result, CLI-process, and latency costs of automatic, flat, apps, compact MCP, and Passport CLI against the same deterministic governed task.
 

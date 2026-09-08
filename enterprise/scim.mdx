@@ -3,9 +3,9 @@ title: "SCIM provisioning"
 description: "Make your identity provider the source of truth for who is in the workspace, so deprovisioning a user instantly revokes their access everywhere."
 ---
 
-SCIM 2.0 lets your identity provider manage who belongs to the workspace and which teams they are on. The payoff is lifecycle control: deprovisioning a user in your IdP instantly revokes their access across every AI client and every connected account. SCIM is available on the Enterprise plan.
+SCIM 2.0 lets your identity provider manage who belongs to the workspace and which teams they are on. The payoff is lifecycle control: deprovisioning a user in your IdP instantly revokes their access across every agent and every connected account. SCIM is available on the Enterprise plan.
 
-Passport implements the SCIM 2.0 Users and Groups subset that **Okta** and **Microsoft Entra** drive in practice (walkthroughs below). Other IdPs that speak the same subset, including Google Workspace SCIM clients, may work, but Passport does not ship a Google-specific setup guide or Google-only extensions.
+Passport implements the SCIM 2.0 Users and Groups subset that **Okta** and **Microsoft Entra** drive in practice (walkthroughs below). Other IdPs that speak the same subset, including Google Workspace SCIM agents, may work, but Passport does not ship a Google-specific setup guide or Google-only extensions.
 
 ## Endpoint and token
 
@@ -18,7 +18,8 @@ https://<your-passport-host>/scim/v2
 SCIM is off until you generate a bearer token. In Passport, open Settings and generate a SCIM token. The token is shown once, so copy it immediately. Point your IdP at the base URL above and authenticate with that token as an OAuth bearer token.
 
 <Note>
-  Generating the token requires the Enterprise plan. The token is stored as a one-way hash, so it cannot be recovered later. Generate a new one to rotate; delete it to turn SCIM off.
+  Generating the token requires the Enterprise plan. The token is stored as a one-way hash, so it cannot be recovered
+  later. Generate a new one to rotate; delete it to turn SCIM off.
 </Note>
 
 ## What Passport implements
@@ -36,7 +37,7 @@ This is the important part. When your IdP deactivates or deletes a user (most se
 
 <CardGroup cols={2}>
   <Card title="Signed out everywhere" icon="right-from-bracket">
-    All sessions, AI client connections, and devices are cut immediately.
+    All sessions, agent connections, and devices are cut immediately.
   </Card>
   <Card title="Grants revoked" icon="key">
     Connected-account grants are dropped, so nothing sits at rest or re-arms on reactivation.
@@ -46,11 +47,14 @@ This is the important part. When your IdP deactivates or deletes a user (most se
 Reactivating a user restores their access; they reconnect their own accounts.
 
 <Warning>
-  Passport refuses to deprovision the last active admin, to avoid locking the workspace out of all administration. That request returns a SCIM 409 with "Cannot deprovision the last active admin. Assign another admin in your IdP first, then retry." Assign a different admin first, then retry.
+  Passport refuses to deprovision the last active admin, to avoid locking the workspace out of all administration. That
+  request returns a SCIM 409 with "Cannot deprovision the last active admin. Assign another admin in your IdP first,
+  then retry." Assign a different admin first, then retry.
 </Warning>
 
 <Note>
-  Creating a new member or reactivating one counts against your plan's seat limit. On the Free plan, a request that would exceed the cap returns a SCIM 403 so your IdP records the failure rather than believing it provisioned someone.
+  Creating a new member or reactivating one counts against your plan's seat limit. On the Free plan, a request that
+  would exceed the cap returns a SCIM 403 so your IdP records the failure rather than believing it provisioned someone.
 </Note>
 
 ## Okta provisioning
@@ -82,5 +86,6 @@ Reactivating a user restores their access; they reconnect their own accounts.
 </Steps>
 
 <Note>
-  Passport correctly handles Entra's non-gallery SCIM client, which sends booleans as the strings "True" and "False". A deprovision from Entra is applied as a real deactivation, not a silent no-op.
+  Passport correctly handles Entra's non-gallery SCIM agent, which sends booleans as the strings "True" and "False". A
+  deprovision from Entra is applied as a real deactivation, not a silent no-op.
 </Note>

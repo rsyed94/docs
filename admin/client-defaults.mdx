@@ -1,32 +1,30 @@
 ---
-title: "Client defaults"
-description: "Choose which allowed apps appear by default in each team's AI clients."
+title: "Agent defaults"
+description: "Choose which allowed apps appear by default in each team's agents."
 ---
 
-Client defaults are an Enterprise workspace control. They choose which already-allowed apps appear in a client for a team.
+Agent defaults are an Enterprise workspace control. They choose which already-allowed apps appear in an agent for a team.
 
 ## How it works
 
 For example: “In Cursor, Engineering starts with GitHub and Linear.”
 
-This is a focus setting, not an access grant. If someone does not have access to Linear, adding Linear to their client default does nothing.
+This is a focus setting, not an access grant. If someone does not have access to Linear, adding Linear to their agent default does nothing.
 
 Passport chooses the visible apps in this order:
 
 <Steps>
-  <Step title="The person's own choice">
-    A member can customize the apps shown in their client. Their choice wins.
-  </Step>
-  <Step title="The team default for that client">
-    Otherwise, Passport uses the team's default for that client, or an all-teams default.
+  <Step title="The person's own choice">A member can customize the apps shown in their agent. Their choice wins.</Step>
+  <Step title="The team default for that agent">
+    Otherwise, Passport uses the team's default for that agent, or an all-teams default.
   </Step>
   <Step title="Everything granted">
-    With no personal choice or team default, the client shows every app the person can use.
+    With no personal choice or team default, the agent shows every app the person can use.
   </Step>
 </Steps>
 
 ## Set a default
 
-Open **Clients → Workspace clients**, choose the client and team, then select the apps that should appear. Clear the rule to return that team to all apps they are allowed to use.
+Open **Agents → Workspace agents**, choose the agent and team, then select the apps that should appear. Clear the rule to return that team to all apps they are allowed to use.
 
 When an app is removed from Passport, it is also removed from any defaults that referenced it.

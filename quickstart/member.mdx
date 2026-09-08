@@ -1,15 +1,15 @@
 ---
 title: "Get connected"
-description: "Connect a work app, add your AI client, and confirm your first Passport action."
+description: "Connect a work app, add your agent, and confirm your first Passport action."
 ---
 
-This is the shortest path from sign-in to a working AI client. It works on Windows, Linux, and macOS. You do not need the Passport desktop app.
+This is the shortest path from sign-in to a working agent. It works on Windows, Linux, and macOS. You do not need the Passport desktop app.
 
 ## 1. Sign in
 
 Open your invite, or sign in at [passportmcp.com](https://passportmcp.com). If your company uses single sign-on, Passport will send you to your company's sign-in page.
 
-After signing in, you should see **Apps**, **Clients**, **Activity**, and **Settings**.
+After signing in, you should see **Apps**, **Agents**, **Activity**, and **Settings**.
 
 ## 2. Connect a work app
 
@@ -19,52 +19,55 @@ Open **Apps**.
 - Complete the provider sign-in in the Passport Connect window.
 - If your workspace requires approval or company setup, Passport shows that instead of pretending the app is ready.
 
-Your provider credentials stay in Passport. They are not copied into Claude, Cursor, ChatGPT, Codex, or another AI client.
+Your provider credentials stay in Passport. They are not copied into Claude, Cursor, ChatGPT, Codex, or another agent.
 
 ## When your agent asks you to connect again
 
 If an app was never connected—or its sign-in expired—Passport can now let your AI agent show the next step right where you are working.
 
-- Some AI clients show a built-in **Connect** or **Reconnect** action.
-- Other clients show a secure Passport link in the conversation.
+- Some agents show a built-in **Connect** or **Reconnect** action.
+- Other agents show a secure Passport link in the conversation.
 - Open the link, confirm that it uses your Passport domain, and finish the provider sign-in in your browser.
 - Return to the agent when Passport says **All set**. The agent can retry the original task; it never receives your provider password or token.
 
 The link is short-lived and tied to your Passport account. Another signed-in person cannot use it to connect their account on your behalf.
 
-## 3. Add your AI client
+## 3. Add your agent
 
-Open **Clients**, choose **Add client**, then pick where you want to use Passport.
+Open **Agents**, choose **Add agent**, then pick where you want to use Passport.
 
-Passport shows current instructions for each client:
+Passport shows current instructions for each agent:
 
 - **Cursor and VS Code** have one-click setup.
 - **Claude Code and Codex** use their own MCP command and browser sign-in.
 - **Claude Desktop, Claude.ai, and ChatGPT** use the connector address Passport gives you.
 - **Terminal and automation** can use [Passport CLI](/quickstart/cli).
-- **Other clients** can copy the advanced connector address if they support remote MCP and browser sign-in.
+- **Other agents** can copy the advanced connector address if they support remote MCP and browser sign-in.
 
-Follow the steps in Passport and finish the browser sign-in. No provider token should be pasted into your AI client.
+Follow the steps in Passport and finish the browser sign-in. No provider token should be pasted into your agent.
 
 <Note>
-  On macOS, Passport Desktop is optional. It can set up several local clients and help discover direct MCP connections. For a supported direct connection, Desktop previews the change before you choose **Route through Passport** or **Remove**; it backs up and verifies a completed removal. **Desktop compatibility** is also available when a client's normal browser sign-in cannot reach a localhost, private, or self-hosted Passport server.
+  On macOS, Passport Desktop is optional. It can set up several local agents and help discover direct MCP connections.
+  For a supported direct connection, Desktop previews the change before you choose **Route through Passport** or
+  **Remove**; it backs up and verifies a completed removal. **Desktop compatibility** is also available when an agent's
+  normal browser sign-in cannot reach a localhost, private, or self-hosted Passport server.
 </Note>
 
 ## 4. Confirm the connection
 
-Keep the AI client open and ask:
+Keep the agent open and ask:
 
 > List my available Passport tools.
 
-Return to **Clients**. Passport marks the client connected after it sees real activity. Then choose **Run setup check** in the checklist. The check is safe, does not contact the app provider, and opens **Activity** so you can see the result.
+Return to **Agents**. Passport marks the agent connected after it sees real activity. Then choose **Run setup check** in the checklist. The check is safe, does not contact the app provider, and opens **Activity** so you can see the result.
 
-If setup stays pending, open that client in **Clients** and use **Troubleshoot**. See [Troubleshooting](/troubleshooting) for common fixes.
+If setup stays pending, open that agent in **Agents** and use **Troubleshoot**. See [Troubleshooting](/troubleshooting) for common fixes.
 
 ## Make it yours
 
-- Open a connected client to choose which of your available apps it can see.
+- Open a connected agent to choose which of your available apps it can see.
 - Open [Safety preferences](/member/safety) to ask before write or destructive actions.
-- Open **Activity** to review what your clients did and whether Passport allowed, blocked, or failed the action.
+- Open **Activity** to review what your agents did and whether Passport allowed, blocked, or failed the action.
 
 <CardGroup cols={2}>
   <Card title="Passport CLI" icon="terminal" href="/quickstart/cli">

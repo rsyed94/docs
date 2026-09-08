@@ -11,7 +11,8 @@ Add an app from the catalog, or add a custom MCP endpoint:
 
 <CardGroup cols={2}>
   <Card title="From the catalog" icon="grid">
-    Choose a reviewed managed API integration or a probe-verified MCP connector. Members click Connect; Passport applies the workspace's catalog policy automatically.
+    Choose a reviewed managed API integration or a probe-verified MCP connector. Members click Connect; Passport applies
+    the workspace's catalog policy automatically.
   </Card>
   <Card title="By URL" icon="link">
     Point Passport at any MCP server by URL. It connects, discovers the tools, and scans them.
@@ -21,7 +22,9 @@ Add an app from the catalog, or add a custom MCP endpoint:
 Each app authenticates upstream in one of three ways: a single company account for everyone (`org`), each person's own account (`member`, through an OAuth broker), or no auth (`none`). Managed API integrations use per-person OAuth.
 
 <Note>
-  Some connectors need a one-time company OAuth client before anyone can connect them (when the provider does not support dynamic registration). Passport shows a "needs admin setup" state and the callback URL to register, rather than a dead-end member sign-in.
+  Some connectors need a one-time company OAuth client before anyone can connect them (when the provider does not
+  support dynamic registration). Passport shows a "needs admin setup" state and the callback URL to register, rather
+  than a dead-end member sign-in.
 </Note>
 
 ## Enterprise catalog modes
@@ -37,7 +40,7 @@ Approval defaults to the requesters with a read-only pass. An admin can widen it
 A pass is what a person can do with an app:
 
 - **Full**: every tool, including writes.
-- **Read-only**: only the tools marked read-only. Write tools are hidden from the tool list entirely, so an AI client never sees a capability its user cannot call.
+- **Read-only**: only the tools marked read-only. Write tools are hidden from the tool list entirely, so an agent never sees a capability its user cannot call.
 - **None**: no access; the app is not advertised to that person.
 
 Access resolves from three layers, strongest last:
@@ -46,16 +49,16 @@ Access resolves from three layers, strongest last:
   <Step title="Workspace default or selected scope">
     Grant a default pass to everyone, or scope the app to selected teams and people only.
   </Step>
-  <Step title="Per-team passes">
-    Give a team its own pass, for example read-only GitHub for Support.
-  </Step>
-  <Step title="Per-person overrides">
-    Override a specific person, which wins over the team and default.
-  </Step>
+  <Step title="Per-team passes">Give a team its own pass, for example read-only GitHub for Support.</Step>
+  <Step title="Per-person overrides">Override a specific person, which wins over the team and default.</Step>
 </Steps>
 
 <Note>
-  How read-only is decided: a tool is treated as read-only only when it is provably so. Probe-verified catalog connectors (and demo apps) may honor the upstream's own `readOnlyHint`. Custom URL MCPs are stricter: an upstream hint counts only when the tool name also looks read-only (prefixes such as `get_`, `list_`, `search_`). Anything not provably read-only counts as a write and is withheld under a read-only pass. The name heuristic is best-effort, not a guarantee that a tool is safe.
+  How read-only is decided: a tool is treated as read-only only when it is provably so. Probe-verified catalog
+  connectors (and demo apps) may honor the upstream's own `readOnlyHint`. Custom URL MCPs are stricter: an upstream hint
+  counts only when the tool name also looks read-only (prefixes such as `get_`, `list_`, `search_`). Anything not
+  provably read-only counts as a write and is withheld under a read-only pass. The name heuristic is best-effort, not a
+  guarantee that a tool is safe.
 </Note>
 
 ## Per-tool control and drift
