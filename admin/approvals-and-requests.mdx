@@ -55,7 +55,7 @@ Access resolves from three layers, strongest last:
 
 <Note>
   How read-only is decided: a tool is treated as read-only only when it is provably so. Probe-verified catalog
-  connectors (and demo apps) may honor the upstream's own `readOnlyHint`. Custom URL MCPs are stricter: an upstream hint
+  connectors (and demo apps) may honor the upstream's own `readOnlyHint`. Custom URL apps are stricter: an upstream hint
   counts only when the tool name also looks read-only (prefixes such as `get_`, `list_`, `search_`). Anything not
   provably read-only counts as a write and is withheld under a read-only pass. The name heuristic is best-effort, not a
   guarantee that a tool is safe.
@@ -65,8 +65,34 @@ Access resolves from three layers, strongest last:
 
 Within an app you can turn individual tools on or off, workspace-wide, and choose whether newly discovered tools default on or off. Passport snapshots each integration's tool set and detects drift, so you are alerted when an upstream MCP or reviewed API manifest changes rather than silently gaining new capabilities.
 
+## Action approvals
+
+Separate from catalog requests, a member's own Safety preference can put a write or destructive action on hold until that person allows it. Passport asks them wherever it can reach them: agents that support MCP elicitation get a prompt inside the agent itself, with the app, the action and its risk class, the account, and a redacted one-line argument summary; everything else waits while the person decides in the Passport app. Either way the decision lands on the same durable approval record, so a decision made on one replica releases a call held on another.
+
+The audit trail records how consent was collected. An approval shows whether it was answered in Passport or in an agent, and which agent install answered it; the Activity row for the released call carries the same provenance next to the approval it consumed. Autonomous agent credentials are never prompted, and the CLI keeps returning an explicit pending result for its own retry loop. Set `PASSPORT_APPROVAL_ELICITATION=off` to turn in-agent prompts off for a deployment and keep the Passport-app flow as the only channel.
+
+## Workspace approval defaults
+
+Two workspace-wide defaults live in **Settings → Approvals**.
+
+**Agents wait for approval** decides what an interactive agent gets while a person is deciding. **Hold the call** (the default) keeps the call open for up to 55 seconds, which is what lets an in-agent prompt or a decision in Passport release the original call. **Return pending** answers immediately with the same pending result the CLI gets, so the agent retries instead of waiting. Autonomous agent keys and the CLI always get the pending result, whichever mode is set.
+
+**Default safety brakes** set the least strict Safety choice people on a team may hold, for write and for destructive actions, with an all-teams default and a per-team override. It is a floor, not a setting on their behalf: someone whose team floor is Ask can choose Ask or Never, and Allow is not offered. A member's own stricter choice always wins, and their stored preference is kept, so lowering the floor later gives them their choice back.
+
 ## Requests
 
-In a managed Enterprise catalog, Connect creates or joins one durable request for that MCP. The admin sees every requester together and can allow the requesters, their teams, or the workspace. If company setup is required, the request moves through **Approved · setup in progress** and becomes **Ready to connect** only after the credential or OAuth client is configured.
+In a managed Enterprise catalog, Connect creates or joins one durable request for that app. The admin sees every requester together and can allow the requesters, their teams, or the workspace. If company setup is required, the request moves through **Approved · setup in progress** and becomes **Ready to connect** only after the credential or OAuth client is configured.
 
 On every plan, a provider that requires a company credential creates an admin setup task rather than pretending the app is ready. Custom and unverified endpoints are always admin-managed.
+
+## Browser approval notifications
+
+Open **Approvals** and switch on **Browser notifications**, then allow notifications in your browser. Use **Send test** to check that a notification reaches this device. Each browser needs its own permission; enabling one device does not subscribe your other devices.
+
+Notifications contain a generic approval reminder, not action arguments or account details. Open the notification to review the specific request in Passport and allow or deny it. If it has expired or someone already answered, Passport shows its current status instead of allowing a second decision.
+
+You can receive notifications without keeping a Passport tab open. Delivery still depends on browser and operating-system settings, network connectivity, and Focus or Do Not Disturb. Keep the Approvals page available for requests that need an immediate response.
+
+On iPhone or iPad, add Passport to your Home Screen, open it from that icon, and enable notifications there. If permission is blocked, change it in your browser or system notification settings and return to Passport.
+
+Switch **Browser notifications** off to stop notifications for this workspace in the current browser. Signing out, revoking the browser session, or deactivating the member also stops server-side delivery for that subscription. After signing in again, enable notifications again if prompted.
