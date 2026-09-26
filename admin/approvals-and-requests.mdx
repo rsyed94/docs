@@ -65,6 +65,12 @@ Access resolves from three layers, strongest last:
 
 Within an app you can turn individual tools on or off, workspace-wide, and choose whether newly discovered tools default on or off. Passport snapshots each integration's tool set and detects drift, so you are alerted when an upstream MCP or reviewed API manifest changes rather than silently gaining new capabilities.
 
+With **Keep off until I approve** selected, a new tool stays off until you approve it. A changed tool stays off too, unless the change is low risk: the tool reads data before and after, its new description and parameters pass Passport's poisoning and runtime security checks, and it only gains optional parameters or a reworded description. Low-risk changes keep serving and are still recorded in the tool history and alert as auto-approved. A write tool, or a change that removes, retypes, constrains, or requires a parameter, stays off.
+
+On every plan, a tool whose new definition looks like a poisoning attempt is switched off until you review it.
+
+Held tools are listed under **Review tool changes** in **Apps → your app → Connections**, with what changed. Select the ones to approve and turn them back on in one step. Flagged tools are approved one at a time. Until then, an agent that calls a held tool is told the app changed it and an admin review is pending, and Activity records the call as held for admin review rather than as a tool you switched off.
+
 ## Requests
 
 In a managed Enterprise catalog, Connect creates or joins one durable request for that MCP. The admin sees every requester together and can allow the requesters, their teams, or the workspace. If company setup is required, the request moves through **Approved · setup in progress** and becomes **Ready to connect** only after the credential or OAuth client is configured.
