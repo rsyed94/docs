@@ -12,7 +12,7 @@ Company access requires Enterprise workspace controls and PostgreSQL. The GitHub
 ## Connect an organization
 
 1. Create a GitHub App and install it on the repositories you want Passport to govern. Give it the repository permissions needed for your selected actions: metadata read, and issues read or write.
-2. In **Apps → Workspace → Company provider accounts**, enter the GitHub App ID and installation ID, then choose its private PEM file.
+2. In **Apps → Workspace → Shared provider accounts**, enter the GitHub App ID and installation ID, then choose its private PEM file.
 3. Preview the installation, select specific repositories, and create the connection.
 
 Passport verifies the selected repository IDs and encrypts the private key. It requests short-lived installation tokens scoped to the particular repository and permissions needed for each invocation. The private key and provider tokens are never given to the agent.
@@ -25,6 +25,18 @@ Your existing workspace connection exposes approved company tools alongside your
 
 ## Approvals and activity
 
-A grant can require approval for each action. Review the proposed action in **Approvals**. Passport checks the current permission and records the outcome. Open **Activity** for your work or **Audit** for workspace activity. The **Runs** view includes durable action receipts and their approval history.
+A grant can require approval for each action. Review the proposed action in **Approvals**. Passport checks the current permission and records the outcome. Open **Activity** to review your own work or, as an admin, the whole workspace. The **Runs** view includes durable action receipts and their approval history.
 
 Standalone managed identity setup has been retired. Existing audit records are retained. For scripts and CI using Passport CLI, see [Automation credentials](/admin/people-and-teams#automation-credentials).
+
+## Agent keys, their owners, and rotation
+
+An agent key is a credential a person owns, not an account of its own. The person who creates a key owns it, and that ownership decides three things.
+
+**Approvals.** The owner's Safety preferences govern the agent. An agent cannot answer a prompt, so a call that needs consent returns a pending result immediately and waits in the owner's **Approvals** queue, where the row names the agent that asked. When the owner decides, the agent's next attempt at the same call goes through. A decision is bound to the agent that asked: allowing one agent's action never releases an identical call from another. Keys created before Passport recorded ownership keep their previous behaviour until they are rotated.
+
+**Rotation.** Rotating a key mints a replacement, shows it once, and stops the old one. The agent identity, its access, and its Activity stay as they were, and no seat is used, because rotation creates no new person. An agent can hold up to five live keys, so a rollout can overlap: `POST /api/agent-keys/:id/rotate` accepts `overlapMinutes` (up to 60) to leave the replaced key working while your jobs pick up the new one.
+
+**Deletion and deactivation.** Deleting a key ends that credential. Deleting an agent's last key retires the agent identity and returns its seat; **Settings → Access → Automation keys** says which of the two a revoke will do. Deactivating a person, removing them, or signing them out everywhere revokes every agent key they own, and the gateway refuses a key whose owner is no longer active. Their agents need new keys after that, so reassign long-lived automation before deprovisioning its owner.
+
+People see the keys they own under **Agents → Automation you own** and can revoke one there without an admin.

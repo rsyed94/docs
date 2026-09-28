@@ -1,0 +1,57 @@
+---
+title: "Record the CLIs your agents run"
+description: "Let Claude Code report the command-line tools it reaches for, so shell work shows up in Activity next to everything else."
+---
+
+Your agents do plenty of work that never goes through Passport: `gh pr create`, `git push`, `railway up`, `kubectl delete`. The Passport hook puts that work in the same audit log as everything else your agents do.
+
+It only watches. It never blocks a command, never answers a permission question, and never delays your agent.
+
+## Turn it on
+
+```sh
+passport hook install --client claude-code --apply
+```
+
+Without `--apply` you see exactly what would change and nothing is written. The command adds one `PostToolUse` entry to `~/.claude/settings.json` and leaves your other hooks alone.
+
+Check what is registered:
+
+```sh
+passport hook status
+```
+
+## What it records
+
+After each shell command, the hook reads the command on your own machine and sends Passport only:
+
+- the tool that ran, such as `gh` or `terraform`
+- a coarse verb, such as `pr create` or `apply`
+- an action class: read, write, destructive, api, sql, http, or unknown
+- whether the command succeeded, how long it took, and the name of the folder you were in
+- your agent's session identifier, so a run hangs together
+
+Each finding becomes one Activity row, shown as `gh CLI`, `git CLI`, and so on.
+
+## What it never records
+
+The hook never sends, and Passport never stores:
+
+- the command line or any of its arguments
+- the command's output
+- your full folder path, only the last folder name
+- anything from your environment, including tokens
+
+Some commands cannot be read at all: a script file, a `make` target, an alias. Passport records those as opaque and says which shape it was, never what they contained.
+
+## Turn it off
+
+```sh
+passport hook uninstall --client claude-code --apply
+```
+
+This removes only Passport's entry. To pause it for one session instead, set `PASSPORT_HOOK_DISABLED=1`.
+
+Codex registration is not automated yet. Add a `PostToolUse` hook that runs `passport hook` and Passport records it the same way.
+
+See also [Activity and audit](/admin/activity-and-audit).

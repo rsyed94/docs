@@ -42,4 +42,4 @@ Export is durable and causal, tuned so a slow or down endpoint never affects the
 
 ## Related: alert webhook
 
-Separately from the full event stream, a workspace can set an alert webhook URL (Slack-style) that receives a one-line JSON payload when a guardrail fires or an MCP's tool set changes. The alert authority and its webhook row share the same request commit, and webhook acknowledgement is independent of SIEM and OTLP. You can send a sample alert from Settings to verify the wiring before a real event. It is validated the same way as the export endpoints.
+Separately from the full event stream, a workspace can set an alert webhook URL (Slack-style) that receives a one-line JSON payload when a guardrail fires or an app's tool set changes. The alert authority and its webhook row share the same request commit, and webhook acknowledgement is independent of SIEM and OTLP. You can send a sample alert from Settings to verify the wiring before a real event. It is validated the same way as the export endpoints.

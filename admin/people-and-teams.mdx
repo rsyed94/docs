@@ -11,8 +11,8 @@ Every member has one of three roles:
 
 | Role   | Can do                                                                                                                                                                               |
 | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Admin  | Approve MCPs, manage people and teams, set guardrails and policy, and see the audit trail. The first person in a workspace is an admin (sometimes called the owner in product copy). |
-| Member | Connect their agents and use the MCPs their passes permit.                                                                                                                           |
+| Admin  | Approve apps, manage people and teams, set guardrails and policy, and see the audit trail. The first person in a workspace is an admin (sometimes called the owner in product copy). |
+| Member | Connect their agents and use the apps their passes permit.                                                                                                                           |
 | Agent  | A non-human identity for automation, authenticated by an agent key rather than a browser session.                                                                                    |
 
 ## Add people
@@ -49,6 +49,6 @@ Deactivating a member immediately signs them out everywhere and revokes their co
 
 Connect Claude Code, Codex, Cursor, and other supported agents from **Agents**. There is no separate managed-agent identity setup.
 
-For scripts and CI, owners can open **Settings → Automation** (under **Advanced** on Free and Pro). A credential authenticates Passport CLI with its own access, or with access narrowed by a delegated person's permissions. It is shown once and can be revoked from the same dialog.
+For scripts and CI, owners can open **Settings → Access → Automation keys** (under **Advanced** on Free and Pro). A credential authenticates Passport CLI with its own access, or with access narrowed by a delegated person's permissions. It is shown once, can be rotated in place, and can be revoked from the same dialog. A credential belongs to the person who created it: their Safety choices govern its agent, and deactivating them revokes it. See [Agent keys, their owners, and rotation](/admin/agents-and-access#agent-keys-their-owners-and-rotation).
 
 Passport CLI accepts the credential through `PASSPORT_AGENT_KEY` and the workspace endpoint through `PASSPORT_ENDPOINT`. Store these in your CI secret store. This mode works without interactive sign-in and writes no local credential file. See [Passport CLI](/quickstart/cli).

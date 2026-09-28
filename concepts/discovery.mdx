@@ -14,11 +14,11 @@ The default is `auto`. Free and Pro stay on that default. Enterprise Settings ca
     Every permitted tool is defined up front. Best experience with no indirection, for small setups.
   </Card>
   <Card title="Apps" icon="grip">
-    One meta-tool per MCP, named for the MCP (for example `github`, `supabase`). The tool list itself is the readable
-    inventory; each MCP's tool definitions load on demand inside its meta-tool.
+    One meta-tool per app, named for the app (for example `github`, `supabase`). The tool list itself is the readable
+    inventory; each app's tool definitions load on demand inside its meta-tool.
   </Card>
   <Card title="Compact" icon="magnifying-glass">
-    Two global meta-tools (a search and a call) whose descriptions carry the MCP manifest. For very large fleets.
+    Two global meta-tools (a search and a call) whose descriptions carry the app manifest. For very large fleets.
   </Card>
 </CardGroup>
 
@@ -32,11 +32,11 @@ When the mode is `auto`, the workspace endpoint estimates the serialized tool-de
     gateway serves flat.
   </Step>
   <Step title="Apps for a larger budget fit">
-    If flat is too large but one app wrapper per MCP fits the budget, the gateway serves apps. Apps mode supports up to
-    24 permitted MCPs.
+    If flat is too large but one wrapper per app fits the budget, the gateway serves apps. Apps mode supports up to
+    24 permitted apps.
   </Step>
   <Step title="Compact when wrappers do not fit">
-    If the app wrappers do not fit, or more than 24 MCPs are permitted, the gateway serves the two global search and
+    If the app wrappers do not fit, or more than 24 apps are permitted, the gateway serves the two global search and
     call meta-tools.
   </Step>
 </Steps>
@@ -44,14 +44,14 @@ When the mode is `auto`, the workspace endpoint estimates the serialized tool-de
 Operators can pin a single tier instead of `auto`, change the threshold from 1 to 500, and set the token budget from 512 to 32,768 when they need a fixed presentation. Day-to-day Free and Pro workspaces do not expose that control and remain on `auto`.
 
 <Note>
-  Auto only applies to the workspace endpoint (`/mcp` and `/w/{workspace}/mcp`). A per-MCP endpoint (`/s/{appKey}/mcp`)
+  Auto only applies to the workspace endpoint (`/mcp` and `/w/{workspace}/mcp`). A per-app endpoint (`/s/{appKey}/mcp`)
   and a bundle endpoint (`/b/{bundleKey}/mcp`) are already curated slices, so they always stay flat regardless of this
   setting.
 </Note>
 
 ## Why the inventory always stays visible
 
-Hiding the inventory would make an agent capability-blind. It would answer "I don't have GitHub" on agents that never proactively search. So at every tier the list of MCPs a person can reach stays readable. In `apps` mode the tool list is that inventory. In `compact` mode the meta-tool descriptions carry it. Only the detailed per-tool definitions load on demand, which is what keeps the context cost down.
+Hiding the inventory would make an agent capability-blind. It would answer "I don't have GitHub" on agents that never proactively search. So at every tier the list of apps a person can reach stays readable. In `apps` mode the tool list is that inventory. In `compact` mode the meta-tool descriptions carry it. Only the detailed per-tool definitions load on demand, which is what keeps the context cost down.
 
 The [repeatable context-efficiency benchmark](/benchmarks/context-efficiency) measures the definition, task-context, wire, result, CLI-process, and latency costs of automatic, flat, apps, compact MCP, and Passport CLI against the same deterministic governed task.
 
