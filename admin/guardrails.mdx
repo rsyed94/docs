@@ -81,7 +81,7 @@ Rules also inspect sensitive text split across fields or content blocks. If reda
 
 ## Alerts and stored records
 
-A match raises an alert. Runtime Security findings can also be exported as metadata-only security events or streamed to a security system.
+A match raises an alert. The alerts bell groups guardrail hits, tool changes, and security events, folds repeats of the same event into one row, and keeps alerts unread until you choose **Mark all read**. The Guardrails page shows the latest five hits; the full record is in Activity. Runtime Security findings can also be exported as metadata-only security events or streamed to a security system.
 
 Guardrails protect Activity itself: content that a guardrail flags is scrubbed before the record is stored, so a blocked credential cannot reappear in Activity or an export. The exception is a custom alert-only rule, which is explicitly meant to surface the matched content for review.
 

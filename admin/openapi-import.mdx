@@ -1,0 +1,70 @@
+---
+title: "Import an OpenAPI spec"
+description: "Turn an OpenAPI 3.x document into a governed app whose tools are the spec's operations."
+---
+
+Plenty of systems your team depends on have an OpenAPI (Swagger) spec and no MCP server — especially internal services. An admin can import that spec and get an **app** whose **tools** are the spec's operations, executed by Passport over HTTPS with the app's credential.
+
+Imported tools are ordinary Passport tools. They inherit passes, per-tool switches, action classes, member Safety choices, action-time approvals, argument and result guardrails, Activity, and the audit trail, on every surface — workspace endpoint, single app, bundles, CLI, desktop, and hosted agents.
+
+## Import one
+
+In **Browse apps**, choose **Import from OpenAPI** (it is also offered inside **Add custom**), then either:
+
+- **By address** — paste the spec URL. Passport reads it and can re-read it later.
+- **Paste the spec** — paste the document itself.
+
+Passport shows the derived tool list before anything is created: each tool's name, HTTP method and path, a one-line summary, its action class, and everything it skipped and why. Read that list, choose the sign-in, then add the app.
+
+## How tools are derived
+
+- **Name** — the operation's `operationId`, lowercased and reduced to `a-z 0-9 _ -`; otherwise `<method>_<path>`. Duplicates get a numeric suffix.
+- **Description** — `summary` then `description`, trimmed to 2,000 characters.
+- **Arguments** — one JSON Schema object per tool. Path, query, and non-credential header parameters become top-level properties; a JSON request body is nested under `body` (or `requestBody` if a parameter already uses that name). Required parameters and a required body are marked required.
+- **Action class** — from the HTTP method: `GET`/`HEAD` are read, `POST`/`PUT`/`PATCH` are write, `DELETE` is destructive. An operation may carry `x-passport-risk` of `write` or `destructive` to raise its class; a spec can never lower one, so labelling a `DELETE` as read has no effect.
+- **Address** — `servers[0]`. Every imported tool is pinned to that origin; a tool argument cannot move a call to another host or path.
+
+<Note>
+  `example`, `examples`, vendor `x-` extensions, and the regular-expression keywords (`pattern`, `patternProperties`)
+  are removed from imported schemas. Passport compiles reviewed schemas to validate arguments, and it will not compile a
+  regular expression that arrived in a document.
+</Note>
+
+## Bounds
+
+An import fails with a clear message rather than partially succeeding:
+
+| Limit                    | Value                                                       |
+| ------------------------ | ----------------------------------------------------------- |
+| Document size            | 2 MB                                                        |
+| Operations               | 512 (an over-long spec is refused, never truncated)         |
+| Stored tool definitions  | 1 MB total, 64 KB per tool                                  |
+| `$ref` resolution        | Local `#/…` pointers only, with cycle and depth detection   |
+| Format                   | OpenAPI 3.x as JSON (convert a YAML spec to JSON first)     |
+
+An operation Passport cannot import — a remote `$ref`, a recursive schema, no `application/json` body, a path placeholder with no declared parameter — is skipped and listed in the warnings. If nothing is left, the import fails.
+
+Imported definitions pass the same bounded admission and definition-security scan as every other tool catalog, so a spec carrying an injected tool description is refused before the app exists.
+
+## Sign-in
+
+The spec's security schemes decide the choices, and the choice decides the app's sign-in mode:
+
+- **No sign-in** — nothing is attached. Passes, guardrails, and the audit trail still apply.
+- **Company credential** — one workspace credential, stored encrypted, attached on every call as `Authorization: Bearer …`, as a named API-key header, or as an API-key query parameter, exactly as the scheme declares. Query-parameter keys are attached at call time and never logged.
+- **Per person** — for an `oauth2` scheme with an `authorizationCode` flow. Passport uses its standard OAuth broker; an admin supplies the provider's client ID and secret, and each person then connects their own account.
+
+Because the credential's placement comes from the spec, an imported app's sign-in cannot be edited on its own. Import the spec again to change it. An agent can never set a credential header or query key through a tool argument: those names belong to the driver.
+
+## Private networks and SSRF
+
+Reading a spec address and calling an imported API both go through Passport's single outbound choke point:
+
+- **Passport Cloud** (`passportmcp.com`) reaches public HTTPS addresses only. Private, loopback, link-local, and cloud-metadata addresses are refused, and every redirect hop is re-checked.
+- **A self-hosted Passport** may reach its own private network, which is what makes internal services importable. Cloud-metadata addresses stay refused in every environment.
+
+So an internal service behind your own network needs a self-hosted Passport (or a reachable public address). Nothing about this import changes those defaults.
+
+## Refresh
+
+An app imported **by address** can be re-read from **Refresh tools** on the app. Passport fetches the spec again, re-derives the inventory under the same checks, keeps the reviewed sign-in, and reports what was added, removed, and changed — the same drift record and alerts as an MCP refresh, so `newToolsDefault: off` still holds new tools and changes that aren't low risk until you approve them. An app imported from a pasted spec has no address to re-read; import it again to update it.

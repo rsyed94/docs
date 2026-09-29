@@ -10,7 +10,7 @@ Open **Settings** and find **Safety**.
 For both write actions and destructive actions, choose:
 
 - **Allow** — go ahead, if your workspace already permits it.
-- **Ask me** — pause so you can allow it once, allow it for one hour, or deny it. Open **Approvals** to decide; its badge shows waiting personal action approvals.
+- **Ask me** — pause so you can allow it once, allow it for one hour, or deny it. Many agents can ask you right there: Passport sends the question into the agent you are already using, showing the app, the action and whether it is a write or destructive, the account, and a short redacted summary of the arguments. Pick **Approve once**, **Approve for 1 hour**, or **Deny** and the agent continues on its own.
 - **Never** — block it immediately.
 
 The defaults are:
@@ -26,9 +26,12 @@ Read-only actions are not controlled here.
 
 - If your app access is read-only, write tools stay hidden even if Safety says **Allow**.
 - If a workspace guardrail blocks an action, Safety cannot override it.
-- Autonomous automation credentials do not raise personal **Ask me** prompts. Company access may require action approvals; see [Company access](/admin/agents-and-access).
+- Your Safety choices also govern the agents whose keys you own. An agent cannot answer a prompt, so its call returns a pending result and waits in your **Approvals** queue, which names the agent that asked. Once you decide, the agent's next attempt at the same call goes through.
+- Company access may require action approvals; see [Company access](/admin/agents-and-access).
 
 Use Safety when you want an extra personal check without changing anyone else's access.
+
+If your agent cannot show a prompt, nothing is lost: the same approval is waiting in **Approvals** in Passport, whose badge shows personal action approvals needing an answer. Answering there releases the agent's call the same way. Approvals record where you answered, so you can tell an in-agent decision from one made in Passport.
 
 An approval stays available for about three minutes. If you choose **Allow for one hour**, matching actions can run without another prompt for one hour; after that, Passport asks again.
 

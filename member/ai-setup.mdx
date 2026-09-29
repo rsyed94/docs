@@ -11,11 +11,11 @@ Open **Setup** in your Passport workspace to see your assigned agents and tools.
 2. Follow **Connect** or **Request access** for tools that need attention. A team setup does not grant access by itself.
 3. Open **Workflows** to find tasks your team has prepared, including their instructions and required tools.
 
-Passport reports what it can verify. A connected agent does not prove that every workflow is installed on every computer. Desktop checks the local installation separately.
+Passport reports what it can verify. A connected agent does not prove that every workflow is installed on every computer. The Passport CLI checks the local installation on that computer.
 
-## Install a workflow on your Mac
+## Install a workflow on your computer
 
-In Passport Desktop, open **Workflows**, choose a published workflow and supported agent, then review the instructions and local changes before installing. Managed workflow skills support **Claude Code** and **Codex**. Restart or reopen the agent if it has not picked up a newly installed skill.
+Open a workflow in Passport, then run the `passport setup install` command it shows to preview the local change and install it. Managed workflow skills support **Claude Code** and **Codex**; for any other agent, follow the steps the workflow shows. Restart or reopen the agent if it has not picked up a newly installed skill.
 
 Passport keeps the workflow in its own skill folder. It preserves your other skills and refuses to replace a managed file you edited yourself. You can review an available update, restore the previous installed version, or remove the managed skill.
 

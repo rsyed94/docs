@@ -40,10 +40,11 @@ no specific connection label keeps the generic name.
 
 ## Set agent policy
 
-Open **Settings → Agent access**:
+Open **Settings → Access → Agents** and choose which agents can connect:
 
-- **Allow dynamic agents** — whether unrecognized agents may connect
-- **Require registered agents** — only agents Passport recognizes (or you have registered) may connect
+- **Any agent**: people can connect any agent, including ones Passport doesn't recognize.
+- **Known agents for new connections**: new connections must use an agent Passport recognizes. Other agents already connected keep working.
+- **Known agents only**: only recognized agents can connect, and other agents are blocked even if already connected. Automation keys still work.
 
 These controls require Enterprise. If the workspace downgrades, the saved policy is not enforced until Enterprise is active again.
 

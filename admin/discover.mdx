@@ -25,54 +25,50 @@ For each item, review:
 
 - who owns it and how they described its purpose;
 - which supported agents contain it;
-- whether Passport can guide a safe move; and
+- whether it could be routed through Passport; and
 - the current admin decision.
 
 Members can describe a connection as **Work**, **Evaluating**, **Personal**, or **Not needed**. This is context they provide, not a conclusion Passport draws from their activity.
 
-## What happens on a member's computer
+## How scans reach Passport
 
-Passport Desktop scans only after the member enables Discover.
-
-For a supported remote connection, the member sees **Route through Passport**. Desktop first previews the connection that will be set up. The direct entry stays in place while the member completes setup. Before it removes the entry, Passport checks the reviewed entry, the governed replacement, and the agent's app selection still match. It then backs up the configuration, changes only the reviewed entry, and verifies the result.
-
-If an admin asks for removal, the member sees **Remove** and a preview that no Passport replacement will be created. The same reviewed backup-and-verify flow removes only that entry. Passport never silently edits the file.
-
-## Coverage and Fleet policy
-
-The Discover page shows reporting computers and supported agent sources. Project-level configuration, hosted agents, and computers without Passport Desktop discovery or the managed scanner are outside coverage.
-
-Choose **Fleet policy** in the page header to switch between:
-
-- **Personal · opt-in** — each member decides whether Desktop scans.
-- **Managed fleet** — administrators deploy the scanner through endpoint management.
-
-Sources older than seven days stop counting as current coverage, but their last findings remain visible.
-
-## Managed scanner
-
-For a managed Windows, Linux, or macOS fleet, schedule:
+Every finding comes from the Passport CLI. On a member's computer, run:
 
 ```sh
 passport discover
 ```
 
-The command scans supported global configuration for Claude Desktop, Claude Code, Cursor, VS Code, and Codex, then submits the same limited report as Desktop. It uses the signed-in Passport CLI profile on that computer.
+The command is headless and needs no desktop app, so it fits an onboarding script, a login hook, or a scheduled MDM job. It scans supported global configuration for Claude Desktop, Claude Code, Cursor, VS Code, and Codex, submits the limited report described below, and uses the signed-in Passport CLI profile on that computer. Daily is a good cadence, because a source that has not reported for seven days stops counting as current coverage.
 
 Managed policy has three responses:
 
-| Response                  | Managed scanner behavior                                                             |
-| ------------------------- | ------------------------------------------------------------------------------------ |
-| Observe only              | Report findings and always exit successfully.                                        |
-| Require Passport route    | Exit `5` while any active direct connection lacks an explicit approval or exception. |
-| Fail denied managed scans | Exit `5` when an active direct connection has an admin decision of **Remove**.       |
+| Response                                               | `passport discover` behavior                                                         |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| Observe only                                           | Report findings and always exit successfully.                                        |
+| Require routing through Passport                       | Exit `5` while any active direct connection lacks an explicit approval or exception. |
+| Report scans as failed when a connection isn't allowed | Exit `5` when an active direct connection has an admin decision of **Remove**.       |
 
 Your endpoint-management system decides what to do with exit code `5`, such as notify, quarantine, or start its own remediation. Passport does not silently edit a managed device.
 
 <Note>
-  Managed mode does not turn on Desktop scanning. Use `passport discover` for administrator-deployed reporting; Desktop
-  remains controlled by the member.
+  Passport Desktop no longer scans local agent configuration. Desktop is sign-in, connection repair, apps, activity,
+  and approvals; `passport discover` is the only source of Discover findings.
 </Note>
+
+## What happens on a member's computer
+
+`passport discover` only reads supported configuration files, and Passport never edits them. A **Route through Passport** or **Remove** decision is a request to the owner, who makes the change in the agent that holds it; the next scan confirms the result.
+
+## Coverage and scan policy
+
+The Discover page says how many people's computers reported a scan this week. Choose **See who's missing** to list the people whose computers haven't sent a scan, whose last scan is over a week old, or whose last scan couldn't read agent settings. Project-level configuration, hosted agents, and computers that never run `passport discover` are outside coverage.
+
+Choose **Scan policy** in the page header to switch between:
+
+- **Personal (opt-in)**: each member decides whether their computer reports scans.
+- **Managed work computers**: administrators run `passport discover` through device management (MDM) or an onboarding script.
+
+Sources older than seven days stop counting as current coverage, but their last findings remain visible.
 
 ## What Discover does not upload
 

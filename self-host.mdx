@@ -245,6 +245,12 @@ malformed production setting.
 | `PASSPORT_CONNECT_WAIT_POLL_MS`                  |     `2000` |                                                                          `100–10000` |
 | `PASSPORT_BRIDGE_POLL_MS`                        |    `15000` |                                                                         `1000–60000` |
 
+`PASSPORT_APPROVAL_ELICITATION` is a separate on/off switch (default `on`). It
+controls whether Passport asks for an action approval inside the calling agent
+over MCP elicitation. With `off`, approvals are answered only in the Passport
+app; the hold, the pending result, and the CLI retry loop are unchanged either
+way.
+
 ## Metrics, monitoring, and paging
 
 `pg_database_size()` is a logical PostgreSQL footprint, not physical host or
@@ -312,9 +318,9 @@ means browser frames have no source maps. The entrypoint removes any
 platform-injected upload token before Node starts.
 
 When enabled, Passport sends normalized route/status/latency data, stack traces,
-operational spans/logs/metrics, MCP app/tool/agent identifiers and outcomes, and
+operational spans/logs/metrics, app/tool/agent identifiers and outcomes, and
 opaque member/workspace IDs. Collection of query strings, cookies, authorization
-headers, HTTP bodies, database statements, MCP inputs/outputs, and AI content is
+headers, HTTP bodies, database statements, tool inputs/outputs, and AI content is
 disabled. Passport does not deliberately attach names or emails, and its
 scrubbers redact email-like values and credential patterns found in diagnostic
 text. Browser Replay is intentionally disabled because its rrweb metadata can

@@ -13,6 +13,8 @@ The initial native API integrations are:
 
 Passport can also load reviewed long-tail connectors from an operator-configured provider adapter.
 
+For a system that has an OpenAPI spec but no reviewed driver and no MCP server — most internal services — an admin can [import the spec](/admin/openapi-import) instead. The imported operations become tools on an ordinary app and use the same control plane described below.
+
 ## What stays the same
 
 The transport does not change the control plane. Managed API actions use the same:

@@ -93,7 +93,7 @@ Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer. No desktop a
 
 | Command                                 | Purpose                                                                                                                     |
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `passport status`                       | Show the workspace, profile, policy agent, and visible MCP connection states.                                               |
+| `passport status`                       | Show the workspace, profile, policy agent, and visible app connection states.                                               |
 | `passport doctor`                       | Check the runtime, credential-store safety, endpoint, authentication, and exact CLI protocol without exposing credentials.  |
 | `passport search [query]`               | Discover allowed, namespaced tools. An empty query lists the visible catalog.                                               |
 | `passport describe <tool>`              | Print a tool's description, read-only flag, and full parameters schema. JSON also exposes `name` and `inputSchema` aliases. |
@@ -110,7 +110,7 @@ Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer. No desktop a
 
 Every command accepts `--profile`, `--json`, `--timeout`, `--quiet`, and `--caller`.
 
-`passport discover` is the cross-platform managed scanner for Passport Discover. It reports limited configuration metadata only—never paths, commands or arguments, environment values, headers, credentials, endpoint paths or query strings, prompts, files, tool payloads, or traffic. See [Find connections outside Passport](/admin/discover).
+`passport discover` is how Discover findings reach Passport: Passport Desktop does not scan local agent configuration, so this command is the only source. It is headless and cross-platform, which suits an onboarding script or a scheduled MDM job, and it reports limited configuration metadata only—never paths, commands or arguments, environment values, headers, credentials, endpoint paths or query strings, prompts, files, tool payloads, or traffic. See [Find connections outside Passport](/admin/discover).
 
 ## Diagnose and complete
 
@@ -211,7 +211,7 @@ OpenCode is a first-class policy identity too, but it is not listed in the **Add
 
 ## Headless, CI, and cron
 
-For scripts and CI, create a credential in **Settings → Automation** (**Advanced → Automation** on Free/Pro), then inject it and the workspace endpoint through your CI secret store. Environment-key mode works without `passport login` and writes no local credential file.
+For scripts and CI, create an automation key in **Settings → Access → Automation keys** (**Settings → Advanced → Automation keys** on Free/Pro), then inject it and the workspace endpoint through your CI secret store. Environment-key mode works without `passport login` and writes no local credential file.
 
 ```sh
 export PASSPORT_AGENT_KEY='<agent-key>'
