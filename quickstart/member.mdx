@@ -41,7 +41,7 @@ Passport shows current instructions for each agent:
 - **Cursor and VS Code** have one-click setup.
 - **Claude Code and Codex** use their own MCP command and browser sign-in.
 - **Claude Desktop, Claude.ai, and ChatGPT** use the connector address Passport gives you.
-- **Terminal and automation** can use [Passport CLI](/quickstart/cli).
+- **Terminal agents** can use [Passport CLI](/quickstart/cli). Scripts and CI use an automation key from **Agents → Automations**.
 - **Other agents** can copy the advanced connector address if they support remote MCP and browser sign-in.
 
 Follow the steps in Passport and finish the browser sign-in. No provider token should be pasted into your agent.
@@ -49,7 +49,7 @@ Follow the steps in Passport and finish the browser sign-in. No provider token s
 <Note>
   On macOS, Passport Desktop is optional. It signs you in, sets up or repairs an agent connection on that Mac, browses
   and connects apps, shows your Activity, and shows approvals. It does not scan local agent configuration and does not
-  install workflows: if your admin uses Discover, findings come from the `passport discover` command, and workflows
+  install workflows: if your admin scans for connections outside Passport, findings come from the `passport discover` command, and workflows
   install with `passport setup install`. **Desktop compatibility** is also available when an agent's normal browser
   sign-in cannot reach a localhost, private, or self-hosted Passport server.
 </Note>
@@ -60,13 +60,13 @@ Keep the agent open and ask:
 
 > List my available Passport tools.
 
-Return to **Agents**. Passport marks the agent connected after it sees real activity. Then choose **Run setup check** in the checklist. The check is safe, does not contact the app provider, and opens **Activity** so you can see the result.
+In the setup guide, choose **Test connection**. Passport waits for the agent's first request, then says what it can reach, such as "Claude Code can see 13 apps and 172 tools". You can run the same test later from the agent's page in **Agents**. Then choose **Run setup check** in the checklist. The check is safe, does not contact the app provider, and opens **Activity** so you can see the result.
 
-If setup stays pending, open that agent in **Agents** and use **Troubleshoot**. See [Troubleshooting](/troubleshooting) for common fixes.
+If the test keeps waiting, finish the sign-in inside the agent, keep it open, and test again. See [Troubleshooting](/troubleshooting) for common fixes.
 
 ## Make it yours
 
-- Open a connected agent to choose which of your available apps it can see.
+- Open a connected agent and use **Limit apps for this agent** to hide apps it does not need.
 - Open [Safety preferences](/member/safety) to ask before write or destructive actions.
 - Open **Activity** to review what your agents did and whether Passport allowed, blocked, or failed the action.
 

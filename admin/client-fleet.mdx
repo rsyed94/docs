@@ -1,28 +1,37 @@
 ---
 title: "Manage connected agents"
-description: "See connected agents, remove access, and set workspace agent policy."
+description: "Manage your own agents, find workspace agents in Inventory, and set workspace agent policy."
 ---
 
-Everyone can manage their own connections from **Agents**. Enterprise admins can also see and manage connections across the workspace.
+Everyone, admins included, manages their own connections from **Agents**. Enterprise admins see every agent in the workspace under [Inventory](/admin/inventory).
 
 ## Manage your own agents
 
-Open **Agents → My agents** to:
+Open **Agents** to see **Your agents**. Members and admins see the same page. There is one row for each agent you signed in to, not one per product: a Claude account connection, Claude Desktop, and Claude Code share one **Claude** row, and interactive Passport CLI profiles share one **Passport CLI** row. ChatGPT and Codex are separate setups, so they stay separate rows.
 
-- add an agent;
-- see whether Passport has observed it;
-- choose which available apps it can see;
-- troubleshoot or reconnect it;
-- remove a duplicate Desktop compatibility connection; or
-- disconnect it immediately.
+A working agent stays quiet: its row shows where it is used (for example **Used in Claude.ai · Desktop · Code**) and **Last used**, which opens Activity filtered to that agent. A row only asks for something when there is one thing to fix:
 
-Free and Pro use the same personal page without the two tabs.
+- **Reconnect** when an agent's Passport sign-in expired;
+- **Update** when a Passport CLI or local setup is behind the newest version in your workspace;
+- **Remove duplicate** when a local setup shows the same tools twice next to a working account connection; or
+- **Remove** when an agent has not been used in 30 days.
+
+Open an agent to:
+
+- **Test connection**: Passport checks that the agent's sign-in is valid and has been used (or waits for its first request), then says what it can reach, such as "Claude Code can see 13 apps and 172 tools";
+- see each sign-in it uses, with a detail line such as "via Passport Desktop on Sam's MacBook", and **Rename** that computer (only you see the name);
+- **Add a connection** on another computer; or **Disconnect** one sign-in immediately; and
+- **Limit apps for this agent** to hide some of your apps from it. The disclosure shows a line such as "Sees 3 of 13 apps" only when the agent is limited.
+
+**Add agent** opens on the agent your team setup recommends, or one a Discover scan found on your computer, and otherwise on Claude. Guided setups end with **Test connection**.
+
+## Automations
+
+Owners and admins manage automation keys for scripts, CI, and hosted workflows in **Agents → Automations**. See [Automation credentials](/admin/people-and-teams#automation-credentials). People who own a key but are not admins see only their own keys there and can revoke them.
 
 ## Manage the workspace
 
-On Enterprise, open **Agents → Workspace agents**. You can search by person or agent, inspect agents that are unused or out of date, and revoke a connection so it must sign in again.
-
-The workspace list shows real observed connections. Opening setup instructions alone does not create a connected-agent record.
+On Enterprise, open **Inventory**. Its **Through Passport** tab lists every connected agent: search by person or agent, review agents that are idle or out of date, and revoke a connection so it must sign in again. See [Inventory](/admin/inventory#agents-through-passport).
 
 ## Understand agent names
 
@@ -30,7 +39,7 @@ For a dynamic agent, Passport uses the name or title reported by the MCP agent,
 falling back to its registered connection label. A reported version is retained
 when available. Recognized agents keep Passport's standard name.
 
-These names help identify connections in Agents, Activity, approvals, and
+These names help identify connections in Agents, Inventory, Activity, approvals, and
 exports. They are self-reported context: claiming the name of a recognized agent
 does not satisfy registered-agent policy or grant access.
 
@@ -56,4 +65,4 @@ These controls require Enterprise. If the workspace downgrades, the saved policy
 
 - [Get connected](/quickstart/member) — connecting an agent
 - [People and teams](/admin/people-and-teams) — roles and lifecycle
-- [Discover](/admin/discover) — finding connections configured outside Passport
+- [Inventory](/admin/inventory) — every agent in the workspace, and connections found outside Passport
