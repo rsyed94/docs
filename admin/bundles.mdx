@@ -1,13 +1,13 @@
 ---
 title: "Bundles"
-description: "Create a curated tool set from several apps, with its own connection URL (Enterprise)."
+description: "Create a curated tool set from several apps, with its own connection URL, and include it in team setups (Enterprise)."
 ---
 
 A **bundle** is an Enterprise feature: a named set of tools from several connected apps, with its own connection URL. Use it when an AI assistant should see a tight tool list instead of everything a person can reach.
 
 ## Create a bundle
 
-On Enterprise, open **Apps → New bundle**, then:
+On Enterprise, open **Team setups → Bundles → New bundle**, then:
 
 1. Name the bundle (and optionally describe it).
 2. Select tools from apps already in the workspace.
@@ -26,6 +26,12 @@ https://<your-passport-host>/b/<bundle-key>/mcp
 
 Sign-in works the same way as the workspace connection. People with no access to the bundle do not see it. Bundle connections always list tools flat (they ignore the workspace flat/apps/compact setting). See [Tool discovery modes](/concepts/discovery).
 
+## Include a bundle in a team setup
+
+In the [team setup](/admin/team-setups) editor, choose the bundles the setup includes, then save and publish. Members of that setup who can already use a bundle see it under **Setup** with its connection URL and a copy button.
+
+Including a bundle does not grant access. If someone cannot use the bundle, it does not appear for them. Deleting a bundle removes it from every setup.
+
 ## Access and rollout
 
 Bundle access uses the same full / read-only / none model as apps, with workspace, team, and per-person layers. Disabling or deleting a bundle removes its tools right away. Removing an app from the workspace also drops that app's tools from every bundle.
@@ -34,6 +40,7 @@ Free and Pro cannot create or serve bundles.
 
 ## Related
 
+- [Team setups](/admin/team-setups)
 - [How Passport works](/concepts/model)
 - [Catalog access and passes](/admin/approvals-and-requests)
 - [Passport CLI](/quickstart/cli)
