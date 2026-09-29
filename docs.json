@@ -40,11 +40,11 @@
         "pages": [
           "admin/people-and-teams",
           "admin/team-setups",
+          "admin/bundles",
           "admin/approvals-and-requests",
           "admin/managed-api-integrations",
           "admin/openapi-import",
           "admin/agents-and-access",
-          "admin/bundles",
           "admin/guardrails",
           "admin/discover",
           "admin/client-fleet"
