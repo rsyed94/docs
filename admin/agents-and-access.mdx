@@ -37,6 +37,6 @@ An agent key is a credential a person owns, not an account of its own. The perso
 
 **Rotation.** Rotating a key mints a replacement, shows it once, and stops the old one. The agent identity, its access, and its Activity stay as they were, and no seat is used, because rotation creates no new person. An agent can hold up to five live keys, so a rollout can overlap: `POST /api/agent-keys/:id/rotate` accepts `overlapMinutes` (up to 60) to leave the replaced key working while your jobs pick up the new one.
 
-**Deletion and deactivation.** Deleting a key ends that credential. Deleting an agent's last key retires the agent identity and returns its seat; **Settings → Access → Automation keys** says which of the two a revoke will do. Deactivating a person, removing them, or signing them out everywhere revokes every agent key they own, and the gateway refuses a key whose owner is no longer active. Their agents need new keys after that, so reassign long-lived automation before deprovisioning its owner.
+**Deletion and deactivation.** Deleting a key ends that credential. Deleting an agent's last key retires the agent identity and returns its seat; **Agents → Automations** says which of the two a revoke will do. Deactivating a person, removing them, or signing them out everywhere revokes every agent key they own, and the gateway refuses a key whose owner is no longer active. Their agents need new keys after that, so reassign long-lived automation before deprovisioning its owner.
 
-People see the keys they own under **Agents → Automation you own** and can revoke one there without an admin.
+People who are not admins see the keys they own under **Agents → Automations** and can revoke one there without an admin.

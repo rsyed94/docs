@@ -46,7 +46,7 @@
           "admin/openapi-import",
           "admin/agents-and-access",
           "admin/guardrails",
-          "admin/discover",
+          "admin/inventory",
           "admin/client-fleet"
         ]
       },
@@ -95,6 +95,10 @@
     {
       "source": "/admin/client-defaults",
       "destination": "/admin/team-setups"
+    },
+    {
+      "source": "/admin/discover",
+      "destination": "/admin/inventory"
     }
   ]
 }

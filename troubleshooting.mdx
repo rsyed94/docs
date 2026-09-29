@@ -23,11 +23,11 @@ Passport shows **agent**.
 
 Ask the agent to list Passport tools, then refresh **Agents**. Review the
 connection's owner and activity before disconnecting it. See
-[agent names](/admin/client-fleet#understand-client-names).
+[agent names](/admin/client-fleet#understand-agent-names).
 
 ## An app is missing from one agent
 
-Open **Agents**, select that agent, and check **App visibility**.
+Open **Agents**, select that agent, and open **Limit apps for this agent**.
 
 - Turn on the app if it is available but hidden.
 - If it says **Not connected yet**, open **Apps** and finish the app connection.
@@ -39,7 +39,7 @@ After a visibility or access change, ask the agent to refresh its tools. Startin
 
 You probably have both the normal connection and **Desktop compatibility** configured for the same agent.
 
-Open **Agents**, choose the affected agent, and remove the compatibility connection. Keep the normal browser-sign-in connection when it works.
+Open **Agents**. The affected row says it is set up twice; choose **Remove duplicate**. Passport removes the local setup and keeps the account connection that works.
 
 ## "Redirect URI is not allowed" when signing into an app
 
@@ -70,7 +70,7 @@ This means the agent's Passport sign-in expired. It is separate from an individu
 
 If Claude Desktop uses **Desktop compatibility**, ask Claude to reconnect Passport. The bridge stays available in a restricted recovery mode and exposes a **Reconnect Passport** action. Open its Passport link, confirm the device code, and finish browser sign-in. Passport restores the tools in the existing Claude session; you do not need to restart Claude.
 
-You can also open **Agents**, select Claude Desktop, and choose **Reconnect to Passport**. Other agent connection types may require this route when they cannot present the recovery action in chat.
+You can also open **Agents** and choose **Reconnect** on the **Claude** row. Other agent connection types may require this route when they cannot present the recovery action in chat.
 
 ## An agent says an app needs sign-in
 
@@ -105,7 +105,7 @@ passport status
 passport search ""
 ```
 
-`doctor` checks the runtime, credential store, endpoint, sign-in, and protocol without printing credentials. If it asks you to sign in, run the `passport login` command shown under **Agents → Add agent → Terminal & automation**.
+`doctor` checks the runtime, credential store, endpoint, sign-in, and protocol without printing credentials. If it asks you to sign in, run the `passport login` command shown under **Agents → Add agent → Passport CLI**.
 
 ## Passport CLI exits with an error code
 
