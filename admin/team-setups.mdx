@@ -1,30 +1,54 @@
 ---
 title: "Team setups"
-description: "Publish maintained agents, tools, and workflow instructions for each team."
+description: "Publish each team's agents, the apps each agent starts with, and workflow instructions."
 ---
 
-Use **Team setups** to give employees a consistent starting point for AI work. A setup combines approved agents, required tools, authored workflow instructions, and reusable team guidance.
+Use **Team setups** to give employees a consistent starting point for AI work. A setup combines approved agents, the apps each agent starts with, required tools, authored workflow instructions, and reusable team guidance. Team setups are an Enterprise workspace control.
 
 ## Create and publish
 
-1. Choose **New setup**, give it a clear name, and assign teams.
-2. Select the agents and tools the team should use.
+1. Choose **New setup**, give it a clear name, and choose who it is for: **Everyone in the workspace** or specific teams.
+2. Select the agents and tools the team should use, and what each agent starts with.
 3. Add a workflow with a concrete outcome, useful instructions, supported agents, and its dependencies. Add reusable skills for conventions shared across workflows.
 4. Save the draft and preview the employee experience.
 5. Publish the reviewed version. Employees receive the published setup; later draft edits remain private until published.
 
 Start with one useful task, such as investigating an issue or preparing a change for review. Instructions should explain how to use existing approved tools and when an employee should review the result.
 
+## What agents start with
+
+Under each approved agent, choose **All granted apps** or **Only these apps**. For example: "In Cursor, Engineering starts with GitHub and Linear."
+
+This is a focus setting, not an access grant. If someone does not have access to Linear, listing Linear for their agent does nothing.
+
+Passport chooses the apps an agent shows in this order:
+
+<Steps>
+  <Step title="The person's own choice">A member can customize the apps shown in their agent. Their choice wins, and **Reset to team setup** returns to the setup's list.</Step>
+  <Step title="Their published team setups">
+    Otherwise, the agent starts with the apps listed for it across every published setup that includes the person. When several setups list the same agent, the lists combine.
+  </Step>
+  <Step title="Everything granted">
+    With no personal choice and no setup that lists the agent, it shows every app the person can use.
+  </Step>
+</Steps>
+
+The list takes effect when you publish, and follows rollback and archive. Drafts never change what an agent shows. The editor and readiness checks warn when an agent's list leaves out an app the setup needs.
+
+When an app is removed from Passport, it is also removed from every setup that listed it.
+
 ## Access and readiness
 
 Publishing a setup does **not** grant app access, provision vendor licenses, or override Safety rules. Employees connect their accounts and request access through Passport's existing flows.
 
-Readiness reflects available server observations, including app access and connection state. Desktop separately checks workflow files on the employee's Mac. A successful tool connection is not proof that a workflow is installed everywhere.
+Readiness reflects available server observations, including app access and connection state. A successful tool connection is not proof that a workflow is installed everywhere.
 
 ## Maintain a setup
 
 Save and publish a new version when tools or instructions change. Employees review local skill updates before installation. If two admins edit the same draft, Passport rejects the stale change so one cannot silently overwrite the other.
 
-Rollback restores the previous published revision for the assigned audience. Employees can then apply that revision locally. Archiving removes the setup from assigned discovery. Existing local instructions remain until the employee removes them, while gateway access continues to follow current permissions.
+Rollback restores the previous published revision for the assigned audience, including what each agent starts with. Employees can then apply that revision locally. Archiving removes the setup from assigned discovery and stops its app lists from applying. Existing local instructions remain until the employee removes them, while gateway access continues to follow current permissions.
+
+If the workspace downgrades, setups are kept but not applied until Enterprise is active again.
 
 Managed local workflow skills support Claude Code and Codex. Other approved agents retain their existing Passport setup instructions.

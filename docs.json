@@ -47,7 +47,6 @@
           "admin/bundles",
           "admin/guardrails",
           "admin/discover",
-          "admin/client-defaults",
           "admin/client-fleet"
         ]
       },
@@ -91,5 +90,11 @@
       "label": "passportmcp.com",
       "href": "https://passportmcp.com"
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/admin/client-defaults",
+      "destination": "/admin/team-setups"
+    }
+  ]
 }
