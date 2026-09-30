@@ -18,6 +18,7 @@
         "group": "Start here",
         "pages": [
           "index",
+          "quickstart/developer",
           "quickstart/member",
           "quickstart/admin",
           "quickstart/cli"
@@ -29,6 +30,7 @@
           "concepts/model",
           "member/ai-setup",
           "member/safety",
+          "member/scan",
           "member/cli-hook",
           "admin/activity-and-audit",
           "billing",

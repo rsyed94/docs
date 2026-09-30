@@ -1,0 +1,106 @@
+---
+title: "See which keys your agents can reach"
+description: "Scan your computer for credentials coding agents can read, and what each one can do. Runs locally, with no account."
+---
+
+Coding agents read the same files and environment you do. `passport scan` lists the keys they can reach and what each key can do.
+
+```sh
+npx passport-bridge scan
+```
+
+Already installed the Passport CLI? `passport scan` is the same command. It needs Node.js 20 or newer and no Passport account.
+
+```text
+Passport scan: 4 keys your agents can reach
+
+  high    Railway account token    ~/.railway/config.json
+          Can delete any project, service, or volume you can, including backups.
+  high    Stripe live secret key   ./.env (STRIPE_SECRET_KEY)
+          Can refund payments and delete live customer data.
+  medium  GitHub CLI token         ~/.config/gh/hosts.yml  +1 more place
+          Can push to and delete branches in every repo you can reach.
+  low     Stripe test key          ~/.config/stripe/config.toml
+
+Agents on this machine: Claude Code, Cursor
+Nothing left this machine.
+
+Give agents access without these keys: npx passport-bridge init
+```
+
+The last line is the next step: [`init`](/quickstart/developer) connects those apps through Passport so your agents don't need the keys. It isn't shown when the scan finds nothing.
+
+## What it never does
+
+- **Never shows a key.** Output names the kind of key and where it is. No part of the value is printed or saved, not even its first characters or a hash.
+- **Never connects to the network.** The scan reads files on your computer and nothing else. Nothing leaves your machine.
+- **Never changes anything.** It only reads, and it never follows a link out of the project folder.
+
+## Where it looks
+
+| Place | What it checks |
+| --- | --- |
+| Agent configs | MCP server settings for Claude Desktop, Claude Code, Cursor, VS Code, and Codex: `env`, headers, arguments, and URLs. Also Claude Code's `settings.json` `env`, and a project's `.mcp.json`, `.cursor/mcp.json`, and `.vscode/mcp.json`. |
+| CLI sign-ins | GitHub CLI, Railway, Vercel, Cloudflare Wrangler, AWS, Stripe CLI, Supabase, and npm, in the files those CLIs write. |
+| Shell environment | Well-known variable names only, such as `GITHUB_TOKEN`, `RAILWAY_TOKEN`, `STRIPE_API_KEY`, and `AWS_SECRET_ACCESS_KEY`. Other variables are never read. |
+| `.env` files | Files named `.env*` in the current project, up to three folders deep. Skips `node_modules`, `.git`, `vendor`, and build output. Skipped entirely in your home folder. |
+
+A sign-in kept in your system keychain isn't flagged. The GitHub CLI does this by default, and so does the Stripe CLI for live keys. The scan says which ones it saw.
+
+The scan recognizes keys by each provider's own format, or by a well-known variable name holding a real-looking value. Placeholders like `your-key-here` or `${STRIPE_KEY}` are ignored. It prefers missing a key over flagging something that isn't one, so a clean result means none of the keys it knows about, not none at all.
+
+## Severity
+
+| Level | Means |
+| --- | --- |
+| high | Can destroy production or move money. |
+| medium | Can change code or data, or run up charges. |
+| low | Test mode, read-only, or expires on its own. |
+
+The same key found in several places is listed once. Add `--verbose` to see every place.
+
+## Options
+
+| Option | What it does |
+| --- | --- |
+| `--path <folder>` | Scan this project's `.env` files instead of the current folder's. |
+| `--verbose` | List every place each key was found, and every file the scan couldn't read. |
+| `--check` | Check files only, not the shell environment, and exit with code 5 when any high or medium key is found. |
+| `--json` | Print one JSON document instead of the report. |
+
+## Use it in CI or a pre-commit hook
+
+```sh
+npx passport-bridge scan --check
+```
+
+The command exits 0 when it finds nothing high or medium, and 5 when it does. With `--check` the scan reads files only and skips the shell environment, so secrets your CI runner injects don't fail the check.
+
+## JSON output
+
+```json
+{
+  "version": 1,
+  "findings": [
+    {
+      "id": "railway-account-token",
+      "provider": "Railway",
+      "kind": "railway-account-token",
+      "label": "Railway account token",
+      "severity": "high",
+      "location": "~/.railway/config.json",
+      "locations": ["~/.railway/config.json"],
+      "blastRadius": "Can delete any project, service, or volume you can, including backups."
+    }
+  ],
+  "agents": ["Claude Code", "Cursor"],
+  "unreadable": 0,
+  "checked": ["agent-configs", "cli-sign-ins", "shell-environment", "env-files"]
+}
+```
+
+`version` changes only when a field changes meaning. `unreadable` counts files the scan found but couldn't read.
+
+## Next
+
+Connect these apps in Passport so agents use them through Passport instead of holding the keys. Start with the [member quickstart](/quickstart/member).

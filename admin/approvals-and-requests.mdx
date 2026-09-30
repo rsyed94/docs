@@ -83,7 +83,7 @@ Two workspace-wide defaults live in **Settings → Access → Approvals**.
 
 **Wait for approval inside the agent** decides what an interactive agent gets while a person is deciding. **Wait for approval** (the default) keeps the call open for up to 55 seconds, which is what lets an in-agent prompt or a decision in Passport release the original call. **Answer right away** returns immediately with the same pending result the CLI gets, so the agent retries instead of waiting. Automation keys that run as themselves and the CLI always get the pending result, whichever mode is set.
 
-**Default approval rules** set the least strict Safety choice people on a team may hold, for write and for destructive actions, with an all-teams default and a per-team override. It is a floor, not a setting on their behalf: someone whose team floor is Ask can choose Ask or Never, and Allow is not offered. A member's own stricter choice always wins, and their stored preference is kept, so lowering the floor later gives them their choice back.
+**Default approval rules** set the least strict Safety choice people on a team may hold, for write and for destructive actions, with an all-teams default and a per-team override. It is a floor, not a setting on their behalf: someone whose team floor is Ask can choose Ask or Never, and Allow is not offered. A member's own stricter choice always wins, and their stored preference is kept, so lowering the floor later gives them their choice back. The **Production safety** column sets the same kind of floor for [production safety](/member/safety#production-safety): **Ask first** or **Block** for destructive actions in Railway, Vercel, Supabase, Cloudflare, GitHub, and Stripe.
 
 ## Requests
 

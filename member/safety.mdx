@@ -7,6 +7,31 @@ Safety preferences are personal checks for actions your agents try through Passp
 
 Open **Settings** and find **Safety**.
 
+## Production safety
+
+The first row, **Production safety**, covers the platforms where one wrong action costs the most: Railway, Vercel, Supabase, Cloudflare, GitHub, and Stripe.
+
+- **Off** — your write and destructive choices below apply as usual.
+- **Ask first** — destructive actions on those apps wait for you, even if you allow destructive actions elsewhere.
+- **Block** — they're blocked instead. You can still run them yourself, outside your agent.
+
+With it on, Passport also treats these high-impact changes as destructive:
+
+| App        | Also treated as destructive                                                                                                                                 |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Railway    | Setting variables, deploying staged changes, domains and TCP proxies, resetting bucket keys, Railway's own agent. `railway variables set`, `railway domain` |
+| Vercel     | `vercel rollback`, `env add`, `domains add`, `alias`, `dns add`                                                                                             |
+| Supabase   | Running SQL, applying migrations, pausing a project, merging or resetting a branch. `supabase db push`, `secrets set`                                       |
+| Cloudflare | `wrangler secret put`, `secret bulk`, `d1 execute`, `d1 migrations apply`, `rollback`                                                                       |
+| GitHub     | `gh repo edit`, `secret set`, `variable set`, `ssh-key add`                                                                                                 |
+| Stripe     | Every Stripe write, refunds included. `stripe refunds create`, `charges create`, `charges capture`, `payment_intents confirm`, `payouts create`             |
+
+It never loosens anything: a stricter choice of yours or a workspace rule still wins. Reads are never affected. New workspaces start their owner at **Ask first**; everyone else starts at **Off**. Your workspace can require **Ask first** or **Block** for your team, and Safety shows which.
+
+The setting applies to tools your agents run through Passport. If you use the [`passport hook` guard](/member/cli-hook), it follows the same setting for the `railway`, `vercel`, `supabase`, `wrangler`, `gh`, and `stripe` commands it recognizes.
+
+## Write and destructive actions
+
 For both write actions and destructive actions, choose:
 
 - **Allow** — go ahead, if your workspace already permits it.
