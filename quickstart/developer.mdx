@@ -1,0 +1,80 @@
+---
+title: "Developer quickstart"
+description: "Let Claude Code, Codex, and Cursor use Railway, Vercel, GitHub, and Stripe through Passport, without holding your keys. Two commands."
+---
+
+Coding agents can read the keys on your computer. Passport lets them use your production apps without those keys, and destructive actions wait for you.
+
+## 1. See which keys your agents can reach
+
+```sh
+npx passport-bridge scan
+```
+
+Runs locally with no account, and nothing leaves your machine. See [the scan](/member/scan) for what it checks.
+
+## 2. Set up Passport
+
+```sh
+npx passport-bridge init
+```
+
+Needs Node.js 20 or newer. Each step asks first, and you can skip any of them:
+
+```text
+Passport setup
+
+  Scan      3 keys your agents can reach: Railway, Stripe, GitHub
+  Sign in   Opening your browser. Confirm code HJKT-WQRM.
+            ✓ Signed in to Maya's workspace
+  Apps      Connect Railway, Stripe, and GitHub? [Y/n]
+            Opening one sign-in page for all three. Press Enter to stop waiting.
+            ✓ Railway   ✓ Stripe   – GitHub skipped
+  Agents    Adds "passport" to ~/.cursor/mcp.json. Keeps a backup.
+            Add Passport to Claude Code and Cursor? [Y/n]
+            ✓ Claude Code   ✓ Cursor
+  Guard     Adds Passport hooks to ~/.claude/settings.json. Keeps a backup.
+            Ask before destructive commands in Claude Code and Cursor? [Y/n]
+            ✓ On
+  Safety    Ask before destructive actions in Railway, Stripe, and GitHub? [Y/n]
+            ✓ Destructive actions in Railway, Stripe, and GitHub ask first
+
+Done. Your agents now reach Railway and Stripe through Passport.
+Your old keys still work. Rotate them once your agents don't need them.
+Try it: in Claude Code, run /mcp to sign in, then ask it to list your Railway
+services.
+```
+
+- **Sign in** creates your workspace if you're new. Already signed in on this computer? Init uses that sign-in.
+- **Apps** covers Railway, Vercel, Supabase, Cloudflare, GitHub, and Stripe when it finds a key or the app's CLI. If your workspace reviews new apps first, init says so and your admin gets the request.
+- **Agents** adds your workspace's Passport address to Claude Code, Codex, Cursor, and VS Code. Each agent signs you in through your browser the first time, so no key or token goes in its settings. For Claude Desktop, init shows the address to add in **Settings → Connectors**.
+- **Guard** asks before destructive commands the agents run in your terminal, like `railway volume delete`. It can't see inside scripts, aliases, or `make` targets. See [the CLI hook](/member/cli-hook).
+- **Safety** makes destructive actions in those apps ask first, in every agent. If yours is off, init asks before turning it on; if it's already on, init just shows it. Change it any time in **Settings → Safety**.
+
+Run init again any time. Finished steps show as already set up, and it asks only about what's missing, including after you press Ctrl-C.
+
+In a script or another agent, add `--yes` to accept every default. Without a terminal, init doesn't wait for app sign-ins: it prints the sign-in page and `passport connect --wait 300` to run once you're done. `--yes --json` prints one summary with each step's status. `--skip-apps`, `--skip-agents`, and `--skip-guard` leave a step out, and `--no-open` prints links instead of opening a browser.
+
+## What changes on your computer
+
+| Where | What |
+| --- | --- |
+| `~/.passport/` | Your sign-in, and a copy of the Passport CLI that the hooks run |
+| `~/.claude.json` | A `passport` server, added with `claude mcp add` |
+| `~/.codex/config.toml` | A `passport` server, added with `codex mcp add` |
+| `~/.cursor/mcp.json` | A `passport` server |
+| VS Code's user `mcp.json` | A `passport` server |
+| `~/.claude/settings.json`, `~/.codex/hooks.json`, `~/.cursor/hooks.json` | Passport's hooks |
+
+Init changes only Passport's own entries. Before it edits a file it didn't create, it says which one and saves the original once as `<file>.passport-backup`. It never edits your shell profile; to run `passport` from any terminal, add the `PATH` line it prints.
+
+## Undo it
+
+```sh
+passport hook uninstall --client claude-code --apply   # also codex, cursor
+claude mcp remove --scope user passport
+codex mcp remove passport
+passport logout
+```
+
+Ran init with `npx` only? Use `~/.passport/cli/bin/passport` in place of `passport`. Then remove the `passport` entry from `~/.cursor/mcp.json` and from VS Code (**MCP: List Servers**), and delete `~/.passport/cli`. Your original settings are in the `.passport-backup` files if you want them back.

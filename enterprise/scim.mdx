@@ -53,8 +53,8 @@ Reactivating a user restores their access; they reconnect their own accounts.
 </Warning>
 
 <Note>
-  Creating a new member or reactivating one counts against your plan's seat limit. On the Free plan, a request that
-  would exceed the cap returns a SCIM 403 so your IdP records the failure rather than believing it provisioned someone.
+  SCIM runs on Enterprise, which has no seat limit. If the workspace leaves Enterprise, every SCIM request returns a SCIM
+  403 so your IdP records the failure, and nobody is provisioned or deprovisioned until Enterprise is restored.
 </Note>
 
 ## Okta provisioning

@@ -3,6 +3,8 @@ title: "Passport CLI"
 description: "Use Passport from Claude Code, Codex CLI, OpenCode, scripts, CI, and cron."
 ---
 
+Setting up your own computer? `npx passport-bridge init` does it in one pass: see the [developer quickstart](/quickstart/developer).
+
 Passport CLI is for terminal coding agents and automation. It talks to the same Passport connection as Claude, Cursor, and ChatGPT — same access rules, Safety, approvals, and Activity log.
 
 Prefer the normal **Add agent** setup for apps with a GUI (Cursor chat, VS Code chat, Claude Desktop, Claude.ai, ChatGPT). Claude Code and Codex CLI can use either path; using the CLI does not turn off other connections.
@@ -16,7 +18,7 @@ Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer. No desktop a
     ```powershell
     npm install --global passport-bridge
     passport version
-    passport login --workspace <workspace-id> --profile cli@<workspace-id>
+    passport login
     passport status
     passport search ""
     ```
@@ -25,7 +27,7 @@ Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer. No desktop a
     ```sh
     npm install --global passport-bridge
     passport version
-    passport login --workspace <workspace-id> --profile cli@<workspace-id>
+    passport login
     passport status
     passport search ""
     ```
@@ -34,7 +36,7 @@ Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer. No desktop a
     ```sh
     npm install --global passport-bridge
     passport version
-    passport login --workspace <workspace-id> --profile cli@<workspace-id>
+    passport login
     passport status
     passport search ""
     ```
@@ -54,19 +56,33 @@ Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer. No desktop a
     ```
 
   </Step>
-  <Step title="Sign in once per workspace">
-    Copy the workspace id (`ws_…`) from your Passport browser URL or from the connector URL under **Agents → Add agent** (`/w/ws_…/mcp`). Login opens a browser and stores the resulting refresh credential in the existing `~/.passport/credentials.json` profile store with owner-only permissions. A successful login activates the profile it creates.
+  <Step title="Sign in">
+    Run `passport login`. It opens your browser. Sign in with Google, GitHub, or a code sent to your email, check that the code on the page matches your terminal, then click **Connect**. New to Passport? Name your workspace on the same page and you're in.
 
     ```sh
-    passport login --workspace ws_… --profile cli@ws_…
+    passport login
     passport status
     passport doctor
     ```
 
-    Passport Cloud is the default when `--workspace` is provided. Self-hosted deployments also pass `--cloud <origin>`. On SSH, CI, or another headless host, add `--no-open` so Passport prints the verification URL instead of trying to launch a browser:
+    The terminal prints what to expect:
+
+    ```text
+    Sign in to Passport
+    Opening your browser... (or open https://passportmcp.com/cli?code=HJKT-WQRM)
+    Confirm this code in the browser: HJKT-WQRM
+    Waiting... (Ctrl-C to cancel)
+
+    Signed in to Acme.
+    Next: passport status
+    ```
+
+    Codes expire after 10 minutes and work once. Nothing connects until you click **Connect**, and **Deny** stops the terminal. If you're already signed in to Passport in that browser, you'll see your workspace straight away; **Use a different account** picks another. Login stores a rotating credential in `~/.passport/credentials.json` with owner-only permissions and makes that profile active.
+
+    Already know the workspace? `passport login --workspace ws_…` signs in to it directly. Self-hosted deployments also pass `--cloud <origin>`. On SSH, CI, or another headless host, add `--no-open` so Passport prints the link instead of launching a browser; open it on any device:
 
     ```sh
-    passport login --workspace ws_… --profile cli@ws_… --no-open
+    passport login --no-open
     ```
 
     To switch later on a machine with more than one profile, inspect and select the local active profile explicitly:

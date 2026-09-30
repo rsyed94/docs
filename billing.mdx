@@ -3,18 +3,18 @@ title: "Plans and billing"
 description: "What Free, Pro, and Enterprise include, how seats work, and how to change or cancel."
 ---
 
-Passport has three plans. Every plan includes the full app catalog, Apps and Agents, your personal Activity log, Safety preferences, the desktop app (macOS), Passport CLI, and the shared connection path. Pro removes the Free caps. Enterprise adds company-wide controls for people, approvals, agents, guardrails, and audit export.
+Passport has three plans. Every plan includes unlimited apps, the full app catalog, Apps and Agents, your personal Activity log, Safety preferences, the desktop app (macOS), Passport CLI, and the shared connection path. Free is for one person. Pro is for teams. Enterprise adds company-wide controls for people, approvals, agents, guardrails, and audit export.
 
 ## Plans
 
 <CardGroup cols={3}>
   <Card title="Free" icon="gift">
-    **$0 forever.** Full catalog for small teams. Up to 5 people and 5 connected apps, self-service Connect, and every
-    supported AI assistant.
+    **$0 forever.** For one person. Unlimited apps and agents, approvals, and activity, plus 3 automations for scripts
+    and CI.
   </Card>
   <Card title="Pro" icon="rocket">
-    **$15 per person per month.** Everything in Free without the caps. Unlimited people and apps, still one-step Connect
-    for verified apps.
+    **$15 per person per month.** For teams. Everyone gets the same apps and rules in every agent. Unlimited people and
+    automations, still one-step Connect for verified apps.
   </Card>
   <Card title="Enterprise" icon="building">
     **$30 per person per month.** Everything in Pro, plus workspace controls for people, teams, agents, and guardrails;
@@ -25,7 +25,7 @@ Passport has three plans. Every plan includes the full app catalog, Apps and Age
 
 ## How apps work on each plan
 
-On Free and Pro, verified catalog apps are open: choose **Connect**, and Passport either finishes the connection or asks an admin when a shared company credential is required. Free's five-app limit counts **connected** apps, not everything you can browse. Pausing an app does not free a slot.
+On Free and Pro, verified catalog apps are open: choose **Connect**, and Passport either finishes the connection or asks an admin when a shared company credential is required. There is no app limit on any plan.
 
 On Enterprise, admins can keep the catalog open, require review, or set rules by app, category, and team. Access usually starts read-only, and an app is not marked ready until required company setup is done.
 
@@ -35,16 +35,23 @@ Passport CLI is included on every plan and uses the same rules and Activity log 
 
 ## How seats are counted
 
-Anyone who can sign in counts as a person (admin or member).
+Anyone who can sign in counts as a person (admin or member). Automations (the agent keys scripts and CI use) are never people and are never billed.
 
-- **Pro and Enterprise:** automation identities (agents) are **not** billed seats.
-- **Free:** agents **do** use one of the five member slots.
+- **Free:** one person and up to 3 automations.
+- **Pro and Enterprise:** unlimited people and automations. Only people are billed.
 
 On paid plans, Passport updates your Stripe subscription as people join or leave and prorates the difference. You do not manage seat quantities by hand.
 
 ## At the Free limit
 
-Free includes 5 people and 5 connected apps. Agents count toward those five people. You can still browse the whole catalog. Adding a sixth person or agent, or connecting a sixth app, is blocked until you upgrade to Pro. Nothing is deleted, and everyone already on the workspace keeps working.
+Free is for one person. Inviting, importing, or approving a second person waits until you upgrade to Pro, and pending invites hold a place. A fourth automation waits the same way.
+
+If a workspace has more people than its plan allows, for example after a trial or a paid plan ends, everyone keeps access and nothing is deleted. Only new people wait.
+
+<Note>
+  Workspaces created on the earlier Free plan keep Free for up to 5 people, now with unlimited apps and up to 5
+  automations that no longer use a person's place.
+</Note>
 
 ## Upgrade, change, or cancel
 

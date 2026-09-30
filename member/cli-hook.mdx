@@ -1,19 +1,25 @@
 ---
 title: "Record the CLIs your agents run"
-description: "Let Claude Code report the command-line tools it reaches for, so shell work shows up in Activity next to everything else."
+description: "Let Claude Code, Codex, and Cursor report the command-line tools they reach for, and ask before the destructive ones."
 ---
 
-Your agents do plenty of work that never goes through Passport: `gh pr create`, `git push`, `railway up`, `kubectl delete`. The Passport hook puts that work in the same audit log as everything else your agents do.
-
-It only watches. It never blocks a command, never answers a permission question, and never delays your agent.
+Your agents do plenty of work that never goes through Passport: `gh pr create`, `git push`, `railway up`, `kubectl delete`. The Passport hook puts that work in the same audit log as everything else your agents do. With the guard on, Passport also asks before destructive commands it recognizes.
 
 ## Turn it on
 
 ```sh
-passport hook install --client claude-code --apply
+passport hook install --client claude-code --guard --apply
 ```
 
-Without `--apply` you see exactly what would change and nothing is written. The command adds one `PostToolUse` entry to `~/.claude/settings.json` and leaves your other hooks alone.
+Use `--client codex` or `--client cursor` for those agents. Leave out `--guard` to only record commands. Without `--apply` you see exactly what would change and nothing is written.
+
+| Agent | File | Before a command (guard) | After a command (audit) |
+| --- | --- | --- | --- |
+| Claude Code | `~/.claude/settings.json` | `PreToolUse` | `PostToolUse`, `PostToolUseFailure` |
+| Codex | `~/.codex/hooks.json` | `PreToolUse` | `PostToolUse` |
+| Cursor | `~/.cursor/hooks.json` | `beforeShellExecution` | `afterShellExecution` |
+
+Passport adds only its own entries and leaves your other hooks alone. Codex asks you to trust new hooks: open Codex and approve them in `/hooks`.
 
 Check what is registered:
 
@@ -21,17 +27,53 @@ Check what is registered:
 passport hook status
 ```
 
+```
+Claude Code  audit + guard  ~/.claude/settings.json
+Codex        not installed  ~/.codex/hooks.json
+Cursor       audit          ~/.cursor/hooks.json
+
+Safety settings: synced 12 minutes ago for cli@ws_example.
+Turn on the guard: passport hook install --client cursor --guard --apply
+```
+
+## What the guard does
+
+Before each shell command, the guard reads it on your machine. When it recognizes a destructive verb, such as `railway volume delete`, `vercel project rm`, `gh repo delete`, or `git push --force`, your agent asks you first:
+
+```
+Passport: railway volume delete is destructive. Run it only if you meant to.
+```
+
+If your safety settings block that action, the command doesn't run:
+
+```
+Passport: your safety settings block railway volume delete. Change this in Passport Settings → Safety.
+```
+
+The guard follows the same safety settings as your apps in Passport, so a command and a tool that do the same thing get the same answer. `passport login` and `passport status` sync them to your machine, and the guard refreshes them in the background about once an hour. Signed out, it asks before every destructive command it recognizes.
+
+The guard only adds a check. It never approves anything your agent would otherwise ask about, and a command it doesn't recognize runs through your agent's usual permissions.
+
+<Note>
+Codex can't ask before a command yet, so in Codex the guard only blocks what your safety settings block. Commands set to ask first run through Codex's own approvals.
+</Note>
+
+## What it can't see
+
+The guard is a guardrail, not a security boundary. It can't see inside scripts, aliases, `make` targets, or `npm run` scripts, and it doesn't guess at them. `--help` and `--dry-run` never trigger it.
+
 ## What it records
 
-After each shell command, the hook reads the command on your own machine and sends Passport only:
+After each shell command, the hook sends Passport only:
 
 - the tool that ran, such as `gh` or `terraform`
 - a coarse verb, such as `pr create` or `apply`
 - an action class: read, write, destructive, api, sql, http, or unknown
 - whether the command succeeded, how long it took, and the name of the folder you were in
 - your agent's session identifier, so a run hangs together
+- when the guard stepped in, whether it asked first or blocked the command
 
-Each finding becomes one Activity row, shown as `gh CLI`, `git CLI`, and so on.
+Each finding becomes one Activity row, shown as `gh CLI`, `git CLI`, and so on. A blocked command shows as blocked. In Claude Code, a command Passport asked about is one row: "asked first, then ran" if you approved it, or "asked first, not run" about 30 minutes after you declined it. In Cursor, the ask and the run are separate rows.
 
 ## What it never records
 
@@ -42,16 +84,15 @@ The hook never sends, and Passport never stores:
 - your full folder path, only the last folder name
 - anything from your environment, including tokens
 
-Some commands cannot be read at all: a script file, a `make` target, an alias. Passport records those as opaque and says which shape it was, never what they contained.
+The guard decides on your machine before anything reaches the network. Some commands can't be read at all: a script file, a `make` target, an alias. Passport records those as opaque and says which shape it was, never what they contained.
 
 ## Turn it off
 
 ```sh
-passport hook uninstall --client claude-code --apply
+passport hook uninstall --client claude-code --guard --apply   # guard only
+passport hook uninstall --client claude-code --apply           # guard and audit
 ```
 
-This removes only Passport's entry. To pause it for one session instead, set `PASSPORT_HOOK_DISABLED=1`.
-
-Codex registration is not automated yet. Add a `PostToolUse` hook that runs `passport hook` and Passport records it the same way.
+This removes only Passport's entries. To pause both for one session instead, set `PASSPORT_HOOK_DISABLED=1`.
 
 See also [Activity and audit](/admin/activity-and-audit).
