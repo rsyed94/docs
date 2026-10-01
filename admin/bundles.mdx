@@ -10,11 +10,19 @@ A **bundle** is an Enterprise feature: a named set of tools from several connect
 On Enterprise, open **Team setups → Bundles → New bundle**, then:
 
 1. Name the bundle (and optionally describe it).
-2. Select tools from apps already in the workspace.
-3. Set who can use it (workspace, teams, or selected people) and the default access. New bundles start **read-only** unless you widen them.
-4. Save. Passport creates a stable key and a target like `bundle:<key>`.
+2. Under **Apps**, pick the apps the bundle draws from. Each chip shows how many tools that app serves.
+3. For each app, choose what the bundle includes:
+   - **Read-only** (the default): every tool Passport classes as a read, including read tools the app adds later.
+   - **Everything**: every tool the app serves, including tools it adds later.
+   - **Custom**: only the tools you check. Search across every Custom list, filter by **Read**, **Write**, or **Destructive**, use **Select all**, or Shift-click to select a range. Tools the app adds later stay out.
+4. Set who can use it (workspace, teams, or selected people) and the default access. New bundles start **read-only** unless you widen them, so people with read-only access get only the read tools, whatever each app's choice.
+5. Check the summary at the bottom (for example `14 tools · 3 apps · 12 read, 2 write`), then select **Create bundle**. Passport creates a stable key and a target like `bundle:<key>`.
 
-Bundles expose tools only — not upstream resources or prompts.
+A bundle never serves a tool its app withholds. Tools that are switched off on the app, held for review after they appear or change upstream, or held because their definition looked unsafe stay out of every bundle, in every mode. Once you approve a held tool on the app, it joins Read-only and Everything bundles on its own (a Custom list adds it only if you check it).
+
+Bundles created before these modes existed open as **Custom** with their original tools and keep working exactly as before. Switch an app to Read-only or Everything to include tools it adds later.
+
+Bundles expose tools only, not upstream resources or prompts.
 
 ## Connect an AI assistant
 
