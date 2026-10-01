@@ -11,7 +11,7 @@ Prefer the normal **Add agent** setup for apps with a GUI (Cursor chat, VS Code 
 
 ## Install and sign in
 
-Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer. No desktop app required.
+Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer.
 
 <Tabs>
   <Tab title="Windows (PowerShell)">
@@ -40,9 +40,6 @@ Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer. No desktop a
     passport status
     passport search ""
     ```
-
-    Passport Desktop is optional if you want to wire several local GUI agents at once.
-
   </Tab>
 </Tabs>
 
@@ -126,7 +123,7 @@ Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer. No desktop a
 
 Every command accepts `--profile`, `--json`, `--timeout`, `--quiet`, and `--caller`.
 
-`passport discover` is how **Inventory → Outside Passport** findings reach Passport: Passport Desktop does not scan local agent configuration, so this command is the only source. It is headless and cross-platform, which suits an onboarding script or a scheduled MDM job, and it reports limited configuration metadata only—never paths, commands or arguments, environment values, headers, credentials, endpoint paths or query strings, prompts, files, tool payloads, or traffic. See [Inventory](/admin/inventory#connections-outside-passport).
+`passport discover` is how **Inventory → Outside Passport** findings reach Passport; it is the only source. It is headless and cross-platform, which suits an onboarding script or a scheduled MDM job, and it reports limited configuration metadata only—never paths, commands or arguments, environment values, headers, credentials, endpoint paths or query strings, prompts, files, tool payloads, or traffic. See [Inventory](/admin/inventory#connections-outside-passport).
 
 ## Diagnose and complete
 

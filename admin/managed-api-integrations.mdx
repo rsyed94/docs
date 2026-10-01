@@ -27,7 +27,7 @@ The transport does not change the control plane. Managed API actions use the sam
 - member Safety choices and action-time approvals
 - argument and result guardrails
 - Activity, audit, metrics, and health views
-- workspace, single-app, CLI, desktop, and hosted-agent surfaces
+- workspace, single-app, CLI, and hosted-agent surfaces
 
 If an API driver exposes resources or prompts, Passport namespaces and governs those with the same read pipeline used for MCP resources and prompts.
 
@@ -69,7 +69,6 @@ The relay contract uses these paths:
 | ------------------------------------------------------- | ----------------------------------------- |
 | `/v1/connectors/{providerKey}/execute`                  | Execute a reviewed action                 |
 | `/v1/connectors/{providerKey}/identity`                 | Resolve a provider-verified account label |
-| `/v1/connectors/{providerKey}/probe`                    | Check whether a member grant is healthy   |
 | `/v1/connectors/{providerKey}/resources/list`           | List resources when advertised            |
 | `/v1/connectors/{providerKey}/resources/templates/list` | List resource templates                   |
 | `/v1/connectors/{providerKey}/resources/read`           | Read one resource                         |
@@ -80,4 +79,4 @@ Passport authenticates itself to the relay with the provider token. The member c
 
 ## Compatibility
 
-Existing MCP app records and URLs are unchanged. The stored `apps` aggregate remains stable; older records infer their protocol from their existing kind. API integrations are additive, so MCP agents, bundles, passes, and existing desktop connections continue to work without migration.
+Existing MCP app records and URLs are unchanged. The stored `apps` aggregate remains stable; older records infer their protocol from their existing kind. API integrations are additive, so MCP agents, bundles, passes, and existing agent connections continue to work without migration.

@@ -1,6 +1,6 @@
 ---
 title: "Network and egress"
-description: "How Passport guards outbound requests to admin-supplied URLs, and what the desktop app and bridge talk to."
+description: "How Passport guards outbound requests to admin-supplied URLs, and what the bridge and CLI talk to."
 ---
 
 Passport makes outbound requests on your behalf to endpoints an admin supplies: MCP servers, the alert webhook, the SIEM and OTLP export endpoints, and your SSO issuer. Because those URLs are attacker-influenceable in a hosted, multi-tenant deployment, every such request goes through one SSRF-hardened path.
@@ -40,26 +40,13 @@ This single guarded path covers MCP endpoint dials, OIDC discovery, JWKS, token 
 
 When you save an MCP URL, webhook, SIEM or OTLP endpoint, or SSO issuer that fails these checks, Passport refuses it with a clear message rather than storing a URL it could never safely reach. The webhook test button uses the same guard, so a "test" can never reach an internal address the real alert could not.
 
-## Desktop app and bridge egress
+## Bridge and CLI egress
 
-The desktop app and the bridge are built to talk to your own Passport server and almost nothing else.
-
-<CardGroup cols={2}>
-  <Card title="Fonts and icons are bundled" icon="font">
-    The app's fonts and connector icons are bundled into the app and loaded from local files, so it renders branded
-    offline with no network font fetch.
-  </Card>
-  <Card title="Product traffic goes to your server" icon="server">
-    All of the app's and bridge's API calls go to your workspace's Passport server. Upstream credentials are brokered
-    server-side and never written into an agent config.
-  </Card>
-</CardGroup>
-
-The one fixed third-party request the desktop app makes is the auto-updater feed, which points at the public GitHub releases repository. Updates are cryptographically signature-verified before they are applied.
+The Passport bridge and Passport CLI talk to your own Passport server and nothing else. All of their API calls go to your workspace's Passport server. Upstream credentials are brokered server-side and never written into an agent config.
 
 <Note>
-  Links the app opens for you, such as the sign-up page or a hosted agent's connector settings, open in your system
-  browser as ordinary navigations. They are not in-app network calls.
+  Links the CLI opens for you, such as the sign-in page, open in your system browser as ordinary navigations. They are
+  not CLI network calls.
 </Note>
 
 Passport does not send telemetry or analytics to the vendor by default. When you self-host, the hosted service never touches your data.
