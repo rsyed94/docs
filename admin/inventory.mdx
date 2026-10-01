@@ -5,20 +5,23 @@ description: "See the AI in use across your workspace, whether it goes through P
 
 **Inventory** answers one question for Enterprise admins: what AI is in use in this workspace, and is it going through Passport? It has two tabs:
 
-- **Through Passport**: every agent connected to Passport, who uses it, and whether it is idle or out of date.
+- **Through Passport**: every agent connected to Passport, its connections, and whether any are idle or out of date.
 - **Outside Passport**: MCP connections people configured directly in supported local agents, found by `passport discover` scans.
 
 Your own agents stay on **Agents**, the same page every member sees.
 
 ## Agents through Passport
 
-Open **Inventory**. The table has one row per agent: the people using it, its connections, the newest version in use, and when it was last active. Choose a row to see each install, its owner, where it runs, and its version.
+Open **Inventory**. The table has one row per agent, such as Claude Code or Cursor. Each agent has **connections**: one per person per computer. A row shows who uses the agent (for example, `1 person · 2 connections`), the newest Passport version it runs, and when it was last active.
 
-- **Idle agents** haven't been used in 30+ days. Revoke the ones you don't recognize.
-- **Out of date** marks installs two or more versions behind the newest version of the same software in use. Passport CLI and every Desktop compatibility connection run the same Passport bridge, so they share one version line; other agents compare within their own versions.
-- Search by person, agent, or device to find one install.
+Choose a row to see each connection: its owner (linked to their person page), the computer it runs on, how it connects (**Signs in with browser**, **Through Passport Desktop**, or **Passport CLI**), Passport's version, and when it was last active.
 
-Revoking an install cuts its access right away. Its owner must reconnect it. The list shows real observed connections; opening setup instructions alone does not add a row. When people in the workspace run Passport Desktop, its rollout summary appears above the table.
+- **Idle connections** haven't been used in 30+ days. Revoke the ones you don't recognize. On an agent's page, **Revoke N idle** revokes all of that agent's idle connections at once.
+- **Version** shows only for software Passport ships: Passport CLI and the local Passport bridge (set up by Passport Desktop or by hand), shown as, for example, `Passport 0.11.3`. Agents that sign in with a browser update from their own vendor, so their version shows as `—`.
+- **Out of date** marks connections running Passport two or more versions behind the newest Passport version in use. Its owner should update.
+- Once an agent list or an agent's page has 10 or more rows, search finds a person, agent, or computer.
+
+Revoking a connection cuts its access right away. Passport asks you to confirm first and names the agent, person, and computer. Its owner must reconnect it. The list shows real observed connections; opening setup instructions alone does not add a row. When people in the workspace run Passport Desktop, its rollout summary appears above the table.
 
 ## Connections outside Passport
 
@@ -34,9 +37,11 @@ Open **Inventory → Outside Passport**. Each finding becomes a clear decision:
   that anyone used it.
 </Warning>
 
-### Review the action queue
+### Review findings
 
-On **Outside Passport**, the action queue appears first and groups the same MCP found in several agents into one decision.
+**Outside Passport** lists every finding in one list grouped by status: **Needs decision** first, then **In progress** and **Resolved**. Empty groups are hidden. The same MCP found in several agents is one finding.
+
+Each row shows the connection's name, its type (**Local tool**, or the remote server's host), where it was found (for example, `1 agent on 1 computer`), when a scan last saw it, and its status. Statuses use plain words, such as **New**, **Moving to Passport**, **Now goes through Passport**, and **Allowed outside Passport**. Choose **Review** to decide on a finding that needs a decision.
 
 For each item, review:
 
@@ -78,12 +83,14 @@ Your endpoint-management system decides what to do with exit code `5`, such as n
 
 ### Coverage and scan policy
 
-**Outside Passport** says how many people's computers reported a scan this week. Choose **See who's missing** to list the people whose computers haven't sent a scan, whose last scan is over a week old, or whose last scan couldn't read agent settings. Project-level configuration, hosted agents, and computers that never run `passport discover` are outside coverage.
+**Outside Passport** says how many people's computers reported a scan this week. With managed scans, a gap is a warning; in Personal (opt-in) mode it's a quiet note, and it appears only once someone has scanned. Choose **See who's missing** to list the people whose computers haven't sent a scan, whose last scan is over a week old, or whose last scan couldn't read agent settings. Project-level configuration, hosted agents, and computers that never run `passport discover` are outside coverage.
 
-Choose **Scan policy** in the page header to switch between:
+Until the first scan arrives, **Outside Passport** shows how to set up scans. Afterwards those steps stay under **Set up scans**.
+
+Choose **Scan settings** on **Outside Passport** to switch between:
 
 - **Personal (opt-in)**: each member decides whether their computer reports scans.
-- **Managed work computers**: administrators run `passport discover` through device management (MDM) or an onboarding script.
+- **Managed work computers**: administrators run `passport discover` through device management (MDM) or an onboarding script. The **Response** setting is available only for managed scans.
 
 Sources older than seven days stop counting as current coverage, but their last findings remain visible.
 
