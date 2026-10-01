@@ -3,7 +3,7 @@ title: "Get connected"
 description: "Connect a work app, add your agent, and confirm your first Passport action."
 ---
 
-This is the shortest path from sign-in to a working agent. It works on Windows, Linux, and macOS. You do not need the Passport desktop app.
+This is the shortest path from sign-in to a working agent. It works on Windows, Linux, and macOS.
 
 ## 1. Sign in
 
@@ -47,11 +47,9 @@ Passport shows current instructions for each agent:
 Follow the steps in Passport and finish the browser sign-in. No provider token should be pasted into your agent.
 
 <Note>
-  On macOS, Passport Desktop is optional. It signs you in, sets up or repairs an agent connection on that Mac, browses
-  and connects apps, shows your Activity, and shows approvals. It does not scan local agent configuration and does not
-  install workflows: if your admin scans for connections outside Passport, findings come from the `passport discover` command, and workflows
-  install with `passport setup install`. **Desktop compatibility** is also available when an agent's normal browser
-  sign-in cannot reach a localhost, private, or self-hosted Passport server.
+  Setting up several agents on one computer? `npx passport-bridge init` adds Passport to each of them in one pass. If an
+  agent's browser sign-in cannot reach a localhost, private, or self-hosted Passport server, choose **Local bridge** in
+  its setup instead.
 </Note>
 
 ## 4. Confirm the connection

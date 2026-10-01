@@ -37,7 +37,7 @@ After a visibility or access change, ask the agent to refresh its tools. Startin
 
 ## Tools appear twice
 
-You probably have both the normal connection and **Desktop compatibility** configured for the same agent.
+You probably have both the normal connection and the **Local bridge** configured for the same agent.
 
 Open **Agents**. The affected row says it is set up twice; choose **Remove duplicate**. Passport removes the local setup and keeps the account connection that works.
 
@@ -57,10 +57,7 @@ For Mintlify, use **Admin → MCP → Allowed OAuth redirect URIs**. This is dif
 
 ## "A different workspace" / reconnect prompts
 
-Passport will not attribute your activity to the wrong workspace. If this machine's saved Passport sign-in belongs to a different workspace than the one an agent expects, you may see:
-
-- In the desktop app: "Connected to another workspace (...). Reconnect to use ..."
-- From the bridge: "This machine's Passport credential now belongs to a different workspace. Reconnect this agent from the Passport app."
+Passport will not attribute your activity to the wrong workspace. If this machine's saved Passport sign-in belongs to a different workspace than the one an agent expects, the bridge reports: "This machine's Passport credential now belongs to a different workspace. Reconnect this agent from the Passport web app or run `passport-bridge login`."
 
 Reconnect that agent from **Agents** in the intended workspace. This often happens after the same computer signs into another workspace.
 
@@ -68,7 +65,7 @@ Reconnect that agent from **Agents** in the intended workspace. This often happe
 
 This means the agent's Passport sign-in expired. It is separate from an individual app or integration needing reconnect.
 
-If Claude Desktop uses **Desktop compatibility**, ask Claude to reconnect Passport. The bridge stays available in a restricted recovery mode and exposes a **Reconnect Passport** action. Open its Passport link, confirm the device code, and finish browser sign-in. Passport restores the tools in the existing Claude session; you do not need to restart Claude.
+If Claude Desktop uses the **Local bridge**, ask Claude to reconnect Passport. The bridge stays available in a restricted recovery mode and exposes a **Reconnect Passport** action. Open its Passport link, confirm the device code, and finish browser sign-in. Passport restores the tools in the existing Claude session; you do not need to restart Claude.
 
 You can also open **Agents** and choose **Reconnect** on the **Claude** row. Other agent connection types may require this route when they cannot present the recovery action in chat.
 

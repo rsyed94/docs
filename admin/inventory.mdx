@@ -14,14 +14,14 @@ Your own agents stay on **Agents**, the same page every member sees.
 
 Open **Inventory**. The table has one row per agent, such as Claude Code or Cursor. Each agent has **connections**: one per person per computer. A row shows who uses the agent (for example, `1 person · 2 connections`), the newest Passport version it runs, and when it was last active.
 
-Choose a row to see each connection: its owner (linked to their person page), the computer it runs on, how it connects (**Signs in with browser**, **Through Passport Desktop**, or **Passport CLI**), Passport's version, and when it was last active.
+Choose a row to see each connection: its owner (linked to their person page), the computer it runs on, how it connects (**Signs in with browser**, **Local bridge**, or **Passport CLI**), Passport's version, and when it was last active.
 
 - **Idle connections** haven't been used in 30+ days. Revoke the ones you don't recognize. On an agent's page, **Revoke N idle** revokes all of that agent's idle connections at once.
-- **Version** shows only for software Passport ships: Passport CLI and the local Passport bridge (set up by Passport Desktop or by hand), shown as, for example, `Passport 0.11.3`. Agents that sign in with a browser update from their own vendor, so their version shows as `—`.
+- **Version** shows only for software Passport ships: Passport CLI and the local bridge (set up by `npx passport-bridge init` or by hand), shown as, for example, `Passport 0.11.3`. Agents that sign in with a browser update from their own vendor, so their version shows as `—`.
 - **Out of date** marks connections running Passport two or more versions behind the newest Passport version in use. Its owner should update.
 - Once an agent list or an agent's page has 10 or more rows, search finds a person, agent, or computer.
 
-Revoking a connection cuts its access right away. Passport asks you to confirm first and names the agent, person, and computer. Its owner must reconnect it. The list shows real observed connections; opening setup instructions alone does not add a row. When people in the workspace run Passport Desktop, its rollout summary appears above the table.
+Revoking a connection cuts its access right away. Passport asks you to confirm first and names the agent, person, and computer. Its owner must reconnect it. The list shows real observed connections; opening setup instructions alone does not add a row.
 
 ## Connections outside Passport
 
@@ -60,7 +60,7 @@ Every finding comes from the Passport CLI. On a member's computer, run:
 passport discover
 ```
 
-The command is headless and needs no desktop app, so it fits an onboarding script, a login hook, or a scheduled MDM job. It scans supported global configuration for Claude Desktop, Claude Code, Cursor, VS Code, and Codex, submits the limited report described below, and uses the signed-in Passport CLI profile on that computer. Daily is a good cadence, because a source that has not reported for seven days stops counting as current coverage.
+The command is headless, so it fits an onboarding script, a login hook, or a scheduled MDM job. It scans supported global configuration for Claude Desktop, Claude Code, Cursor, VS Code, and Codex, submits the limited report described below, and uses the signed-in Passport CLI profile on that computer. Daily is a good cadence, because a source that has not reported for seven days stops counting as current coverage.
 
 Managed policy has three responses:
 
@@ -71,11 +71,6 @@ Managed policy has three responses:
 | Report scans as failed when a connection isn't allowed | Exit `5` when an active direct connection has an admin decision of **Remove**.       |
 
 Your endpoint-management system decides what to do with exit code `5`, such as notify, quarantine, or start its own remediation. Passport does not silently edit a managed device.
-
-<Note>
-  Passport Desktop no longer scans local agent configuration. Desktop is sign-in, connection repair, apps, activity,
-  and approvals; `passport discover` is the only source of outside-Passport findings.
-</Note>
 
 ### What happens on a member's computer
 
