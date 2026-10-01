@@ -17,7 +17,7 @@ Open **Inventory**. The table has one row per agent, such as Claude Code or Curs
 Choose a row to see each connection: its owner (linked to their person page), the computer it runs on, how it connects (**Signs in with browser**, **Local bridge**, or **Passport CLI**), Passport's version, and when it was last active.
 
 - **Idle connections** haven't been used in 30+ days. Revoke the ones you don't recognize. On an agent's page, **Revoke N idle** revokes all of that agent's idle connections at once.
-- **Version** shows only for software Passport ships: Passport CLI and the local bridge (set up by `npx passport-bridge init` or by hand), shown as, for example, `Passport 0.11.3`. Agents that sign in with a browser update from their own vendor, so their version shows as `—`.
+- **Version** shows only for software Passport ships: Passport CLI and the local bridge (set up by `npx passport-bridge@latest init` or by hand), shown as, for example, `Passport 0.11.3`. Agents that sign in with a browser update from their own vendor, so their version shows as `—`.
 - **Out of date** marks connections running Passport two or more versions behind the newest Passport version in use. Its owner should update.
 - Once an agent list or an agent's page has 10 or more rows, search finds a person, agent, or computer.
 
