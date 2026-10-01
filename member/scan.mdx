@@ -6,7 +6,7 @@ description: "Scan your computer for credentials coding agents can read, and wha
 Coding agents read the same files and environment you do. `passport scan` lists the keys they can reach and what each key can do.
 
 ```sh
-npx passport-bridge scan
+npx passport-bridge@latest scan
 ```
 
 Already installed the Passport CLI? `passport scan` is the same command. It needs Node.js 20 or newer and no Passport account.
@@ -25,7 +25,7 @@ Passport scan: 4 keys your agents can reach
 Agents on this machine: Claude Code, Cursor
 Nothing left this machine.
 
-Give agents access without these keys: npx passport-bridge init
+Give agents access without these keys: npx passport-bridge@latest init
 ```
 
 The last line is the next step: [`init`](/quickstart/developer) connects those apps through Passport so your agents don't need the keys. It isn't shown when the scan finds nothing.
@@ -71,7 +71,7 @@ The same key found in several places is listed once. Add `--verbose` to see ever
 ## Use it in CI or a pre-commit hook
 
 ```sh
-npx passport-bridge scan --check
+npx passport-bridge@latest scan --check
 ```
 
 The command exits 0 when it finds nothing high or medium, and 5 when it does. With `--check` the scan reads files only and skips the shell environment, so secrets your CI runner injects don't fail the check.
