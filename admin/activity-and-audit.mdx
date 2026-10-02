@@ -1,6 +1,6 @@
 ---
 title: "Activity and audit records"
-description: "Review tool calls and admin changes, then export or stream records on Enterprise."
+description: "Review tool calls and admin changes, export them on Pro, and stream them on Enterprise."
 ---
 
 Passport keeps two separate records:
@@ -20,7 +20,7 @@ Everyone can open **Activity** to see their own calls. A row shows the app, acti
 
 ## Workspace activity
 
-On Enterprise, the admin **Activity** page shows calls across the workspace. Filters cover person, apps, team, agent, outcome, time, and search text. Choose **Me** in the person filter to see only your own calls. You can select several apps at once. Filtered views have shareable URLs, and Guardrail findings can open the relevant view.
+On Pro and Enterprise, the admin **Activity** page shows calls across the workspace. Filters cover person, apps, team, agent, outcome, time, and search text. Choose **Me** in the person filter to see only your own calls. You can select several apps at once. Filtered views have shareable URLs, and on Enterprise, Guardrail findings can open the relevant view.
 
 Passport CLI may add an optional **via CLI** label so the record can distinguish tools such as Codex and Claude Code. That label is self-reported; the signed-in person or agent and the agent policy remain authoritative.
 
@@ -31,7 +31,7 @@ access. See [agent names](/admin/client-fleet#understand-agent-names).
 
 ## Admin activity
 
-Open **Settings → Admin activity** on Enterprise to review changes such as:
+Open **Settings → Admin activity** on Pro or Enterprise to review changes such as:
 
 - approving or removing an app;
 - changing a role or team;
@@ -44,17 +44,17 @@ Each entry records the actor, action, target, time, and a concise description of
 ## Export
 
 <CardGroup cols={2}>
-  <Card title="Enterprise activity export" icon="table">
-    `GET /export/activity.csv` and `GET /export/activity.jsonl` require Enterprise. They accept the same `member`,
+  <Card title="Activity export" icon="table">
+    `GET /export/activity.csv` and `GET /export/activity.jsonl` require Pro or Enterprise. They accept the same `member`,
     `app`, `outcome`, `department`, `via`, `since`, and `q` filters as the Activity page. Repeat `app` to include several apps. In
     this API, `department` means team, `via` means agent, and `q` is search text.
   </Card>
-  <Card title="Enterprise audit export" icon="file-lines">
-    `GET /export/audit.csv` exports the privileged-action trail and also requires Enterprise.
+  <Card title="Audit export" icon="file-lines">
+    `GET /export/audit.csv` exports the privileged-action trail and also requires Pro or Enterprise.
   </Card>
 </CardGroup>
 
-Every plan lets an admin download a full workspace backup. On Free and Pro, use **Settings → Workspace essentials → Manage workspace → Advanced**. On Enterprise, use **Settings → Workspace → Workspace backup**. A backup is for recovery and support, not for security monitoring.
+Every plan lets an admin download a full workspace backup. On Free, use **Settings → Workspace essentials → Manage workspace → Advanced**. On Pro and Enterprise, use **Settings → Workspace → Workspace backup**. A backup is for recovery and support, not for security monitoring.
 
 <Note>
   Passport scrubs sensitive content before Activity is stored. A blocked credential cannot reappear through an export.
