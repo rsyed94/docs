@@ -53,6 +53,8 @@ Access resolves from three layers, strongest last:
   <Step title="Per-person overrides">Override a specific person, which wins over the team and default.</Step>
 </Steps>
 
+Selected scope, team passes, and person overrides are part of Pro and Enterprise. On Free, an app has one workspace-wide pass: read-only or full.
+
 <Note>
   How read-only is decided: a tool is treated as read-only only when it is provably so. Probe-verified catalog
   connectors (and demo apps) may honor the upstream's own `readOnlyHint`. Custom URL apps are stricter: an upstream hint
@@ -63,9 +65,9 @@ Access resolves from three layers, strongest last:
 
 ## Per-tool control and drift
 
-Within an app you can turn individual tools on or off, workspace-wide, and choose whether newly discovered tools default on or off. Passport snapshots each integration's tool set and detects drift, so you are alerted when an upstream MCP or reviewed API manifest changes rather than silently gaining new capabilities.
+Within an app you can turn individual tools on or off, workspace-wide. On Enterprise, you can also choose whether newly discovered tools default on or off. Passport snapshots each integration's tool set and detects drift, so you are alerted when an upstream MCP or reviewed API manifest changes rather than silently gaining new capabilities.
 
-With **Keep off until I approve** selected, a new tool stays off until you approve it. A changed tool stays off too, unless the change is low risk: the tool reads data before and after, its new description and parameters pass Passport's poisoning and runtime security checks, and it only gains optional parameters or a reworded description. Low-risk changes keep serving and are still recorded in the tool history and alert as auto-approved. A write tool, or a change that removes, retypes, constrains, or requires a parameter, stays off.
+With **Keep off until I approve** selected, a new tool stays off until you approve it. A changed tool stays off too, unless the change is low risk: the tool reads data before and after, its new description and parameters pass Passport's poisoning and runtime security checks, and it only gains optional parameters or a reworded description. Low-risk changes keep serving and are still recorded in the tool history and alert as auto-approved. Tool history and in-app alerts are part of Pro and Enterprise. A write tool, or a change that removes, retypes, constrains, or requires a parameter, stays off.
 
 On every plan, a tool whose new definition looks like a poisoning attempt is switched off until you review it.
 
@@ -83,7 +85,7 @@ Two workspace-wide defaults live in **Settings → Access → Approvals**.
 
 **Wait for approval inside the agent** decides what an interactive agent gets while a person is deciding. **Wait for approval** (the default) keeps the call open for up to 55 seconds, which is what lets an in-agent prompt or a decision in Passport release the original call. **Answer right away** returns immediately with the same pending result the CLI gets, so the agent retries instead of waiting. Automation keys that run as themselves and the CLI always get the pending result, whichever mode is set.
 
-**Default approval rules** set the least strict Safety choice people on a team may hold, for write and for destructive actions, with an all-teams default and a per-team override. It is a floor, not a setting on their behalf: someone whose team floor is Ask can choose Ask or Never, and Allow is not offered. A member's own stricter choice always wins, and their stored preference is kept, so lowering the floor later gives them their choice back. The **Production safety** column sets the same kind of floor for [production safety](/member/safety#production-safety): **Ask first** or **Block** for destructive actions in Railway, Vercel, Supabase, Cloudflare, GitHub, and Stripe.
+**Default approval rules** (Pro and Enterprise) set the least strict Safety choice people on a team may hold, for write and for destructive actions, with an all-teams default and a per-team override. It is a floor, not a setting on their behalf: someone whose team floor is Ask can choose Ask or Never, and Allow is not offered. A member's own stricter choice always wins, and their stored preference is kept, so lowering the floor later gives them their choice back. The **Production safety** column sets the same kind of floor for [production safety](/member/safety#production-safety): **Ask first** or **Block** for destructive actions in Railway, Vercel, Supabase, Cloudflare, GitHub, and Stripe.
 
 ## Requests
 

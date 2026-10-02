@@ -3,7 +3,7 @@ title: "Plans and billing"
 description: "What Free, Pro, and Enterprise include, how seats work, and how to change or cancel."
 ---
 
-Passport has three plans. Every plan includes unlimited apps, the full app catalog, Apps and Agents, your personal Activity log, Safety preferences, Passport CLI, and the shared connection path. Free is for one person. Pro is for teams. Enterprise adds company-wide controls for people, approvals, agents, guardrails, and audit export.
+Passport has three plans. Every plan includes unlimited apps, the full app catalog, Apps and Agents, your personal Activity log, Safety preferences, Passport CLI, and the shared connection path. Free is for one person. Pro is the team plan: People, teams, team rules, Team setups, and workspace Activity. Enterprise adds company-wide controls for identity, guardrails, Inventory, catalog rollout, and audit streaming.
 
 ## Plans
 
@@ -14,12 +14,13 @@ Passport has three plans. Every plan includes unlimited apps, the full app catal
   </Card>
   <Card title="Pro" icon="rocket">
     **$15 per person per month.** For teams. Everyone gets the same apps and rules in every agent. Unlimited people and
-    automations, still one-step Connect for verified apps.
+    automations, the People page and teams, access rules and approval floors by team and person, Team setups with
+    bundles, workspace Activity with CSV and JSONL export, alerts, and tool history.
   </Card>
   <Card title="Enterprise" icon="building">
-    **$30 per person per month.** Everything in Pro, plus workspace controls for people, teams, agents, and guardrails;
-    approval workflows; SSO; SCIM; audit streaming; a DPA on request; and annual invoicing. Still self-serve with a
-    card.
+    **$30 per person per month.** Everything in Pro, plus OIDC SSO; SCIM; Inventory and `passport discover`; custom
+    guardrails and Runtime Security; catalog review and rollout rules; agent policy; SIEM and OTLP streaming with alert
+    webhooks; a DPA on request; and annual invoicing. Still self-serve with a card.
   </Card>
 </CardGroup>
 
@@ -29,7 +30,7 @@ On Free and Pro, verified catalog apps are open: choose **Connect**, and Passpor
 
 On Enterprise, admins can keep the catalog open, require review, or set rules by app, category, and team. Access usually starts read-only, and an app is not marked ready until required company setup is done.
 
-On every plan, workspace admins can finish technical setup (company API keys, OAuth clients, custom URLs, removing apps). Built-in secret scanning and personal Safety preferences also stay on every plan. Enterprise adds custom guardrails, team and client rules, and company-wide audit export.
+On every plan, workspace admins can finish technical setup (company API keys, OAuth clients, custom URLs, removing apps). Built-in secret scanning and personal Safety preferences also stay on every plan. Pro adds access rules by team and person, approval floors by team, and workspace Activity export. Enterprise adds custom guardrails, agent policy, and audit streaming.
 
 Passport CLI is included on every plan and uses the same rules and Activity log as other connections.
 
@@ -53,12 +54,19 @@ If a workspace has more people than its plan allows, for example after a trial o
   automations that no longer use a person's place.
 </Note>
 
+## When a plan changes
+
+Changing plans never deletes configuration. Settings that need a higher plan are kept but stop applying until that plan is active again.
+
+- **Enterprise to Pro:** SSO, SCIM, guardrails, agent policy, domain joining, catalog rules, and streaming stop applying. People, teams, team rules, Team setups, and Activity keep working.
+- **Pro to Free:** Team setups, bundles, and the People and Activity pages pause, and teams and setups are kept. A saved approval floor keeps applying, since it only tightens. Team and person access rules keep restricting access until an owner resets the app to workspace-wide read-only or full.
+
 ## Upgrade, change, or cancel
 
 <Steps>
   <Step title="Upgrade">
-    Open **Settings**, find the **Billing** card (Free/Pro owners see **Plan & billing**), and upgrade. Stripe Checkout
-    asks for a card.
+    Open **Settings**, find the **Billing** card (Free owners see **Plan & billing**), and upgrade. Stripe Checkout asks
+    for a card.
   </Step>
   <Step title="Change plan">
     Plan changes on an existing subscription go through the Stripe customer portal. Passport edits your one subscription

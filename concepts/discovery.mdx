@@ -5,7 +5,7 @@ description: "How Passport shows tools to AI assistants as you connect more apps
 
 AI assistants work better when they are not flooded with hundreds of tool definitions at once. Passport controls how tools are presented so a large setup stays usable. You can still see which apps you can reach; only the detailed tool lists become on-demand as things grow.
 
-The default is `auto`. Free and Pro stay on that default. Enterprise Settings can show a pinned mode if one was set earlier, with a way to switch back to `auto`.
+The default is `auto`. Free stays on that default. Pro and Enterprise Settings can show a pinned mode if one was set earlier, with a way to switch back to `auto`.
 
 ## The three tiers
 
@@ -41,7 +41,7 @@ When the mode is `auto`, the workspace endpoint estimates the serialized tool-de
   </Step>
 </Steps>
 
-Operators can pin a single tier instead of `auto`, change the threshold from 1 to 500, and set the token budget from 512 to 32,768 when they need a fixed presentation. Day-to-day Free and Pro workspaces do not expose that control and remain on `auto`.
+Operators can pin a single tier instead of `auto`, change the threshold from 1 to 500, and set the token budget from 512 to 32,768 when they need a fixed presentation. Day-to-day Free workspaces do not expose that control and remain on `auto`.
 
 <Note>
   Auto only applies to the workspace endpoint (`/mcp` and `/w/{workspace}/mcp`). A per-app endpoint (`/s/{appKey}/mcp`)
