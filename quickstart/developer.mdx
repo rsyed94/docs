@@ -34,10 +34,14 @@ Passport setup
             Add Passport to Claude Code and Cursor? [Y/n]
             ✓ Claude Code   ✓ Cursor
   Guard     Adds Passport hooks to ~/.claude/settings.json. Keeps a backup.
-            Ask before destructive commands in Claude Code and Cursor? [Y/n]
+            Apply your Autopilot rules before each shell command in Claude Code and Cursor? [Y/n]
             ✓ On
-  Safety    Ask before destructive actions in Railway, Stripe, and GitHub? [Y/n]
-            ✓ Destructive actions in Railway, Stripe, and GitHub ask first
+  Autopilot How much can agents do on their own?
+            Production   Careful     reads run, changes ask
+            Staging      Balanced    reads and changes run, deletes ask
+            Development  Hands-off   everything except irreversible runs
+            Keep these? [Y/n]
+            ✓ Autopilot on. You'll be asked only for Production changes, deletes outside Development, and irreversible actions.
 
 Done. Your agents now reach Railway and Stripe through Passport.
 Your old keys still work. Rotate them once your agents don't need them.
@@ -48,8 +52,8 @@ services.
 - **Sign in** creates your workspace if you're new. Already signed in on this computer? Init uses that sign-in.
 - **Apps** covers Railway, Vercel, Supabase, Cloudflare, GitHub, and Stripe when it finds a key or the app's CLI. If your workspace reviews new apps first, init says so and your admin gets the request.
 - **Agents** adds your workspace's Passport address to Claude Code, Codex, Cursor, and VS Code. Each agent signs you in through your browser the first time, so no key or token goes in its settings. For Claude Desktop, init shows the address to add in **Settings → Connectors**.
-- **Guard** asks before destructive commands the agents run in your terminal, like `railway volume delete`. It can't see inside scripts, aliases, or `make` targets. See [the CLI hook](/member/cli-hook).
-- **Safety** makes destructive actions in those apps ask first, in every agent. If yours is off, init asks before turning it on; if it's already on, init just shows it. Change it any time in **Settings → Safety**.
+- **Guard** applies your Autopilot rules to the commands agents run in your terminal, like `railway volume delete`. It can't see inside scripts, aliases, or `make` targets. See [the CLI hook](/member/cli-hook).
+- **Autopilot** sets how much agents can do on their own in Production, Staging, and Development, in every agent. A re-run shows your presets without asking. Change them any time in **Rules**.
 
 Run init again any time. Finished steps show as already set up, and it asks only about what's missing, including after you press Ctrl-C.
 

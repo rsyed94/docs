@@ -78,10 +78,11 @@ Deactivating a person revokes their sessions, agents, and connected accounts imm
 <Accordion title="Technical connection URLs">
   | URL | Purpose |
   | --- | --- |
-  | `/mcp` or `/w/{workspace}/mcp` | Whole workspace (hosted connectors use the `/w/…` form) |
+  | `/mcp` | Whole workspace, for every agent. Sign-in picks the workspace. Add `?ws={workspace}` or `?enroll={key}` to pre-select one. |
+  | `/w/{workspace}/mcp` | Whole workspace, fixed to that workspace (older connector links keep working) |
   | `/s/{appKey}/mcp` | One app |
   | `/b/{bundleKey}/mcp` | One bundle |
 
-Most people should copy the connector address shown under **Agents → Add agent**. For CLI agent keys, set `PASSPORT_ENDPOINT` to the workspace URL (`/w/ws_…/mcp`). See [Passport CLI](/quickstart/cli).
+Most people should add `https://passportmcp.com/mcp`. It connects to your workspace when you sign in. For CLI agent keys, set `PASSPORT_ENDPOINT` to the workspace URL (`/w/ws_…/mcp`). See [Passport CLI](/quickstart/cli).
 
 </Accordion>

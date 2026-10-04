@@ -3,7 +3,7 @@ title: "Record the CLIs your agents run"
 description: "Let Claude Code, Codex, and Cursor report the command-line tools they reach for, and ask before the destructive ones."
 ---
 
-Your agents do plenty of work that never goes through Passport: `gh pr create`, `git push`, `railway up`, `kubectl delete`. The Passport hook puts that work in the same audit log as everything else your agents do. With the guard on, Passport also asks before destructive commands it recognizes.
+Your agents do plenty of work that never goes through Passport: `gh pr create`, `git push`, `railway up`, `kubectl delete`. The Passport hook puts that work in the same audit log as everything else your agents do. With the guard on, Passport also applies your Autopilot rules to the commands it recognizes.
 
 ## Turn it on
 
@@ -32,35 +32,108 @@ Claude Code  audit + guard  ~/.claude/settings.json
 Codex        not installed  ~/.codex/hooks.json
 Cursor       audit          ~/.cursor/hooks.json
 
-Safety settings: synced 12 minutes ago for cli@ws_example.
+Autopilot rules: synced 12 minutes ago for cli@ws_example.
 Turn on the guard: passport hook install --client cursor --guard --apply
 ```
 
 ## What the guard does
 
-Before each shell command, the guard reads it on your machine. When it recognizes a destructive verb, such as `railway volume delete`, `vercel project rm`, `gh repo delete`, or `git push --force`, your agent asks you first:
+Before each shell command, the guard reads it on your machine and decides from your Autopilot rules, the same rules your apps follow in Passport, so a command and a tool that do the same thing get the same answer. It works out the environment the way the vendor's own CLI does: a flag first, such as Railway's `--environment` or Vercel's `--prod`, then the folder's link, then the vendor's default. A command with no environment it can place counts as Production. See [how Passport knows](/member/safety#how-passport-knows).
+
+When a rule says to ask first, your agent asks you, with the reason:
 
 ```
-Passport: railway volume delete is destructive. Run it only if you meant to.
+Passport: railway redeploy changes Production (linked in this folder). Approve to run it.
 ```
 
-If your safety settings block that action, the command doesn't run:
+### See what a folder is linked to
+
+```sh
+passport env
+```
 
 ```
-Passport: your safety settings block railway volume delete. Change this in Passport Settings → Safety.
+App      Resource      How     Environment
+Railway  api staging   linked  Staging
+Vercel   web preview   linked  Staging
+Fly      shop-prod     linked  Production
 ```
 
-The guard follows the same safety settings as your apps in Passport, so a command and a tool that do the same thing get the same answer. `passport login` and `passport status` sync them to your machine, and the guard refreshes them in the background about once an hour. Signed out, it asks before every destructive command it recognizes.
+Passport reads Railway, Vercel, Supabase, Wrangler, Netlify, Firebase, Convex, Neon, Fly, Heroku, kubectl, AWS, gcloud, Terraform, and Stripe links, plus database URLs for `psql`, `pg_dump`, Prisma, drizzle-kit, Knex, Sequelize, Rails, and Alembic. Everything is read on your computer each time a command runs; only an id-style key and how it was found reach Passport, never a path, URL, or key. A folder with nothing linked shows "No linked apps in this folder."
 
-The guard only adds a check. It never approves anything your agent would otherwise ask about, and a command it doesn't recognize runs through your agent's usual permissions.
+If Passport guessed wrong, fix it once for the whole workspace:
+
+```sh
+passport env set railway qa staging
+```
+
+Admins can choose any environment. Everyone else can only say Production, and gets "Ask an admin to place it" otherwise.
+
+When a rule blocks it, the command doesn't run:
+
+```
+Blocked by Passport: Team rule, no deletes in Production. Ask an admin to run it, or request an exception in Passport.
+```
+
+When nobody is at the keyboard, such as in CI or a background agent, an ask becomes an approval request on the web and your phone, and the agent can run `passport wait <id>`. `passport login` and `passport status` sync your rules to your machine, and the guard refreshes them in the background about once an hour. Signed out, it asks before every destructive command it recognizes. Change your rules any time in **Rules**.
+
+A command the guard doesn't recognize, or one it can't read with confidence (scripts, aliases, `make` targets, a path in a variable), runs through your agent's usual permissions.
+
+## Everyday commands
+
+Your agent's own work in the project folder counts as **Development**, so with the default Hands-off preset it runs without a prompt: tests, builds, linters, formatters, package scripts, `git commit`, `rm -rf build`. The project folder is the repository root, or the folder your agent works in.
+
+| Command | Counts as |
+| --- | --- |
+| `npm test`, `rg TODO`, `git status`, `tsc` | Read in Development |
+| `git commit`, `prettier --write .`, `npm run dev` | Change in Development |
+| `rm -rf dist`, `git reset --hard`, `git clean -fd` | Delete in Development |
+| `npm install`, `pip install`, `brew install` | Change in Other apps |
+| `git push` to your branch | Change in Development |
+| `git push origin main` | Change in Production |
+| `git push origin --delete old-branch` | Delete in Other apps (teammates share it) |
+| `rm -rf /tmp/scratch` | Delete in Development (temporary folders count as Development) |
+| `curl https://…` | Read in Other apps (sending data is a Change) |
+| `rm -rf ~/`, `rm -rf /`, deleting the whole project | Irreversible, always asks |
+| `sudo …` | Always asks |
+
+Symlinks count where they point, `cd` inside a command is followed, and writing to your keys or shell startup files counts as a delete. Try any command on the **Rules** page or with `passport rules test "npm test"`.
+
+## Fewer prompts, even offline
+
+```sh
+passport sync
+```
+
+Passport adds the commands your rules run without asking to each agent's own allowlist, so those prompts stop even when Passport can't be reached, and in Codex, which can't take an allow from a hook. Only tests, builds, type checks, checks that don't change files, `git status`, `git add`, and `git commit` are added. Formatters, package scripts, and file moves stay with the hook, and deletes, installs, and anything in Production never are.
+
+| Agent | Where |
+| --- | --- |
+| Claude Code | `permissions.allow` in `~/.claude/settings.json` |
+| Codex | `~/.codex/rules/passport.rules` |
+| Cursor CLI | `permissions.allow` in `~/.cursor/cli-config.json` |
+| Cursor | `terminalAllowlist` in `~/.cursor/permissions.json`, only if you keep one there |
+
+Your own entries are never changed. Passport updates its entries when your rules change, and `passport sync --remove` or `passport hook uninstall` takes them out. `passport status` shows how many prompts Passport answered for you today.
 
 <Note>
-Codex can't ask before a command yet, so in Codex the guard only blocks what your safety settings block. Commands set to ask first run through Codex's own approvals.
+Codex can't ask before a command yet, so in Codex the guard only blocks what your rules block. Commands set to ask first run through Codex's own approvals.
 </Note>
+
+## Keys in Passport
+
+Move a CLI's sign-in into Passport, and agents run that CLI through Passport instead:
+
+```sh
+passport keys move
+passport exec -- railway up -e staging
+```
+
+`keys move` asks about each key, stores it in Passport, and signs that CLI out on your computer. `.env` files stay as they are, since your apps need them. `passport exec` asks Passport before each command; when your rules allow it, the key reaches only that command, short-lived for GitHub (with the GitHub App installed), AWS, and Cloudflare where the key allows it. In Claude Code, the guard sends commands for those CLIs through `passport exec` for you. If Passport can't be reached, nothing runs.
 
 ## What it can't see
 
-The guard is a guardrail, not a security boundary. It can't see inside scripts, aliases, `make` targets, or `npm run` scripts, and it doesn't guess at them. `--help` and `--dry-run` never trigger it.
+The guard is a guardrail, not a security boundary. It can't see inside scripts, aliases, `make` targets, or package scripts, and it doesn't guess at them: `npm run` counts as a change in the project because the scripts are the project's own. `--help` and `--dry-run` never trigger it.
 
 ## What it records
 
@@ -68,6 +141,7 @@ After each shell command, the hook sends Passport only:
 
 - the tool that ran, such as `gh` or `terraform`
 - a coarse verb, such as `pr create` or `apply`
+- for everyday commands, where they landed (Development, Other apps, Production), never a path. Allowed work in your project is only counted, not recorded one by one
 - an action class: read, write, destructive, api, sql, http, or unknown
 - whether the command succeeded, how long it took, and the name of the folder you were in
 - your agent's session identifier, so a run hangs together
