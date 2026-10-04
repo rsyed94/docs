@@ -1,0 +1,49 @@
+---
+title: "Backups and undo"
+description: "Passport backs up what a delete removes, right before it runs, and can undo it for 7 days."
+---
+
+When an agent deletes or overwrites something through Passport, Passport first saves what's about to go, where it can. The action's row then says **Backup taken**, and for 7 days you can **Undo** it from the session, Activity, or Home, from the terminal, or by asking your agent.
+
+Passport only backs up actions it can see: app tools, the production toolkit, and `passport exec`. A command an agent runs with a key on your computer gets no backup, which is one reason to [move your keys into Passport](/member/cli-hook).
+
+## What Passport backs up
+
+| App | Actions | The backup | Undo |
+| --- | --- | --- | --- |
+| GitHub | Deleting or overwriting a file, closing an issue or pull request, deleting a branch (`gh api` through `passport exec`) | The file's previous version (it stays in the repository), the issue's state, the branch's commit | Puts the file back as a new commit, reopens (first recreating a pull request's branch that closing it deleted, as the preview says), or recreates the branch. A merge can't be undone. |
+| Vercel | `vercel env rm`, `vercel rollback`, `vercel promote` through `passport exec`, and `prod_rollback` | The variable's value and targets, or the deployment in production | Recreates the variable, or promotes the earlier deployment. Sensitive variables can't be read back, so they get no backup. |
+| Railway | Setting variables, and `prod_rollback` | The variables' previous values, or the deployment that was running | Sets the old values (Railway redeploys), or rolls back to that deployment |
+| Supabase | SQL that deletes, updates, or empties up to 5 tables of up to 1,000 rows, and pausing a project | A copy of those tables' rows, or the project's state | Restores the rows in one transaction, or restores the project |
+| Neon | SQL that changes data or schema | A branch made from the target branch right before the SQL ran | Restores the branch from it and keeps the state it replaced as a branch for 7 days |
+
+Not backed up: Railway volume, service, and environment deletes (Railway removes a volume's backups with it and can't restore the others), Neon branch deletes and resets, Supabase branch deletes and resets, and schema changes on Supabase. Irreversible actions never get a backup, because they can't be taken back even with one.
+
+Variable values and table rows are encrypted and deleted after 7 days. Branches Passport made on Neon are removed after 7 days (Neon also expires them on its own), or as soon as you undo. Neon won't delete or reset a branch that has backups under it, so when you delete or reset one, Passport removes its own backups of that branch first and the action's row says how many.
+
+## How backups change decisions
+
+- **Hands-off:** a delete runs only once its backup is taken. If Passport can't take one, it asks you instead: "Couldn't take a backup first, so Passport is asking." To let Hands-off deletes run without a backup in Development, Staging, or Other apps, turn on **Run deletes without a backup** for that row in **Rules**. It's off by default, and it isn't offered for Production.
+- **Careful and Balanced:** deletes ask as before. The request says whether Passport will take a backup right before it runs.
+- An exception that always runs an action, or an approval for the session, runs it even when no backup was possible. Its row says **No backup**.
+
+## Undo
+
+Undo first shows what comes back, what won't, and how old the backup is. Some things never come back: notifications and webhooks already sent, and anything other systems did because of the change.
+
+If the thing changed again since, a plain restore would overwrite that change, so Passport offers a safe alternative instead where there is one, such as restoring a file as a copy, a variable under a new name, rows into a new table, or a Neon backup as a new branch.
+
+Undo isn't available once the backup is 7 days old, while someone else is undoing it, or if you can't reach the app (connect it in Passport first). You can undo your own actions and those of agents you own; workspace admins can undo anyone's, with their own connection.
+
+An undo is an action too: its row says **Undone by** you and links to what it undid, and most undos can be undone again.
+
+From the terminal:
+
+```sh
+passport undo --last
+passport undo <action-id> --yes
+```
+
+Agents can call `passport_undo`. An undo from the terminal or an agent is decided like a change in that environment, so in Production it asks you first.
+
+When your team needs someone else to approve Production deletes, the undo of a Production delete goes to them too, whether you start it in Passport, the terminal, or an agent. Undo again once they approve. See [Slack and Production approvers](/admin/slack-and-approvers).

@@ -1,0 +1,43 @@
+---
+title: "Slack, approvers, and exceptions"
+description: "Answer approvals in Slack, require a second person for Production, lift a rule for one person, and learn from what you approve."
+---
+
+Autopilot asks a person only when a rule says so. These features decide who that person is, where they answer, and how the rules improve over time.
+
+## Approvals in Slack
+
+An admin adds the Passport app to Slack from **Settings › Notifications** with **Add to Slack**. After that:
+
+- Each approval request arrives as a direct message to the person who can answer it, with the action, its environment and class, the agent, the computer and folder, the command with secrets removed, and why Passport asked.
+- **Approve once**, **For this session**, and **Decline** work right in Slack. Decline asks for an optional note the agent sees.
+- Admins can also post Production requests to a channel. Anyone can see them there; only people allowed to approve can answer.
+- When a request is decided anywhere (Passport, a phone notification, Slack, or a rule change), every Slack message for it updates in place, for example "Approved once by Ramish in Slack".
+
+Passport finds each person in Slack by their Passport email. If Slack has no account with that email, Settings says so and requests still arrive in Passport. Each person can turn Slack messages off for themselves.
+
+If the app is removed from Slack or its access is revoked, Settings shows "Slack stopped working" and an admin can reconnect it. Self-hosted Passports need the Slack app configured by whoever runs them; until then Settings shows "Slack isn't set up on this Passport".
+
+## Production approvers
+
+On **Rules › Production approvers** (Pro and up), an admin can require someone else to approve Production deletes for a team, and optionally Production changes too. Choose the people or teams who approve; with none chosen, workspace admins approve.
+
+- The person whose agent asked can't approve their own request, in Passport, Slack, a notification, or their agent's own prompt.
+- Any one approver is enough. The request shows who it needs, like "Needs Maya or Sam".
+- Nothing these settings cover runs on its own in Production, whatever the presets or exceptions say. Blocks still block.
+- Undoing a covered Production action needs an approver too, even when it starts from Undo in Passport.
+- When Passport only guessed where a request runs, its requester can say it's Production but not anything looser. An approver who's an admin can place it from the request's **This is:** line.
+
+## Exception requests
+
+When a team or workspace rule blocks something a member needs, they can **Request an exception** from the agent's message, a blocked row in a session, or the rule on the Rules page. They choose whether it should run or ask them first, for an hour, a day, or permanently, and say why.
+
+Admins answer in **Approvals › Rule requests**: approve (optionally changing how long) or decline with a note. Approving adds a rule just for that person that lifts the one rule for that one action. Team floors and Production approvers still apply. The member gets an email either way.
+
+## Rule suggestions
+
+When you approve the same action in the same environment five times in fourteen days, Passport suggests a rule on Home and Approvals: "You've approved railway redeploy in Staging 6 times. Run it without asking?" Choose **Make it a rule**, **Not now** (it comes back after five more approvals), or **Never suggest**. `passport wait` mentions it once too.
+
+## Weekly summary
+
+Every Monday, people who had agent activity get a short email: what Passport handled for them, what they approved, what was blocked, and any suggestions. Admins get the workspace version with totals, new environments, and requests waiting for them. Turn it off in **Settings › Notifications**.

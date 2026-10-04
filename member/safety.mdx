@@ -1,63 +1,65 @@
 ---
-title: "Safety preferences"
-description: "Choose when Passport should allow, ask about, or block actions for you."
+title: "Autopilot rules"
+description: "How much your agents can do on their own, per environment, and when Passport asks you first."
 ---
 
-Safety preferences are personal checks for actions your agents try through Passport. They can make your access stricter, but never broader.
+Autopilot decides every action your agents take through Passport, instantly, from your rules. It asks you only when a rule says so, and every decision names its cause, such as "Asked: Production changes ask first (Careful)."
 
-Open **Settings** and find **Safety**.
+## Actions and environments
 
-## Production safety
+Each action is one of four classes:
 
-The first row, **Production safety**, covers the platforms where one wrong action costs the most: Railway, Vercel, Supabase, Cloudflare, GitHub, and Stripe.
+- **Read** — looks at something.
+- **Change** — creates or edits.
+- **Delete** — removes or overwrites. Rollbacks, secret changes, and schema migrations count.
+- **Irreversible** — can't be taken back even with a backup: sending money or email, force-pushing the default branch, deleting a repository.
 
-- **Off** — your write and destructive choices below apply as usual.
-- **Ask first** — destructive actions on those apps wait for you, even if you allow destructive actions elsewhere.
-- **Block** — they're blocked instead. You can still run them yourself, outside your agent.
+Each action also runs in an environment: **Production**, **Staging**, or **Development**. Passport reads it from the action, such as a Railway environment, a Vercel target, a Supabase project or branch, a Neon branch, or a CLI flag like `--environment`. When an agent names a resource only by its id, Passport looks up its name once with your own connection to that app, using one of the app's read tools, and places it by name. If an app has environments but Passport can't place the resource, it counts as Production, and the decision says so.
 
-With it on, Passport also treats these high-impact changes as destructive:
+Apps without environments, like Linear, Notion, and Slack, are **Other apps**.
 
-| App        | Also treated as destructive                                                                                                                                 |
-| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Railway    | Setting variables, deploying staged changes, domains and TCP proxies, resetting bucket keys, Railway's own agent. `railway variables set`, `railway domain` |
-| Vercel     | `vercel rollback`, `env add`, `domains add`, `alias`, `dns add`                                                                                             |
-| Supabase   | Running SQL, applying migrations, pausing a project, merging or resetting a branch. `supabase db push`, `secrets set`                                       |
-| Cloudflare | `wrangler secret put`, `secret bulk`, `d1 execute`, `d1 migrations apply`, `rollback`                                                                       |
-| GitHub     | `gh repo edit`, `secret set`, `variable set`, `ssh-key add`                                                                                                 |
-| Stripe     | Every Stripe write, refunds included. `stripe refunds create`, `charges create`, `charges capture`, `payment_intents confirm`, `payouts create`             |
+### How Passport knows
 
-It never loosens anything: a stricter choice of yours or a workspace rule still wins. Reads are never affected. New workspaces start their owner at **Ask first**; everyone else starts at **Off**. Your workspace can require **Ask first** or **Block** for your team, and Safety shows which.
+Passport places a command the way the vendor's own CLI picks where it goes. The first answer wins:
 
-The setting applies to tools your agents run through Passport. If you use the [`passport hook` guard](/member/cli-hook), it follows the same setting for the `railway`, `vercel`, `supabase`, `wrangler`, `gh`, and `stripe` commands it recognizes.
+1. **A flag** on the command, such as `-e staging` or `--prod`.
+2. **The folder's link**, such as `railway link`, `.vercel/project.json`, `supabase link`, or a `DATABASE_URL` in `.env`.
+3. **The vendor's default**, such as `vercel deploy` going to Preview.
+4. **Your workspace's choice** for that resource.
+5. **Its name**: whole words like `prod`, `staging`, `qa`, `dev`, or `preview`. `domain` doesn't count as `main`.
+6. **Nothing**: it counts as Production, and the decision says so.
 
-## Write and destructive actions
+A name in a link file never makes anything looser. Railway, Supabase, and Neon links hold an id, so Passport asks your connected app for the real name, and an id nobody has placed counts as Production until someone chooses. The id decides: if the name in a link file differs from the one Passport saved, the environment was renamed, so it keeps its place and shows the new name. If a link file can't be read, the command counts as Production. A database URL is read only for its host: a local database is Development; Passport never sends or stores the URL, user, or password.
 
-For both write actions and destructive actions, choose:
+Each decision says how Passport knows: "Runs: Staging is Hands-off (linked in this folder)." In **Rules → Environments**, each resource shows where it came from: **Linked in a folder**, **From a name**, or **Set by** whoever chose. When an approval is waiting on a resource nobody has placed, the request shows **This is: Production · Staging · Development**. Choosing saves it for the whole workspace and decides the action again, so it may run right away. Anyone can say Production; anything looser needs an admin. Changing an environment in Rules or with `passport env set` applies to new actions only: a request that's already waiting keeps the environment it was raised with.
 
-- **Allow** — go ahead, if your workspace already permits it.
-- **Ask me** — pause so you can allow it once, allow it for one hour, or deny it. Many agents can ask you right there: Passport sends the question into the agent you are already using, showing the app, the action and whether it is a write or destructive, the account, and a short redacted summary of the arguments. Pick **Approve once**, **Approve for 1 hour**, or **Deny** and the agent continues on its own.
-- **Never** — block it immediately.
+Run `passport env` in a folder to see what Passport reads there.
 
-The defaults are:
+## Presets
 
-| Action      | Default |
-| ----------- | ------- |
-| Write       | Allow   |
-| Destructive | Ask me  |
+For each environment, and for Other apps, choose how much agents can do on their own:
 
-Read-only actions are not controlled here.
+| | Careful | Balanced | Hands-off |
+| --- | --- | --- | --- |
+| Reads | Run | Run | Run |
+| Changes | Ask | Run | Run |
+| Deletes | Ask | Ask | Run |
+| Irreversible | Ask | Ask | Ask |
 
-## How Safety combines with workspace rules
+The defaults are **Production: Careful**, **Staging: Balanced**, **Development: Hands-off**, and **Other apps: Balanced**. Irreversible actions always ask unless an exception allows that one action. Your team may require a minimum preset for an environment; you can always pick something stricter.
 
-- If your app access is read-only, write tools stay hidden even if Safety says **Allow**.
-- If a workspace guardrail blocks an action, Safety cannot override it.
-- Your Safety choices also govern the agents whose keys you own. An agent cannot answer a prompt, so its call returns a pending result and waits in your **Approvals** queue, which names the agent that asked. Once you decide, the agent's next attempt at the same call goes through.
-- Company access may require action approvals; see [Company access](/admin/agents-and-access).
+## Exceptions
 
-Use Safety when you want an extra personal check without changing anyone else's access.
+An exception runs, asks about, or blocks a specific action, an app, or a class of actions, in one environment or all of them. The most specific exception wins, the strictest wins among equals, and a block always wins. Admins can add exceptions for a team or everyone.
 
-If your agent cannot show a prompt, nothing is lost: the same approval is waiting in **Approvals** in Passport, whose badge shows personal action approvals needing an answer. Answering there releases the agent's call the same way. Approvals record where you answered, so you can tell an in-agent decision from one made in Passport.
+## When Passport asks
 
-An approval stays available for about three minutes. If you choose **Allow for one hour**, matching actions can run without another prompt for one hour; after that, Passport asks again.
+When an action needs you, you can **Approve once**, **Approve for this session**, **Always allow** (which saves an exception), or **Decline** with a note the agent receives. Many agents show the question right where you are working; it is also waiting in **Approvals**, and in a notification with Approve and Decline buttons if you turned notifications on.
+
+An approval asked in your agent's own prompt stays open for about three minutes. One asked while nobody was at the keyboard, such as a background or CI run, waits for a day. If your rules change while a request is waiting and would now run the action, the request resolves itself.
+
+## Agents you own
+
+Your rules also govern the agents whose keys you own. An agent can't answer a prompt, so its request waits in your **Approvals**, naming the agent that asked. An agent key with no owner is blocked from anything that would need a person: assign it an owner in **Agents**.
 
 See also [Guardrails](/admin/guardrails) and [Catalog access and passes](/admin/approvals-and-requests).
