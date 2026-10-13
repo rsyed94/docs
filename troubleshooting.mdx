@@ -57,7 +57,7 @@ For Mintlify, use **Admin → MCP → Allowed OAuth redirect URIs**. This is dif
 
 ## "A different workspace" / reconnect prompts
 
-Passport will not attribute your activity to the wrong workspace. If this machine's saved Passport sign-in belongs to a different workspace than the one an agent expects, the bridge reports: "This machine's Passport credential now belongs to a different workspace. Reconnect this agent from the Passport web app or run `passport-bridge login`."
+Passport will not attribute your activity to the wrong workspace. If this computer's saved Passport sign-in belongs to a different workspace than the one an agent expects, the bridge reports: "This computer's Passport sign-in now belongs to a different workspace. Reconnect this agent from the Passport web app or run `passport-bridge login`."
 
 Reconnect that agent from **Agents** in the intended workspace. This often happens after the same computer signs into another workspace.
 
@@ -108,13 +108,16 @@ passport search ""
 
 Stable exit codes help scripts and agents:
 
-| Code | Meaning                                                               |
-| ---- | --------------------------------------------------------------------- |
-| `2`  | Select a profile or sign in                                           |
-| `3`  | Complete the required app connection or member action                 |
-| `4`  | Approval is pending                                                   |
-| `5`  | Blocked by policy, a guardrail, agent selection, or a denied approval |
-| `6`  | Invalid command or tool name                                          |
-| `1`  | Other failure, including an unclear network error; do not auto-retry  |
+| Code | Meaning                                                                                    |
+| ---- | ------------------------------------------------------------------------------------------ |
+| `0`  | Success                                                                                    |
+| `1`  | Network, timeout, or server error, or Passport couldn't be reached; don't retry on its own |
+| `2`  | Sign in, or pick a profile: the sign-in is missing, expired, or revoked                    |
+| `3`  | An app needs you to sign in, or Passport has no working key for it                         |
+| `4`  | Waiting for approval; the approval id is included                                          |
+| `5`  | Blocked, declined, or expired: your rules, a guardrail, or a person said no                |
+| `6`  | Usage mistake: an unknown command, option, tool, or app                                    |
+
+`passport help` ends with the same table. A mistyped command or option exits `6` and names the closest match, like `Unknown command "stauts". Did you mean: passport status`.
 
 Run with `--json` for a structured `cause` and any approval or app hint.

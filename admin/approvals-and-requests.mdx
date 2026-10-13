@@ -73,9 +73,11 @@ On every plan, a tool whose new definition looks like a poisoning attempt is swi
 
 Held tools are listed under **Review tool changes** in **Apps → your app → Connections**, with what changed. Select the ones to approve and turn them back on in one step. Flagged tools are approved one at a time. Until then, an agent that calls a held tool is told the app changed it and an admin review is pending, and Activity records the call as held for admin review rather than as a tool you switched off.
 
+Apps that need an admin, for setup, repair, or tool review, show under **Needs attention** on the **Apps** page. These are the same rows Home's **Needs attention** shows, and Home also lists everything else, such as idle workspace agents.
+
 ## Action approvals
 
-Separate from catalog requests, a member's own Safety preference can put a write or destructive action on hold until that person allows it. Passport asks them wherever it can reach them: agents that support MCP elicitation get a prompt inside the agent itself, with the app, the action and its risk class, the account, and a redacted one-line argument summary; everything else waits while the person decides in the Passport app. Either way the decision lands on the same durable approval record, so a decision made on one replica releases a call held on another.
+Separate from catalog requests, a member's own [Autopilot rules](/member/safety) can put an action on hold until that person allows it. Passport asks them wherever it can reach them: agents that support MCP elicitation get a prompt inside the agent itself, with the app, the action and its risk class, the account, and a redacted one-line argument summary; everything else waits while the person decides in the Passport app. Either way the decision lands on the same durable approval record, so a decision made on one replica releases a call held on another.
 
 The audit trail records how consent was collected. An approval shows whether it was answered in Passport or in an agent, and which agent install answered it; the Activity row for the released call carries the same provenance next to the approval it consumed. Autonomous agent credentials are never prompted, and the CLI keeps returning an explicit pending result for its own retry loop. Set `PASSPORT_APPROVAL_ELICITATION=off` to turn in-agent prompts off for a deployment and keep the Passport-app flow as the only channel.
 
@@ -85,7 +87,7 @@ Two workspace-wide defaults live in **Settings → Access → Approvals**.
 
 **Wait for approval inside the agent** decides what an interactive agent gets while a person is deciding. **Wait for approval** (the default) keeps the call open for up to 55 seconds, which is what lets an in-agent prompt or a decision in Passport release the original call. **Answer right away** returns immediately with the same pending result the CLI gets, so the agent retries instead of waiting. Automation keys that run as themselves and the CLI always get the pending result, whichever mode is set.
 
-**Team floors** (Pro and Enterprise) set the least strict [Autopilot preset](/member/safety#presets) people on a team may hold in each environment, such as "Production: at least Careful", with an all-teams default and a per-team override. It is a floor, not a setting on their behalf: a member's own stricter choice always wins, and their stored choice is kept, so lowering the floor later gives them their choice back. Floors also bound every exception. Admins can add team and workspace exceptions, and a block always wins. The older default approval rules and production safety column are read as floors and blocks.
+**Team floors** (Pro and Enterprise) set the least strict [Autopilot preset](/member/safety#presets) people on a team may hold in each environment, such as "Production at least Careful", with an all-teams default and a per-team override. It is a floor, not a setting on their behalf: a member's own stricter choice always wins, and their stored choice is kept, so lowering the floor later gives them their choice back. Floors also bound every exception. Admins can add team and workspace exceptions, and a block always wins. The older default approval rules and production safety column are read as floors and blocks.
 
 ## Requests
 

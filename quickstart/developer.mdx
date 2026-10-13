@@ -11,7 +11,7 @@ Coding agents can read the keys on your computer. Passport lets them use your pr
 npx passport-bridge@latest scan
 ```
 
-Runs locally with no account, and nothing leaves your machine. See [the scan](/member/scan) for what it checks.
+Runs locally with no account, and nothing leaves your computer. See [the scan](/member/scan) for what it checks.
 
 ## 2. Set up Passport
 
@@ -19,7 +19,7 @@ Runs locally with no account, and nothing leaves your machine. See [the scan](/m
 npx passport-bridge@latest init
 ```
 
-Needs Node.js 20 or newer. Each step asks first, and you can skip any of them:
+Needs Node.js 20 or newer. Init looks at everything first and shows one plan. Nothing changes until you say yes:
 
 ```text
 Passport setup
@@ -27,37 +27,55 @@ Passport setup
   Scan      3 keys your agents can reach: Railway, Stripe, GitHub
   Sign in   Opening your browser. Confirm code HJKT-WQRM.
             ✓ Signed in to Maya's workspace
-  Apps      Connect Railway, Stripe, and GitHub? [Y/n]
-            Opening one sign-in page for all three. Press Enter to stop waiting.
-            ✓ Railway   ✓ Stripe   – GitHub skipped
-  Agents    Adds "passport" to ~/.cursor/mcp.json. Keeps a backup.
-            Add Passport to Claude Code and Cursor? [Y/n]
-            ✓ Claude Code   ✓ Cursor
-  Guard     Adds Passport hooks to ~/.claude/settings.json. Keeps a backup.
-            Apply your Autopilot rules before each shell command in Claude Code and Cursor? [Y/n]
-            ✓ On
-  Autopilot How much can agents do on their own?
-            Production   Careful     reads run, changes ask
-            Staging      Balanced    reads and changes run, deletes ask
-            Development  Hands-off   everything except irreversible runs
-            Keep these? [Y/n]
-            ✓ Autopilot on. You'll be asked only for Production changes, deletes outside Development, and irreversible actions.
 
-Done. Your agents now reach Railway and Stripe through Passport.
-Your old keys still work. Rotate them once your agents don't need them.
-Try it: in Claude Code, run /mcp to sign in, then ask it to list your Railway
+  Will      Connect Railway and Stripe on one sign-in page
+            Add Passport to Claude Code and Cursor
+            Turn on the guard in Claude Code and Cursor, so Passport checks each
+            shell command first
+            Save the Autopilot presets below
+  Edits     ~/.claude.json, ~/.cursor/mcp.json, ~/.claude/settings.json, and
+            ~/.cursor/hooks.json. Keeps a backup of each.
+  Already set up
+            ✓ GitHub connected
+  Not changed
+            – Your Railway key stays on this computer. Move it any time:
+              passport keys move
+  Autopilot Production   Careful    reads run, changes ask
+            Staging      Balanced   reads and changes run, deletes ask
+            Development  Hands-off  everything except irreversible runs
+
+Use the recommended setup? (n to choose step by step) [Y/n]
+
+  Apps      Opening one sign-in page for both. Press Enter to stop waiting.
+            ✓ Railway   ✓ Stripe
+  Agents    ✓ Claude Code   ✓ Cursor
+  Guard     ✓ On in Claude Code and Cursor
+  Autopilot ✓ Presets saved
+
+Done.
+  ✓ Railway and Stripe connected to Passport
+  ✓ Passport added to Claude Code and Cursor
+  ✓ Guard on in Claude Code and Cursor
+  ✓ Autopilot on. You'll be asked only for Production changes, deletes outside
+    Development, and irreversible actions.
+
+Next: in Claude Code, run /mcp to sign in, then ask it to list your Railway
 services.
 ```
 
+Press Enter for the recommended setup, or type `n` to go step by step: each step then asks on its own, and you can skip any of them.
+
 - **Sign in** creates your workspace if you're new. Already signed in on this computer? Init uses that sign-in.
-- **Apps** covers Railway, Vercel, Supabase, Cloudflare, GitHub, and Stripe when it finds a key or the app's CLI. If your workspace reviews new apps first, init says so and your admin gets the request.
-- **Agents** adds your workspace's Passport address to Claude Code, Codex, Cursor, and VS Code. Each agent signs you in through your browser the first time, so no key or token goes in its settings. For Claude Desktop, init shows the address to add in **Settings → Connectors**.
+- **Apps** covers Railway, Vercel, Supabase, Cloudflare, GitHub, and Stripe when it finds a key or the app's CLI. If your workspace reviews new apps first, init says so and your admin gets the request. With no apps found, step by step lets you pick some.
+- **Keys** stay on your computer in the recommended setup. Step by step, init offers to move each CLI sign-in into Passport and sign that CLI out on your computer (`[y/N]`, so Enter keeps the key). Only the key is removed; project links and other CLI settings stay. If Passport already holds a different key for that CLI, init asks whether to replace it. The closing list names the keys that moved and where to rotate each old one. See [Keys in Passport](/member/cli-hook#keys-in-passport).
+- **Agents** adds your workspace's Passport address to Claude Code, Codex, Cursor, and VS Code. Each agent signs you in through your browser the first time, so no key or token goes in its settings. For Claude Desktop, init copies the address for you to paste in **Settings → Connectors → Add custom connector**.
 - **Guard** applies your Autopilot rules to the commands agents run in your terminal, like `railway volume delete`. It can't see inside scripts, aliases, or `make` targets. See [the CLI hook](/member/cli-hook).
-- **Autopilot** sets how much agents can do on their own in Production, Staging, and Development, in every agent. A re-run shows your presets without asking. Change them any time in **Rules**.
+- **Autopilot** sets how much agents can do on their own in Production, Staging, and Development, in every agent. Step by step asks once per environment, and only where your team leaves a choice. Change them any time in **Rules**.
+- **Environments** lists the ones Passport placed, by environment. Anything it can't place yet counts as Production until you place it in **Rules**.
 
-Run init again any time. Finished steps show as already set up, and it asks only about what's missing, including after you press Ctrl-C.
+Run init again any time. The plan shows what's already set up and changes only what's missing, including after you press Ctrl-C. When nothing is missing, it says so and asks nothing.
 
-In a script or another agent, add `--yes` to accept every default. Without a terminal, init doesn't wait for app sign-ins: it prints the sign-in page and `passport connect --wait 300` to run once you're done. `--yes --json` prints one summary with each step's status. `--skip-apps`, `--skip-agents`, and `--skip-guard` leave a step out, and `--no-open` prints links instead of opening a browser.
+Questions only take what you type after they appear, so pressing Enter while init is busy never answers one. `--dry-run` prints the plan and changes nothing. In a script or another agent, add `--yes` to use the recommended setup without asking; init then prints the sign-in page and moves on instead of waiting, and `passport connect --wait 300` waits for it later. `--yes` never moves your CLI keys; add `--move-keys` to move them too, and the closing list names each CLI it signed out. `--json` without `--yes` prints the plan as JSON; `--yes --json` applies it and prints one summary with each step's status. `--skip-apps`, `--skip-agents`, and `--skip-guard` leave a step out, and `--no-open` prints links instead of opening a browser.
 
 ## What changes on your computer
 
@@ -70,12 +88,12 @@ In a script or another agent, add `--yes` to accept every default. Without a ter
 | VS Code's user `mcp.json` | A `passport` server |
 | `~/.claude/settings.json`, `~/.codex/hooks.json`, `~/.cursor/hooks.json` | Passport's hooks |
 
-Init changes only Passport's own entries. Before it edits a file it didn't create, it says which one and saves the original once as `<file>.passport-backup`. It never edits your shell profile; to run `passport` from any terminal, add the `PATH` line it prints.
+Init changes only Passport's own entries. The plan names every file it edits before it edits any, and it saves each original once as `<file>.passport-backup`. It never edits your shell profile; to run `passport` from any terminal, add the `PATH` line it prints.
 
 ## Undo it
 
 ```sh
-passport hook uninstall --client claude-code --apply   # also codex, cursor
+passport hook uninstall --agent claude-code --apply    # also codex, cursor
 claude mcp remove --scope user passport
 codex mcp remove passport
 passport logout

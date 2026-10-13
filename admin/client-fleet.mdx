@@ -1,24 +1,26 @@
 ---
 title: "Manage connected agents"
-description: "Manage your own agents, find workspace agents in Inventory, and set workspace agent policy."
+description: "Manage your own agents, review every agent in the workspace, and set workspace agent policy."
 ---
 
-Everyone, admins included, manages their own connections from **Agents**. Enterprise admins see every agent in the workspace under [Inventory](/admin/inventory).
+Everyone, admins included, manages their own connections from **Agents**. Pro and Enterprise admins switch the page to **Everyone** to see every agent in the workspace.
 
 ## Manage your own agents
 
-Open **Agents** to see **Your agents**. Members and admins see the same page. There is one row for each agent you signed in to, not one per product: a Claude account connection, Claude Desktop, and Claude Code share one **Claude** row, and interactive Passport CLI profiles share one **Passport CLI** row. ChatGPT and Codex are separate setups, so they stay separate rows.
+Open **Agents** to see **Your agents**. Members and admins see the same page. There is one row for each agent on each computer: Claude Code, Claude Desktop, and Claude.ai are separate agents, and Claude Code on two laptops is two rows. Interactive Passport CLI profiles on one computer share one **Passport CLI** row. An agent that only has Passport's guard on a computer (say Codex, with no sign-in of its own) still gets its row, marked **Guard only**.
 
-A working agent stays quiet: its row shows where it is used (for example **Used in Claude.ai · Desktop · Code**) and **Last used**, which opens Activity filtered to that agent. A row only asks for something when there is one thing to fix:
+A working agent stays quiet: its row shows where it runs (for example **On Sam's MacBook**), how much of what the guard saw it checked this week (for example **94% checked**), and **Last used**, which opens **All activity** filtered to that agent. One chip says its state: **Sign-in expired**, or its guard: **On**, **Off**, **Outdated**, **Not trusted**, or **Locked** (see [Guard health](/member/cli-hook#guard-health)). A row only asks for something when there is one thing to fix, and the fix is on the row:
 
 - **Reconnect** when an agent's Passport sign-in expired;
+- the guard's fix, such as `passport hook install --client codex --guard --apply` or "Open Codex → /hooks and trust Passport's hooks.";
 - **Update** when a Passport CLI or local setup is behind the newest version in your workspace;
 - **Remove duplicate** when a local setup shows the same tools twice next to a working account connection; or
-- **Remove** when an agent has not been used in 30 days.
+- **Disconnect** when an agent has not been used in 30 days.
 
 Open an agent to:
 
 - **Test connection**: Passport checks that the agent's sign-in is valid and has been used (or waits for its first request), then says what it can reach, such as "Claude Code can see 13 apps and 172 tools";
+- see its guard on each computer it runs on, with how much it checked and when the computer last reported;
 - see each sign-in it uses, with a detail line such as "via Passport CLI on Sam's MacBook", and **Rename** that computer (only you see the name);
 - **Add a connection** on another computer; or **Disconnect** one sign-in immediately; and
 - **Limit apps for this agent** to hide some of your apps from it. The disclosure shows a line such as "Sees 3 of 13 apps" only when the agent is limited.
@@ -31,7 +33,17 @@ Owners and admins manage automation keys for scripts, CI, and hosted workflows i
 
 ## Manage the workspace
 
-On Enterprise, open **Inventory**. Its **Through Passport** tab lists every connected agent and its connections (one per person per computer): review connections that are idle or out of date, and revoke a connection so it must sign in again. See [Inventory](/admin/inventory#agents-through-passport).
+On Pro and Enterprise, admins switch **Agents** from **Mine** to **Everyone**, the same selector Sessions uses. Everyone has one row per agent connected through Passport, such as Claude Code or Cursor, with who uses it (for example, `1 person · 2 connections`), the newest Passport version it runs and how many connections are out of date, and when it was last active. Once the list has 10 or more rows, search finds a person, agent, or computer.
+
+Open an agent to see its **connections**, one per person per computer. Each shows its owner (linked to their person page), the computer, the guard state, Passport's version, when it was last active, and **Disconnect**.
+
+- **Idle connections** haven't been used in 30+ days. Disconnect the ones you don't recognize, one at a time or with **Disconnect N idle**.
+- **Version** shows only for software Passport ships: Passport CLI and the local bridge, shown as, for example, `Passport 0.11.3`. Agents that sign in with a browser update from their own vendor, so their version shows as `—`.
+- **Out of date** marks connections running Passport two or more versions behind the newest Passport version in use. Its owner should update.
+
+Disconnecting cuts access right away, after a confirm that names the agent, person, and computer. Its owner must sign in again. The list shows real observed connections; opening setup instructions alone does not add a row.
+
+A person's page shows the same rows as their **Agents** page under **Agents**, with each guard state and fix. Connections people configured outside Passport are in [Inventory](/admin/inventory).
 
 ## Understand agent names
 
@@ -39,7 +51,7 @@ For a dynamic agent, Passport uses the name or title reported by the MCP agent,
 falling back to its registered connection label. A reported version is retained
 when available. Recognized agents keep Passport's standard name.
 
-These names help identify connections in Agents, Inventory, Activity, approvals, and
+These names help identify connections in Agents, Sessions, activity, approvals, and
 exports. They are self-reported context: claiming the name of a recognized agent
 does not satisfy registered-agent policy or grant access.
 
@@ -61,8 +73,28 @@ These controls require Enterprise. If the workspace downgrades, the saved policy
 
 [Team setups](/admin/team-setups#what-agents-start-with) choose which already-allowed apps each agent starts with for a team. They never grant access.
 
+## Lock the guard on
+
+By default the guard lives in each person's own agent settings, so they can turn it off. **Lock it** on the Rollout page puts Passport's guard and audit hooks in each agent's managed (system) settings instead, where people can't remove them. Managed settings run a small launcher owned by root at `/Library/Application Support/Passport/bin/passport` (macOS), `/opt/passport/bin/passport` (Linux), or `C:\ProgramData\Passport\bin\passport.cmd` (Windows). It hands off to each person's own Passport CLI; until that's set up, commands run as usual.
+
+| Agent       | Lock it                                                                                                                                                                                  | Strict adds                                                    |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| Claude Code | `hooks` in managed settings, or the drop-in `managed-settings.d/50-passport.json` ([settings](https://code.claude.com/docs/en/settings), [hooks](https://code.claude.com/docs/en/hooks)) | `allowManagedHooksOnly`, and `onFailure: "block"` on the guard |
+| Codex       | Hooks in `requirements.toml` run from `managed_dir`, trusted by policy ([managed configuration](https://learn.chatgpt.com/docs/enterprise/managed-configuration))                        | `allow_managed_hooks_only = true`                              |
+| Cursor      | The system `hooks.json` ([hooks](https://cursor.com/docs/agent/hooks))                                                                                                                   | `failClosed` on the guard                                      |
+
+**Strict** runs only managed hooks, and blocks a command when the guard can't run (for example, before that person has set Passport up).
+
+Deploy the files from the Rollout page through MDM, or run this as root on each computer:
+
+```sh
+sudo npx passport-bridge@latest setup --org <key> --yes --lock [--strict]
+```
+
+It writes the launcher and each agent's file, merging with what's there: it replaces only Passport's own entries, and leaves a file it can't merge safely untouched with the fix (for example, managed settings that set `disableAllHooks`, or another `[hooks]` table in `requirements.toml`). Without administrator rights it writes nothing and lists the files to deploy. If you also use claude.ai server-managed settings, add `"managedSourcesBehavior": "merge"` so both apply. The guard shows **Locked** on **Agents** for computers where it's locked.
+
 ## Related
 
 - [Get connected](/quickstart/member) — connecting an agent
 - [People and teams](/admin/people-and-teams) — roles and lifecycle
-- [Inventory](/admin/inventory) — every agent in the workspace, and connections found outside Passport
+- [Inventory](/admin/inventory) — connections found outside Passport

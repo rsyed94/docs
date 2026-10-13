@@ -9,7 +9,7 @@ This is the shortest path from sign-in to a working agent. It works on Windows, 
 
 Open your invite, or sign in at [passportmcp.com](https://passportmcp.com). If your company uses single sign-on, Passport will send you to your company's sign-in page.
 
-After signing in, you should see **Apps**, **Agents**, **Activity**, and **Settings**.
+After signing in, you should see **Home**, **Approvals**, **Sessions**, **Rules**, **Apps**, **Agents**, and **Settings**. If your team published a setup for you, **Setup** appears under **Your team**.
 
 ## 2. Connect a work app
 
@@ -58,15 +58,15 @@ Keep the agent open and ask:
 
 > List my available Passport tools.
 
-In the setup guide, choose **Test connection**. Passport waits for the agent's first request, then says what it can reach, such as "Claude Code can see 13 apps and 172 tools". You can run the same test later from the agent's page in **Agents**. Then choose **Run setup check** in the checklist. The check is safe, does not contact the app provider, and opens **Activity** so you can see the result.
+In the setup guide, choose **Test connection**. Passport waits for the agent's first request, then says what it can reach, such as "Claude Code can see 13 apps and 172 tools". You can run the same test later from the agent's page in **Agents**. Then choose **Run setup check** in the checklist. The check is safe, does not contact the app provider, and opens **All activity** so you can see the result.
 
 If the test keeps waiting, finish the sign-in inside the agent, keep it open, and test again. See [Troubleshooting](/troubleshooting) for common fixes.
 
 ## Make it yours
 
 - Open a connected agent and use **Limit apps for this agent** to hide apps it does not need.
-- Open [Safety preferences](/member/safety) to ask before write or destructive actions.
-- Open **Activity** to review what your agents did and whether Passport allowed, blocked, or failed the action.
+- Open [Autopilot rules](/member/safety) to choose what agents do on their own and when they ask you.
+- Open **Sessions → All activity** to review what your agents did and whether Passport allowed, blocked, or failed the action.
 
 <CardGroup cols={2}>
   <Card title="Passport CLI" icon="terminal" href="/quickstart/cli">

@@ -3,7 +3,7 @@ title: "People and teams"
 description: "Use Pro and Enterprise team controls to manage people, roles, teams, and lifecycle."
 ---
 
-People and Teams are part of Pro and Enterprise. Free is for one person: its owner opens **Settings**, then under **Workspace essentials** chooses **Manage workspace** to manage the workspace (backup download lives under **Advanced** on that page). Pro and Enterprise add a **People** page with roles, teams, person pages, Adoption, scoped access, and lifecycle controls. Enterprise adds directory sync and domain joining.
+People and Teams are part of Pro and Enterprise. Free is for one person: its owner opens **Settings**, then under **Workspace essentials** chooses **Manage workspace** to manage the workspace (backup download lives under **Advanced** on that page). Pro and Enterprise add a **People** page with roles, teams, person pages, usage, scoped access, and lifecycle controls, and a **Rollout** page that tracks how far everyone got. Enterprise adds directory sync and domain joining.
 
 ## Roles
 
@@ -21,11 +21,13 @@ Select **Invite people** on the People page to add teammates as admins or member
 
 **Needs attention**, at the top of the list, shows join requests to review and anyone who joined more than a day ago but hasn't connected an agent, with their sign-in link one click away. App requests stay in **Approvals**.
 
-**Adoption** shows the rollout in three steps: **Joined**, **Connected an agent**, and **Used a tool**, each as a bar with "N of M people" against everyone in the rollout, invites included. Select a step to open the People list narrowed to who hasn't reached it yet; clear the filter with its chip.
+**Progress**, at the top of the **Rollout** page, shows the rollout in three steps: **Joined**, **Connected an agent**, and **Used a tool**, each as a bar with "N of M people" against everyone in the rollout, invites included. Select a step to open the People list narrowed to who hasn't reached it yet; clear the filter with its chip. **People → Adoption** is the usage table.
 
 Once the workspace has ten or more people, search the list and filter it by team, role, or status (Active, Invited, or Deactivated). The list shows active and invited people by default. Each row's menu changes the person's team or role, copies the sign-in link, signs them out everywhere, or deactivates them. Each of those asks first.
 
-Open a person for their own page. **Overview** shows how far their setup got and what comes next, their job title, team, and role (each saved as soon as you change it), their connected apps and agents, and **Security and account** actions. Their **Activity** tab is the audit trail for that person, with its own CSV export.
+Open a person for their own page. **Overview** shows how far their setup got and what comes next, their job title, team, and role (each saved as soon as you change it), their connected apps and agents, and **Security and account** actions. Their **Activity** tab is the audit trail for that person, with its own CSV export. Their **Approvals** tab shows every kind: their agents' approvals, their rule requests, and their app requests.
+
+Names link the same way everywhere: a person's name opens their person page, an agent opens its page, and a computer opens where its agents are listed. Session rows show the person and the computer.
 
 ## Manage teams
 
@@ -55,6 +57,6 @@ Deactivating a member immediately signs them out everywhere and revokes their co
 
 Connect Claude Code, Codex, Cursor, and other supported agents from **Agents**. There is no separate managed-agent identity setup.
 
-For scripts and CI, owners and admins open **Agents → Automations** on every plan. A credential authenticates Passport CLI with its own access, or with access narrowed by a delegated person's permissions. It is shown once, can be rotated in place, and can be revoked from the same dialog. A credential belongs to the person who created it: their Safety choices govern its agent, and deactivating them revokes it. See [Agent keys, their owners, and rotation](/admin/agents-and-access#agent-keys-their-owners-and-rotation).
+For scripts and CI, owners and admins open **Agents → Automations** on every plan. A credential authenticates Passport CLI with its own access, or with access narrowed by a delegated person's permissions. It is shown once, can be rotated in place, and can be revoked from the same dialog. A credential belongs to the person who created it: their Autopilot rules govern its agent, and deactivating them revokes it. See [Agent keys, their owners, and rotation](/admin/agents-and-access#agent-keys-their-owners-and-rotation).
 
 Passport CLI accepts the credential through `PASSPORT_AGENT_KEY` and the workspace endpoint through `PASSPORT_ENDPOINT`. Store these in your CI secret store. This mode works without interactive sign-in and writes no local credential file. See [Passport CLI](/quickstart/cli).

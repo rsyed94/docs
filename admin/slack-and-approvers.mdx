@@ -20,7 +20,7 @@ If the app is removed from Slack or its access is revoked, Settings shows "Slack
 
 ## Production approvers
 
-On **Rules › Production approvers** (Pro and up), an admin can require someone else to approve Production deletes for a team, and optionally Production changes too. Choose the people or teams who approve; with none chosen, workspace admins approve.
+On **Rules › Team rules** (Pro and up), an admin can require someone else to approve Production deletes for a team, and optionally Production changes too. Choose the people or teams who approve; with none chosen, workspace admins approve.
 
 - The person whose agent asked can't approve their own request, in Passport, Slack, a notification, or their agent's own prompt.
 - Any one approver is enough. The request shows who it needs, like "Needs Maya or Sam".
@@ -36,7 +36,7 @@ Admins answer in **Approvals › Rule requests**: approve (optionally changing h
 
 ## Rule suggestions
 
-When you approve the same action in the same environment five times in fourteen days, Passport suggests a rule on Home and Approvals: "You've approved railway redeploy in Staging 6 times. Run it without asking?" Choose **Make it a rule**, **Not now** (it comes back after five more approvals), or **Never suggest**. `passport wait` mentions it once too.
+When you approve the same action in the same environment three times in fourteen days, Passport suggests a rule on Home and Approvals: "You've approved railway redeploy in Staging 6 times. Run it without asking?" Choose **Make it a rule**, **Not now** (it comes back after three more approvals), or **Never suggest**. `passport wait` mentions it once too.
 
 ## Weekly summary
 

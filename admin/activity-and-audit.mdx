@@ -10,17 +10,23 @@ Passport keeps two separate records:
 
 Keeping them separate makes it clear whether an event came from an agent or from an administrator changing the workspace.
 
-## Your Activity
+## Your activity
 
-Everyone can open **Activity** to see their own calls. A row shows the app, action, agent, outcome, and timing.
+Everyone can open **Sessions → All activity** to see their own calls. A row shows the app, action, agent, outcome, and timing.
 
 - **Allowed** means the call completed.
-- **Blocked** means access, Safety, an approval, or a guardrail stopped it.
+- **Blocked** means access, Autopilot rules, an approval, or a guardrail stopped it.
 - **Error** means the call was allowed but did not complete successfully.
+
+Actions read the same everywhere. A CLI command reads like "railway redeploy" under the app **Railway CLI**, everyday commands appear under **Shell**, and tools read like "delete branch". A command Passport couldn't read says **Not checked**.
 
 ## Workspace activity
 
-On Pro and Enterprise, the admin **Activity** page shows calls across the workspace. Filters cover person, apps, team, agent, outcome, time, and search text. Choose **Me** in the person filter to see only your own calls. You can select several apps at once. Filtered views have shareable URLs, and on Enterprise, Guardrail findings can open the relevant view.
+On Pro and Enterprise, admins switch **All activity** from **Mine** to **Everyone**, the same selector Sessions uses, to see calls across the workspace. Filters cover person, apps, agent, team, result, time, and search text. You can select several apps at once. Filtered views have shareable URLs, and links elsewhere in Passport, such as Guardrail findings and alerts, say **Open in All activity** and open the matching view. Older Activity links open the same view with their filters kept. Export the filtered view as CSV or JSONL.
+
+On Enterprise, once managed runs exist, a **Runs** tab sits beside the log with durable action receipts and their approval history.
+
+A person's own timeline is the **Activity** tab on their person page, with its own CSV export.
 
 Passport CLI may add an optional **via CLI** label so the record can distinguish tools such as Codex and Claude Code. That label is self-reported; the signed-in person or agent and the agent policy remain authoritative.
 
@@ -46,7 +52,7 @@ Each entry records the actor, action, target, time, and a concise description of
 <CardGroup cols={2}>
   <Card title="Activity export" icon="table">
     `GET /export/activity.csv` and `GET /export/activity.jsonl` require Pro or Enterprise. They accept the same `member`,
-    `app`, `outcome`, `department`, `via`, `since`, and `q` filters as the Activity page. Repeat `app` to include several apps. In
+    `app`, `outcome`, `department`, `via`, `since`, and `q` filters as the Everyone view of All activity. Repeat `app` to include several apps. In
     this API, `department` means team, `via` means agent, and `q` is search text.
   </Card>
   <Card title="Audit export" icon="file-lines">
