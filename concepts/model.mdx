@@ -3,7 +3,7 @@ title: "How Passport works"
 description: "A plain-language guide to workspaces, apps, agents, access, and Activity."
 ---
 
-Passport sits between an agent and the work app it wants to use. It keeps the app credential, checks access and Safety, makes the call, and records the outcome.
+Passport sits between an agent and the work app it wants to use. It keeps the app credential, checks access and Autopilot rules, makes the call, and records the outcome.
 
 ## The five things to know
 
@@ -15,11 +15,11 @@ A workspace is your team's private space in Passport. It holds people, apps, set
 
 An app is something your agent can use through Passport, such as GitHub, Linear, Stripe, or Notion. Open **Apps** to browse, connect, and manage them.
 
-Some apps connect through MCP. Others use a reviewed API integration. Passport gives both the same connection, access, Safety, and Activity experience, so most people do not need to care which technology is underneath.
+Some apps connect through MCP. Others use a reviewed API integration. Passport gives both the same connection, access, rules, and Activity experience, so most people do not need to care which technology is underneath.
 
 ### Agents
 
-An agent is where you use AI: Claude, Cursor, ChatGPT, VS Code, Codex, Passport CLI, or another MCP-compatible product. Open **Agents** to add one, see its connection status, disconnect it, or choose which available apps it can see. On Enterprise, admins see every agent in the workspace under **Inventory**, next to connections that scans found outside Passport.
+An agent is where you use AI: Claude, Cursor, ChatGPT, VS Code, Codex, Passport CLI, or another MCP-compatible product. Open **Agents** to add one, see its connection status, disconnect it, or choose which available apps it can see. On Pro and Enterprise, admins switch **Agents** to **Everyone** to see every agent in the workspace. On Enterprise, **Inventory** lists connections that scans found outside Passport.
 
 ### Access
 
@@ -41,7 +41,7 @@ Pro and Enterprise admins can set access for the workspace, a team, or a person.
 
 ### Activity
 
-Every call through Passport creates an Activity record with the person, agent, app, action, outcome, and timing. Members see their own records. Pro and Enterprise admins can review the workspace-wide log on the same **Activity** page.
+Every call through Passport creates an Activity record with the person, agent, app, action, outcome, and timing. Everyone sees their own records in **Sessions → All activity**. Pro and Enterprise admins switch it to **Everyone** for the workspace-wide log.
 
 ## What happens during a call
 
@@ -49,7 +49,7 @@ Every call through Passport creates an Activity record with the person, agent, a
   <Step title="Identify the person and agent">
     Passport checks the signed-in identity and the connection being used.
   </Step>
-  <Step title="Apply access and Safety">
+  <Step title="Apply access and rules">
     Apps or actions that are not allowed are hidden, blocked, or held for approval.
   </Step>
   <Step title="Inspect the request">Guardrails check outgoing arguments before Passport contacts the app.</Step>

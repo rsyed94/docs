@@ -1,9 +1,9 @@
 ---
-title: "Your AI setup"
+title: "Setup"
 description: "Get the agents, connections, and practical workflows your team has prepared for you."
 ---
 
-Open **Setup** in your Passport workspace to see your assigned agents and tools. Each item shows what is ready and what needs attention. Your admin publishes the setup for your team; your existing access rules still apply.
+Open **Setup**, under **Your team**, in your Passport workspace to see your assigned agents and tools. Each item shows what is ready and what needs attention. Your admin publishes the setup for your team; your existing access rules still apply.
 
 ## Get ready
 
@@ -28,13 +28,13 @@ With Passport CLI 0.10.0 or newer, sign in to the workspace and list your assign
 
 ```sh
 passport setup list
-passport setup install <setup-id> <workflow-key> --client codex
+passport setup install <setup-id> <workflow-key> --agent codex
 ```
 
-The install command previews the change. Add `--apply` to install it. Use `--client claude-code` for Claude Code. Managed skill installation supports macOS and Linux; the regular Passport CLI remains available on Windows.
+The install command previews the change. Add `--apply` to install it. Use `--agent claude-code` for Claude Code (`--client` still works). Managed skill installation supports macOS and Linux; the regular Passport CLI remains available on Windows.
 
 ```sh
-passport setup install <setup-id> <workflow-key> --client codex --apply
+passport setup install <setup-id> <workflow-key> --agent codex --apply
 passport setup installed
 passport setup rollback <skill-name> --apply
 passport setup remove <skill-name> --apply

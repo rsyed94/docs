@@ -29,11 +29,15 @@ Passport places a command the way the vendor's own CLI picks where it goes. The 
 5. **Its name**: whole words like `prod`, `staging`, `qa`, `dev`, or `preview`. `domain` doesn't count as `main`.
 6. **Nothing**: it counts as Production, and the decision says so.
 
-A name in a link file never makes anything looser. Railway, Supabase, and Neon links hold an id, so Passport asks your connected app for the real name, and an id nobody has placed counts as Production until someone chooses. The id decides: if the name in a link file differs from the one Passport saved, the environment was renamed, so it keeps its place and shows the new name. If a link file can't be read, the command counts as Production. A database URL is read only for its host: a local database is Development; Passport never sends or stores the URL, user, or password.
+Railway, Supabase, and Neon links hold an id. Once a resource is placed, the id decides: if the name in a link file differs from the one Passport saved, the environment was renamed, so it keeps its place and shows the new name. A name in a link file never makes anything looser: for an id nobody has placed, Passport asks your connected app for its real name and places it by that, so a linked Railway environment called `staging` is Staging. Until the app has named it, or when the name says nothing, it counts as Production until someone chooses. If a link file can't be read, the command counts as Production. A database URL is read only for its host: a local database is Development; Passport never sends or stores the URL, user, or password.
 
 Each decision says how Passport knows: "Runs: Staging is Hands-off (linked in this folder)." In **Rules → Environments**, each resource shows where it came from: **Linked in a folder**, **From a name**, or **Set by** whoever chose. When an approval is waiting on a resource nobody has placed, the request shows **This is: Production · Staging · Development**. Choosing saves it for the whole workspace and decides the action again, so it may run right away. Anyone can say Production; anything looser needs an admin. Changing an environment in Rules or with `passport env set` applies to new actions only: a request that's already waiting keeps the environment it was raised with.
 
-Run `passport env` in a folder to see what Passport reads there.
+Run `passport env` in a folder to see what Passport reads there. **Rules → Environments** lists a resource the first time an agent works in it, not when you connect the app.
+
+### Project scripts
+
+**Rules → Environments → Project scripts** lists what your workspace has said about project scripts the guard can't read on its own, such as `deploy.py`: its environment and class, who set it, and **Changed since set** when the script changed. It's a classification, like placing an environment: your presets and exceptions still decide. Add one with **Add script**, from a Session row's **Tell Passport what this does**, or with `passport actions add`. Anyone can say Production for a change or worse; anything looser is **Proposed** until an admin approves it. See [Scripts](/member/cli-hook#scripts).
 
 ## Presets
 
@@ -48,13 +52,25 @@ For each environment, and for Other apps, choose how much agents can do on their
 
 The defaults are **Production: Careful**, **Staging: Balanced**, **Development: Hands-off**, and **Other apps: Balanced**. Irreversible actions always ask unless an exception allows that one action. Your team may require a minimum preset for an environment; you can always pick something stricter.
 
+Each environment row also says what the CLI guard does **When Passport can't be reached**: **Ask**, **Block**, or **Run**. Production asks and the rest run by default. Run never applies to irreversible actions, and Codex can't ask, so Ask blocks there. See [When Passport can't be reached](/member/cli-hook#when-passport-cant-be-reached).
+
+What happened to an action reads **Ran**, **Asked**, or **Blocked** everywhere (and **Approved** or **Declined** for an approval). **Run**, **Ask**, and **Block** are what a preset or exception says to do.
+
 ## Exceptions
 
 An exception runs, asks about, or blocks a specific action, an app, or a class of actions, in one environment or all of them. The most specific exception wins, the strictest wins among equals, and a block always wins. Admins can add exceptions for a team or everyone.
 
+When an exception lets something run that your preset would ask about, Passport says so on the exception, such as "Deletes run in Production without asking, even without a backup.", and on each preset it loosens. The **Add exception** form shows the same warning before you save.
+
+## The Rules page
+
+**Rules** shows, in order: your presets, your exceptions, environments, a one-line **Test a command**, and, once your workspace has two people, **Team rules**. Team rules give each team one line with its floors, Production approvers, and whether it requires the guard; admins change all three from one **Edit**, and a team's **Access** tab shows the same line. Members see their own team's line when it sets anything. **Guard required** (Pro) stops `passport exec` for agents whose guard isn't on; see [Guard required](/member/cli-hook#guard-required).
+
 ## When Passport asks
 
 When an action needs you, you can **Approve once**, **Approve for this session**, **Always allow** (which saves an exception), or **Decline** with a note the agent receives. Many agents show the question right where you are working; it is also waiting in **Approvals**, and in a notification with Approve and Decline buttons if you turned notifications on.
+
+Home's **Waiting for you** previews up to three of the same rows as **Approvals**, agent actions first and then rule requests, with **See all N waiting** to open the rest. A session that has ended never shows **Waiting for you**.
 
 An approval asked in your agent's own prompt stays open for about three minutes. One asked while nobody was at the keyboard, such as a background or CI run, waits for a day. If your rules change while a request is waiting and would now run the action, the request resolves itself.
 
