@@ -95,6 +95,10 @@ In a managed Enterprise catalog, Connect creates or joins one durable request fo
 
 On every plan, a provider that requires a company credential creates an admin setup task rather than pretending the app is ready. Custom and unverified endpoints are always admin-managed.
 
+### Requests filed by agents
+
+When a rule blocks an agent, or a task needs an app the person doesn't have, the agent can file the request itself with a one-line reason. It lands in the same list as a request the person made, attributed to them, and the reason starts with **Filed by** and the agent's name so you know an agent wrote it. An agent can ask to lift only the rule that blocked it, for that one tool, for an hour or a day, and an Irreversible action is asked for as **Ask first**, never **Allow**. App requests never install or grant anything: where the person could add the app themselves, the agent is told so and nothing is filed. Only people decide, and agents with no person behind them can't file.
+
 ## Browser approval notifications
 
 Open **Settings** and switch on **Approval alerts in this browser** under
