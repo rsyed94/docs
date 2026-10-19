@@ -9,11 +9,11 @@ People and Teams are part of Pro and Enterprise. Free is for one person: its own
 
 Every member has one of three roles:
 
-| Role   | Can do                                                                                                                                                                               |
-| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Admin  | Approve apps, manage people and teams, set guardrails and policy, and see the audit trail. The first person in a workspace is an admin (sometimes called the owner in product copy). |
-| Member | Connect their agents and use the apps their passes permit.                                                                                                                           |
-| Agent  | A non-human identity for automation, authenticated by an agent key rather than a browser session.                                                                                    |
+| Role   | Can do                                                                                                                                                                                |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Admin  | Approve apps, manage people and teams, set data checks and policy, and see the audit trail. The first person in a workspace is an admin (sometimes called the owner in product copy). |
+| Member | Connect their agents and use the apps their passes permit.                                                                                                                            |
+| Agent  | A non-human identity for automation, authenticated by an agent token rather than a browser session.                                                                                   |
 
 ## Add people
 
@@ -21,7 +21,7 @@ Select **Invite people** on the People page to add teammates as admins or member
 
 **Needs attention**, at the top of the list, shows join requests to review and anyone who joined more than a day ago but hasn't connected an agent, with their sign-in link one click away. App requests stay in **Approvals**.
 
-**Progress**, at the top of the **Rollout** page, shows the rollout in three steps: **Joined**, **Connected an agent**, and **Used a tool**, each as a bar with "N of M people" against everyone in the rollout, invites included. Select a step to open the People list narrowed to who hasn't reached it yet; clear the filter with its chip. **People → Adoption** is the usage table.
+**Progress**, at the top of **Agents → Rollout**, shows the rollout in three steps: **Joined**, **Connected an agent**, and **Used a tool**, each as a bar with "N of M people" against everyone in the rollout, invites included. Select a step to open the People list narrowed to who hasn't reached it yet; clear the filter with its chip. **People → Adoption** is the usage table.
 
 Once the workspace has ten or more people, search the list and filter it by team, role, or status (Active, Invited, or Deactivated). The list shows active and invited people by default. Each row's menu changes the person's team or role, copies the sign-in link, signs them out everywhere, or deactivates them. Each of those asks first.
 
@@ -31,7 +31,7 @@ Names link the same way everywhere: a person's name opens their person page, an 
 
 ## Manage teams
 
-Teams live alongside People. Each team row shows how many people it has, how many apps it can use, the team setup that reaches it, and its approval rules. Open a team to add or remove people, review what the team gets on **Access** (each part links to where it's edited), and see its published setups on **Setup**. The team's menu views its activity, renames it, or deletes it. Renaming a team carries its access rules forward. Deleting one asks where its people should move before removing the team's shared rules.
+Teams live alongside People. Each team row shows how many people it has, how many apps it can use, the team setup that reaches it, and its approval rules. Open a team to add or remove people, review what the team gets on **Access** (each part links to where it's edited), and see its published setups on **Setup**. The team's menu views its activity, renames it, or deletes it. Renaming a team carries its access rules, approval floors, team rules, and Guard required setting forward. Deleting one asks where its people should move before removing the team's shared rules, floors, and Guard required setting.
 
 ## Who can join
 
@@ -57,6 +57,6 @@ Deactivating a member immediately signs them out everywhere and revokes their co
 
 Connect Claude Code, Codex, Cursor, and other supported agents from **Agents**. There is no separate managed-agent identity setup.
 
-For scripts and CI, owners and admins open **Agents → Automations** on every plan. A credential authenticates Passport CLI with its own access, or with access narrowed by a delegated person's permissions. It is shown once, can be rotated in place, and can be revoked from the same dialog. A credential belongs to the person who created it: their Autopilot rules govern its agent, and deactivating them revokes it. See [Agent keys, their owners, and rotation](/admin/agents-and-access#agent-keys-their-owners-and-rotation).
+For scripts and CI, owners and admins open **Agents → Automations** on every plan. An agent token authenticates Passport CLI with its own access, or with access narrowed by a delegated person's permissions. It is shown once, can be rotated in place, and can be revoked from the same dialog. An agent token belongs to the person who created it: their Autopilot rules govern its agent, and deactivating them revokes it. See [Agent tokens, their owners, and rotation](/admin/agents-and-access#agent-tokens-their-owners-and-rotation).
 
-Passport CLI accepts the credential through `PASSPORT_AGENT_KEY` and the workspace endpoint through `PASSPORT_ENDPOINT`. Store these in your CI secret store. This mode works without interactive sign-in and writes no local credential file. See [Passport CLI](/quickstart/cli).
+Passport CLI accepts the agent token through `PASSPORT_AGENT_KEY` and the workspace endpoint through `PASSPORT_ENDPOINT`. Store these in your CI secret store. This mode works without interactive sign-in and writes no local credential file. See [Passport CLI](/quickstart/cli).

@@ -1,0 +1,88 @@
+---
+title: "Data checks"
+description: "Inspect tool traffic, protect secrets, and block or redact risky content."
+---
+
+Data checks inspect calls that pass through Passport. They check arguments before an app receives them and the complete result before an agent sees it, including structured data and resource metadata. Images, audio, and binary content are size-limited but are not interpreted as text.
+
+Built-in secret detection protects every plan. Runtime security and custom checks require Enterprise. Data checks are a tab on **Rules**, next to your own rules and your team's; they were the **Guardrails** page.
+
+## Start with runtime security
+
+Open **Rules → Data checks**. In the **Runtime security** card, choose a mode and what to inspect:
+
+- tool names and descriptions before a tool is exposed;
+- call arguments before execution;
+- text results before they reach the agent.
+
+Start with **Observe**. It records findings without changing calls, so you can see what would happen before turning on enforcement.
+
+| Mode    | Behavior                                                                     |
+| ------- | ---------------------------------------------------------------------------- |
+| Off     | Do not run runtime security checks.                                          |
+| Observe | Record findings but allow the call. Recommended first.                       |
+| Enforce | Block high-confidence threats. Lower-confidence signals remain observations. |
+
+The results card shows observed, blocked, and critical counts, plus recent findings.
+
+<Warning>
+  Runtime security is explainable and intentionally conservative. It does not claim to detect every malicious
+  instruction. Images, audio, and binary content are size-limited but are not understood semantically.
+</Warning>
+
+## What it looks for
+
+Runtime security recognizes categories such as instruction override, hidden instruction characters, secret-exfiltration instructions, access-control bypass, destructive commands, and resource abuse.
+
+Passport runs blocking checks against the original content before applying redactions. That prevents one check from hiding a match from another.
+
+Security findings store only bounded metadata: app, tool, phase, category, severity, action, reason, and a one-way fingerprint. Passport does not store the matching request or result in the finding.
+
+## Built-in secret detection
+
+Every workspace has a check that catches common credentials before they cross the wire in either direction, including:
+
+- AWS access keys
+- GitHub tokens
+- Slack tokens
+- OpenAI keys
+- Stripe keys
+- PEM private keys
+- Passport's own session, access, refresh, and agent tokens
+- password assignments
+
+The check scans the full text payload up to 5 MB, including secrets deep inside a file read or database result. An enforcing check with a larger payload withholds it instead of passing an uninspected tail.
+
+## Check actions
+
+<CardGroup cols={3}>
+  <Card title="Block" icon="ban">
+    Stop the call and raise an alert.
+  </Card>
+  <Card title="Redact" icon="eye-slash">
+    Replace the match with a marker and allow the cleaned call.
+  </Card>
+  <Card title="Alert" icon="bell">
+    Allow the call and record the match.
+  </Card>
+</CardGroup>
+
+## Add a custom check
+
+Choose **Add check** at the top of the tab, or **Add from library** in the **Checks** card. A check can inspect arguments, results, or both, and can apply everywhere or only to selected apps.
+
+Custom checks accept a regular expression or a plain phrase. Regex runs in a bounded, linear-time engine; lookarounds and backreferences are not supported. A phrase that is not valid regex is matched literally and case-insensitively.
+
+Patterns are limited to 200 characters, and at most 32 enabled checks can apply to one call surface. A custom check inspects up to 100,000 characters. If a blocking or redacting check receives more, Passport withholds the payload rather than passing an uninspected tail; an alert-only check records the ceiling event and allows it.
+
+Older custom checks may show **Review required** after an upgrade. Review the displayed pattern before accepting it, including disabled and alert-only checks. If a pattern uses unsupported lookarounds or backreferences, choose **Retire** and replace it with a supported check. Retiring a check disables it immediately. Some pattern and enforcement changes are temporarily unavailable while the workspace completes its upgrade.
+
+Checks also inspect sensitive text split across fields or content blocks. If redaction cannot preserve a valid response (for example, because it would change a resource address or object key), Passport withholds the response.
+
+## Alerts and stored records
+
+A match raises an alert. The alerts bell groups data check hits, tool changes, and security events, folds repeats of the same event into one row, and keeps alerts unread until you choose **Mark all read**. The **Data checks** tab shows the latest five hits; **Open in All activity** shows the full record. Runtime security findings can also be exported as metadata-only security events or streamed to a security system.
+
+Data checks protect Activity itself: content that a check flags is scrubbed before the record is stored, so a blocked credential cannot reappear in Activity or an export. The exception is a custom alert-only check, which is explicitly meant to surface the matched content for review.
+
+See [SIEM and OTLP export](/enterprise/siem-export).

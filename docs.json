@@ -16,13 +16,7 @@
     "groups": [
       {
         "group": "Start here",
-        "pages": [
-          "index",
-          "quickstart/developer",
-          "quickstart/member",
-          "quickstart/admin",
-          "quickstart/cli"
-        ]
+        "pages": ["index", "quickstart/developer", "quickstart/member", "quickstart/admin", "quickstart/cli"]
       },
       {
         "group": "Using Passport",
@@ -49,32 +43,22 @@
           "admin/managed-api-integrations",
           "admin/openapi-import",
           "admin/agents-and-access",
-          "admin/guardrails",
-          "admin/inventory",
+          "admin/data-checks",
+          "admin/discovered-agents",
           "admin/client-fleet"
         ]
       },
       {
         "group": "Enterprise security",
-        "pages": [
-          "enterprise/sso-oidc",
-          "enterprise/scim",
-          "enterprise/siem-export"
-        ]
+        "pages": ["enterprise/sso-oidc", "enterprise/scim", "enterprise/siem-export"]
       },
       {
         "group": "Self-hosting",
-        "pages": [
-          "self-host",
-          "security/network"
-        ]
+        "pages": ["self-host", "security/network"]
       },
       {
         "group": "Technical reference",
-        "pages": [
-          "concepts/discovery",
-          "benchmarks/context-efficiency"
-        ]
+        "pages": ["concepts/discovery", "benchmarks/context-efficiency"]
       }
     ]
   },
@@ -102,7 +86,15 @@
     },
     {
       "source": "/admin/discover",
-      "destination": "/admin/inventory"
+      "destination": "/admin/discovered-agents"
+    },
+    {
+      "source": "/admin/inventory",
+      "destination": "/admin/discovered-agents"
+    },
+    {
+      "source": "/admin/guardrails",
+      "destination": "/admin/data-checks"
     }
   ]
 }

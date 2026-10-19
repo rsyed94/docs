@@ -5,7 +5,7 @@ description: "Connect the first app, add your agent, invite people, and confirm 
 
 Start here if you created the workspace. You will connect one useful app, prove the setup yourself, and then invite other people.
 
-Free keeps administration inside **Settings**. Pro adds workspace pages for **People**, **Team setups**, **Rollout**, and **Settings**, and **Everyone** views of **Sessions → All activity** and **Agents**. Enterprise adds **Inventory** and **Guardrails**.
+Free keeps administration inside **Settings**. Pro adds **People** (once someone else joins), team rules on **Rules → Team**, **Setups** on **Apps**, **Rollout** on **Agents**, and **Everyone** views of **Sessions → All activity** and **Agents**. Enterprise adds **Agents → Discovered** and **Rules → Data checks**.
 
 ## 1. Connect an app
 
@@ -19,15 +19,15 @@ Verified catalog apps are self-service on Free and Pro. Enterprise can keep that
 
 ## 2. Add your agent
 
-Open **Agents**, choose **Add agent**, and follow the instructions Passport shows. The normal path uses the agent's own remote MCP support and browser sign-in.
+Open **Agents**, choose **Add agent**, and follow the instructions Passport shows. The normal path uses the agent's own support for remote MCP servers and browser sign-in.
 
-Ask the agent to list its Passport tools, then return to **Agents** and choose **Run setup check**. Passport opens **All activity** when the safe check succeeds.
+Ask the agent to list its Passport tools, then return to **Agents** and choose **Run test call**. Passport opens **All activity** when the safe check succeeds.
 
 Do this before inviting the team. It proves the full connection and gives you a known-good example.
 
 ## 3. Invite people
 
-- **Free:** Free is for one person. Upgrade to Pro from **Settings → Plan & billing** to invite your team.
+- **Free:** Free is for one person. Upgrade to Pro from **Settings → Billing** to invite your team.
 - **Pro and Enterprise:** open **People**.
 
 Add people individually or in a batch. Invites are tied to the intended email address and expire after 14 days. On Pro and Enterprise, assign roles and teams as part of the rollout.
@@ -41,21 +41,22 @@ You can start simple:
 - Personal [Autopilot rules](/member/safety) are available on every plan.
 - Built-in secret detection protects every plan.
 - Pro adds teams, access rules and approval floors by team and person, Team setups, every agent in the workspace on **Agents → Everyone**, and the workspace activity log with export.
-- Enterprise adds catalog review and rollout rules, agent policy, Inventory with scans for connections outside Passport, Runtime Security, custom guardrails, SSO, SCIM, and audit streaming.
+- Enterprise adds catalog review and rollout rules, agent policy, **Agents → Discovered** with scans for connections outside Passport, runtime security, custom data checks, SSO, SCIM, and audit streaming.
 
 Start with the default behavior, watch real usage in **All activity**, and add controls when there is a clear need.
 
 <Note>
-  Everyone can see their own actions in **Sessions → All activity**. Pro and Enterprise admins switch the same tab to **Everyone** to review and export company-wide activity, and
-  can review privileged admin changes under **Settings → Admin activity**.
+  Everyone can see their own actions in **Sessions → All activity**. Pro and Enterprise admins switch the same tab to
+  **Everyone** to review and export company-wide activity, and can review privileged admin changes under **Settings →
+  Admin activity**.
 </Note>
 
 <CardGroup cols={2}>
   <Card title="App access and approvals" icon="key" href="/admin/approvals-and-requests">
     Decide who can connect each app and what they can do.
   </Card>
-  <Card title="Guardrails" icon="filter" href="/admin/guardrails">
-    Understand secret checks, Runtime Security, and custom rules.
+  <Card title="Data checks" icon="filter" href="/admin/data-checks">
+    Understand secret checks, runtime security, and custom checks.
   </Card>
   <Card title="Plans and billing" icon="credit-card" href="/billing">
     Compare Free, Pro, and Enterprise.

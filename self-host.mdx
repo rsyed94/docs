@@ -53,7 +53,7 @@ When `NODE_ENV=production`, Passport fails closed: a misconfigured deployment re
 - `PASSPORT_ENCRYPTION_KEY` contains at least 32 bytes of random key material. Without it, upstream OAuth tokens and company keys would be stored in plaintext.
 - `PUBLIC_URL` is set and starts with `https://`. Otherwise OAuth callbacks and CORS would trust the `Host` header.
 - `PASSPORT_DEMO` is explicit, either `off` (recommended) or `on`.
-- `PASSPORT_BILLING_MODE` is explicit. Use `self-hosted` to intentionally unlock Enterprise without Stripe, or `hosted` with a complete Stripe configuration.
+- `PASSPORT_BILLING_MODE` is explicit. Use `self-hosted` to intentionally enable Enterprise without Stripe, or `hosted` with a complete Stripe configuration.
 - `PASSPORT_SIGNUP_MODE` is explicit: `off`, `open`, or `domain`. If signup is enabled, configure either verified email or Google/GitHub identity login. With `PASSPORT_EMAIL_VERIFY=off`, production becomes provider-only: typed email addresses cannot create sessions or workspaces.
 
 <Warning>
@@ -148,7 +148,7 @@ You can also let a person sign into Passport itself with Google or GitHub by set
 
 ## Billing (Stripe)
 
-Set `PASSPORT_BILLING_MODE=self-hosted` to intentionally unlock Enterprise for every workspace without Stripe. Production refuses an omitted mode, and self-hosted mode rejects dormant Stripe settings so a deployment cannot silently mix the appliance and hosted billing contracts.
+Set `PASSPORT_BILLING_MODE=self-hosted` to intentionally enable Enterprise for every workspace without Stripe. Production refuses an omitted mode, and self-hosted mode rejects dormant Stripe settings so a deployment cannot silently mix the appliance and hosted billing contracts.
 
 For a hosted service, set `PASSPORT_BILLING_MODE=hosted` and configure the key, webhook secret, and both distinct Stripe price IDs. Production refuses to start when any part is missing or inconsistent. It also forbids redirecting `STRIPE_API_BASE` away from Stripe; that override is only for local tests.
 
@@ -265,7 +265,7 @@ carry the same logical values and explicitly do not represent volume capacity.
 Each workspace's mutable control-plane document has a fixed 8 MiB serialized
 ceiling. Live state is capped at 10,000 members, 5,000 apps, 1,000 bundles,
 2,000 app requests, 10,000 invites, 10,000 join requests, and 5,000 agent
-keys. Terminal requests, invites, join requests, and agent keys are retained for
+tokens. Terminal requests, invites, join requests, and agent tokens are retained for
 at most 90 days and 500 rows per kind; a terminal request retains at most 100
 requesters. Passport compacts terminal history before every file or PostgreSQL
 write. The append-only activity/audit log is separate and remains authoritative.

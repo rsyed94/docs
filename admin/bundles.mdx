@@ -7,15 +7,15 @@ A **bundle** is a Pro and Enterprise feature: a named set of tools from several 
 
 ## Create a bundle
 
-On Pro or Enterprise, open **Team setups → Bundles → New bundle**, then:
+On Pro or Enterprise, open **Apps → Setups → Bundles** and choose **New bundle**, then:
 
 1. Name the bundle (and optionally describe it).
 2. Under **Apps**, pick the apps the bundle draws from. Each chip shows how many tools that app serves.
 3. For each app, choose what the bundle includes:
-   - **Custom** (the default): only the tools you check. A new app starts with its read tools checked. Search across every Custom list, filter by **Read**, **Write**, or **Destructive**, use **Select all**, or Shift-click to select a range. Tools the app adds later stay out.
+   - **Custom** (the default): only the tools you check. A new app starts with its read tools checked. Search across every Custom list, filter by **Read**, **Change**, **Delete**, or **Irreversible** (shown when an app has one), use **Select all**, or Shift-click to select a range. Tools the app adds later stay out.
    - **Everything**: every tool the app serves, including tools it adds later.
 4. Set who can use it (workspace, teams, or selected people) and the default access. New bundles start **read-only** unless you widen them, so people with read-only access get only the read tools, whatever each app's choice.
-5. Check the summary at the bottom (for example `14 tools · 3 apps · 12 read, 2 write`), then select **Create bundle**. Passport creates a stable key and a target like `bundle:<key>`.
+5. Check the summary at the bottom (for example `14 tools · 3 apps · 12 Read, 2 Change`), then select **Create bundle**. Passport creates a stable key and a target like `bundle:<key>`.
 
 A bundle never serves a tool its app withholds. Tools that are switched off on the app, held for review after they appear or change upstream, or held because their definition looked unsafe stay out of every bundle, in every mode. Once you approve a held tool on the app, it joins Everything bundles on its own (a Custom list adds it only if you check it).
 
