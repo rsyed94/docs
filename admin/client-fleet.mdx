@@ -12,7 +12,7 @@ Open **Agents** to see **Your agents**. Members and admins see the same page. Th
 A working agent stays quiet: its row shows where it runs (for example **On Sam's MacBook**), how much of what the guard saw it checked this week (for example **94% checked**), and **Last used**, which opens **All activity** filtered to that agent. One chip says its state: **Sign-in expired**, or its guard: **On**, **Off**, **Outdated**, **Not trusted**, or **Locked** (see [Guard health](/member/cli-hook#guard-health)). A row only asks for something when there is one thing to fix, and the fix is on the row:
 
 - **Reconnect** when an agent's Passport sign-in expired;
-- the guard's fix, such as `passport hook install --client codex --guard --apply` or "Open Codex → /hooks and trust Passport's hooks.";
+- the guard's fix, such as `passport hook install --agent codex --guard --apply` or "Open Codex → /hooks and trust Passport's hooks.";
 - **Update** when a Passport CLI or local setup is behind the newest version in your workspace;
 - **Remove duplicate** when a local setup shows the same tools twice next to a working account connection; or
 - **Disconnect** when an agent has not been used in 30 days.
@@ -29,7 +29,7 @@ Open an agent to:
 
 ## Automations
 
-Owners and admins manage automation keys for scripts, CI, and hosted workflows in **Agents → Automations**. See [Automation credentials](/admin/people-and-teams#automation-credentials). People who own a key but are not admins see only their own keys there and can revoke them.
+Owners and admins manage agent tokens for scripts, CI, and hosted workflows in **Agents → Automations**. See [Automation credentials](/admin/people-and-teams#automation-credentials). People who own an agent token but are not admins see only their own tokens there and can revoke them.
 
 ## Manage the workspace
 
@@ -43,11 +43,11 @@ Open an agent to see its **connections**, one per person per computer. Each show
 
 Disconnecting cuts access right away, after a confirm that names the agent, person, and computer. Its owner must sign in again. The list shows real observed connections; opening setup instructions alone does not add a row.
 
-A person's page shows the same rows as their **Agents** page under **Agents**, with each guard state and fix. Connections people configured outside Passport are in [Inventory](/admin/inventory).
+A person's page shows the same rows as their **Agents** page under **Agents**, with each guard state and fix. Connections people configured outside Passport are on [Agents → Discovered](/admin/discovered-agents).
 
 ## Understand agent names
 
-For a dynamic agent, Passport uses the name or title reported by the MCP agent,
+For a dynamic agent, Passport uses the name or title reported by the agent,
 falling back to its registered connection label. A reported version is retained
 when available. Recognized agents keep Passport's standard name.
 
@@ -65,7 +65,7 @@ Open **Settings → Access → Agents** and choose which agents can connect:
 
 - **Any agent**: people can connect any agent, including ones Passport doesn't recognize.
 - **Known agents for new connections**: new connections must use an agent Passport recognizes. Other agents already connected keep working.
-- **Known agents only**: only recognized agents can connect, and other agents are blocked even if already connected. Automation keys still work.
+- **Known agents only**: only recognized agents can connect, and other agents are blocked even if already connected. Agent tokens still work.
 
 These controls require Enterprise. If the workspace downgrades, the saved policy is not enforced until Enterprise is active again.
 
@@ -75,7 +75,7 @@ These controls require Enterprise. If the workspace downgrades, the saved policy
 
 ## Lock the guard on
 
-By default the guard lives in each person's own agent settings, so they can turn it off. **Lock it** on the Rollout page puts Passport's guard and audit hooks in each agent's managed (system) settings instead, where people can't remove them. Managed settings run a small launcher owned by root at `/Library/Application Support/Passport/bin/passport` (macOS), `/opt/passport/bin/passport` (Linux), or `C:\ProgramData\Passport\bin\passport.cmd` (Windows). It hands off to each person's own Passport CLI; until that's set up, commands run as usual.
+By default the guard lives in each person's own agent settings, so they can turn it off. **Lock it** on **Agents → Rollout** puts Passport's guard and audit hooks in each agent's managed (system) settings instead, where people can't remove them. Managed settings run a small launcher owned by root at `/Library/Application Support/Passport/bin/passport` (macOS), `/opt/passport/bin/passport` (Linux), or `C:\ProgramData\Passport\bin\passport.cmd` (Windows). It hands off to each person's own Passport CLI; until that's set up, commands run as usual.
 
 | Agent       | Lock it                                                                                                                                                                                  | Strict adds                                                    |
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
@@ -85,16 +85,16 @@ By default the guard lives in each person's own agent settings, so they can turn
 
 **Strict** runs only managed hooks, and blocks a command when the guard can't run (for example, before that person has set Passport up).
 
-Deploy the files from the Rollout page through MDM, or run this as root on each computer:
+Deploy the files from **Agents → Rollout** through MDM, or run this as root on each computer:
 
 ```sh
-sudo npx passport-bridge@latest setup --org <key> --yes --lock [--strict]
+sudo npx passport-bridge@latest init --org <key> --yes --lock [--strict]
 ```
 
 It writes the launcher and each agent's file, merging with what's there: it replaces only Passport's own entries, and leaves a file it can't merge safely untouched with the fix (for example, managed settings that set `disableAllHooks`, or another `[hooks]` table in `requirements.toml`). Without administrator rights it writes nothing and lists the files to deploy. If you also use claude.ai server-managed settings, add `"managedSourcesBehavior": "merge"` so both apply. The guard shows **Locked** on **Agents** for computers where it's locked.
 
 ## Related
 
-- [Get connected](/quickstart/member) — connecting an agent
-- [People and teams](/admin/people-and-teams) — roles and lifecycle
-- [Inventory](/admin/inventory) — connections found outside Passport
+- [Get connected](/quickstart/member): connecting an agent
+- [People and teams](/admin/people-and-teams): roles and lifecycle
+- [Discovered agents](/admin/discovered-agents): connections found outside Passport

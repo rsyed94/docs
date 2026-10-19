@@ -9,10 +9,10 @@ Autopilot decides every action your agents take through Passport, instantly, fro
 
 Each action is one of four classes:
 
-- **Read** — looks at something.
-- **Change** — creates or edits.
-- **Delete** — removes or overwrites. Rollbacks, secret changes, and schema migrations count.
-- **Irreversible** — can't be taken back even with a backup: sending money or email, force-pushing the default branch, deleting a repository.
+- **Read**: looks at something.
+- **Change**: creates or edits.
+- **Delete**: removes or overwrites. Rollbacks, secret changes, and schema migrations count.
+- **Irreversible**: can't be taken back even with a backup: sending money or email, force-pushing the default branch, deleting a repository.
 
 Each action also runs in an environment: **Production**, **Staging**, or **Development**. Passport reads it from the action, such as a Railway environment, a Vercel target, a Supabase project or branch, a Neon branch, or a CLI flag like `--environment`. When an agent names a resource only by its id, Passport looks up its name once with your own connection to that app, using one of the app's read tools, and places it by name. If an app has environments but Passport can't place the resource, it counts as Production, and the decision says so.
 
@@ -43,16 +43,16 @@ Run `passport env` in a folder to see what Passport reads there. **Rules → Env
 
 For each environment, and for Other apps, choose how much agents can do on their own:
 
-| | Careful | Balanced | Hands-off |
-| --- | --- | --- | --- |
-| Reads | Run | Run | Run |
-| Changes | Ask | Run | Run |
-| Deletes | Ask | Ask | Run |
-| Irreversible | Ask | Ask | Ask |
+|              | Careful | Balanced | Hands-off |
+| ------------ | ------- | -------- | --------- |
+| Reads        | Run     | Run      | Run       |
+| Changes      | Ask     | Run      | Run       |
+| Deletes      | Ask     | Ask      | Run       |
+| Irreversible | Ask     | Ask      | Ask       |
 
 The defaults are **Production: Careful**, **Staging: Balanced**, **Development: Hands-off**, and **Other apps: Balanced**. Irreversible actions always ask unless an exception allows that one action. Your team may require a minimum preset for an environment; you can always pick something stricter.
 
-Each environment row also says what the CLI guard does **When Passport can't be reached**: **Ask**, **Block**, or **Run**. Production asks and the rest run by default. Run never applies to irreversible actions, and Codex can't ask, so Ask blocks there. See [When Passport can't be reached](/member/cli-hook#when-passport-cant-be-reached).
+Each environment row also says what the CLI guard does **When Passport can't be reached**: **Ask**, **Block**, or **Run**. Every environment asks by default. An unattended agent or Codex can't ask, so Ask blocks there. Run never applies to irreversible actions or to anything your team requires. See [When Passport can't be reached](/member/cli-hook#when-passport-cant-be-reached).
 
 What happened to an action reads **Ran**, **Asked**, or **Blocked** everywhere (and **Approved** or **Declined** for an approval). **Run**, **Ask**, and **Block** are what a preset or exception says to do.
 
@@ -68,14 +68,14 @@ When an exception lets something run that your preset would ask about, Passport 
 
 ## When Passport asks
 
-When an action needs you, you can **Approve once**, **Approve for this session**, **Always allow** (which saves an exception), or **Decline** with a note the agent receives. Many agents show the question right where you are working; it is also waiting in **Approvals**, and in a notification with Approve and Decline buttons if you turned notifications on.
+When an action needs you, you can **Approve once**, **Approve for this session**, **Always allow** (which saves an exception), or **Decline** with a note the agent receives. Many agents show the question right where you are working; it is also waiting in **Approvals**. If you turned notifications on, you can approve or decline from the notification.
 
-Home's **Waiting for you** previews up to three of the same rows as **Approvals**, agent actions first and then rule requests, with **See all N waiting** to open the rest. A session that has ended never shows **Waiting for you**.
+Home's **Waiting for you** previews up to three of the same rows as **Approvals**, agent actions first and then any other requests waiting for you, with **See all N waiting** to open the rest. The count matches the one next to **Approvals** in the navigation. A session that has ended never shows **Waiting for you**.
 
 An approval asked in your agent's own prompt stays open for about three minutes. One asked while nobody was at the keyboard, such as a background or CI run, waits for a day. If your rules change while a request is waiting and would now run the action, the request resolves itself.
 
 ## Agents you own
 
-Your rules also govern the agents whose keys you own. An agent can't answer a prompt, so its request waits in your **Approvals**, naming the agent that asked. An agent key with no owner is blocked from anything that would need a person: assign it an owner in **Agents**.
+Your rules also govern the agents whose agent tokens you own. An agent can't answer a prompt, so its request waits in your **Approvals**, naming the agent that asked. An agent token with no owner is blocked from anything that would need a person: assign it an owner in **Agents**.
 
-See also [Guardrails](/admin/guardrails) and [Catalog access and passes](/admin/approvals-and-requests).
+See also [Data checks](/admin/data-checks) and [Catalog access and passes](/admin/approvals-and-requests).

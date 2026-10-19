@@ -15,14 +15,14 @@ Keeping them separate makes it clear whether an event came from an agent or from
 Everyone can open **Sessions → All activity** to see their own calls. A row shows the app, action, agent, outcome, and timing.
 
 - **Allowed** means the call completed.
-- **Blocked** means access, Autopilot rules, an approval, or a guardrail stopped it.
+- **Blocked** means access, Autopilot rules, an approval, or a data check stopped it. The row says which in one line, such as "No access to GitHub in Passport", "This tool is switched off for GitHub", or the data check's name, and links to where that's set: the app's **Access** or **Tools** tab, **Apps → Setups**, **Rules → Data checks**, or the rule. Session rows say the same.
 - **Error** means the call was allowed but did not complete successfully.
 
 Actions read the same everywhere. A CLI command reads like "railway redeploy" under the app **Railway CLI**, everyday commands appear under **Shell**, and tools read like "delete branch". A command Passport couldn't read says **Not checked**.
 
 ## Workspace activity
 
-On Pro and Enterprise, admins switch **All activity** from **Mine** to **Everyone**, the same selector Sessions uses, to see calls across the workspace. Filters cover person, apps, agent, team, result, time, and search text. You can select several apps at once. Filtered views have shareable URLs, and links elsewhere in Passport, such as Guardrail findings and alerts, say **Open in All activity** and open the matching view. Older Activity links open the same view with their filters kept. Export the filtered view as CSV or JSONL.
+On Pro and Enterprise, admins switch **All activity** from **Mine** to **Everyone**, the same selector Sessions uses, to see calls across the workspace. Filters cover person, apps, agent, team, result, time, and search text. You can select several apps at once. Filtered views have shareable URLs, and links elsewhere in Passport, such as data check findings and alerts, say **Open in All activity** and open the matching view. Older Activity links open the same view with their filters kept. Export the filtered view as CSV or JSONL.
 
 On Enterprise, once managed runs exist, a **Runs** tab sits beside the log with durable action receipts and their approval history.
 
@@ -30,7 +30,7 @@ A person's own timeline is the **Activity** tab on their person page, with its o
 
 Passport CLI may add an optional **via CLI** label so the record can distinguish tools such as Codex and Claude Code. That label is self-reported; the signed-in person or agent and the agent policy remain authoritative.
 
-Dynamic MCP agents can appear by their reported name or title, with their
+Dynamic agents can appear by their reported name or title, with their
 reported version retained when available. Like the CLI caller label, this is
 self-reported context; it does not change the authenticated identity or grant
 access. See [agent names](/admin/client-fleet#understand-agent-names).
@@ -41,7 +41,7 @@ Open **Settings → Admin activity** on Pro or Enterprise to review changes such
 
 - approving or removing an app;
 - changing a role or team;
-- creating or editing a guardrail;
+- creating or editing a data check;
 - changing agent policy; or
 - generating or revoking a SCIM token.
 
@@ -51,9 +51,10 @@ Each entry records the actor, action, target, time, and a concise description of
 
 <CardGroup cols={2}>
   <Card title="Activity export" icon="table">
-    `GET /export/activity.csv` and `GET /export/activity.jsonl` require Pro or Enterprise. They accept the same `member`,
-    `app`, `outcome`, `department`, `via`, `since`, and `q` filters as the Everyone view of All activity. Repeat `app` to include several apps. In
-    this API, `department` means team, `via` means agent, and `q` is search text.
+    `GET /export/activity.csv` and `GET /export/activity.jsonl` require Pro or Enterprise. They accept the same
+    `member`, `app`, `outcome`, `department`, `via`, `since`, and `q` filters as the Everyone view of All activity.
+    Repeat `app` to include several apps. In this API, `department` means team, `via` means agent, and `q` is search
+    text.
   </Card>
   <Card title="Audit export" icon="file-lines">
     `GET /export/audit.csv` exports the privileged-action trail and also requires Pro or Enterprise.
@@ -64,7 +65,7 @@ Every plan lets an admin download a full workspace backup. On Free, use **Settin
 
 <Note>
   Passport scrubs sensitive content before Activity is stored. A blocked credential cannot reappear through an export.
-  See [Guardrails](/admin/guardrails).
+  See [Data checks](/admin/data-checks).
 </Note>
 
 ## Stream to your SIEM

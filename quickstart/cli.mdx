@@ -5,7 +5,7 @@ description: "Use Passport from Claude Code, Codex CLI, OpenCode, scripts, CI, a
 
 Setting up your own computer? `npx passport-bridge@latest init` does it in one pass: see the [developer quickstart](/quickstart/developer).
 
-Passport CLI is for terminal coding agents and automation. It talks to the same Passport connection as Claude, Cursor, and ChatGPT — same access rules, Autopilot rules, approvals, and Activity log.
+Passport CLI is for terminal coding agents and automation. It talks to the same Passport connection as Claude, Cursor, and ChatGPT, with the same access rules, Autopilot rules, approvals, and Activity log.
 
 Prefer the normal **Add agent** setup for apps with a GUI (Cursor chat, VS Code chat, Claude Desktop, Claude.ai, ChatGPT). Claude Code and Codex CLI can use either path; using the CLI does not turn off other connections.
 
@@ -69,10 +69,10 @@ Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer.
       Code: HJKT-WQRM
       Link: https://passportmcp.com/cli?code=HJKT-WQRM (opened in your browser)
     Check the code matches the one in your browser before you approve.
-    Waiting for the browser... (Ctrl-C to cancel)
+    Waiting for the browser… (Ctrl-C to stop)
 
     Signed in as Erin Park to Acme.
-    Next: passport status
+    Run: passport status
     ```
 
     Check the code. A sign-in link someone else sends you shows their code, not yours, so a code that doesn't match means close the page. Codes expire after 10 minutes and work once. Nothing connects until you click **Connect**, and **Deny** stops the terminal. If you're already signed in to Passport in that browser, you'll see your workspace straight away; **Use a different account** picks another. Login stores a rotating credential in `~/.passport/credentials.json` with owner-only permissions and makes that profile active. Add `--verbose` to see the profile name and file.
@@ -115,25 +115,25 @@ Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer.
 
 ## Commands
 
-| Command                                 | Purpose                                                                                                                     |
-| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `passport init [--dry-run]`             | Set up this computer: one plan first, then one question. `--dry-run` shows the plan and changes nothing.                    |
-| `passport status`                       | One screen: you, your workspace, and this computer; each agent's guard and its fix; Autopilot; apps; keys; this folder.     |
-| `passport wait <approval-id>`           | Wait for a person to decide an approval. Prints the link at once and, on a terminal, a live countdown.                      |
-| `passport exec -- <cli> [args…]`        | Run a vendor CLI with a key Passport holds. `--ask-again` asks again after a recent decline.                                |
-| `passport doctor`                       | Check the runtime, credential-store safety, endpoint, authentication, and exact CLI protocol without exposing credentials.  |
-| `passport search [query]`               | Discover allowed, namespaced tools. An empty query lists the visible catalog.                                               |
-| `passport describe <tool>`              | Print a tool's description, read-only flag, and full parameters schema. JSON also exposes `name` and `inputSchema` aliases. |
-| `passport run <tool> [json-args]`       | Execute a governed tool call. Use `--args -` for stdin or repeat `--set` / `--set-json`.                                    |
-| `passport connect [app...]`             | Get or open a personal-account connection flow. Add `--wait <sec>` to wait for completion.                                  |
-| `passport resources [uri]`              | List resources or read one URI.                                                                                             |
-| `passport prompts [name]`               | List prompts or get one, with repeatable `--set key=value` arguments.                                                       |
-| `passport discover`                     | Scan supported global MCP configuration and submit privacy-minimized inventory. Managed-policy violations exit `5`.         |
-| `passport completion <bash\|zsh\|fish>` | Generate shell completion locally without a profile or network request.                                                     |
-| `passport profiles` / `use <name>`      | List local profiles or select the active profile without network access.                                                    |
-| `passport login` / `logout`             | Create or revoke a named local profile.                                                                                     |
-| `passport ready --json`                 | Report machine-readable local readiness for automation.                                                                     |
-| `passport help [verb]` / `version`      | Inspect the CLI without a profile or network connection.                                                                    |
+| Command                                 | Purpose                                                                                                                                                    |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `passport init [--dry-run]`             | Set up this computer: one plan first, then one question. `--dry-run` shows the plan and changes nothing.                                                   |
+| `passport status`                       | Your setup on one screen: you, your workspace, and this computer; each agent's guard and its fix; Autopilot; apps; keys.                                   |
+| `passport wait <approval-id>`           | Wait for a person to decide an approval. While it is still waiting, prints the link and, on a terminal, a live countdown.                                  |
+| `passport exec -- <cli> [args…]`        | Run a vendor CLI with a key Passport holds. `--ask-again` asks again after a recent decline.                                                               |
+| `passport doctor`                       | Check Node, how your sign-in is stored, the server, your sign-in, and that this CLI and the server match. Never shows a key.                               |
+| `passport search [query]`               | Find tools you can run. With no words, lists every tool you can run, by app.                                                                               |
+| `passport describe <tool>`              | Print a tool's class (Read, Change, Delete, or Irreversible), description, and full parameters schema. JSON also exposes `name` and `inputSchema` aliases. |
+| `passport run <tool> [json-args]`       | Execute a governed tool call. Use `--args -` for stdin or repeat `--set` / `--set-json`.                                                                   |
+| `passport connect [app...]`             | Get or open a personal-account connection flow. Add `--wait <sec>` to wait for completion.                                                                 |
+| `passport resources [uri]`              | List resources or read one URI.                                                                                                                            |
+| `passport prompts [name]`               | List prompts or get one, with repeatable `--set key=value` arguments.                                                                                      |
+| `passport scan`                         | Find keys your agents can reach. Signed in, also report the MCP servers set up in your agents. Managed-policy violations exit `5`.                         |
+| `passport completion <bash\|zsh\|fish>` | Generate shell completion locally without a profile or network request.                                                                                    |
+| `passport profiles` / `use <name>`      | List local profiles or select the active profile without network access.                                                                                   |
+| `passport login` / `logout`             | Create or revoke a named local profile.                                                                                                                    |
+| `passport ready --json`                 | Report machine-readable local readiness for automation.                                                                                                    |
+| `passport help [verb]` / `version`      | Inspect the CLI without a profile or network connection.                                                                                                   |
 
 Every command accepts `--profile`, `--json`, `--timeout`, `--quiet`, and `--caller`.
 
@@ -152,7 +152,7 @@ Waiting for Erin · 1:32 left
 
 Press Ctrl-C to stop waiting: the request stays open, and `passport wait <id>` picks it up again (exit `4`). A decline is said again on every retry for ten minutes, with who and when ("Declined 2 minutes ago by Erin: Not during the freeze."), instead of asking twice. Run the command with `--ask-again` to request again.
 
-`passport discover` is how **Inventory** findings reach Passport; it is the only source. It is headless and cross-platform, which suits an onboarding script or a scheduled MDM job, and it reports limited configuration metadata only—never paths, commands or arguments, environment values, headers, credentials, endpoint paths or query strings, prompts, files, tool payloads, or traffic. See [Inventory](/admin/inventory#connections-outside-passport).
+`passport scan`, signed in, is how **Agents → Discovered** findings reach Passport; it is the only source. It is headless and cross-platform, which suits an onboarding script or a scheduled MDM job, and it reports limited configuration metadata only, never paths, commands or arguments, environment values, headers, credentials, endpoint paths or query strings, prompts, files, tool payloads, or traffic. `--check` (CI and pre-commit) never reports. `passport discover`, its old name, still works for one release. See [Discovered agents](/admin/discovered-agents#connections-outside-passport).
 
 ## Diagnose and complete
 
@@ -170,7 +170,7 @@ passport doctor --json
 fields. `passport ready --json` runs the local, authentication, server, and
 exact CLI-protocol preflight and returns `ready`, `ok`, auth/profile context,
 `server`, and `checks`; gate on its `ready` value and exit code rather than
-parsing human output.
+parsing human output. Not signed in, `doctor` and `ready` exit 2.
 
 Install generated completion in the standard location for your shell:
 
@@ -211,9 +211,9 @@ With `--json`, stdout contains exactly one JSON value. Hints and warnings go to 
 |    0 | Success.                                                                                                                                           |
 |    1 | Network, server, or ambiguous execution error. Do not retry automatically.                                                                         |
 |    2 | Authentication or profile selection is missing. Run `passport profiles`, `passport use <name>`, or `passport login`.                               |
-|    3 | A personal app connection or member action is required. Follow `next` or `remediation`; agent keys fail fast instead of waiting for browser OAuth. |
+|    3 | A personal app connection or member action is required. Follow `next` or `remediation`; agent tokens fail fast rather than wait for browser OAuth. |
 |    4 | Approval is pending. The result includes the approval id.                                                                                          |
-|    5 | Policy, a guardrail, agent selection, or approval denial blocked the call.                                                                         |
+|    5 | Policy, a data check, agent selection, or approval denial blocked the call.                                                                        |
 |    6 | Usage error or unknown tool.                                                                                                                       |
 
 `passport run --wait <sec>` retries only a definite `approval_pending` response. It never retries a timeout or network failure because the execution outcome could be ambiguous. When a failure names an approval, human output also prints `Open in Passport: <url>` so a person can decide it.
@@ -249,16 +249,16 @@ passport status --profile claude-code@work
 
 Passport can also add cooperative caller detail from known agent environment variables. `--caller <id>` takes precedence. Activity labels it as self-reported, for example **Passport CLI · Codex via CLI**; the authenticated member or agent and the policy agent remain separate identities.
 
-OpenCode is a first-class policy identity too, but it is not listed in the **Add agent** hub — set it up with the CLI. Use `--agent opencode --profile opencode@work` when its selection and Activity should remain distinct from other terminal agents.
+OpenCode is a first-class policy identity too, but it is not listed in the **Add agent** hub, so set it up with the CLI. Use `--agent opencode --profile opencode@work` when its selection and Activity should remain distinct from other terminal agents.
 
 ## Headless, CI, and cron
 
-For scripts and CI, create an automation key in **Agents → Automations**, then inject it and the workspace endpoint through your CI secret store. Environment-key mode works without `passport login` and writes no local credential file.
+For scripts and CI, create an agent token in **Agents → Automations**, set `PASSPORT_AGENT_KEY` to it, and inject it and the workspace endpoint through your CI secret store. Environment mode works without `passport login` and writes no local credential file.
 
 ```sh
-export PASSPORT_AGENT_KEY='<agent-key>'
-# Must be the workspace MCP URL (/w/ws_…/mcp), same shape as hosted connectors.
-export PASSPORT_ENDPOINT='https://passportmcp.com/w/ws_…/mcp'
+export PASSPORT_AGENT_KEY='<agent-token>'
+# Passport's one URL: the agent token names its own workspace.
+export PASSPORT_ENDPOINT='https://passportmcp.com/mcp'
 
 passport status --json
 passport search "failed builds" --json
@@ -267,9 +267,9 @@ passport version --json
 passport ready --json
 ```
 
-Agent keys can inspect status and call allowed tools, but cannot mint a person's sign-in link. Use `passport connect` from an interactive member profile when an app needs personal OAuth.
+Agent tokens can inspect status and call allowed tools, but cannot mint a person's sign-in link. Use `passport connect` from an interactive member profile when an app needs personal OAuth.
 
-Legacy agent keys are non-interactive: they do not create action-time member
+Legacy agent tokens are non-interactive: they do not create action-time member
 approval prompts. Use a member profile for an operation that must pause for a
 human's one-off approval.
 

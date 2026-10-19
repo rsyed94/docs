@@ -39,8 +39,8 @@ Approval defaults to the requesters with a read-only pass. An admin can widen it
 
 A pass is what a person can do with an app:
 
-- **Full**: every tool, including writes.
-- **Read-only**: only the tools marked read-only. Write tools are hidden from the tool list entirely, so an agent never sees a capability its user cannot call.
+- **Full**: every tool, including ones that change or delete.
+- **Read-only**: only the tools marked read-only. Every other tool is hidden from the tool list entirely, so an agent never sees a capability its user cannot call.
 - **None**: no access; the app is not advertised to that person.
 
 Access resolves from three layers, strongest last:
@@ -85,7 +85,7 @@ The audit trail records how consent was collected. An approval shows whether it 
 
 Two workspace-wide defaults live in **Settings → Access → Approvals**.
 
-**Wait for approval inside the agent** decides what an interactive agent gets while a person is deciding. **Wait for approval** (the default) keeps the call open for up to 55 seconds, which is what lets an in-agent prompt or a decision in Passport release the original call. **Answer right away** returns immediately with the same pending result the CLI gets, so the agent retries instead of waiting. Automation keys that run as themselves and the CLI always get the pending result, whichever mode is set.
+**Wait for approval inside the agent** decides what an interactive agent gets while a person is deciding. **Wait for approval** (the default) keeps the call open for up to 55 seconds, which is what lets an in-agent prompt or a decision in Passport release the original call. **Answer right away** returns immediately with the same pending result the CLI gets, so the agent retries instead of waiting. Agent tokens that run as themselves and the CLI always get the pending result, whichever mode is set.
 
 **Team floors** (Pro and Enterprise) set the least strict [Autopilot preset](/member/safety#presets) people on a team may hold in each environment, such as "Production at least Careful", with an all-teams default and a per-team override. It is a floor, not a setting on their behalf: a member's own stricter choice always wins, and their stored choice is kept, so lowering the floor later gives them their choice back. Floors also bound every exception. Admins can add team and workspace exceptions, and a block always wins. The older default approval rules and production safety column are read as floors and blocks.
 
@@ -100,6 +100,14 @@ On every plan, a provider that requires a company credential creates an admin se
 When a rule blocks an agent, or a task needs an app the person doesn't have, the agent can file the request itself with a one-line reason. It lands in the same list as a request the person made, attributed to them, and the reason starts with **Filed by** and the agent's name so you know an agent wrote it. An agent can ask to lift only the rule that blocked it, for that one tool, for an hour or a day, and an Irreversible action is asked for as **Ask first**, never **Allow**. App requests never install or grant anything: where the person could add the app themselves, the agent is told so and nothing is filed. Only people decide, and agents with no person behind them can't file.
 
 When someone with **Read-only** needs a tool that changes data, their agent can ask for **Full access** (Pro and Enterprise). It shows as **Full access to** the app, separate from anyone asking for access, and approving it gives Full to exactly the people who asked, nobody else.
+
+## The Approvals list
+
+**Approvals** is one list of everything waiting for you, oldest first: agent actions your rules ask about, calls on a shared account, app requests, tool access requests (Enterprise), and rule requests. Every row reads the same way: who asked, what they asked for (with its Read, Change, Delete, or Irreversible class when it is an action), the environment, how long it has waited, and your choices. When more than one kind is waiting, filter the list by kind.
+
+Your agents' requests that someone else approves sit at the end under **Waiting on others**. They never count as yours.
+
+The count next to **Approvals** in the navigation, the page's "waiting for you" line, Home's **Waiting for you**, and the weekly summary email are the same number. A request that is approved but still being set up is Apps work, under **Needs attention**, and isn't counted.
 
 ## Browser approval notifications
 

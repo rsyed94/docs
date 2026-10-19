@@ -17,9 +17,11 @@ An app is something your agent can use through Passport, such as GitHub, Linear,
 
 Some apps connect through MCP. Others use a reviewed API integration. Passport gives both the same connection, access, rules, and Activity experience, so most people do not need to care which technology is underneath.
 
+An app is also its vendor's CLI. Railway's tools, the `railway` commands agents run through `passport exec`, and the Railway key you keep in Passport all belong to the Railway app: its **Tools** tab lists the commands too, its **Keys** tab holds your key, its **Activity** tab includes the CLI, and its **Access** decides who may run it. AWS is a CLI app: it has no tools, just the AWS CLI with each person's key.
+
 ### Agents
 
-An agent is where you use AI: Claude, Cursor, ChatGPT, VS Code, Codex, Passport CLI, or another MCP-compatible product. Open **Agents** to add one, see its connection status, disconnect it, or choose which available apps it can see. On Pro and Enterprise, admins switch **Agents** to **Everyone** to see every agent in the workspace. On Enterprise, **Inventory** lists connections that scans found outside Passport.
+An agent is where you use AI: Claude, Cursor, ChatGPT, VS Code, Codex, Passport CLI, or another MCP-compatible product. Open **Agents** to add one, see its connection status, disconnect it, or choose which available apps it can see. On Pro and Enterprise, admins switch **Agents** to **Everyone** to see every agent in the workspace. On Enterprise, **Agents → Discovered** lists connections that scans found outside Passport.
 
 ### Access
 
@@ -27,10 +29,10 @@ Access answers one question: what may this person do with this app?
 
 <CardGroup cols={3}>
   <Card title="Full" icon="unlock">
-    Read and write tools are available.
+    Every tool is available, Read through Irreversible.
   </Card>
   <Card title="Read-only" icon="glasses">
-    Write tools are hidden from the agent.
+    Only Read tools. The rest are hidden from the agent.
   </Card>
   <Card title="None" icon="ban">
     The app is not shown to that person.
@@ -52,10 +54,10 @@ Every call through Passport creates an Activity record with the person, agent, a
   <Step title="Apply access and rules">
     Apps or actions that are not allowed are hidden, blocked, or held for approval.
   </Step>
-  <Step title="Inspect the request">Guardrails check outgoing arguments before Passport contacts the app.</Step>
+  <Step title="Inspect the request">Data checks inspect outgoing arguments before Passport contacts the app.</Step>
   <Step title="Call the app">Passport uses the connected account on the person's behalf.</Step>
   <Step title="Inspect and record the result">
-    Guardrails check the result, then Passport writes Activity and returns the safe response.
+    Data checks inspect the result, then Passport writes Activity and returns the safe response.
   </Step>
 </Steps>
 
@@ -78,11 +80,10 @@ Deactivating a person revokes their sessions, agents, and connected accounts imm
 <Accordion title="Technical connection URLs">
   | URL | Purpose |
   | --- | --- |
-  | `/mcp` | Whole workspace, for every agent. Sign-in picks the workspace. Add `?ws={workspace}` or `?enroll={key}` to pre-select one. |
-  | `/w/{workspace}/mcp` | Whole workspace, fixed to that workspace (older connector links keep working) |
-  | `/s/{appKey}/mcp` | One app |
-  | `/b/{bundleKey}/mcp` | One bundle |
+  | `/mcp` | Whole workspace, for every agent and agent token. Sign-in picks the workspace. Add `?ws={workspace}` or `?enroll={key}` to pre-select one. |
+  | `/w/{workspace}/mcp` | An older address for the same thing. It keeps working; `passport init` moves agents to `/mcp`. |
+  | `/b/{bundleKey}/mcp` | One bundle, for setups installed from **Apps › Setups** |
 
-Most people should add `https://passportmcp.com/mcp`. It connects to your workspace when you sign in. For CLI agent keys, set `PASSPORT_ENDPOINT` to the workspace URL (`/w/ws_…/mcp`). See [Passport CLI](/quickstart/cli).
+Add `https://passportmcp.com/mcp`. It connects to your workspace when you sign in, and an agent token names its workspace itself, so `PASSPORT_ENDPOINT` is the same URL. See [Passport CLI](/quickstart/cli). Pick which apps each agent sees on its page in **Agents**.
 
 </Accordion>

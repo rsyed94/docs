@@ -9,7 +9,7 @@ This is the shortest path from sign-in to a working agent. It works on Windows, 
 
 Open your invite, or sign in at [passportmcp.com](https://passportmcp.com). If your company uses single sign-on, Passport will send you to your company's sign-in page.
 
-After signing in, you should see **Home**, **Approvals**, **Sessions**, **Rules**, **Apps**, **Agents**, and **Settings**. If your team published a setup for you, **Setup** appears under **Your team**.
+After signing in, you should see **Home**, **Approvals**, **Sessions**, **Rules**, **Apps**, **Agents**, and **Settings**. If your team published a setup for you, **Apps** gets a **Setups** tab.
 
 ## 2. Connect a work app
 
@@ -23,7 +23,7 @@ Your provider credentials stay in Passport. They are not copied into Claude, Cur
 
 ## When your agent asks you to connect again
 
-If an app was never connected—or its sign-in expired—Passport can now let your AI agent show the next step right where you are working.
+If an app was never connected or its sign-in expired, Passport can now let your AI agent show the next step right where you are working.
 
 - Some agents show a built-in **Connect** or **Reconnect** action.
 - Other agents show a secure Passport link in the conversation.
@@ -41,15 +41,15 @@ Passport shows current instructions for each agent:
 - **Cursor and VS Code** have one-click setup.
 - **Claude Code and Codex** use their own MCP command and browser sign-in.
 - **Claude Desktop, Claude.ai, and ChatGPT** use the connector address Passport gives you.
-- **Terminal agents** can use [Passport CLI](/quickstart/cli). Scripts and CI use an automation key from **Agents → Automations**.
-- **Other agents** can copy the advanced connector address if they support remote MCP and browser sign-in.
+- **Terminal agents** can use [Passport CLI](/quickstart/cli). Scripts and CI use an agent token from **Agents → Automations**.
+- **Other agents** can copy the advanced connector address if they support remote MCP servers and browser sign-in.
 
 Follow the steps in Passport and finish the browser sign-in. No provider token should be pasted into your agent.
 
 <Note>
-  Setting up several agents on one computer? `npx passport-bridge@latest init` adds Passport to each of them in one pass. If an
-  agent's browser sign-in cannot reach a localhost, private, or self-hosted Passport server, choose **Local bridge** in
-  its setup instead.
+  Setting up several agents on one computer? `npx passport-bridge@latest init` adds Passport to each of them in one
+  pass. If an agent's browser sign-in cannot reach a localhost, private, or self-hosted Passport server, choose **Local
+  bridge** in its setup instead.
 </Note>
 
 ## 4. Confirm the connection
@@ -58,7 +58,7 @@ Keep the agent open and ask:
 
 > List my available Passport tools.
 
-In the setup guide, choose **Test connection**. Passport waits for the agent's first request, then says what it can reach, such as "Claude Code can see 13 apps and 172 tools". You can run the same test later from the agent's page in **Agents**. Then choose **Run setup check** in the checklist. The check is safe, does not contact the app provider, and opens **All activity** so you can see the result.
+In the setup guide, choose **Test connection**. Passport waits for the agent's first request, then says what it can reach, such as "Claude Code can see 13 apps and 172 tools". You can run the same test later from the agent's page in **Agents**. Then choose **Run test call** in the checklist. The check is safe, does not contact the app provider, and opens **All activity** so you can see the result.
 
 If the test keeps waiting, finish the sign-in inside the agent, keep it open, and test again. See [Troubleshooting](/troubleshooting) for common fixes.
 
