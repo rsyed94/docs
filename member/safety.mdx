@@ -5,6 +5,17 @@ description: "How much your agents can do on their own, per environment, and whe
 
 Autopilot decides every action your agents take through Passport, instantly, from your rules. It asks you only when a rule says so, and every decision names its cause, such as "Asked: Production changes ask first (Careful)."
 
+## How a decision is made
+
+Every action is decided the same way, whether it's a tool call, a command through the CLI guard, or `passport exec`. The first step that applies decides:
+
+1. **Access**: what you may do with the app, set on its **Access** tab, and whether an admin switched the tool off. **No access** blocks everything; **Read-only** runs only reads. No exception or preset gets past it.
+2. **Exceptions**: a block always wins, then the most specific exception.
+3. **Team floors**: your team's minimum preset for that environment. An exception can't be looser than it.
+4. **Your preset** for the environment.
+
+An irreversible action always asks unless an exception names that exact action. **Test a command** on the **Rules** page answers in the same order, so an access block shows its cause with a link to the app's **Access** tab.
+
 ## Actions and environments
 
 Each action is one of four classes:

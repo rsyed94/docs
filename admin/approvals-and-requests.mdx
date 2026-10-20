@@ -40,7 +40,7 @@ Approval defaults to the requesters with a read-only pass. An admin can widen it
 A pass is what a person can do with an app:
 
 - **Full**: every tool, including ones that change or delete.
-- **Read-only**: only the tools marked read-only. Every other tool is hidden from the tool list entirely, so an agent never sees a capability its user cannot call.
+- **Read-only**: only the tools whose class is Read. Every other tool is hidden from the tool list entirely, so an agent never sees a capability its user cannot call, and a call to it is blocked the same way.
 - **None**: no access; the app is not advertised to that person.
 
 Access resolves from three layers, strongest last:
@@ -59,9 +59,12 @@ Selected scope, team passes, and person overrides are part of Pro and Enterprise
   How read-only is decided: a tool is treated as read-only only when it is provably so. Probe-verified catalog
   connectors (and demo apps) may honor the upstream's own `readOnlyHint`. Custom URL apps are stricter: an upstream hint
   counts only when the tool name also looks read-only (prefixes such as `get_`, `list_`, `search_`). Anything not
-  provably read-only counts as a write and is withheld under a read-only pass. The name heuristic is best-effort, not a
-  guarantee that a tool is safe.
+  provably read-only counts as a write and is withheld under a read-only pass. A safety pack can only narrow this: a
+  tool Passport's pack treats as a delete stays withheld even if the upstream calls it read-only. A class you set on the
+  app's **Tools** tab counts. The name heuristic is best-effort, not a guarantee that a tool is safe.
 </Note>
+
+Access is the first step of every decision, before any [Autopilot rule](/member/safety#how-a-decision-is-made): no exception, preset, or team floor gets past it. The same pass governs the app's tools, its CLI through the guard and `passport exec`, and **Rules → Test a command**.
 
 ## Per-tool control and drift
 
@@ -100,6 +103,10 @@ On every plan, a provider that requires a company credential creates an admin se
 When a rule blocks an agent, or a task needs an app the person doesn't have, the agent can file the request itself with a one-line reason. It lands in the same list as a request the person made, attributed to them, and the reason starts with **Filed by** and the agent's name so you know an agent wrote it. An agent can ask to lift only the rule that blocked it, for that one tool, for an hour or a day, and an Irreversible action is asked for as **Ask first**, never **Allow**. App requests never install or grant anything: where the person could add the app themselves, the agent is told so and nothing is filed. Only people decide, and agents with no person behind them can't file.
 
 When someone with **Read-only** needs a tool that changes data, their agent can ask for **Full access** (Pro and Enterprise). It shows as **Full access to** the app, separate from anyone asking for access, and approving it gives Full to exactly the people who asked, nobody else.
+
+### Access for a limited time
+
+When you approve access for **the people who asked** (Pro and Enterprise), choose how long it lasts: **No end**, **7 days**, **30 days**, or **90 days**. At the end, each person goes back to what they had before: no access of their own, or Read-only after a request for Full access. The app's **Access** tab and the person's page show **until** the date. Three days before, the person gets an email and can **Ask to keep it**, which sends you an ordinary request; their agents are told too. Changing that person's access on the **Access** tab removes the end date. Team and whole-workspace access never ends on its own.
 
 ## The Approvals list
 
