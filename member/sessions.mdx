@@ -1,0 +1,173 @@
+---
+title: "Sessions"
+description: "What your agents worked on, grouped by project and pull request, with what needed you first."
+---
+
+**Sessions** shows what your agents did, organized the way you think about the work: by project and pull request, not by the minute. It leads with what needs a look, such as a failure, a Production change, or an ask, and folds routine work out of the way.
+
+## Work items
+
+A **work item** is one branch of one project, titled by its pull request when GitHub has one. The list reads from the top down:
+
+- **Project**: the repository. Worktrees of the same repository fold in.
+- **Work item**: the pull request (such as `#482 · merged`), else the branch.
+- **Sessions**: each agent run on that branch. Retries, subagents, and different agents all roll up into the one work item.
+- **Bursts**: inside a session, stretches of activity split by 30 quiet minutes.
+
+Each row says which agents worked on it (such as `Claude Code ×2 · Codex`), how many sessions, its active time, and a short shape line: actions, what failed, confirmed Production changes, unplaced changes, how asks ended, the share not checked, and the apps it used. Only what happened is listed, so a row never reads "0 failed". A colored stripe marks the worst thing in it: something failed, something asked or needs setup, or it changed Production.
+
+A work item with one session opens that session. One with several opens [its own page](#a-work-item-page). A project's name, such as **mcp-passport**, opens [the project's page](#a-project-page).
+
+Sessions from an app connection with no project folder, such as ChatGPT or Claude using apps, group under the apps they used, such as **Apps · GitHub**.
+
+A single agent run is one session even when it used both the [CLI guard](/member/cli-hook) and app tools through Passport. Passport joins them when the agent names its session, or when the same person's same agent has exactly one guard session active in the last 30 minutes on that computer. Two runs at once, an agent token, or a different agent are never joined.
+
+## Views
+
+Four views sit at the top of the list:
+
+- **Notable** (the default): work items with a failure, a confirmed Production change, an ask, a block or decline, a data check match, an undo, an unplaced change, or a command Passport couldn't check, plus anything still running. Everything else folds into one line per project, such as "14 routine work items · 3,200 reads · nothing needed you", which opens in place.
+- **All work**: every work item in the time range.
+- **Production changes**: every change your agents made to confirmed Production, one row each, beside your deploys and new errors. See [what changed in Production](#what-changed-in-production).
+- **Running**: work items with a session still going.
+
+Home shows the same work: **Running now** lists running work items, and a one-line summary of your week, such as "4 PRs worked on · 2 Production changes · 1 ask · 3 failures", opens each part in Sessions.
+
+On Pro and Enterprise, admins switch **Mine** to **Everyone** to see the workspace's work items and its Production changes, and can narrow to one person.
+
+## What changed in Production
+
+When something breaks, **Production changes** answers the first question: what did agents change, and when. Home's weekly Production count opens it.
+
+Pick a window: the last hour, 6 hours, 24 hours (the default), 7 days, or custom dates. The view lists every change, delete, and irreversible action that ran on confirmed Production in that window, grouped by app and then newest first. Each row says:
+
+- when it ran, and the command or tool, such as `railway redeploy → api`
+- which agent ran it, and for whom
+- its work item: the pull request, else the branch
+- the result: it ran, or it failed, and whether someone approved it first
+- whether Passport can still [undo](/member/undo) it
+
+Repeated changes fold into one row: 28 pushes in a row by the same agent to the same branch read `git push → main ×28` with their span of times, and open to show each one. A change that failed, was approved, can be undone, or is a possible cause keeps its own row. When the changes come from more than one repository, each row names its repository, such as "mcp-passport · main".
+
+Blocked and declined actions never reached Production, so they aren't listed. Changes to a target nobody placed show as one line, such as "12 unplaced actions", with **Set environments**. The search box narrows the list the same way it narrows Sessions.
+
+### Deploys and errors on the same timeline
+
+Above the list, a quiet timeline lines agent changes up with what happened to your apps:
+
+- **Railway deploys** to Production environments
+- **New Sentry errors**: unresolved issues first seen in the window
+
+Passport reads these with your own connection to Railway or Sentry, using only their read tools you can already use through Passport. It never uses a company credential for them, and the reads aren't recorded as agent activity. If you haven't connected the app, or can't read it, that lane isn't shown. Results refresh about once a minute.
+
+Select a deploy or an error to mark the agent changes in the 30 minutes before it as **possible causes**. They're a place to start looking, not a verdict: a change can sit in that window by chance.
+
+From a terminal, `passport changes` prints the same list:
+
+```sh
+passport changes --env production --since 1h
+```
+
+## Search
+
+**Sessions** and **All activity** share one search box. Type words to match a pull request title, branch, project, folder, command, or app. Narrow with filters:
+
+| Filter | Example | Finds |
+| --- | --- | --- |
+| `project:` | `project:acme-api` | A repository, else a folder name |
+| `pr:` | `pr:482` | A pull request by number |
+| `branch:` | `branch:fix/retry` | A branch |
+| `agent:` | `agent:claude-code` | One agent |
+| `app:` | `app:github` | One or more apps, comma separated |
+| `cmd:` | `cmd:"gh pr merge"` | A command or tool |
+| `env:` | `env:production` | `production`, `staging`, `development`, `other`, or `unplaced` |
+| `outcome:` | `outcome:failed` | `notable`, `failed`, `asked`, `blocked`, `declined`, `undone`, or `unchecked` |
+| `person:` | `person:` and pick from the suggestions | One person's work (admins on Pro and Enterprise) |
+| `since:` | `since:7d` | `today`, `1h`, `6h`, `24h`, `7d`, `30d`, `90d`, or a date like `2026-10-01` |
+
+`env:production` means confirmed Production only; `env:unplaced` finds what Passport couldn't place. Commands match by program and verb, never their arguments, which Passport doesn't store. Suggestions come from your own work in the time range.
+
+Search covers your whole history, not only what's loaded. The address keeps it, so a view is a link you can share. Under the box, **Failed** and **Asked** are quick filters on Sessions; All activity also has **Notable** and **Production changes**. On a phone they fold behind **Filters**.
+
+## Where an action lands
+
+Before Passport decides an action, it works out what the action reaches. That decides which environment, if any, it belongs to:
+
+- **Local**: installs, builds, tests, the project's own scripts, and files stay on your computer. They have no environment.
+- **Repository**: `git` and `gh` reads have no environment. Work on a branch, such as a push, opening a pull request, or rerunning a check, is Development. Code that reaches the default branch, such as a push to `main`, `gh pr merge`, or a release, goes where your workspace placed that repository: Production if it deploys on merge, Staging if it doesn't.
+- **Shared service**: a deploy, a database, or an app tool lands in that service's environment, such as a Railway environment or a Vercel target. See [how Passport knows](/member/safety#how-passport-knows).
+
+### Unplaced
+
+An action is **unplaced** when it reaches something nobody has placed yet: a repository's default branch before anyone said whether it deploys on merge, or a service environment Passport can't name. Unplaced actions are still decided as Production, so your Production preset applies and a push to `main` keeps asking. Sessions counts them apart from confirmed Production changes, such as "2 changes, 3 unplaced", so the Production count only ever means what you placed there.
+
+Each unplaced repository or environment shows once in Home's **Needs attention**, where an admin can choose its environment. When a deploy follows a merge in the same session within an hour, the notice says the repository may deploy on merge and suggests Production. Passport never places anything on its own.
+
+### Place a target once
+
+Placing a target answers it for the whole workspace, for new actions from then on:
+
+- **Rules → Environments** lists every repository and environment agents have reached. Admins choose **Production**, **Staging**, or **Development** for each. **Set environments** on a session, a project, or the Production changes ledger opens it.
+- For a repository, choose **Production** if merging to its default branch deploys it, or **Staging** if it doesn't. With Staging, a push to `main` runs under Staging's preset; force pushes still ask.
+- When an approval is waiting on something nobody placed, it shows **This is: Production · Staging · Development**. Choosing saves it and decides that request again.
+- From a terminal, `passport env set` places a resource. Anyone can say Production; anything looser needs an admin.
+
+## A session page
+
+A session reads as a story. The title is its pull request, else its branch or folder, with the project and branch beneath, the agent, and how long it was active, such as "1h 40m active in 3 bursts". Active time leaves out quiet stretches. The project's name opens [its page](#a-project-page).
+
+If an approval is waiting, **Waiting for you** comes first. A session that has ended never shows it. Then three tiles say what happened:
+
+- **Shipped**: what it merged, deployed, opened, and pushed, most consequential first, such as "1 pull request merged", "2 deploys", "5 pushes", or "Nothing shipped".
+- **Production**: confirmed Production changes, then unplaced ones with **Set environments**, and how many risky actions had a safety net.
+- **Needs you**: asks still waiting, what failed (with the first failure, such as `npm test (exit code 1)`), how each ask ended, and commands Passport couldn't check, with **Describe them** to open [Project scripts](/member/cli-hook#tell-passport-what-a-script-does). When nothing did, it says "Nothing needed you".
+
+**Show them** on a tile opens the timeline at those rows. Everything else is under **Details**: the number of actions, each risky action's safety outcome, how many commands Passport checked, what can still be [undone](/member/undo), actions a [data check](/admin/data-checks) matched, tokens and their API-equivalent cost, the model, the computer, and when it ran.
+
+### Timeline, lenses, and bursts
+
+The timeline is newest first. **Jump to start** reads it from the first action, and **Back to newest** returns. Lenses narrow it to one kind of row: **Everything**, **Changes**, **Production**, **Failed**, **Asked**, and **Not checked**. **Open in All activity** shows the session's actions in the full log, however old it is.
+
+When a session had more than one burst, each starts with a heading such as "4:00–4:29 PM · 31 actions" and the quiet time before it. Runs of three or more routine reads fold into one line, such as "17 reads", that opens to show each one, and commands Passport couldn't check fold together.
+
+A row names what it acted on only when the action itself says so, such as a Railway service or a redacted app summary. A push doesn't borrow the session's branch, since a subagent may have pushed a different one.
+
+If an admin turned on **Show what agents say they're doing** (off by default), a Claude Code row leads with the agent's own one-line description of the step, such as "Redeploy staging with the retry fix", with the command's name still beside it, and the first described change shows under the session's title as its goal. The description is redacted on your computer before it's sent. See [what the hook records](/member/cli-hook#what-it-records).
+
+### How an ask ended
+
+An action that asked reads as a short chain: **Asked**, then who answered and where, then what happened. For example, "Asked › you allowed from your phone › ran (1.8 s)", "Asked › Erin declined in Slack", or "Asked › expired with no answer". An ask answered right in your agent reads "in the agent". When your rules changed and now allow it, the chain says "your rules now allow it". Ask outcomes are kept for 90 days, like Activity, so an old session still shows how each ask ended.
+
+## A work item page
+
+A work item with several sessions, such as a pull request two agents worked on, has its own page. It reads the same way as a session: its title and pull request, the project and branch, its agents, how many sessions, and its active time; then the **Shipped**, **Production**, and **Needs you** tiles over all its sessions; **Details**; and its sessions, newest first. **Show them** on a tile opens the matching actions in **All activity**.
+
+## A project page
+
+Each project, such as a repository, has a page. Open it from the project's name in **Sessions** or on a session, or search for it with ⌘K. It shows, in order:
+
+- **Live work**: work items with a session running now. Left out when nothing runs.
+- **Recent sessions**: the latest work items, with **See all** for the rest in Sessions.
+- **Production changes**: the change, delete, and irreversible actions that ran on confirmed Production in the last 7 days, by app and target, and how many were unplaced.
+- **Environments**: where the repository is placed (Production if merging to its default branch deploys it, Staging if it doesn't, or not placed yet), then each platform its changes reached, such as "Railway: Production, Staging". **Rules › Environments** places them; admins can **Place it** right there.
+- **Rules**: the exceptions for the apps and commands its agents use, such as "Run railway up in Staging for you", and the project scripts saved for this repository. A rule for every app isn't listed here.
+
+On Pro and Enterprise, an admin who opens a project from **Everyone** sees everyone's work in it.
+
+## What Passport saw
+
+Passport counts what your agents did the same way everywhere:
+
+- **Seen**: every command the guard saw, counted on your computer.
+- **Decisions**: the actions that asked or were blocked. Everything else ran on its own.
+- **Blind**: commands the guard saw but couldn't tell what they do, such as a one-liner or a program it doesn't know. They never run on Passport's say-so.
+
+Sessions, Agents, People, and `passport status` all read these counts, so a session's "12 not checked" and an agent's "decides 82%" come from the same numbers, over the commands the guard saw. Commands the guard answered instantly on your computer still count toward their session. Passport doesn't claim to have checked what it didn't. See [coverage](/member/cli-hook#decided-placed-and-blind).
+
+### Risky actions
+
+A risky action is one on Production, or on a target nobody placed yet, that a backup protects or that's hard to take back: a delete, an irreversible action, a change Passport backs up, or a command Passport couldn't read. Routine changes such as a deploy, a workflow run, or a merge still follow your rules, but they aren't counted as risky, and neither is deleting folders a build makes again, such as `node_modules` (**Regenerable, not backed up**). Every risky action gets one safety outcome: **Backed up** (Passport took a backup first, so you can undo it), **Asked** (someone approved or declined it), **Declined** (a rule or a person stopped it), **Not checked** (Passport couldn't tell what it did), **Couldn't be backed up** (it ran, and no backup was possible there, such as a delete from the shell with a key on your computer, or an irreversible action), or **Ran with no backup or ask** (a backup was possible and none was taken). The session's summary says how many had a safety net, such as "3 of 4 had a safety net". A work item where a risky action ran unprotected on confirmed Production is **Notable**.
+
+## From the terminal
+
+`passport sessions` lists your agents' recent sessions: status, agent, folder, when it started, what Passport decided (such as `42 ran · 2 asked · 1 blocked`), the environments it touched, and **Waiting for you** when an approval is pending. Add `--status running`, `idle`, or `ended` to narrow it, and `--json` for scripts. `passport sessions --project <name>` prints the project page's summary (its environments, rules, and Production changes this week) above its work. `passport changes` lists what your agents changed in Production, newest first; add `--since 1h` (or `6h`, `24h`, `7d`) to choose the window. See [Passport CLI](/quickstart/cli#json-and-exit-code-contract).

@@ -9,11 +9,11 @@ Everyone, admins included, manages their own connections from **Agents**. Pro an
 
 Open **Agents** to see **Your agents**. Members and admins see the same page. There is one row for each agent on each computer: Claude Code, Claude Desktop, and Claude.ai are separate agents, and Claude Code on two laptops is two rows. Interactive Passport CLI profiles on one computer share one **Passport CLI** row. An agent that only has Passport's guard on a computer (say Codex, with no sign-in of its own) still gets its row, marked **Guard only**.
 
-A working agent stays quiet: its row shows where it runs (for example **On Sam's MacBook**), how much of what the guard saw it checked this week (for example **94% checked**), and **Last used**, which opens **All activity** filtered to that agent. One chip says its state: **Sign-in expired**, or its guard: **On**, **Off**, **Outdated**, **Not trusted**, or **Locked** (see [Guard health](/member/cli-hook#guard-health)). A row only asks for something when there is one thing to fix, and the fix is on the row:
+A working agent stays quiet: its row shows where it runs (for example **On Sam's MacBook**), how much of what the guard saw your rules could decide this week (for example **decides 82%**), and **Last used**, which opens **All activity** filtered to that agent. One chip says its state: **Sign-in expired**, or its guard: **On**, **Off**, **Outdated**, **Not trusted**, or **Locked** (see [Guard health](/member/cli-hook#guard-health)). A row only asks for something when there is one thing to fix, and the fix is on the row:
 
 - **Reconnect** when an agent's Passport sign-in expired;
 - the guard's fix, such as `passport hook install --agent codex --guard --apply` or "Open Codex → /hooks and trust Passport's hooks.";
-- **Update** when a Passport CLI or local setup is behind the newest version in your workspace;
+- **Update** when a Passport CLI or local setup is behind the newest published version (see [Keep agents up to date](/member/updates));
 - **Remove duplicate** when a local setup shows the same tools twice next to a working account connection; or
 - **Disconnect** when an agent has not been used in 30 days.
 
@@ -33,13 +33,13 @@ Owners and admins manage agent tokens for scripts, CI, and hosted workflows in *
 
 ## Manage the workspace
 
-On Pro and Enterprise, admins switch **Agents** from **Mine** to **Everyone**, the same selector Sessions uses. Everyone has one row per agent connected through Passport, such as Claude Code or Cursor, with who uses it (for example, `1 person · 2 connections`), the newest Passport version it runs and how many connections are out of date, and when it was last active. Once the list has 10 or more rows, search finds a person, agent, or computer.
+On Pro and Enterprise, admins switch **Agents** from **Mine** to **Everyone**, the same selector Sessions uses. Everyone has one row per agent connected through Passport, such as Claude Code or Cursor, with who uses it (for example, `1 person · 2 connections`), the newest Passport version it runs and how many connections are out of date, and when it was last active. When connections are out of date, **Update all N** asks every computer that can update itself to install the new version on its next run. Once the list has 10 or more rows, search finds a person, agent, or computer.
 
 Open an agent to see its **connections**, one per person per computer. Each shows its owner (linked to their person page), the computer, the guard state, Passport's version, when it was last active, and **Disconnect**.
 
 - **Idle connections** haven't been used in 30+ days. Disconnect the ones you don't recognize, one at a time or with **Disconnect N idle**.
 - **Version** shows only for software Passport ships: Passport CLI and the local bridge, shown as, for example, `Passport 0.11.3`. Agents that sign in with a browser update from their own vendor, so their version shows as `—`.
-- **Out of date** marks connections running Passport two or more versions behind the newest Passport version in use. Its owner should update.
+- **Out of date** marks connections running a Passport older than the newest published version. Once asked for, the cell says **Updates on next run**, then **Restart to finish** for a local bridge whose agent still runs the old version, or **Update didn't finish** with the reason.
 
 Disconnecting cuts access right away, after a confirm that names the agent, person, and computer. Its owner must sign in again. The list shows real observed connections; opening setup instructions alone does not add a row.
 

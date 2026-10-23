@@ -1,6 +1,6 @@
 ---
 title: "Slack, approvers, and exceptions"
-description: "Answer approvals in Slack, require a second person for Production, lift a rule for one person, and learn from what you approve."
+description: "Route approvals to the right people, answer them in Slack, require a second person for Production, lift a rule for one person, and learn from what you approve."
 ---
 
 Autopilot asks a person only when a rule says so. These features decide who that person is, where they answer, and how the rules improve over time.
@@ -18,15 +18,37 @@ Passport finds each person in Slack by their Passport email. If Slack has no acc
 
 If the app is removed from Slack or its access is revoked, Settings shows "Slack stopped working" and an admin can reconnect it. Self-hosted Passports need the Slack app configured by whoever runs them; until then Settings shows "Slack isn't set up on this Passport".
 
-## Production approvers
+## Approval routing
 
-On **Rules › Team rules** (Pro and up), an admin can require someone else to approve Production deletes for a team, and optionally Production changes too. Choose the people or teams who approve; with none chosen, workspace admins approve.
+On **Rules › Team**, **Approval routing** (Pro and up) decides who gets each team's approval requests. A route is one team (or everyone) in one environment, such as Support in Production:
+
+- **Requests**: deletes and irreversible actions, or changes too.
+- **Send to**: one **Person**, a **Group** where any one of them can decide (people, or anyone on a team), **On call**, or the workspace **Admins**.
+- **On call** is a simple rotation: a list of people who take turns, handing off weekly on a day and time you choose, in your time zone. Changing the list keeps whoever is on call now on call. **Someone else covers this week** hands the rest of the week to another person; the rotation picks up again at the next handoff.
+- **If nobody answers**: after 15 minutes to 4 hours, the request also goes to every admin. **Only before it expires** keeps the long wait: a reminder after about 2 hours, and every admin about 4 hours before it expires.
+
+A team's own route decides who gets its requests; without one, the route for everyone does. Routed people get a phone notification and, when Slack is connected, a direct message. The person whose agent asked sees who it's waiting on, like "Waiting on Maya, on call". Nobody is routed their own request: their turn passes to the next person on call, and a route that would reach only the requester goes to the admins.
+
+Each step is in the audit trail (**Settings › Audit**): where Passport sent the request and why, each reminder, and the escalation to admins.
+
+### Team review of Production deletes
+
+Without a route, once a workspace has a second person, a Delete or Irreversible action in Production (confirmed, or not placed yet and treated as Production) also goes to the workspace admins. With a route, it goes to the routed people instead. Either way the requester can still answer it themselves unless the route needs someone else; the first answer counts. Notifications, Slack, and Approvals show who else has it.
+
+## Someone else must approve
+
+A Production route can say **Production deletes need someone else to approve** (or changes and deletes, when it covers changes). Workspaces that set Production approvers before routing keep them: each became a Production route with the same people and the same rule.
 
 - The person whose agent asked can't approve their own request, in Passport, Slack, a notification, or their agent's own prompt.
-- Any one approver is enough. The request shows who it needs, like "Needs Maya or Sam".
+- Any one of the routed people is enough. The request shows who it needs, like "Needs Maya or Sam" or "Needs you, on call".
+- The rule from the route for everyone applies to every team, even one with its own route.
 - Nothing these settings cover runs on its own in Production, whatever the presets or exceptions say. Blocks still block.
 - Undoing a covered Production action needs an approver too, even when it starts from Undo in Passport.
 - When Passport only guessed where a request runs, its requester can say it's Production but not anything looser. An approver who's an admin can place it from the request's **This is:** line.
+
+## Asking someone to review
+
+From one of your work items in **Sessions**, **Ask for review** sends it to a teammate with an optional short note. It shows up in their Home under **Needs attention**, linking to the work, and they answer **Looks good** or with a short comment. Their answer shows up in your **Needs attention** until you dismiss it. The teammate can open the sessions you sent for a month. It's a quick second look, not a code review.
 
 ## Exception requests
 
@@ -36,7 +58,7 @@ Admins answer in **Approvals**, where the list can be filtered to **Rule request
 
 ## Rule suggestions
 
-When you approve the same action in the same environment three times in fourteen days, Passport suggests a rule on Home and Approvals: "You've approved railway redeploy in Staging 6 times. Run it without asking?" Choose **Make it a rule**, **Not now** (it comes back after three more approvals), or **Never suggest**. `passport wait` mentions it once too.
+When someone approves the same action in the same environment three times in two weeks, Passport offers to make it an exception just for them: "You approved railway redeploy in Staging 6 times this week. Always run it here?" Production deletes, irreversible actions, and anything a team floor keeps asking about are never suggested. An accepted suggestion is an ordinary exception, recorded in Activity as **Rule added** with "From an approval suggestion". See [Learning from your approvals](/member/safety#learning-from-your-approvals).
 
 ## Weekly summary
 

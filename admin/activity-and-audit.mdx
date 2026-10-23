@@ -20,6 +20,16 @@ Everyone can open **Sessions → All activity** to see their own calls. A row sh
 
 Actions read the same everywhere. A CLI command reads like "railway redeploy" under the app **Railway CLI**, everyday commands appear under **Shell**, and tools read like "delete branch". A command Passport couldn't read says **Not checked**.
 
+## What agents say they're doing
+
+Claude Code writes a one-line description of each command it runs, such as "Run the bridge tests". Admins can turn on **Settings → Workspace → Show what agents say they're doing** so that line becomes the action's label in Sessions, with the command's name and target still beside it, and the session's first described change shows under its title as its goal. It's off by default.
+
+The description is redacted on the member's computer before it's sent: paths are cut to their last name, and one containing anything that looks like a key, token, or email address isn't sent at all. Passport keeps it with the activity for 90 days. Admins on Pro and Enterprise see other members' descriptions where they already see their sessions. Turning it off stops Passport keeping new ones and hides the ones it kept. See [what the hook records](/member/cli-hook#what-it-records).
+
+## Find work
+
+**All activity** shares the search box and filters of [Sessions](/member/sessions#search), such as `project:acme-api`, `cmd:"gh pr merge"`, `env:unplaced`, or `outcome:failed`. Its quick filters are **Notable**, **Production changes**, **Failed**, and **Asked**. Search covers your whole history, and the address keeps it, so a filtered view is a link you can share. **Open in All activity** on a session shows that session's actions however old it is.
+
 ## Workspace activity
 
 On Pro and Enterprise, admins switch **All activity** from **Mine** to **Everyone**, the same selector Sessions uses, to see calls across the workspace. Filters cover person, apps, agent, team, result, time, and search text. You can select several apps at once. Filtered views have shareable URLs, and links elsewhere in Passport, such as data check findings and alerts, say **Open in All activity** and open the matching view. Older Activity links open the same view with their filters kept. Export the filtered view as CSV or JSONL.

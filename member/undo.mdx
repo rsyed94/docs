@@ -3,9 +3,9 @@ title: "Backups and undo"
 description: "Passport backs up what a delete removes, right before it runs, and can undo it for 7 days."
 ---
 
-When an agent deletes or overwrites something through Passport, Passport first saves what's about to go, where it can. The action's row then says **Backup taken**, and for 7 days you can **Undo** it from the session, All activity, or Home, from the terminal, or by asking your agent.
+When an agent deletes or overwrites something through Passport, Passport first saves what's about to go, where it can. The action's row then says **Backup taken**, and for 7 days you can **Undo** it right there, in the session or All activity, from the terminal, or by asking your agent. Home stays as it is: undo lives on the action.
 
-Passport only backs up actions it can see: app tools, the production toolkit, and `passport exec`. A command an agent runs with a key on your computer gets no backup, which is one reason to [move your keys into Passport](/member/cli-hook).
+Passport only backs up actions it can see: app tools, the production toolkit, and `passport exec`. A command an agent runs with a key on your computer gets no backup, which is one reason to [move your keys into Passport](/member/cli-hook). The exception is everyday deletes from the shell: see [Backups on your computer](#backups-on-your-computer).
 
 ## What Passport backs up
 
@@ -23,19 +23,47 @@ Variable values and table rows are encrypted and deleted after 7 days. Branches 
 
 ## How backups change decisions
 
-- **Hands-off:** a delete runs only once its backup is taken. If Passport can't take one, it asks you instead: "Couldn't take a backup first, so Passport is asking." To let Hands-off deletes run without a backup in Development, Staging, or Other apps, turn on **Run deletes without a backup** for that row in **Rules**. It's off by default, and it isn't offered for Production.
+- **Hands-off:** a delete runs only once its backup is taken. If Passport can't take one, it asks you instead: "Couldn't take a backup first, so Passport is asking." This covers deletes an agent runs from the shell too: the ones Passport backs up on your computer run (see below), and others, such as `kubectl delete`, ask. To let Hands-off deletes run without a backup in Development, Staging, or Other apps, turn on **Run deletes without a backup** for that row in **Rules**. It's off by default, and it isn't offered for Production.
 - **Careful and Balanced:** deletes ask as before. The request says whether Passport will take a backup right before it runs.
-- An exception that always runs an action, or an approval for the session, runs it even when no backup was possible. Its row says **No backup**.
+- An exception that always runs an action, or an approval for the session, skips the ask, not the backup: Passport still takes one first wherever it can. When no backup was possible, it runs anyway and its row says **No backup**.
+
+## Backups on your computer
+
+Right before an agent runs one of these from the shell, the guard keeps a backup on your computer, under your Passport folder, for 7 days:
+
+| Command | The backup |
+| --- | --- |
+| `rm`, `rm -r`, `rm -rf` of files in the project or your home folder (Claude Code) | The files move to Passport's trash for this project instead of being deleted. They're gone from where they were, exactly as with `rm`. |
+| `git reset --hard`, `git clean`, `git checkout -- …`, `git restore …` | Your changed and untracked files, saved as a git commit kept under a private ref. Your staged changes aren't touched. |
+| `git stash drop`, `git stash clear` | The dropped stashes. |
+| `git branch -d`, `git tag -d`, `git update-ref -d`, `git push --delete`, `git push --force` | The commit each branch or tag pointed at. A remote branch is saved as your computer last saw it, as of your last fetch or push. |
+
+Folders a build or an install makes again need no backup: `rm -r` of `node_modules`, `dist`, `build`, `out`, `.next`, `.nuxt`, `.turbo`, `.cache`, `coverage`, `__pycache__`, `.pytest_cache`, `.gradle`, `target` (beside a `Cargo.toml` or `pom.xml`), `.venv` or `venv` (beside a requirements or `pyproject.toml` file), and `vendor` (beside a `composer.json` or `go.mod`) inside the project, or a `git clean -x` or `-X` that removes only what's inside them, runs and its row says **Regenerable, not backed up**. When git tracks any file inside such a folder, Passport treats it like any other folder and takes the usual backup. A `git clean -x` or `-X` that removes those folders and other ignored files too keeps a backup of the others only, runs, and its row says **Backed up (build folders not backed up)**; when the others are over the snapshot limit, it asks.
+
+So with Hands-off, these run instead of asking. Passport skips the backup, and the command asks as usual, when it can't keep an exact copy: the line uses a pattern, a variable, `~`, a redirect, or more than one command; the path is outside the project and your home folder, in agent settings, or on another disk; it's a device or a mount point; or it's large (over 10,000 files or 512 MB for the trash, 5,000 files or 256 MB for git). Only Claude Code lets Passport move files to the trash, so in Codex and Cursor `rm` asks.
+
+To see what was saved, and put one back:
+
+```sh
+passport undo --local
+passport undo --local <id>
+```
+
+With an id, Passport shows what comes back and asks first. It never replaces something that's there now (a file you changed since, a branch at another commit, a remote branch) without asking about that one thing; without a terminal, add `--yes` and those are left as they are.
+
+The files, refs, and commits never leave your computer. Passport only learns each backup's id, so the action's row in Passport says **Undo on** and your computer's name. It opens the exact command to run there, with a copy button. If Passport is signed in on that computer, **Send to** your computer queues the restore: the next time you run `passport` in a terminal there, it shows what comes back and asks. Nothing is put back until you say yes at that terminal, never from an agent's shell, a script, or `--yes`. The row then says **Restored on** your computer, or **Sent to** it while it waits.
 
 ## Undo
 
-Undo first shows what comes back, what won't, and how old the backup is. Some things never come back: notifications and webhooks already sent, and anything other systems did because of the change.
+**Undo** on an action's row first shows what comes back, what it replaces that's there now, what won't come back, and how old the backup is. Some things never come back: notifications and webhooks already sent, and anything other systems did because of the change.
 
 If the thing changed again since, a plain restore would overwrite that change, so Passport offers a safe alternative instead where there is one, such as restoring a file as a copy, a variable under a new name, rows into a new table, or a Neon backup as a new branch.
 
-Undo isn't available once the backup is 7 days old, while someone else is undoing it, or if you can't reach the app (connect it in Passport first). You can undo your own actions and those of agents you own; workspace admins can undo anyone's, with their own connection.
+The result shows in the dialog and on the row: **Restored**, **Couldn't restore** with the reason (you can try again), or **Already undone** if someone got there first. Undoing twice never restores twice.
 
-An undo is an action too: its row says **Undone by** you and links to what it undid, and most undos can be undone again.
+After 7 days the row says **Backup expired**, with no button. Undo also isn't available while someone else is undoing it, or if you can't reach the app (connect it in Passport first). You can undo your own actions and those of agents you own; workspace admins can undo anyone's, with their own connection, and the person whose action it was gets an email saying so.
+
+An undo is an action too: the original row says **Restored by** you and links to the undo's own row, which links back. Most undos can be undone again.
 
 From the terminal:
 

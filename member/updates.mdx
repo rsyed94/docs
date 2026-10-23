@@ -1,0 +1,54 @@
+---
+title: "Keep agents up to date"
+description: "Update the Passport CLI on your computers with one click, or by hand with one command."
+---
+
+Passport CLI and the local bridge are Passport's own software on your computer. Your agents' hooks run them, so an old version can miss new rules and fixes. **Agents** says when one is behind, and one click updates it.
+
+Agents that sign in with a browser (Claude.ai, ChatGPT, Cursor's own sign-in) update from their own vendor, so Passport never flags them.
+
+## Update from Agents
+
+An agent row that runs an older Passport says **Update available**. Its one control is **Update**:
+
+1. Click **Update**. The row says **Updates on next run**.
+2. The next time the Passport CLI runs on that computer (a command you type, or an agent's hook), it installs the new version in the background. Nothing you run waits for it.
+3. The row says **Up to date**. A local bridge picks up the new version when its agent restarts, so until then its row says **Restart Codex to finish updating** (with your agent's name).
+
+If the update can't finish, the row says **Update didn't finish**, with a short reason and the command to run on that computer. Your current version keeps running in every case.
+
+Computers on a Passport CLI from before one-click updates show the command instead. Run it once; later updates are one click:
+
+```sh
+npm install --global passport-bridge@<version>
+```
+
+## What an update does
+
+- It installs exactly the version Passport names: the newest version Passport has verified on npm. Never a range or a tag like `latest`, and never a version npm doesn't have.
+- It installs into a new folder, checks the new version starts and reports that exact version, then switches Passport's launcher over in one step. If anything goes wrong, the old launcher stays and nothing changes.
+- Your agents' hooks keep the same command (`~/.passport/cli/bin/passport`), so Claude Code, Codex, and Cursor need no changes, and Codex keeps trusting Passport's hooks. The Passport plugin follows the same launcher.
+- A command already running keeps running on the version it started with.
+- Passport learns only the old and new version numbers and, if it failed, a reason such as "npm could not be reached." npm's output never leaves your computer.
+
+## Update from the terminal
+
+```sh
+passport update          # install the version Passport names
+passport update check    # what runs here, and whether a newer version is ready
+```
+
+`passport update` works even when automatic updates are off.
+
+## Turn automatic updates off
+
+```sh
+passport update off      # this computer only
+passport update on
+```
+
+With updates off, **Update** on that computer's rows shows "Automatic updates are off on this computer." and the command to run. Setting `PASSPORT_AUTO_UPDATE=off` (for example on a managed computer or in CI) also stops the background checks. Passport never checks for updates in CI or from an agent token.
+
+## Update everyone (admins)
+
+On Pro and Enterprise, **Agents → Everyone** says how many connections are out of date. **Update all N** asks every one of those computers that can update itself to install the new version on its next run. The line then says how many update on their next run, and how many need their owners to update by hand. Each request is recorded in the audit trail, and so is each computer's result.
