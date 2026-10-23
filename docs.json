@@ -24,9 +24,11 @@
           "concepts/model",
           "member/ai-setup",
           "member/safety",
+          "member/sessions",
           "member/undo",
           "member/scan",
           "member/cli-hook",
+          "member/updates",
           "admin/activity-and-audit",
           "billing",
           "troubleshooting"

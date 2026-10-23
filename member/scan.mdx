@@ -41,7 +41,7 @@ The last line is the next step: [`init`](/quickstart/developer) connects those a
 | Place | What it checks |
 | --- | --- |
 | Agent configs | MCP server settings for Claude Desktop, Claude Code, Cursor, VS Code, and Codex: `env`, headers, arguments, and URLs. Also Claude Code's `settings.json` `env`, and a project's `.mcp.json`, `.cursor/mcp.json`, and `.vscode/mcp.json`. |
-| CLI sign-ins | GitHub CLI, Railway, Vercel, Cloudflare Wrangler, AWS, Stripe CLI, Supabase, and npm, in the files those CLIs write. |
+| CLI sign-ins | GitHub CLI, Railway, Vercel, Cloudflare Wrangler, AWS, Stripe CLI, Supabase, npm, and Composer, in the files those CLIs write. |
 | Shell environment | Well-known variable names only, such as `GITHUB_TOKEN`, `RAILWAY_TOKEN`, `STRIPE_API_KEY`, and `AWS_SECRET_ACCESS_KEY`. Other variables are never read. |
 | `.env` files | Files named `.env*` in the current project, up to three folders deep. Skips `node_modules`, `.git`, `vendor`, and build output. Skipped entirely in your home folder. |
 

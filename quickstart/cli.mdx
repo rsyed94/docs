@@ -120,6 +120,7 @@ Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer.
 | `passport init [--dry-run]`             | Set up this computer: one plan first, then one question. `--dry-run` shows the plan and changes nothing.                                                   |
 | `passport status`                       | Your setup on one screen: you, your workspace, and this computer; each agent's guard and its fix; Autopilot; apps; keys.                                   |
 | `passport wait <approval-id>`           | Wait for a person to decide an approval. While it is still waiting, prints the link and, on a terminal, a live countdown.                                  |
+| `passport sessions [--status <s>]`      | Your agents' recent sessions and what Passport decided, running ones first. See [Sessions](/member/sessions#from-the-terminal).                            |
 | `passport exec -- <cli> [args…]`        | Run a vendor CLI with a key Passport holds. `--ask-again` asks again after a recent decline.                                                               |
 | `passport doctor`                       | Check Node, how your sign-in is stored, the server, your sign-in, and that this CLI and the server match. Never shows a key.                               |
 | `passport search [query]`               | Find tools you can run. With no words, lists every tool you can run, by app.                                                                               |
