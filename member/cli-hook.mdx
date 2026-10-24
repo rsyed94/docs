@@ -3,7 +3,9 @@ title: "Record the CLIs your agents run"
 description: "Let Claude Code, Codex, and Cursor report the command-line tools they reach for, and ask before the ones that delete or can't be undone."
 ---
 
-Your agents do plenty of work that never goes through Passport: `gh pr create`, `git push`, `railway up`, `kubectl delete`. The Passport hook puts that work in the same audit log as everything else your agents do. With the guard on, Passport also applies your Autopilot rules to the commands it recognizes.
+Open in Passport: [Agents](https://passportmcp.com/#agents)
+
+Your agents do plenty of work that never goes through Passport: `gh pr create`, `git push`, `railway up`, `kubectl delete`. The Passport hook puts that work in the same Activity as everything else your agents do. With the guard on, Passport also applies your Autopilot rules to the commands it recognizes.
 
 ## Turn it on
 
@@ -13,11 +15,13 @@ passport hook install --agent claude-code --guard --apply
 
 Use `--agent codex` or `--agent cursor` for those agents (`--client` still works). Leave out `--guard` to only record commands. Without `--apply` you see exactly what would change and nothing is written.
 
-| Agent       | File                      | Before a command (guard) | After a command (audit)             | Session start and end         |
-| ----------- | ------------------------- | ------------------------ | ----------------------------------- | ----------------------------- |
-| Claude Code | `~/.claude/settings.json` | `PreToolUse`             | `PostToolUse`, `PostToolUseFailure` | `SessionStart`, `SessionEnd`  |
-| Codex       | `~/.codex/hooks.json`     | `PreToolUse`             | `PostToolUse`                       | `SessionStart`                |
-| Cursor      | `~/.cursor/hooks.json`    | `beforeShellExecution`   | `afterShellExecution`               |                               |
+| Agent       | File                      | Before a command (guard) | After a command (audit)             | Session events                                   |
+| ----------- | ------------------------- | ------------------------ | ----------------------------------- | ------------------------------------------------ |
+| Claude Code | `~/.claude/settings.json` | `PreToolUse`             | `PostToolUse`, `PostToolUseFailure` | `SessionStart`, `SessionEnd`, `UserPromptSubmit` |
+| Codex       | `~/.codex/hooks.json`     | `PreToolUse`             | `PostToolUse`                       | `SessionStart`                                   |
+| Cursor      | `~/.cursor/hooks.json`    | `beforeShellExecution`   | `afterShellExecution`               |                                                  |
+
+Claude Code's `UserPromptSubmit` entry (CLI 0.26.0 and later) tells the agent about a command you approved after it stopped waiting. It asks Passport only for a session that waited for you; run `passport hook install --apply` to add it to an existing install.
 
 Passport adds only its own entries and leaves your other hooks alone. Codex asks you to trust new hooks: open Codex → `/hooks` and trust Passport's hooks.
 
@@ -63,7 +67,7 @@ Passport counts what the guard saw on each computer, per agent and per day, and 
 - **Placed**: Passport knows what kind of action it is and where it lands, but can't allow it, such as the project's own scripts (`node scripts/build.mjs`, `make test`, or a package script that runs them) or a vendor command with a variable in it.
 - **Blind**: Passport couldn't tell what it does: a program it doesn't know, a script outside the project, a package it doesn't know, SQL from a file (`psql -f`), or a one-liner (`node -e`, `python -c`).
 
-Each agent row on **Agents**, each person on **People**, each team, **Agents → Rollout**, and Home show the share your rules could decide over the last week, such as "decides 82%". An agent's page also names the three programs it was most often blind to, such as "Not checked: python3 ×12, node ×3". A session shows its own counts, such as "468 checked · 12 not checked · 3 could reach Production". `passport status` prints the week's line. Computers on a CLI before 0.24.0 don't sort their commands: what they couldn't read counts as not checked, and their rows show "468 checked · 12 not checked" instead of a share.
+Each agent row on **Agents**, each person on **People**, each team, [Agents › Rollout](/admin/rollout), and Home show the share your rules could decide over the last week, such as "decides 82%". An agent's page also names the three programs it was most often blind to, such as "Not checked: python3 ×12, node ×3". A session shows its own counts, such as "468 checked · 12 not checked · 3 could reach Production". `passport status` prints the week's line. Computers on a CLI before 0.24.0 don't sort their commands: what they couldn't read counts as not checked, and their rows show "468 checked · 12 not checked" instead of a share.
 
 When a session that changed confirmed Production had blind commands, the agent's owner and admins get an alert, at most once a week per computer, and the weekly email has a Coverage section. Open the agent's [sessions](/member/sessions#what-passport-saw) to see what Passport couldn't tell.
 
@@ -109,7 +113,7 @@ When a rule blocks it, the command doesn't run:
 Blocked by a team rule: no deletes in Production. Ask an admin to run it, or request an exception in Passport.
 ```
 
-When nobody is at the keyboard, such as in CI or a background agent, an ask becomes an approval request on the web and your phone, and the agent can run `passport wait <id>`. A decline answers the same command for ten minutes, so the agent hears "Declined 2 minutes ago by Erin" instead of asking you again; `passport exec --ask-again` requests it anew. `passport login` and `passport status` sync your rules to your computer, and the guard refreshes them in the background about once an hour. Signed out, it asks before every command it recognizes as a Delete or Irreversible. Change your rules any time in **Rules**; `passport status` prints a link to it.
+When nobody is at the keyboard, such as in CI or a background agent, an ask becomes an approval request on the web and your phone, and the agent can run `passport wait <id>`. If the agent stops waiting, you can still approve the request for a day: the command runs once, the next time the agent tries it in that session, and a resumed Claude Code session is told it was approved ([details](/member/safety#when-the-agent-stopped-waiting)). A decline answers the same command for ten minutes, so the agent hears "Declined 2 minutes ago by Erin" instead of asking you again; `passport exec --ask-again` requests it anew. `passport login` and `passport status` sync your rules to your computer, and the guard refreshes them in the background about once an hour. Signed out, it asks before every command it recognizes as a Delete or Irreversible. Change your rules any time in **Rules**; `passport status` prints a link to it.
 
 A command the guard doesn't recognize, or one it can't read with confidence (scripts, aliases, `make` targets, a path in a variable), runs through your agent's usual permissions.
 
@@ -134,7 +138,7 @@ Your agent's own work in the project folder counts as **Development**, so with t
 
 Symlinks count where they point, `cd` inside a command is followed, and writing to your keys or shell startup files counts as a delete. Try any command on the **Rules** page or with `passport rules test "npm test"`.
 
-Code that reaches a repository's default branch only reaches people if that repository deploys when you merge. The first push to a repository's default branch shows it in **Rules → Environments**, treated as Production until you choose: keep **Production** for a repository that deploys on merge, or choose **Staging** for one that doesn't. A force push to it asks either way, because Staging asks before deletes.
+Code that reaches a repository's default branch only reaches people if that repository deploys when you merge. The first push to a repository's default branch shows it in [Rules › Environments](https://passportmcp.com/#rules?section=environments), treated as Production until you choose: keep **Production** for a repository that deploys on merge, or choose **Staging** for one that doesn't. A force push to it asks either way, because Staging asks before deletes.
 
 ## Fewer prompts, even offline
 
@@ -169,7 +173,7 @@ Most decisions happen on your computer from rules synced in the last hour, and t
 
 ## App access
 
-Your access to an app in Passport covers its CLI too. If you have **No access** to Railway, every `railway` command an agent runs through the guard or `passport exec` is blocked with `You don't have access to Railway in Passport. Ask an admin.` and a link to the app's **Access** tab. **Read-only** access runs only commands that read; anything that changes or deletes is blocked, saying so. A CLI whose app isn't in your workspace works from its key, as before. This covers the CLIs `passport exec` runs: `railway`, `gh` (GitHub), `vercel`, `wrangler` (Cloudflare), `supabase`, `stripe`, `aws`, `neonctl` (Neon), and `flyctl` (Fly.io).
+Your access to an app in Passport covers its CLI too. If you have **No access** to Railway, every `railway` command an agent runs through the guard or `passport exec` is blocked with `You don't have access to Railway in Passport. Ask an admin: passport request railway --reason "<why>"` and a link to the app's **Access** tab. **Read-only** access runs only commands that read; anything that changes or deletes is blocked, and the message names `passport request railway --full --reason "<why>"` to ask for Full access. You can also ask from the app's page in Passport: **Ask for Full access** on its Overview (Pro and Enterprise). A CLI whose app isn't in your workspace works from its key, as before. This covers the CLIs `passport exec` runs: `railway`, `gh` (GitHub), `vercel`, `wrangler` (Cloudflare), `supabase`, `stripe`, `aws`, `neonctl` (Neon), and `flyctl` (Fly.io).
 
 AWS has no MCP server to connect, so an admin adds **AWS** from the catalog as a CLI app: no sign-in and no tools, just who may run `aws` and how. Its **Tools** tab lists common commands by class. Reads such as `aws s3 ls` run; changes follow your rules; commands that open access (`iam attach-role-policy`, `s3api put-bucket-policy`) ask like a delete; and terminating an instance or deleting a bucket, table, or database in Production is **Irreversible**. The **AWS Knowledge** docs app is a separate app and never decides who may run `aws`.
 
@@ -184,11 +188,11 @@ passport exec -- railway up -e staging
 
 `keys move` asks about each key (`[y/N]`, so Enter keeps it), stores it in Passport, and signs that CLI out on your computer. `passport keys move railway` moves only that one. If Passport already holds a different key for that CLI, every agent that uses it would switch, so you type the CLI's name to replace it (`Type railway to confirm, or press Enter to cancel:`); anything else keeps the key in Passport and leaves this computer signed in. Only you, at a terminal, can replace a key: with `--yes` or without a terminal nothing is replaced, and `keys move` says `Replacing a key in Passport needs you at a terminal.` and `Run: passport keys move railway`. A replacement alerts you and your admins ("Railway key in Passport was replaced from Laptop by Maya. Undo."), is in the audit trail, and can be undone for seven days from the alert or the app's **Keys** tab. Signing out removes only the key: your project links, current team, profiles, and other settings stay. `.env` files stay as they are, since your apps need them. `passport exec` asks Passport before each command; when your rules allow it, the key reaches only that command, short-lived for GitHub (with the GitHub App installed), AWS, and Cloudflare where the key allows it. In Claude Code, the guard sends commands for those CLIs through `passport exec` for you. If Passport can't be reached, nothing runs.
 
-Each key lives on its app. In **Apps**, the app's row says **Key in Passport**, and flags one that stopped working or is back on a computer. Open the app and its **Keys** tab to rotate or remove your key; admins also see who keeps a key for that app, whether it works, and when agents last used it, never the key itself. A key for a CLI whose app isn't in your workspace stays listed under your apps, with any computer that still holds keys.
+[Settings › Keys](https://passportmcp.com/#settings/keys) lists every key Passport holds for you, with any computer that still holds keys and the command to move them, beside your agent tokens (and, for admins, enrollment keys). Rotate or remove a key there or on its app: in **Apps**, the app's row says **Key in Passport** and flags one that stopped working or is back on a computer, and the app's **Keys** tab holds your key too. Admins also see who keeps a key for that app, whether it works, and when agents last used it, never the key itself.
 
 ### Rotate a key
 
-Each key's row says how old it is ("Added 120 days ago"). When a key gets older than your workspace allows (90 days unless an admin picks another time in **Settings › Access › Keys in Passport**), or a data check catches its value in a tool call, **Home** shows one line under **Needs attention**, like "Your Railway key is 120 days old. Rotate it.", with a **Rotate** button.
+Each key's row says how old it is ("Added 120 days ago"). When a key gets older than your workspace allows (90 days unless an admin picks another time under **Keys in Passport** on [Settings › Access](https://passportmcp.com/#settings/access)), or a data check catches its value in a tool call, **Home** shows one line under **Needs attention**, like "Your Railway key is 120 days old. Rotate it.", with a **Rotate** button.
 
 **Rotate** (on Home, or on the key's row) opens three steps:
 
@@ -247,7 +251,7 @@ A kept CLI signs in as usual, Passport never removes it, and it isn't counted as
 
 ## Guard required
 
-On Pro, an admin can require the guard for a team in **Rules › Team rules**. With **Required**, `passport exec` runs only for an agent whose computer reported its guard On (or Locked) in the last 48 hours; otherwise the command stops with "Blocked by Passport: guard required" and the fix, and its session row reads **Blocked · Guard required**. **Report only** shows those agents on **Agents** without stopping anything. Tools your agents call through Passport are always checked by Passport itself, so this applies to `passport exec`.
+On Pro, an admin can require the guard for a team under **Team rules** on [Rules › Team](https://passportmcp.com/#rules/team?section=floors). With **Required**, `passport exec` runs only for an agent whose computer reported its guard On (or Locked) in the last 48 hours; otherwise the command stops with "Blocked by Passport: guard required" and the fix, and its session row reads **Blocked · Guard required**. **Report only** shows those agents on **Agents** without stopping anything. Tools your agents call through Passport are always checked by Passport itself, so this applies to `passport exec`.
 
 ## Speed
 
@@ -329,7 +333,7 @@ To get the numbers, `passport hook flush` (which runs in the background, never w
 
 A model Passport has no price for shows tokens only. Codex and Cursor don't give hooks token numbers, so their sessions show none.
 
-It's on by default. An admin turns it off for the workspace in **Settings → Workspace** (**Token usage per session**). To turn it off on one computer, set `PASSPORT_TOKEN_USAGE=off` in the environment your agent runs in.
+It's on by default. An admin turns it off for the workspace with **Token usage per session** on [Settings › Workspace](https://passportmcp.com/#settings/workspace). To turn it off on one computer, set `PASSPORT_TOKEN_USAGE=off` in the environment your agent runs in.
 
 ## What it never records
 

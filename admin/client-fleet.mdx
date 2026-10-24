@@ -3,7 +3,9 @@ title: "Manage connected agents"
 description: "Manage your own agents, review every agent in the workspace, and set workspace agent policy."
 ---
 
-Everyone, admins included, manages their own connections from **Agents**. Pro and Enterprise admins switch the page to **Everyone** to see every agent in the workspace.
+Open in Passport: [Agents › Everyone](https://passportmcp.com/#agents?scope=everyone)
+
+This page covers **Agents** in both views. Everyone, admins included, manages their own agents on [Agents](https://passportmcp.com/#agents). On Pro and Enterprise, admins switch it to **Agents › Everyone** to see every agent in the workspace. To put Passport in every agent at once, see [Roll out to your company](/admin/rollout).
 
 ## Manage your own agents
 
@@ -29,7 +31,7 @@ Open an agent to:
 
 ## Automations
 
-Owners and admins manage agent tokens for scripts, CI, and hosted workflows in **Agents → Automations**. See [Automation credentials](/admin/people-and-teams#automation-credentials). People who own an agent token but are not admins see only their own tokens there and can revoke them.
+**Agents › Automations** shows how many agent tokens scripts, CI, and hosted workflows use, and **Manage tokens** opens them in [Settings › Keys](/admin/settings#agent-tokens), where owners and admins create, rotate, and revoke them. People who own an agent token but are not admins see only their own tokens there and can revoke them. See [Automation credentials](/admin/people-and-teams#automation-credentials).
 
 ## Manage the workspace
 
@@ -43,7 +45,7 @@ Open an agent to see its **connections**, one per person per computer. Each show
 
 Disconnecting cuts access right away, after a confirm that names the agent, person, and computer. Its owner must sign in again. The list shows real observed connections; opening setup instructions alone does not add a row.
 
-A person's page shows the same rows as their **Agents** page under **Agents**, with each guard state and fix. Connections people configured outside Passport are on [Agents → Discovered](/admin/discovered-agents).
+A person's page shows the same rows as their **Agents** page under **Agents**, with each guard state and fix. MCP servers people set up outside Passport are on [Agents › Discovered](/admin/discovered-agents).
 
 ## Understand agent names
 
@@ -61,7 +63,7 @@ no specific connection label keeps the generic name.
 
 ## Set agent policy
 
-Open **Settings → Access → Agents** and choose which agents can connect:
+Open [Rules › Team › Which agents can connect](https://passportmcp.com/#rules/team?section=agents) and choose which agents can connect:
 
 - **Any agent**: people can connect any agent, including ones Passport doesn't recognize.
 - **Known agents for new connections**: new connections must use an agent Passport recognizes. Other agents already connected keep working.
@@ -75,7 +77,7 @@ These controls require Enterprise. If the workspace downgrades, the saved policy
 
 ## Lock the guard on
 
-By default the guard lives in each person's own agent settings, so they can turn it off. **Lock it** on **Agents → Rollout** puts Passport's guard and audit hooks in each agent's managed (system) settings instead, where people can't remove them. Managed settings run a small launcher owned by root at `/Library/Application Support/Passport/bin/passport` (macOS), `/opt/passport/bin/passport` (Linux), or `C:\ProgramData\Passport\bin\passport.cmd` (Windows). It hands off to each person's own Passport CLI; until that's set up, commands run as usual.
+By default the guard lives in each person's own agent settings, so they can turn it off. **Lock it** on [Agents › Rollout](/admin/rollout#lock-the-guard-on) puts Passport's guard and audit hooks in each agent's managed (system) settings instead, where people can't remove them. Managed settings run a small launcher owned by root at `/Library/Application Support/Passport/bin/passport` (macOS), `/opt/passport/bin/passport` (Linux), or `C:\ProgramData\Passport\bin\passport.cmd` (Windows). It hands off to each person's own Passport CLI; until that's set up, commands run as usual.
 
 | Agent       | Lock it                                                                                                                                                                                  | Strict adds                                                    |
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
@@ -85,7 +87,7 @@ By default the guard lives in each person's own agent settings, so they can turn
 
 **Strict** runs only managed hooks, and blocks a command when the guard can't run (for example, before that person has set Passport up).
 
-Deploy the files from **Agents → Rollout** through MDM, or run this as root on each computer:
+Deploy the files from **Agents › Rollout** through MDM, or run this as root on each computer:
 
 ```sh
 sudo npx passport-bridge@latest init --org <key> --yes --lock [--strict]
@@ -97,4 +99,5 @@ It writes the launcher and each agent's file, merging with what's there: it repl
 
 - [Get connected](/quickstart/member): connecting an agent
 - [People and teams](/admin/people-and-teams): roles and lifecycle
-- [Discovered agents](/admin/discovered-agents): connections found outside Passport
+- [Roll out to your company](/admin/rollout): enrollment keys and channels
+- [Discovered agents](/admin/discovered-agents): MCP servers found outside Passport

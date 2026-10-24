@@ -3,13 +3,15 @@ title: "Data checks"
 description: "Inspect tool traffic, protect secrets, and block or redact risky content."
 ---
 
+Open in Passport: [Rules › Data checks](https://passportmcp.com/#rules/data-checks)
+
 Data checks inspect calls that pass through Passport. They check arguments before an app receives them and the complete result before an agent sees it, including structured data and resource metadata. Images, audio, and binary content are size-limited but are not interpreted as text.
 
 Built-in secret detection protects every plan. Runtime security and custom checks require Enterprise. Data checks are a tab on **Rules**, next to your own rules and your team's; they were the **Guardrails** page.
 
 ## Start with runtime security
 
-Open **Rules → Data checks**. In the **Runtime security** card, choose a mode and what to inspect:
+Open **Rules › Data checks**. In the **Runtime security** card, choose a mode and what to inspect:
 
 - tool names and descriptions before a tool is exposed;
 - call arguments before execution;
@@ -23,7 +25,7 @@ Start with **Observe**. It records findings without changing calls, so you can s
 | Observe | Record findings but allow the call. Recommended first.                       |
 | Enforce | Block high-confidence threats. Lower-confidence signals remain observations. |
 
-The results card shows observed, blocked, and critical counts, plus recent findings.
+The results card shows observed, blocked, and critical counts, plus recent findings. Each finding opens its own page; see [Review a finding](#review-a-finding).
 
 <Warning>
   Runtime security is explainable and intentionally conservative. It does not claim to detect every malicious
@@ -81,8 +83,23 @@ Checks also inspect sensitive text split across fields or content blocks. If red
 
 ## Alerts and stored records
 
-A match raises an alert. The alerts bell groups data check hits, tool changes, and security events, folds repeats of the same event into one row, and keeps alerts unread until you choose **Mark all read**. The **Data checks** tab shows the latest five hits; **Open in All activity** shows the full record. Runtime security findings can also be exported as metadata-only security events or streamed to a security system.
+A match raises an alert. The alerts bell groups data check hits, tool changes, and security events, folds repeats of the same event into one row, and keeps alerts unread until you choose **Mark all read**. The **Data checks** tab shows the latest five hits; **Open in All activity** shows the full record, filtered to **Flagged** actions. Runtime security findings can also be exported as metadata-only security events or streamed to a security system.
 
 Data checks protect Activity itself: content that a check flags is scrubbed before the record is stored, so a blocked credential cannot reappear in Activity or an export. The exception is a custom alert-only check, which is explicitly meant to surface the matched content for review.
 
 See [SIEM and OTLP export](/enterprise/siem-export).
+
+## Review a finding
+
+Every runtime security finding has its own page, `#rules/data-checks/<id>`. Open it from its row on **Rules › Data checks**, from the Inbox, or from Home. It shows:
+
+- the check that matched and why;
+- where it matched (the tool's description, the call's arguments, or its result), its severity, and what Passport did;
+- the app and tool, and when;
+- who ran it, linked to their person page, and the session, linked to its timeline.
+
+It never shows the matched content or its fingerprint.
+
+**Mark reviewed** on the page clears that one finding from Home and the Inbox, and is recorded in admin activity. Reviewed rows show **Reviewed** on the tab. The tab's own button still marks every finding reviewed at once.
+
+Critical findings nobody has reviewed show in the [Inbox](/member/inbox#needs-attention) under **Needs attention**. With exactly one, its row opens that finding; with more, it opens the list.

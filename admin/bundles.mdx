@@ -1,13 +1,15 @@
 ---
 title: "Bundles"
-description: "Create a curated tool set from several apps, with its own connection URL, and include it in team setups (Pro and Enterprise)."
+description: "Create a curated tool set from several apps, with its own URL, and include it in team setups (Pro and Enterprise)."
 ---
 
-A **bundle** is a Pro and Enterprise feature: a named set of tools from several connected apps, with its own connection URL. Use it when an AI assistant should see a tight tool list instead of everything a person can reach.
+Open in Passport: [Apps › Setups › Bundles](https://passportmcp.com/#apps/setups/bundles)
+
+A **bundle** is a Pro and Enterprise feature: a named set of tools from several connected apps, with its own URL. Use it when an AI assistant should see a tight tool list instead of everything a person can reach.
 
 ## Create a bundle
 
-On Pro or Enterprise, open **Apps → Setups → Bundles** and choose **New bundle**, then:
+On Pro or Enterprise, open **Apps › Setups › Bundles** and choose **New bundle**, then:
 
 1. Name the bundle (and optionally describe it).
 2. Under **Apps**, pick the apps the bundle draws from. Each chip shows how many tools that app serves.
@@ -25,17 +27,17 @@ Bundles expose tools only, not upstream resources or prompts.
 
 ## Connect an AI assistant
 
-Point the assistant at the bundle connection URL:
+Point the assistant at the bundle's URL:
 
 ```
 https://<your-passport-host>/b/<bundle-key>/mcp
 ```
 
-Sign-in works the same way as the workspace connection. People with no access to the bundle do not see it. Bundle connections always list tools flat (they ignore the workspace flat/apps/compact setting). See [Tool discovery modes](/concepts/discovery).
+Sign-in works the same way as Passport's main URL. People with no access to the bundle do not see it. A bundle always lists tools flat (they ignore the workspace flat/apps/compact setting). See [Tool discovery modes](/concepts/discovery).
 
 ## Include a bundle in a team setup
 
-In the [team setup](/admin/team-setups) editor, choose the bundles the setup includes, then save and publish. Members of that setup who can already use a bundle see it under **Setup** with its connection URL and a copy button.
+In the [team setup](/admin/team-setups) editor, choose the bundles the setup includes, then save and publish. Members of that setup who can already use a bundle see it under **Apps › Setups** with its URL and a copy button.
 
 Including a bundle does not grant access. If someone cannot use the bundle, it does not appear for them. Deleting a bundle removes it from every setup.
 

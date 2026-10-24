@@ -1,0 +1,42 @@
+---
+title: "Status words"
+description: "What each status word in Passport means, in one sentence."
+---
+
+Open in Passport: [Sessions](https://passportmcp.com/#sessions)
+
+Passport uses one word for each status, and a word means the same thing on every page, in the CLI, and in these docs. Hover a status in the app to read its definition.
+
+Every count names its window beside it, such as **Last 7 days**. A **Production change** counts only an action that ran: blocked, declined, and failed actions changed nothing, so they never count. An **Unplaced** target counts as Production until someone places it.
+
+| Word | What it means |
+| --- | --- |
+| **Unplaced** | Passport could not tell which environment this touched, so it is treated as Production until someone places it. |
+| **Placed** | Someone chose Production, Staging, or Development for this target, and Passport decides by that choice. |
+| **Production change** | A change, delete, or irreversible action that ran on Production. |
+| **Change** | An action that creates or edits something. |
+| **Read** | An action that only looks at something. |
+| **Checked** | Passport read every part of the command and decided it from your rules. |
+| **Partly checked** | Passport could read only part of the command, so the risky parts it understood still follow your rules and the rest is not trusted. |
+| **Not checked** | The command ran, but Passport could not read what it did. |
+| **Asked** | Passport asked a person before letting the action run. |
+| **Failed** | The action ran and returned an error. |
+| **Blocked** | Your rules or a data check stopped the action before it ran. |
+| **Allowed** | Your agents can use this tool, and calls run without asking anyone. |
+| **Asks first** | Your agents can use this tool, but a person approves each call before it runs. |
+| **Withheld** | Your access, an admin’s switch, or a rule keeps this tool from your agents. |
+| **Notable** | Work with something worth a look, such as a failure, a Production change, an ask, or a command Passport could not check. |
+| **Running** | The session’s last action was less than 30 minutes ago. |
+| **Ended** | The session has been quiet for 30 minutes, or its agent said it was done. |
+| **Shipped** | What the work merged, deployed, opened, or pushed. |
+| **Careful** | Reads run on their own, and changes and deletes ask first. |
+| **Balanced** | Reads and changes run on their own, and deletes ask first. |
+| **Hands-off** | Everything runs on its own except irreversible actions, which always ask. |
+| **Observe** | Data checks record what they match but let the action run. |
+| **Enforce** | Data checks block high-confidence threats and record the rest. |
+| **Flagged** | A data check matched this action and recorded it without blocking it. |
+| **Reviewed** | An admin looked at this data check match and marked it as seen. |
+
+<Note>
+  This page is generated from the app's own glossary, so it matches what Passport shows.
+</Note>

@@ -1,17 +1,19 @@
 ---
-title: "Managed API integrations"
+title: "Managed API apps"
 description: "Connect provider APIs through the same Passport policy, safety, and audit layer as apps that use MCP servers."
 ---
 
-Passport treats an app as an integration, independent of how Passport reaches the provider. An integration may use an upstream MCP server or a reviewed API driver. Both appear in **Apps**, use the same Connect experience, and are delivered to agents through the same Passport MCP endpoint.
+Open in Passport: [Apps › Add an app](https://passportmcp.com/#apps/add)
 
-The initial native API integrations are:
+An app is the same to people however Passport reaches the provider. It may use an upstream MCP server or a reviewed API driver. Both appear in **Apps**, use the same Connect experience, and are delivered to agents through the same Passport MCP endpoint.
+
+The first managed API apps are:
 
 - **GitHub API**: repositories, code search, issues, comments, and pull requests
 - **Google Workspace**: Gmail, Drive, and Calendar
 - **Slack API**: channels, messages, threads, users, reactions, and direct messages
 
-Passport can also load reviewed long-tail connectors from an operator-configured provider adapter.
+Passport can also load reviewed long-tail apps from an operator-configured provider adapter.
 
 For a system that has an OpenAPI spec but no reviewed driver and no MCP server (most internal services), an admin can [import the spec](/admin/openapi-import) instead. The imported operations become tools on an ordinary app and use the same control plane described below.
 
@@ -26,7 +28,7 @@ The transport does not change the control plane. Managed API actions use the sam
 - per-tool switches, action classes, and drift alerts
 - members' Autopilot rules and action-time approvals
 - argument and result data checks
-- Activity, audit, metrics, and health views
+- Activity, admin activity, metrics, and health views
 - workspace, single-app, CLI, and hosted-agent surfaces
 
 If an API driver exposes resources or prompts, Passport namespaces and governs those with the same read pipeline used for MCP resources and prompts.
@@ -79,4 +81,4 @@ Passport authenticates itself to the relay with the provider token. The member c
 
 ## Compatibility
 
-Existing app records and URLs are unchanged. The stored `apps` aggregate remains stable; older records infer their protocol from their existing kind. API integrations are additive, so agents, bundles, passes, and existing agent connections continue to work without migration.
+Existing app records and URLs are unchanged. The stored `apps` aggregate remains stable; older records infer their protocol from their existing kind. Managed API apps are additive, so agents, bundles, and passes keep working without migration.

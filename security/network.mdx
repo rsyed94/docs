@@ -3,6 +3,8 @@ title: "Network and egress"
 description: "How Passport guards outbound requests to admin-supplied URLs, and what the bridge and CLI talk to."
 ---
 
+Open in Passport: [Settings › Advanced](https://passportmcp.com/#settings/advanced)
+
 Passport makes outbound requests on your behalf to endpoints an admin supplies: MCP servers, the alert webhook, the SIEM and OTLP export endpoints, and your SSO issuer. Because those URLs are attacker-influenceable in a hosted, multi-tenant deployment, every such request goes through one SSRF-hardened path.
 
 ## SSRF posture for admin-supplied URLs

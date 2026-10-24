@@ -1,0 +1,51 @@
+---
+title: "Home and the weekly report"
+description: "What Home shows, the Get started checklist, and the weekly report of what your agents shipped, changed, and asked."
+---
+
+Open in Passport: [Home](https://passportmcp.com/#home)
+
+**Home** is the first page after you sign in. It shows only what's live or needs you, in this order:
+
+- **Get started**, while your first setup is still open (see below).
+- **Waiting for you**: up to three of the requests in your [Inbox](/member/inbox), agent actions first, with **See all N waiting**.
+- **Needs attention**: things to fix, such as an app to sign in to again, an agent to reconnect, a key that stopped working, environments to place, or work a teammate asked you to review. The line "N things need attention" opens the Inbox and uses the same number as its badge.
+- **Running now**: work items with an agent session still going.
+- **Last 7 days**: the weekly numbers, which open the weekly report.
+- **Recent sessions**: your latest work, which opens in [Sessions](/member/sessions).
+
+A new workspace with nothing to show yet says "Connect an agent and an app, and your agents' work shows up here."
+
+## Get started
+
+A short checklist sits at the top of Home until the first path is done: an agent, an app, and one action. Each row has one control, and a finished row shows **Done**:
+
+| Step | Done when |
+| --- | --- |
+| **Connect an agent** | Passport saw a request from one of your agents |
+| **Add an app** | An app is ready for you (admins: an app is turned on for the workspace) |
+| **Pick your rules preset** | You chose a preset in **Rules** yourself |
+| **Run one action** | One of your agents made a successful call, or you ran a setup check. Sign in with `/mcp` in Claude Code, or run `passport init` |
+| **Move your keys into Passport** | Shown only while a computer still holds keys. See [Settings › Keys](/admin/settings#keys) |
+
+Admins see workspace facts: when a teammate connects an agent, the admin's agent step is done too. Dismiss the checklist and it stays dismissed for you. While the agent step is open, Home has no separate **Connect an agent** link; once it's done, a **Connect an agent** link sits in the page header, and each app's **Overview** offers the same shortcut.
+
+## The weekly report
+
+Home's **Last 7 days** card shows up to three numbers, only the ones with something in them:
+
+- **PRs shipped**: pull requests your agents' work merged.
+- **Production changes**: changes, deletes, and irreversible actions that ran on Production or on a target nobody placed yet. This number opens **Sessions › Production changes** for the same 7 days.
+- **Actions asked or blocked**: actions Passport asked a person about first, or stopped.
+
+Every count names its window beside it. **Weekly report** opens [the full report](https://passportmcp.com/#home/week), titled **This week**. It starts with a line about what Passport handled on its own, then one section for each number with the work behind it:
+
+- **PRs shipped**, with **All work** to open Sessions.
+- **Production changes**, with a link to the same view in Sessions.
+- **Actions asked or blocked**, with **Open in All activity** for those actions.
+
+A section with nothing in it says so, such as "Nothing your agents ran changed Production this week." The counts here, on Home, in Sessions, on a project's page, and in `passport changes` all use the same definitions. See [Status words](/concepts/status-words).
+
+## The weekly email
+
+Every Monday, people who had agent activity also get a short email: what Passport handled for them, what they approved, what was blocked, and any suggestions. Admins get the workspace version. Turn it off with **Weekly summary email** under **Notifications** in [Settings › Account](https://passportmcp.com/#settings). See [Weekly summary](/admin/slack-and-approvers#weekly-summary).

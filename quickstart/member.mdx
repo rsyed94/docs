@@ -3,19 +3,21 @@ title: "Get connected"
 description: "Connect a work app, add your agent, and confirm your first Passport action."
 ---
 
+Open in Passport: [Apps](https://passportmcp.com/#apps)
+
 This is the shortest path from sign-in to a working agent. It works on Windows, Linux, and macOS.
 
 ## 1. Sign in
 
 Open your invite, or sign in at [passportmcp.com](https://passportmcp.com). If your company uses single sign-on, Passport will send you to your company's sign-in page.
 
-After signing in, you should see **Home**, **Approvals**, **Sessions**, **Rules**, **Apps**, **Agents**, and **Settings**. If your team published a setup for you, **Apps** gets a **Setups** tab.
+After signing in, you should see **Home**, **Inbox**, **Sessions**, **Rules**, **Apps**, **Agents**, and **Settings**. [Home](/member/home) shows a **Get started** checklist until your first agent, app, and action are done. If your team published a setup for you, **Apps** gets a **Setups** tab.
 
 ## 2. Connect a work app
 
-Open **Apps**.
+Open [Apps](https://passportmcp.com/#apps).
 
-- Choose an app you already have access to and select **Connect**.
+- Choose an app you already have access to and select **Connect**. To find one that isn't on your list, choose **Add an app**; each app there has its own page with **Add**, or **Ask an admin to add** when your workspace reviews new apps.
 - Complete the provider sign-in in the Passport Connect window.
 - If your workspace requires approval or company setup, Passport shows that instead of pretending the app is ready.
 
@@ -34,15 +36,15 @@ The link is short-lived and tied to your Passport account. Another signed-in per
 
 ## 3. Add your agent
 
-Open **Agents**, choose **Add agent**, then pick where you want to use Passport.
+Open [Agents › Add agent](https://passportmcp.com/#agents/add), then pick where you want to use Passport.
 
 Passport shows current instructions for each agent:
 
 - **Cursor and VS Code** have one-click setup.
 - **Claude Code and Codex** use their own MCP command and browser sign-in.
-- **Claude Desktop, Claude.ai, and ChatGPT** use the connector address Passport gives you.
-- **Terminal agents** can use [Passport CLI](/quickstart/cli). Scripts and CI use an agent token from **Agents → Automations**.
-- **Other agents** can copy the advanced connector address if they support remote MCP servers and browser sign-in.
+- **Claude Desktop, Claude.ai, and ChatGPT** use the MCP server URL Passport gives you.
+- **Terminal agents** can use [Passport CLI](/quickstart/cli). Scripts and CI use an agent token from [Settings › Keys](/admin/settings#agent-tokens).
+- **Other agents** can copy the MCP server URL if they support remote MCP servers and browser sign-in.
 
 Follow the steps in Passport and finish the browser sign-in. No provider token should be pasted into your agent.
 
@@ -58,7 +60,7 @@ Keep the agent open and ask:
 
 > List my available Passport tools.
 
-In the setup guide, choose **Test connection**. Passport waits for the agent's first request, then says what it can reach, such as "Claude Code can see 13 apps and 172 tools". You can run the same test later from the agent's page in **Agents**. Then choose **Run test call** in the checklist. The check is safe, does not contact the app provider, and opens **All activity** so you can see the result.
+In the setup guide, choose **Test connection**. Passport waits for the agent's first request, then says what it can reach, such as "Claude Code can see 13 apps and 172 tools". You can run the same test later from the agent's page in **Agents**. Once the agent makes its first successful call, Home's **Run one action** step shows **Done**, and the call is in **Sessions › All activity**.
 
 If the test keeps waiting, finish the sign-in inside the agent, keep it open, and test again. See [Troubleshooting](/troubleshooting) for common fixes.
 
@@ -66,8 +68,8 @@ If the test keeps waiting, finish the sign-in inside the agent, keep it open, an
 
 - Open a connected agent and use **Limit apps for this agent** to hide apps it does not need.
 - Open [Autopilot rules](/member/safety) to choose what agents do on their own and when they ask you.
-- Open **Sessions → All activity** to review what your agents did and whether Passport allowed, blocked, or failed the action.
-- Open [Sessions](/member/sessions) to see your agents' work by project and pull request, with what needed you first. A session leads with its outcome: what it shipped, its Production changes, what failed, and how each ask ended. If your admin turned on **Show what agents say they're doing**, Claude Code's own one-line description of each step labels it.
+- Open [Sessions › All activity](https://passportmcp.com/#sessions/activity) to review what your agents did and whether each action ran, was blocked, or failed.
+- Open [Sessions](/member/sessions) to see your agents' work by project and pull request, with what needed attention first. Anything that needs your decision waits in your [Inbox](/member/inbox). A session leads with its outcome: what it shipped, its Production changes, what failed, and how each ask ended. If your admin turned on **Show what agents say they're doing**, Claude Code's own one-line description of each step labels it.
 
 <CardGroup cols={2}>
   <Card title="Passport CLI" icon="terminal" href="/quickstart/cli">
