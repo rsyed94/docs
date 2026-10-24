@@ -1,0 +1,59 @@
+---
+title: "Roll out to your company"
+description: "Put Passport in every agent with enrollment keys and the channels your company already runs, then track how far everyone got (Pro and Enterprise)."
+---
+
+Open in Passport: [Agents › Rollout](https://passportmcp.com/#agents/rollout)
+
+**Agents › Rollout** is where an admin puts Passport in every agent across the company, without anyone pasting a URL. It has three parts, top to bottom: **Progress**, **Enrollment keys**, and **Channels**. Rollout is part of Pro and Enterprise; on Free the tab explains it and links to **Settings › Billing**. Setting up only yourself? Use **Add agent** on [Agents](https://passportmcp.com/#agents) instead.
+
+The line under the header counts active enrollment keys, computers set up with them, computers whose guard is **On**, and how much of what the guard saw it could check, such as "94% checked".
+
+## Progress
+
+**Progress** shows everyone invited to the workspace, and how far each got, in three steps:
+
+1. **Joined**
+2. **Connected an agent**
+3. **Used a tool**
+
+Each step is a bar with "N of M people", counted against everyone in the rollout, invites included. Select a step to open the **People** list narrowed to whoever hasn't reached it (`#people?step=agent` or `#people?step=tool`); clear the filter with its chip. Before anyone is invited, Progress says "No rollout yet". For who is using Passport and how much, see [Adoption](/admin/people-and-teams#adoption).
+
+## Enrollment keys
+
+An enrollment key (`pek_…`) points an agent's sign-in at this workspace. It isn't secret and never grants access: people still sign in as themselves, and must be members or allowed to join.
+
+- **Create enrollment key** is the page's one action. Give the key an optional name, such as "Engineering laptops", and optionally limit it to one email domain, so only people whose email ends with that domain are pointed here.
+- Each key shows how many computers it set up. **Revoke key** makes sign-ins and scripts that use it stop pointing at this workspace; people already signed in stay connected.
+- With more than one active key, **Snippets use** picks which key the channel snippets below carry.
+
+Enrollment keys also appear in [Settings › Keys](/admin/settings#keys), beside app keys and agent tokens. **All keys in Settings** opens it.
+
+## Channels
+
+Each channel sets Passport up through something your company already runs. Use the ones you have:
+
+| Channel | Who it's for | What it does |
+| --- | --- | --- |
+| **Claude for your organization** | Claude Team and Enterprise owners | Uploads the Passport plugin, or syncs it from a private GitHub repository, as a required plugin for everyone on Claude.ai, Claude Desktop, and Claude Code |
+| **Cursor team marketplace** | Cursor Teams and Enterprise admins | Installs the Passport plugin for everyone, set to Required |
+| **Claude Code through MDM** | Device management | Deploys `managed-settings.json`, which installs the Passport plugin at each person's next session |
+| **Codex through MDM** | Device management | Deploys Codex managed defaults and requirements, so only approved MCP servers are allowed |
+| **Any agent, by script** | Any computer with Node.js 22 or newer | Adds Passport to every agent found on the computer; safe to rerun. Jamf Pro and other MDM variants are included |
+| **People add it themselves** | Everyone | One-click setup for Cursor, VS Code, Goose, and LM Studio, and the public setup pages for other agents |
+
+Every snippet carries the selected enrollment key, so sign-in lands in this workspace.
+
+### Lock the guard on
+
+The Cursor, MDM, and script channels offer **Lock it**: Passport's guard and audit hooks go into each agent's managed settings, where people can't remove them. **Strict** also blocks a command when the guard can't run. See [Lock the guard on](/admin/client-fleet#lock-the-guard-on) for the files each agent uses, and the one-line command:
+
+```sh
+sudo npx passport-bridge@latest init --org <key> --yes --lock [--strict]
+```
+
+Computers where the guard is locked show **Locked** on **Agents**.
+
+## Invites carry the key
+
+Invite emails include one line to set up agents from a terminal, `npx passport-bridge init --org <key>`. An invitee who signs in or runs it with the invited address joins without the link. See [Invitations](/admin/invitations).

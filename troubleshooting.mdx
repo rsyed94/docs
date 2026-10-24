@@ -1,7 +1,9 @@
 ---
 title: "Troubleshooting"
-description: "Fix incomplete sign-in, missing apps, duplicate connections, and common CLI errors."
+description: "Fix incomplete sign-in, missing apps, tools that show twice, moved pages, and common CLI errors."
 ---
+
+Open in Passport: [Agents](https://passportmcp.com/#agents)
 
 ## An agent stays on "Setup pending"
 
@@ -12,9 +14,9 @@ Passport marks an agent connected only after it observes real activity. Opening 
 3. Ask it to list your Passport tools.
 4. Return to **Agents**, open the agent, and choose **Refresh** or **Troubleshoot**.
 
-Passport's agent-specific troubleshooting shows the exact check for Claude Code, Cursor, VS Code, Codex, Claude, ChatGPT, and Passport CLI.
+Passport's agent-specific troubleshooting shows the exact check for Claude Code, Cursor, VS Code, Codex, Claude.ai, ChatGPT, and Passport CLI.
 
-## A connection has a generic or unfamiliar agent name
+## An agent has a generic or unfamiliar name
 
 Dynamic agents can report their own MCP name, title, and version. Passport
 shows that context in Agents and Activity; it does not use the claimed name to
@@ -22,7 +24,7 @@ grant access. If the agent supplies no usable identity or connection label,
 Passport shows **agent**.
 
 Ask the agent to list Passport tools, then refresh **Agents**. Review the
-connection's owner and activity before disconnecting it. See
+agent's owner and Activity before disconnecting it. See
 [agent names](/admin/client-fleet#understand-agent-names).
 
 ## An app is missing from one agent
@@ -37,9 +39,9 @@ After a visibility or access change, ask the agent to refresh its tools. Startin
 
 ## Tools appear twice
 
-You probably have both the normal connection and the **Local bridge** configured for the same agent.
+You probably have both the normal setup and the **Local bridge** configured for the same agent.
 
-Open **Agents**. The affected row says it is set up twice; choose **Remove duplicate**. Passport removes the local setup and keeps the account connection that works.
+Open **Agents**. The affected row says it is set up twice; choose **Remove duplicate**. Passport removes the local setup and keeps the sign-in that works.
 
 ## "Redirect URI is not allowed" when signing into an app
 
@@ -53,7 +55,7 @@ https://<your-passport-domain>/auth/connect-app/callback
 
 Admins can copy this from the app's setup screen under **Sign-in service** or **Callback URL**.
 
-For Mintlify, use **Admin → MCP → Allowed OAuth redirect URIs**. This is different from the custom-domain DNS settings. If your organization has several Mintlify deployments, allow the redirect on each one or choose the intended deployment during consent.
+For Mintlify, add the callback URL to your MCP server's allowed OAuth redirect URIs in the Mintlify dashboard. This is different from the custom-domain DNS settings. If your organization has several Mintlify deployments, allow the redirect on each one or choose the intended deployment during consent.
 
 ## "A different workspace" / reconnect prompts
 
@@ -63,15 +65,15 @@ Reconnect that agent from **Agents** in the intended workspace. This often happe
 
 ## "This connection isn't signed in"
 
-This means the agent's Passport sign-in expired. It is separate from an individual app or integration needing reconnect.
+This means the agent's Passport sign-in expired. It is separate from one app needing you to sign in again.
 
 If Claude Desktop uses the **Local bridge**, ask Claude to reconnect Passport. The bridge stays available in a restricted recovery mode and exposes a **Reconnect Passport** action. Open its Passport link, confirm the device code, and finish browser sign-in. Passport restores the tools in the existing Claude session; you do not need to restart Claude.
 
-You can also open **Agents** and choose **Reconnect** on the **Claude** row. Other agent connection types may require this route when they cannot present the recovery action in chat.
+You can also open **Agents** and choose **Reconnect** on the **Claude Desktop** row. Other agents may need this route when they cannot present the recovery action in chat.
 
 ## An agent says an app needs sign-in
 
-This means one integration's sign-in expired, not the agent's Passport sign-in. The agent should offer a **Connect** or **Reconnect** action. Depending on the agent, this appears as a built-in prompt or as a secure Passport link in the conversation.
+This means one app's sign-in expired, not the agent's Passport sign-in. It also shows in your [Inbox](/member/inbox#needs-attention) under **Needs attention**, with **Sign in again**. The agent should offer a **Connect** or **Reconnect** action. Depending on the agent, this appears as a built-in prompt or as a secure Passport link in the conversation.
 
 1. Open the link and confirm that it uses your Passport domain.
 2. Sign in to the provider in the browser. Do not paste a password, API key, or provider token into the chat.
@@ -88,6 +90,23 @@ A deactivated person cannot sign in or use Passport. You may see:
 
 An admin can reactivate you in **People**. Then sign in again and reconnect any accounts that need it.
 
+## A page moved
+
+Old links open the new place, so a bookmark keeps working:
+
+| Was | Now |
+| --- | --- |
+| Approvals | [Inbox](/member/inbox) |
+| Apps › Browse apps, App catalog | **Apps › Add an app** |
+| Guardrails | **Rules › Data checks** |
+| Inventory, Discover | **Agents › Discovered** |
+| Agents › Workspace agents | **Agents › Everyone** |
+| Rollout (its own page) | [Agents › Rollout](/admin/rollout) |
+| Settings › Admin activity | **Settings › Workspace › Admin activity** |
+| Settings › Safety, Settings › Access › Which agents can connect | **Rules › Team** |
+| Apps › Keys, Manage tokens | [Settings › Keys](/admin/settings#keys) |
+| An app's Connections | The app's **Tools** tab (tool review) and **Sign-in** tab |
+
 ## Rate limited
 
 Wait a moment and try again. The message says whether the limit applies to the connection, workspace, or number of calls happening at once. Self-host operators can tune these limits; see [Self-host](/self-host).
@@ -102,7 +121,7 @@ passport status
 passport search ""
 ```
 
-`doctor` checks the runtime, credential store, endpoint, sign-in, and protocol without printing credentials. If it asks you to sign in, run the `passport login` command shown under **Agents → Add agent → Passport CLI**.
+`doctor` checks the runtime, credential store, endpoint, sign-in, and protocol without printing credentials. If it asks you to sign in, run the `passport login` command shown for **Passport CLI** in [Agents › Add agent](https://passportmcp.com/#agents/add).
 
 ## Passport CLI exits with an error code
 

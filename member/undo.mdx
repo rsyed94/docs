@@ -3,6 +3,8 @@ title: "Backups and undo"
 description: "Passport backs up what a delete removes, right before it runs, and can undo it for 7 days."
 ---
 
+Open in Passport: [Sessions › All activity](https://passportmcp.com/#sessions/activity)
+
 When an agent deletes or overwrites something through Passport, Passport first saves what's about to go, where it can. The action's row then says **Backup taken**, and for 7 days you can **Undo** it right there, in the session or All activity, from the terminal, or by asking your agent. Home stays as it is: undo lives on the action.
 
 Passport only backs up actions it can see: app tools, the production toolkit, and `passport exec`. A command an agent runs with a key on your computer gets no backup, which is one reason to [move your keys into Passport](/member/cli-hook). The exception is everyday deletes from the shell: see [Backups on your computer](#backups-on-your-computer).
@@ -63,7 +65,7 @@ The result shows in the dialog and on the row: **Restored**, **Couldn't restore*
 
 After 7 days the row says **Backup expired**, with no button. Undo also isn't available while someone else is undoing it, or if you can't reach the app (connect it in Passport first). You can undo your own actions and those of agents you own; workspace admins can undo anyone's, with their own connection, and the person whose action it was gets an email saying so.
 
-An undo is an action too: the original row says **Restored by** you and links to the undo's own row, which links back. Most undos can be undone again.
+An undo is an action too: the original row says **Restored by** you and links to the undo’s own row, which links back. Most undos can be undone again. An undo you run from the web is your action, not the agent’s, so it’s in All activity rather than the agent’s session, and an ended session stays ended.
 
 From the terminal:
 

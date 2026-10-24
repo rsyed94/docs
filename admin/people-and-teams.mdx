@@ -3,7 +3,9 @@ title: "People and teams"
 description: "Use Pro and Enterprise team controls to manage people, roles, teams, and lifecycle."
 ---
 
-People and Teams are part of Pro and Enterprise. Free is for one person: its owner opens **Settings**, then under **Workspace essentials** chooses **Manage workspace** to manage the workspace (backup download lives under **Advanced** on that page). Pro and Enterprise add a **People** page with roles, teams, person pages, usage, scoped access, and lifecycle controls, and a **Rollout** page that tracks how far everyone got. Enterprise adds directory sync and domain joining.
+Open in Passport: [People](https://passportmcp.com/#people)
+
+People and Teams are part of Pro and Enterprise. Free is for one person: its owner manages the workspace from **Manage workspace** on [Settings › Account](https://passportmcp.com/#settings) (backup download is under **Advanced** there). Pro and Enterprise add a **People** page with four tabs, **People**, **Teams**, [Invitations](/admin/invitations), and [Adoption](#adoption), plus person pages, scoped access, and lifecycle controls. [Agents › Rollout](/admin/rollout) tracks how far everyone got. Enterprise adds directory sync and domain joining.
 
 ## Roles
 
@@ -11,21 +13,21 @@ Every member has one of three roles:
 
 | Role   | Can do                                                                                                                                                                                |
 | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Admin  | Approve apps, manage people and teams, set data checks and policy, and see the audit trail. The first person in a workspace is an admin (sometimes called the owner in product copy). |
+| Admin  | Approve apps, manage people and teams, set data checks and policy, and see admin activity. The first person in a workspace is an admin (sometimes called the owner in product copy). |
 | Member | Connect their agents and use the apps their passes permit.                                                                                                                            |
 | Agent  | A non-human identity for automation, authenticated by an agent token rather than a browser session.                                                                                   |
 
 ## Add people
 
-Select **Invite people** on the People page to add teammates as admins or members, and Passport emails each an invite. The email also has one line to set up agents from a terminal (`npx passport-bridge init --org <key>`). An invitee who signs in or runs it with the invited address joins without the link. Have a list? Choose **Import a CSV** in the same dialog to paste one person per line (`name, email, title, team`), and **Invite by email instead** to go back. On Enterprise, **Or sync from your directory** opens SCIM provisioning in Settings. Invited people sit at the top of the list until they accept, with **Resend** beside each one and **Revoke invite** in its menu. You can also copy your workspace sign-in link and share it directly. A person's team is stored as their department; assign it when you add them or change it later. Activity export filters use the query parameter `department` for that team name.
+Select **Invite people** on the People page to add teammates as admins or members, and Passport emails each an invite. The email also has one line to set up agents from a terminal (`npx passport-bridge init --org <key>`). An invitee who signs in or runs it with the invited address joins without the link. Have a list? Choose **Import a CSV** in the same dialog to paste one person per line (`name, email, title, team`), and **Invite by email instead** to go back. On Enterprise, **Or sync from your directory** opens SCIM provisioning in **Settings › Advanced**. Invited people sit at the top of the list until they accept. [People › Invitations](https://passportmcp.com/#people/invitations) lists every pending invite and join request: **Resend** or **Approve** beside each one, and **Revoke invite** or **Deny request** in its menu. See [Invitations](/admin/invitations). You can also copy your workspace sign-in link and share it directly. A person's team is stored as their department; assign it when you add them or change it later. Activity export filters use the query parameter `department` for that team name.
 
-**Needs attention**, at the top of the list, shows join requests to review and anyone who joined more than a day ago but hasn't connected an agent, with their sign-in link one click away. App requests stay in **Approvals**.
+**Needs attention**, at the top of the list, shows join requests to review (on **People › Invitations**) and anyone who joined more than a day ago but hasn't connected an agent, with their sign-in link one click away. App requests wait in the [Inbox](/member/inbox).
 
-**Progress**, at the top of **Agents → Rollout**, shows the rollout in three steps: **Joined**, **Connected an agent**, and **Used a tool**, each as a bar with "N of M people" against everyone in the rollout, invites included. Select a step to open the People list narrowed to who hasn't reached it yet; clear the filter with its chip. **People → Adoption** is the usage table.
+**Progress**, at the top of **Agents › Rollout**, shows the rollout in three steps: **Joined**, **Connected an agent**, and **Used a tool**. Select a step to open the People list narrowed to who hasn't reached it yet; clear the filter with its chip. See [Roll out to your company](/admin/rollout#progress).
 
 Once the workspace has ten or more people, search the list and filter it by team, role, or status (Active, Invited, or Deactivated). The list shows active and invited people by default. Each row's menu changes the person's team or role, copies the sign-in link, signs them out everywhere, or deactivates them. Each of those asks first.
 
-Open a person for their own page. **Overview** shows how far their setup got and what comes next, their job title, team, and role (each saved as soon as you change it), their connected apps and agents, and **Security and account** actions. Their **Activity** tab is the audit trail for that person, with its own CSV export. Their **Approvals** tab shows every kind: their agents' approvals, their rule requests, and their app requests.
+Open a person for their own page. **Overview** shows how far their setup got and what comes next, their job title, team, and role (each saved as soon as you change it), their connected apps and agents, and **Security and account** actions. Their **Activity** tab is that person's Activity, with the same filters and export as **All activity**. Their **Approvals** tab shows every kind: their agents' approvals, their rule requests, and their app requests.
 
 Names link the same way everywhere: a person's name opens their person page, an agent opens its page, and a computer opens where its agents are listed. Session rows show the person and the computer.
 
@@ -33,11 +35,20 @@ Names link the same way everywhere: a person's name opens their person page, an 
 
 Teams live alongside People. Each team row shows how many people it has, how many apps it can use, the team setup that reaches it, and its approval rules. Open a team to add or remove people, review what the team gets on **Access** (each part links to where it's edited), and see its published setups on **Setup**. The team's menu views its activity, renames it, or deletes it. Renaming a team carries its access rules, approval floors, team rules, and Guard required setting forward. Deleting one asks where its people should move before removing the team's shared rules, floors, and Guard required setting.
 
+## Adoption
+
+[People › Adoption](https://passportmcp.com/#people/adoption) shows who is using Passport. Its table names its window in the title, **Usage in the last N days**, and groups **By team** or **By person**:
+
+- **By team**: active people, actions, blocked actions, and the most used app for each team.
+- **By person**: actions, blocked actions, the most used app, and last activity for each person. A name opens their person page.
+
+How far the rollout got is on [Agents › Rollout](/admin/rollout#progress); who needs a nudge is under **Needs attention** on the People list. With no teams yet, put people on teams to compare usage by team.
+
 ## Who can join
 
-Free and Pro workspaces stay invite-only: only invited members can sign in. Domain join and domain discovery are **Enterprise** controls under workspace Settings. On Pro, Settings names them with an Enterprise badge in place of the controls.
+Free and Pro workspaces stay invite-only: only invited members can sign in. Domain join and domain discovery are **Enterprise** controls on [Settings › Access](https://passportmcp.com/#settings/access). On Pro, Settings names them with an Enterprise badge in place of the controls.
 
-On Enterprise, joining defaults to invite-only. You can instead allow anyone who verifies an email on a company domain to join as a member (a Slack-style domain policy), and optionally make the workspace discoverable to teammates on those domains. You control this and the list of allowed domains in Settings.
+On Enterprise, joining defaults to invite-only. You can instead allow anyone who verifies an email on a company domain to join as a member (a Slack-style domain policy), and optionally make the workspace discoverable to teammates on those domains. You control this and the list of allowed domains under **Joining** on **Settings › Access**.
 
 <Note>
   Consumer and disposable email domains never trigger domain join or domain discovery, so shared providers like
@@ -46,7 +57,7 @@ On Enterprise, joining defaults to invite-only. You can instead allow anyone who
 
 ## Deactivate and reactivate
 
-Deactivating a member immediately signs them out everywhere and revokes their connected-account grants, so nothing sits at rest or re-arms later. Reactivating restores access; they reconnect their own accounts. Sign-in attempts by a deactivated member are recorded in the audit trail as a security signal.
+Deactivating a member immediately signs them out everywhere and revokes their connected-account grants, so nothing sits at rest or re-arms later. Reactivating restores access; they reconnect their own accounts. Sign-in attempts by a deactivated member are recorded in admin activity as a security signal.
 
 <Note>
   The same lifecycle runs through SCIM. Deprovisioning a user in your IdP does exactly this, and Passport refuses to
@@ -57,6 +68,6 @@ Deactivating a member immediately signs them out everywhere and revokes their co
 
 Connect Claude Code, Codex, Cursor, and other supported agents from **Agents**. There is no separate managed-agent identity setup.
 
-For scripts and CI, owners and admins open **Agents → Automations** on every plan. An agent token authenticates Passport CLI with its own access, or with access narrowed by a delegated person's permissions. It is shown once, can be rotated in place, and can be revoked from the same dialog. An agent token belongs to the person who created it: their Autopilot rules govern its agent, and deactivating them revokes it. See [Agent tokens, their owners, and rotation](/admin/agents-and-access#agent-tokens-their-owners-and-rotation).
+For scripts and CI, owners and admins create agent tokens in [Settings › Keys](/admin/settings#agent-tokens) on every plan; **Agents › Automations** shows how many are active and links there. An agent token authenticates Passport CLI with its own access, or with access narrowed by a delegated person's permissions. It is shown once, can be rotated in place, and can be revoked from the same list. An agent token belongs to the person who created it: their Autopilot rules govern its agent, and deactivating them revokes it. See [Agent tokens, their owners, and rotation](/admin/agents-and-access#agent-tokens-their-owners-and-rotation).
 
 Passport CLI accepts the agent token through `PASSPORT_AGENT_KEY` and the workspace endpoint through `PASSPORT_ENDPOINT`. Store these in your CI secret store. This mode works without interactive sign-in and writes no local credential file. See [Passport CLI](/quickstart/cli).

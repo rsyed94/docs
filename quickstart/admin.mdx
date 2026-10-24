@@ -3,36 +3,42 @@ title: "Set up a workspace"
 description: "Connect the first app, add your agent, invite people, and confirm the setup."
 ---
 
+Open in Passport: [Home › Get started](https://passportmcp.com/#home)
+
 Start here if you created the workspace. You will connect one useful app, prove the setup yourself, and then invite other people.
 
-Free keeps administration inside **Settings**. Pro adds **People** (once someone else joins), team rules on **Rules → Team**, **Setups** on **Apps**, **Rollout** on **Agents**, and **Everyone** views of **Sessions → All activity** and **Agents**. Enterprise adds **Agents → Discovered** and **Rules → Data checks**.
+Free keeps administration inside [Settings](/admin/settings). Pro adds **People** (once someone else joins), team rules on **Rules › Team**, **Setups** on **Apps**, [Rollout](/admin/rollout) on **Agents**, and **Everyone** views of **Sessions › All activity** and **Agents**. Enterprise adds **Agents › Discovered** and **Rules › Data checks**.
+
+Home's **Get started** checklist tracks the same first steps: connect an agent, add an app, pick your rules preset, and run one action. See [Home](/member/home#get-started).
 
 ## 1. Connect an app
 
-Open **Apps**, then **Browse apps**.
+Open [Apps › Add an app](https://passportmcp.com/#apps/add).
 
-- Pick an app you already use.
-- Choose **Connect**.
+- Pick an app you already use, or search for it.
+- Choose **Add**. The dialog explains any setup step, such as a shared key or an OAuth client.
 - Complete your own provider sign-in, or finish any company setup Passport asks for.
+
+Every app has its own page, even before it's added, with what it can do and the tools it will expose.
 
 Verified catalog apps are self-service on Free and Pro. Enterprise can keep that flow open, require review, or apply catalog rules by app, category, publisher, and team.
 
 ## 2. Add your agent
 
-Open **Agents**, choose **Add agent**, and follow the instructions Passport shows. The normal path uses the agent's own support for remote MCP servers and browser sign-in.
+Open [Agents › Add agent](https://passportmcp.com/#agents/add) and follow the instructions Passport shows. The normal path uses the agent's own support for remote MCP servers and browser sign-in.
 
-Ask the agent to list its Passport tools, then return to **Agents** and choose **Run test call**. Passport opens **All activity** when the safe check succeeds.
+Ask the agent to list its Passport tools, then choose **Test connection** in the setup guide. Passport waits for the agent's first request and says what it can reach. Home's **Run one action** step turns **Done** once the agent makes a successful call.
 
 Do this before inviting the team. It proves the full connection and gives you a known-good example.
 
 ## 3. Invite people
 
-- **Free:** inviting your first teammate starts a 30-day Pro trial for your team, with no card. After it, upgrade to Pro from **Settings → Billing** to add more people.
-- **Pro and Enterprise:** open **People**.
+- **Free:** inviting your first teammate starts a 30-day Pro trial for your team, with no card. After it, upgrade to Pro from the **Billing** card in [Settings](https://passportmcp.com/#settings) to add more people.
+- **Pro and Enterprise:** open **People** and choose **Invite people**. Pending invites and join requests are on [People › Invitations](/admin/invitations).
 
 Add people individually or in a batch. Invites are tied to the intended email address and expire after 14 days. On Pro and Enterprise, assign roles and teams as part of the rollout.
 
-See [People and teams](/admin/people-and-teams) for roles, deactivation, teams, and automation credentials.
+See [People and teams](/admin/people-and-teams) for roles, deactivation, teams, and automation credentials. To put Passport in every agent across the company, use [Agents › Rollout](/admin/rollout).
 
 ## 4. Choose the right level of control
 
@@ -40,15 +46,15 @@ You can start simple:
 
 - Personal [Autopilot rules](/member/safety) are available on every plan.
 - Built-in secret detection protects every plan.
-- Pro adds teams, access rules and approval floors by team and person, Team setups, every agent in the workspace on **Agents → Everyone**, and the workspace activity log with export.
-- Enterprise adds catalog review and rollout rules, agent policy, **Agents → Discovered** with scans for connections outside Passport, runtime security, custom data checks, SSO, SCIM, and audit streaming.
+- Pro adds teams, access rules and approval floors by team and person, Team setups, every agent in the workspace on **Agents › Everyone**, and workspace-wide Activity with export.
+- Enterprise adds catalog review and rollout rules, agent policy, **Agents › Discovered** with scans for agents set up outside Passport, runtime security, custom data checks, SSO, SCIM, and streaming to your SIEM.
 
 Start with the default behavior, watch real usage in **All activity**, and add controls when there is a clear need.
 
 <Note>
-  Everyone can see their own actions in **Sessions → All activity**. Pro and Enterprise admins switch the same tab to
-  **Everyone** to review and export company-wide activity, and can review privileged admin changes under **Settings →
-  Admin activity**.
+  Everyone can see their own actions in **Sessions › All activity**. Pro and Enterprise admins switch the same tab to
+  **Everyone** to review and export company-wide Activity, and can review privileged admin changes under
+  [Settings › Workspace › Admin activity](https://passportmcp.com/#settings/workspace).
 </Note>
 
 <CardGroup cols={2}>

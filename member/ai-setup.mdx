@@ -1,16 +1,18 @@
 ---
 title: "Your setup"
-description: "Get the agents, connections, and practical workflows your team has prepared for you."
+description: "Get the agents, apps, and practical workflows your team has prepared for you."
 ---
 
-Open **Apps → Setups** in your Passport workspace to see your assigned agents, tools, and workflows. Each item shows what is ready and what needs attention. Your admin publishes the setup for your team; your existing access rules still apply.
+Open in Passport: [Apps › Setups](https://passportmcp.com/#apps/setups/yours)
+
+Open **Apps › Setups** in your Passport workspace to see your assigned agents, tools, and workflows. Each item shows what is ready and what needs attention. Your admin publishes the setup for your team; your existing access rules still apply.
 
 ## Get ready
 
-1. Open **Agents** to connect an approved agent. Install the vendor's app and sign in with your existing account when prompted.
+1. Open [Agents](https://passportmcp.com/#agents) to connect an approved agent. Install the vendor's app and sign in with your existing account when prompted.
 2. Follow **Connect** or **Request access** for tools that need attention. A team setup does not grant access by itself.
 3. Scroll to **Workflows** on the same tab to find tasks your team has prepared, including their instructions and required tools.
-4. If your setup includes bundles you can use, copy a bundle's connection URL from **Apps → Setups** and add it to your agent.
+4. If your setup includes bundles you can use, copy a bundle's URL from **Apps › Setups** and add it to your agent.
 
 Passport reports what it can verify. A connected agent does not prove that every workflow is installed on every computer. The Passport CLI checks the local installation on that computer.
 
@@ -20,7 +22,7 @@ Open a workflow in Passport, then run the `passport setup install` command it sh
 
 Passport keeps the workflow in its own skill folder. It preserves your other skills and refuses to replace a managed file you edited yourself. You can review an available update, restore the previous installed version, or remove the managed skill.
 
-Your agent still needs its normal Passport connection and vendor account. Installing instructions does not bypass approvals or grant new permissions.
+Your agent still needs its normal Passport sign-in and vendor account. Installing instructions does not bypass approvals or grant new permissions.
 
 ## Use the CLI
 
@@ -45,6 +47,6 @@ The installed inventory, rollback, and removal work offline, including after you
 ## When a setup needs attention
 
 - **Needs setup:** finish the indicated connection or installation step.
-- **Blocked:** use the existing access request process or contact your workspace admin.
+- **Blocked:** choose **Request access** on the app's **Tools** tab, or contact your workspace admin. Your requests are listed in your [Inbox](/member/inbox#your-requests).
 - **Locally modified:** move or restore your edited managed file before applying an update. Passport preserves the edit.
 - **Interrupted setup:** review the workflow again and retry. Passport uses its recovery record to finish safely.

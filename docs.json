@@ -22,6 +22,8 @@
         "group": "Using Passport",
         "pages": [
           "concepts/model",
+          "member/home",
+          "member/inbox",
           "member/ai-setup",
           "member/safety",
           "member/sessions",
@@ -30,6 +32,7 @@
           "member/cli-hook",
           "member/updates",
           "admin/activity-and-audit",
+          "concepts/status-words",
           "billing",
           "troubleshooting"
         ]
@@ -37,7 +40,10 @@
       {
         "group": "Manage a workspace",
         "pages": [
+          "admin/settings",
           "admin/people-and-teams",
+          "admin/invitations",
+          "admin/rollout",
           "admin/team-setups",
           "admin/bundles",
           "admin/approvals-and-requests",

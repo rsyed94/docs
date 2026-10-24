@@ -3,6 +3,8 @@ title: "How Passport works"
 description: "A plain-language guide to workspaces, apps, agents, access, and Activity."
 ---
 
+Open in Passport: [Home](https://passportmcp.com/#home)
+
 Passport sits between an agent and the work app it wants to use. It keeps the app credential, checks access and Autopilot rules, makes the call, and records the outcome.
 
 ## The five things to know
@@ -13,15 +15,15 @@ A workspace is your team's private space in Passport. It holds people, apps, set
 
 ### Apps
 
-An app is something your agent can use through Passport, such as GitHub, Linear, Stripe, or Notion. Open **Apps** to browse, connect, and manage them.
+An app is something your agent can use through Passport, such as GitHub, Linear, Stripe, or Notion. Open [Apps](https://passportmcp.com/#apps) to add, connect, and manage them.
 
-Some apps connect through MCP. Others use a reviewed API integration. Passport gives both the same connection, access, rules, and Activity experience, so most people do not need to care which technology is underneath.
+Some apps connect through MCP. Others use a reviewed API driver. Passport gives both the same sign-in, access, rules, and Activity, so most people do not need to care which technology is underneath.
 
 An app is also its vendor's CLI. Railway's tools, the `railway` commands agents run through `passport exec`, and the Railway key you keep in Passport all belong to the Railway app: its **Tools** tab lists the commands too, its **Keys** tab holds your key, its **Activity** tab includes the CLI, and its **Access** decides who may run it. AWS is a CLI app: it has no tools, just the AWS CLI with each person's key.
 
 ### Agents
 
-An agent is where you use AI: Claude, Cursor, ChatGPT, VS Code, Codex, Passport CLI, or another MCP-compatible product. Open **Agents** to add one, see its connection status, disconnect it, or choose which available apps it can see. On Pro and Enterprise, admins switch **Agents** to **Everyone** to see every agent in the workspace. On Enterprise, **Agents → Discovered** lists connections that scans found outside Passport.
+An agent is where you use AI: Claude, Cursor, ChatGPT, VS Code, Codex, Passport CLI, or another MCP-compatible product. Open [Agents](https://passportmcp.com/#agents) to add one, see whether it's working, disconnect it, or choose which available apps it can see. On Pro and Enterprise, admins switch **Agents** to **Everyone** to see every agent in the workspace. On Enterprise, **Agents › Discovered** lists MCP servers that scans found set up outside Passport.
 
 ### Access
 
@@ -43,13 +45,13 @@ Pro and Enterprise admins can set access for the workspace, a team, or a person.
 
 ### Activity
 
-Every call through Passport creates an Activity record with the person, agent, app, action, outcome, and timing. Everyone sees their own records in **Sessions → All activity**. Pro and Enterprise admins switch it to **Everyone** for the workspace-wide log.
+Every call through Passport creates an Activity record with the person, agent, app, action, outcome, and timing. Everyone sees their own records in [Sessions › All activity](https://passportmcp.com/#sessions/activity). Pro and Enterprise admins switch it to **Everyone** for the workspace-wide log.
 
 ## What happens during a call
 
 <Steps>
   <Step title="Identify the person and agent">
-    Passport checks the signed-in identity and the connection being used.
+    Passport checks the signed-in person and the agent's sign-in.
   </Step>
   <Step title="Apply access, then rules">
     Access comes first: apps and tools the person may not use are hidden and blocked, and no rule can change that.
@@ -67,16 +69,16 @@ Every call through Passport creates an Activity record with the person, agent, a
 - **Admins** manage the workspace and its rules.
 - **Members** connect agents and use the apps available to them.
 - **Agents** are the AI tools connected to Passport, such as Claude Code, Codex, or Cursor.
-- **Automation credentials** connect scripts and CI through Passport CLI.
+- **Agent tokens** connect scripts and CI through Passport CLI. They live in [Settings › Keys](/admin/settings#keys).
 - **Teams** let Pro and Enterprise admins apply access and team setups to a group instead of one person at a time.
 
 Deactivating a person revokes their sessions, agents, and connected accounts immediately.
 
 ## Advanced building blocks
 
-- A [bundle](/admin/bundles) combines a curated set of tools from several apps behind one connection.
+- A [bundle](/admin/bundles) combines a curated set of tools from several apps behind one URL.
 - [Tool discovery modes](/concepts/discovery) control how a large tool catalog is presented to an agent.
-- [Managed API integrations](/admin/managed-api-integrations) connect reviewed provider APIs through the same Passport gateway.
+- [Managed API apps](/admin/managed-api-integrations) connect reviewed provider APIs through the same Passport gateway.
 
 <Accordion title="Technical connection URLs">
   | URL | Purpose |

@@ -3,13 +3,15 @@ title: "Import an OpenAPI spec"
 description: "Turn an OpenAPI 3.x document into a governed app whose tools are the spec's operations."
 ---
 
+Open in Passport: [Apps › Add an app](https://passportmcp.com/#apps/add)
+
 Plenty of systems your team depends on have an OpenAPI (Swagger) spec and no MCP server, especially internal services. An admin can import that spec and get an **app** whose **tools** are the spec's operations, executed by Passport over HTTPS with the app's credential.
 
-Imported tools are ordinary Passport tools. They inherit passes, per-tool switches, action classes, members' Autopilot rules, action-time approvals, argument and result data checks, Activity, and the audit trail, on every surface: workspace endpoint, single app, bundles, CLI, and hosted agents.
+Imported tools are ordinary Passport tools. They inherit passes, per-tool switches, action classes, members' Autopilot rules, action-time approvals, argument and result data checks, and Activity, on every surface: workspace endpoint, single app, bundles, CLI, and hosted agents.
 
 ## Import one
 
-In **Browse apps**, choose **Import from OpenAPI** (it is also offered inside **Add custom**), then either:
+In [Apps › Add an app](https://passportmcp.com/#apps/add), choose **Import from OpenAPI**, then either:
 
 - **By address**: paste the spec URL. Passport reads it and can re-read it later.
 - **Paste the spec**: paste the document itself.
@@ -50,7 +52,7 @@ Imported definitions pass the same bounded admission and definition-security sca
 
 The spec's security schemes decide the choices, and the choice decides the app's sign-in mode:
 
-- **No sign-in**: nothing is attached. Passes, data checks, and the audit trail still apply.
+- **No sign-in**: nothing is attached. Passes, data checks, and Activity still apply.
 - **Company credential**: one workspace credential, stored encrypted, attached on every call as `Authorization: Bearer …`, as a named API-key header, or as an API-key query parameter, exactly as the scheme declares. Query-parameter keys are attached at call time and never logged.
 - **Per person**: for an `oauth2` scheme with an `authorizationCode` flow. Passport uses its standard OAuth broker; an admin supplies the provider's client ID and secret, and each person then connects their own account.
 

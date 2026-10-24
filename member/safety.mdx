@@ -3,6 +3,8 @@ title: "Autopilot rules"
 description: "How much your agents can do on their own, per environment, and when Passport asks you first."
 ---
 
+Open in Passport: [Rules](https://passportmcp.com/#rules)
+
 Autopilot decides every action your agents take through Passport, instantly, from your rules. It asks you only when a rule says so, and every decision names its cause, such as "Asked: Production changes ask first (Careful)."
 
 ## How a decision is made
@@ -16,6 +18,8 @@ Every action is decided the same way, whether it's a tool call, a command throug
 
 An irreversible action always asks unless an exception names that exact action. **Test a command** on the **Rules** page answers in the same order, so an access block shows its cause with a link to the app's **Access** tab.
 
+An app's **Tools** tab shows the answer for each tool before any agent calls it: **Allowed**, **Asks first**, or **Withheld**, with the reason, such as "Your access is Read-only". A withheld tool has one control, **Request access**, when a request can lift it: **Full access** for a Read-only pass, or an exception for a team or workspace rule. Once filed, it reads **Requested** and links to your [Inbox](/member/inbox#your-requests). See [Status words](/concepts/status-words).
+
 ## Actions and environments
 
 Each action is one of four classes:
@@ -25,7 +29,7 @@ Each action is one of four classes:
 - **Delete**: removes or overwrites. Rollbacks, secret changes, and schema migrations count.
 - **Irreversible**: can't be taken back even with a backup: sending money or email, force-pushing the default branch, deleting a repository.
 
-Each action also runs in an environment: **Production**, **Staging**, or **Development**. Passport reads it from the action, such as a Railway environment, a Vercel target, a Supabase project or branch, a Neon branch, or a CLI flag like `--environment`. When an agent names a resource only by its id, Passport asks that app once, with your own connection and only its read tools, and places the resource when the app's own facts are clear: a Railway environment's name or pull request environment, a Supabase default or preview branch, a Neon default branch, or a Vercel environment type. If an app has environments but Passport can't place the resource, it counts as Production, and the decision says so. Repository work lands where it goes: `gh` and `git` reads have no environment, a branch is Development, and code that reaches a repository's default branch counts as Production until you place that repository in **Rules → Environments**: Production if it deploys on merge, Staging if it doesn't. Local work, such as installs, builds, and tests, has no environment of its own. [Sessions](/member/sessions#where-an-action-lands) shows where each action landed and counts unplaced actions apart from confirmed Production.
+Each action also runs in an environment: **Production**, **Staging**, or **Development**. Passport reads it from the action, such as a Railway environment, a Vercel target, a Supabase project or branch, a Neon branch, or a CLI flag like `--environment`. When an agent names a resource only by its id, Passport asks that app once, with your own connection and only its read tools, and places the resource when the app's own facts are clear: a Railway environment's name or pull request environment, a Supabase default or preview branch, a Neon default branch, or a Vercel environment type. If an app has environments but Passport can't place the resource, it counts as Production, and the decision says so. Repository work lands where it goes: `gh` and `git` reads have no environment, a branch is Development, and code that reaches a repository's default branch counts as Production until you place that repository in [Rules › Environments](https://passportmcp.com/#rules?section=environments): Production if it deploys on merge, Staging if it doesn't. Local work, such as installs, builds, and tests, has no environment of its own. [Sessions](/member/sessions#where-an-action-lands) shows where each action landed and counts unplaced actions apart from confirmed Production.
 
 Apps without environments, like Linear, Notion, and Slack, are **Other apps**.
 
@@ -42,13 +46,13 @@ Passport places a command the way the vendor's own CLI picks where it goes. The 
 
 Railway, Supabase, and Neon links hold an id. Once a resource is placed, the id decides: if the name in a link file differs from the one Passport saved, the environment was renamed, so it keeps its place and shows the new name. A name in a link file never makes anything looser: for an id nobody has placed, Passport asks your connected app for its real name and places it by that, so a linked Railway environment called `staging` is Staging. Until the app has named it, or when the name says nothing, it counts as Production until someone chooses. If a link file can't be read, the command counts as Production. A database URL is read only for its host: a local database is Development; Passport never sends or stores the URL, user, or password.
 
-Each decision says how Passport knows: "Runs: Staging is Hands-off (linked in this folder)." In **Rules → Environments**, each resource shows where it came from: a linked folder, its name, what the app said (such as **Neon default branch**), or **Set by** whoever chose. **Needs attention** on Home lists only resources Passport couldn't place, one row per app: anyone can **Confirm all** to keep them Production, and an admin can choose each. When an approval is waiting on a resource nobody has placed, the request shows **This is: Production · Staging · Development**. Choosing saves it for the whole workspace and decides the action again, so it may run right away. Anyone can say Production; anything looser needs an admin. Changing an environment in Rules or with `passport env set` applies to new actions only: a request that's already waiting keeps the environment it was raised with.
+Each decision says how Passport knows: "Runs: Staging is Hands-off (linked in this folder)." In **Rules › Environments**, each resource shows where it came from: a linked folder, its name, what the app said (such as **Neon default branch**), or **Set by** whoever chose. **Needs attention** on Home lists only resources Passport couldn't place, one row per app: anyone can **Confirm all** to keep them Production, and an admin can choose each. When an approval is waiting on a resource nobody has placed, the request shows **This is: Production · Staging · Development**. Choosing saves it for the whole workspace and decides the action again, so it may run right away. Anyone can say Production; anything looser needs an admin. Changing an environment in Rules or with `passport env set` applies to new actions only: a request that's already waiting keeps the environment it was raised with.
 
-Run `passport env` in a folder to see what Passport reads there. **Rules → Environments** lists a resource the first time an agent works in it, not when you connect the app.
+Run `passport env` in a folder to see what Passport reads there. **Rules › Environments** lists a resource the first time an agent works in it, not when you connect the app.
 
 ### Project scripts
 
-**Rules → Environments → Project scripts** lists what your workspace has said about project scripts the guard can't read on its own, such as `deploy.py`: its environment and class, who set it, and **Changed since set** when the script changed. It's a classification, like placing an environment: your presets and exceptions still decide. Add one with **Add script**, from a Session row's **Tell Passport what this does**, or with `passport actions add`. Anyone can say Production for a change or worse; anything looser is **Proposed** until an admin approves it. See [Scripts](/member/cli-hook#scripts).
+[Rules › Environments › Project scripts](https://passportmcp.com/#rules?section=scripts) lists what your workspace has said about project scripts the guard can't read on its own, such as `deploy.py`: its environment and class, who set it, and **Changed since set** when the script changed. It's a classification, like placing an environment: your presets and exceptions still decide. Add one with **Add script**, from a Session row's **Tell Passport what this does**, or with `passport actions add`. Anyone can say Production for a change or worse; anything looser is **Proposed** until an admin approves it. See [Scripts](/member/cli-hook#scripts).
 
 ## Presets
 
@@ -77,11 +81,11 @@ When an exception lets something run that your preset would ask about, Passport 
 
 ## The Rules page
 
-**Rules** shows, in order: your presets, your exceptions, environments, a one-line **Test a command**, and, once your workspace has two people, **Team rules**. Team rules give each team one line with its floors, whether Production deletes need someone else to approve, and whether it requires the guard, and a team’s **Access** tab shows the same line. Below them, **Approval routing** says who gets each team’s requests per environment, including who is on call; see [Approval routing](/admin/slack-and-approvers#approval-routing). Members see their own team’s line when it sets anything, such as "Production deletes need someone else to approve: Maya, on call." **Guard required** (Pro) stops `passport exec` for agents whose guard isn't on; see [Guard required](/member/cli-hook#guard-required).
+**Rules** has a tab for your own rules (**Yours**), and for admins **Team** and, on Enterprise, [Data checks](/admin/data-checks). Every tab opens with one line saying what applies to you on top of your presets (admins see **Workspace safety** instead: floors, who approves Production deletes, Guard required, which agents can connect, the data check mode, and tools withheld for everyone, each linking to where it's set). **Yours** shows, in order: your presets, your exceptions, environments, and a one-line **Test a command**. [Rules › Team](https://passportmcp.com/#rules/team) holds **Team rules**, **Approval routing**, and **Which agents can connect**. Team rules give each team one line with its floors, whether Production deletes need someone else to approve, and whether it requires the guard, and a team’s **Access** tab shows the same line. Below them, **Approval routing** says who gets each team’s requests per environment, including who is on call; see [Approval routing](/admin/slack-and-approvers#approval-routing). Members see their own team’s line when it sets anything, such as "Production deletes need someone else to approve: Maya, on call." **Guard required** (Pro) stops `passport exec` for agents whose guard isn't on; see [Guard required](/member/cli-hook#guard-required).
 
 ## When Passport asks
 
-When an action needs you, you can **Approve once**, **Approve for this session**, **Always allow** (which saves an exception), or **Decline** with a note the agent receives. Many agents show the question right where you are working; it is also waiting in **Approvals**. If you turned notifications on, you can approve or decline from the notification.
+When an action needs you, you can **Approve once**, **Approve for this session**, **Always allow** (which saves an exception), or **Decline** with a note the agent receives. Many agents show the question right where you are working; it is also waiting in your [Inbox](https://passportmcp.com/#inbox). If you turned notifications on, you can approve or decline from the notification.
 
 ### On your phone
 
@@ -89,16 +93,24 @@ Tapping a notification opens that request on its own screen: what the agent want
 
 When your team routes a request to someone else, your own request says who it's waiting on, like "Waiting on Maya, on call". If nobody answers in time, it also goes to your admins.
 
-Home's **Waiting for you** previews up to three of the same rows as **Approvals**, agent actions first and then any other requests waiting for you, with **See all N waiting** to open the rest. The count matches the one next to **Approvals** in the navigation. A session that has ended never shows **Waiting for you**.
+Home's **Waiting for you** previews up to three of the same rows as the Inbox's **Waiting on you**, agent actions first and then any other requests waiting for you, with **See all N waiting** to open the rest. The badge next to **Inbox** in the navigation adds what needs attention to that count. A session that has ended never shows **Waiting for you**. See [Inbox](/member/inbox).
 
-An approval asked in your agent's own prompt stays open for about three minutes. One asked while nobody was at the keyboard, such as a background or CI run, waits for a day. If your rules change while a request is waiting and would now run the action, the request resolves itself.
+A request for a command your agent wants to run stays open for a day, whether or not someone was at the keyboard. A request for an app's tool asked in your agent's own prompt stays open for about three minutes. If your rules change while a request is waiting and would now run the action, the request resolves itself.
+
+### When the agent stopped waiting
+
+Agents don't wait forever: the guard holds for a few seconds, and an agent's turn can end or its session can close while a command waits for you. You can still approve that command for a day. The Inbox and your phone say so first: "The agent stopped waiting. Approving lets it run the next time the agent tries it." After you approve, it reads "Approved. The agent stopped waiting, so it will run the next time the agent tries it."
+
+The approval is a one-time pass for that exact command in that agent session. It runs once, the next time the agent tries the same command there, and lapses a day after you approve. A different command, or another session, asks again. Passport never runs the command itself. A decline stays final.
+
+For your own Claude Code session, the Inbox shows the command that resumes it, such as `claude --resume 0b5c…`, with a copy button. When the session resumes, or the next time you type in it, Passport tells the agent which command was approved, by whom, and when, once. Codex and Cursor don’t take that message: the approved command runs the next time the agent tries it.
 
 ### Learning from your approvals
 
-When you approve the same command or tool in the same environment three times in two weeks, and haven't declined it there, Passport asks once: "You approved `gh workflow run` in Development 6 times this week. Always run it here?" It shows on **Approvals** right after you approve, and as one quiet row in Home's **Needs attention**. **Always run** adds an exception just for you, for that command and environment only, which you can undo for 10 seconds or remove later in **Rules**; **Not now** waits for three more approvals, and **Don't suggest this again** is for good. Passport never suggests Production deletes or irreversible actions, or anything your team's floor keeps asking about.
+When you approve the same command or tool in the same environment three times in two weeks, and haven't declined it there, Passport asks once: "You approved `gh workflow run` in Development 6 times this week. Always run it here?" It shows in the **Inbox** right after you approve, and as one quiet row in Home's **Needs attention**. **Always run** adds an exception just for you, for that command and environment only, which you can undo for 10 seconds or remove later in **Rules**; **Not now** waits for three more approvals, and **Don't suggest this again** is for good. Passport never suggests Production deletes or irreversible actions, or anything your team's floor keeps asking about.
 
 ## Agents you own
 
-Your rules also govern the agents whose agent tokens you own. An agent can't answer a prompt, so its request waits in your **Approvals**, naming the agent that asked. An agent token with no owner is blocked from anything that would need a person: assign it an owner in **Agents**.
+Your rules also govern the agents whose agent tokens you own. An agent can't answer a prompt, so its request waits in your **Inbox**, naming the agent that asked. An agent token with no owner is blocked from anything that would need a person: assign it an owner in **Agents**.
 
 See also [Data checks](/admin/data-checks) and [Catalog access and passes](/admin/approvals-and-requests).
