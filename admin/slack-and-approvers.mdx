@@ -12,7 +12,7 @@ Autopilot asks a person only when a rule says so. These features decide who that
 An admin adds the Passport app to Slack from **Notifications** on [Settings › Account](https://passportmcp.com/#settings) with **Add to Slack**. After that:
 
 - Each approval request arrives as a direct message to the person who can answer it, with the action, its environment and class, the agent, the computer and folder, the command with secrets removed, and why Passport asked.
-- **Approve once**, **For this session**, and **Decline** work right in Slack. Decline asks for an optional note the agent sees.
+- **Approve once**, **For this session**, and **Decline** work right in Slack. Decline asks for an optional note the agent sees. A Production change or delete, or anything irreversible, shows **Review in Passport** instead of Approve: approving it takes a passkey check in Passport ([Confirm it's you](/member/safety#confirm-its-you)).
 - Admins can also post Production requests to a channel. Anyone can see them there; only people allowed to approve can answer.
 - When a request is decided anywhere (Passport, a phone notification, Slack, or a rule change), every Slack message for it updates in place, for example "Approved once by Maya in Slack".
 
