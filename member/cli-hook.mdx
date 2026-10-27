@@ -69,6 +69,8 @@ Passport counts what the guard saw on each computer, per agent and per day, and 
 
 Each agent row on **Agents**, each person on **People**, each team, [Agents › Rollout](/admin/rollout), and Home show the share your rules could decide over the last week, such as "decides 82%". An agent's page also names the three programs it was most often blind to, such as "Not checked: python3 ×12, node ×3". A session shows its own counts, such as "468 checked · 12 not checked · 3 could reach Production". `passport status` prints the week's line. Computers on a CLI before 0.24.0 don't sort their commands: what they couldn't read counts as not checked, and their rows show "468 checked · 12 not checked" instead of a share.
 
+**Rules › Environments › Project scripts** lists the week's blind commands in two groups: your scripts, which you can tell Passport about, and inline code and programs Passport doesn't read yet, which only show what they are. Inline code (`python3 -c`, `node -e`, a heredoc) is checked for side effects first, and only what Passport still can't read counts as not checked.
+
 When a session that changed confirmed Production had blind commands, the agent's owner and admins get an alert, at most once a week per computer, and the weekly email has a Coverage section. Open the agent's [sessions](/member/sessions#what-passport-saw) to see what Passport couldn't tell.
 
 ## What the guard does
@@ -281,14 +283,14 @@ Python and JavaScript files aren't read yet. Tell Passport what one does instead
 
 ### Tell Passport what a script does
 
-From a **Partly checked** or **Not checked** row in **Sessions**, choose **Tell Passport what this does** (the first row for each program offers it; open any other row to find it there), or run:
+From a **Partly checked** or **Not checked** row in **Sessions**, or a script under **Your scripts, not checked** in **Rules › Environments › Project scripts**, choose **Tell Passport what this does** (in Sessions, the first row for each program offers it; open any other row to find it there), or run:
 
 ```sh
 passport actions add scripts/deploy.py --environment production --class change
 passport actions add make seed --environment staging --class delete
 ```
 
-Passport then checks that script as a Change in Production (or whatever you said), with your presets and exceptions deciding as for any command. A project script never runs on its own say-so. You can say Production for a change, delete, or irreversible script; anything looser waits for an admin in **Rules › Environments › Project scripts**. When the script changes, the row there says **Changed since set** and the guard reads it again until someone sets it.
+Passport then checks that script as a Change in Production (or whatever you said), with your presets and exceptions deciding as for any command. A project script never runs on its own say-so. You can say Production for a change, delete, or irreversible script; anything looser waits for an admin in **Rules › Environments › Project scripts**. When the script changes, the row there says **Changed since set** and the guard reads it again until someone sets it. That page keeps your scripts apart from inline code and programs Passport doesn't read yet, which have nothing stable to describe.
 
 A repository can keep its own list in `.passport/actions.toml`:
 
