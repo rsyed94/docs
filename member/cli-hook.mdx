@@ -166,7 +166,7 @@ Your own entries are never changed. Passport updates its entries when your rules
 
 ## When Passport can't be reached
 
-Most decisions happen on your computer from rules synced in the last hour, and those stand as decided: a command that runs still runs, a block still blocks, and when you're at the keyboard you answer the ask yourself. Only an ask that needed Passport (an unattended run, Codex, or a Production action someone else approves) uses each environment's setting on the **Rules** page when Passport doesn't answer in time: **When Passport can't be reached: Ask, Block, or Run**. Every environment asks unless you change it.
+Most decisions happen on your computer from rules synced in the last hour, and those stand as decided: a command that runs still runs, a block still blocks, and when you're at the keyboard you answer the ask yourself. An irreversible command is the exception: it's approved only in Passport, with a passkey check, so your agent is told "Approve this in Passport. Irreversible actions need a passkey check." and waits for it. If Passport can't be reached, it's blocked. Only an ask that needed Passport (an unattended run, Codex, or a Production action someone else approves) uses each environment's setting on the **Rules** page when Passport doesn't answer in time: **When Passport can't be reached: Ask, Block, or Run**. Every environment asks unless you change it.
 
 - Nobody can answer an ask for an unattended agent or Codex, so Ask blocks there, with one line saying why.
 - An action someone else must approve is blocked, since nobody can approve it offline.
@@ -254,6 +254,10 @@ A kept CLI signs in as usual, Passport never removes it, and it isn't counted as
 ## Guard required
 
 On Pro, an admin can require the guard for a team under **Team rules** on [Rules › Team](https://passportmcp.com/#rules/team?section=floors). With **Required**, `passport exec` runs only for an agent whose computer reported its guard On (or Locked) in the last 48 hours; otherwise the command stops with "Blocked by Passport: guard required" and the fix, and its session row reads **Blocked · Guard required**. **Report only** shows those agents on **Agents** without stopping anything. Tools your agents call through Passport are always checked by Passport itself, so this applies to `passport exec`.
+
+## Ended sessions
+
+When you (or an admin) end an agent's session on its **Sessions** page, the guard refuses the next command in that session, even one it would let run on its own, with "Session ended by Maya at 14:05 UTC. Start a new session to continue." Other sessions and other computers keep running. Before such a command, the guard asks Passport whether the session ended at most every 15 seconds per session, waits at most 300 ms, and remembers an ended session without asking again. If Passport doesn't answer in time, the command runs as it would have: the guard is a guardrail, not a security boundary. Plain reads the launcher answers on its own (see Speed) still run. Everything that reaches Passport under an ended session, tool calls and `passport exec` included, is refused there.
 
 ## Speed
 
