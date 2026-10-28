@@ -77,11 +77,13 @@ When a session that changed confirmed Production had blind commands, the agent's
 
 Before each shell command, the guard reads it on your computer and decides from your Autopilot rules, the same rules your apps follow in Passport, so a command and a tool that do the same thing get the same answer. It works out the environment the way the vendor's own CLI does: a flag first, such as Railway's `--environment` or Vercel's `--prod`, then the folder's link, then the vendor's default. A linked environment nobody has placed yet is read by the name your connected app gives it, so a Railway environment called `staging` is Staging; the name in a link file on your computer never counts. A command with no environment it can place counts as Production. See [how Passport knows](/member/safety#how-passport-knows).
 
-When a rule says to ask first, your agent asks you, with the reason:
+When a rule says to ask first, your agent asks you. Its own prompt only has its built-in choices, so the reason line carries the ask in one go and ends with a short link to every other choice (Run for this task, It's Staging, always run, Stop):
 
 ```
-Passport: railway redeploy changes Production (linked in this folder). Approve to run it.
+Passport: `railway up` would deploy acme-worker (unplaced, treated as Production). Deploys can be rolled back in Railway. More choices: https://passportmcp.com/a/k3Jd9sQx2mVb7LpA
 ```
+
+The link opens the ask in Passport for someone signed in who may answer it, and expires with the ask. An answer you give there is used by the agent's next try of the same command.
 
 ### See what a folder is linked to
 

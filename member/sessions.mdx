@@ -111,7 +111,7 @@ Placing a target answers it for the whole workspace, for new actions from then o
 
 - Each app's page lists, under **Environments**, every repository and environment agents have reached on it. Admins choose **Production**, **Staging**, or **Development** for each. **Set environments** on a session, a project, or the Production changes ledger opens Apps.
 - For a repository, choose **Production** if merging to its default branch deploys it, or **Staging** if it doesn't. With Staging, a push to `main` runs under Staging's preset; force pushes still ask.
-- When an approval is waiting on something nobody placed, it shows **This is: Production · Staging · Development**. Choosing saves it and decides that request again.
+- When an approval is waiting on something nobody placed, it offers **It's Staging, always run** and **It's Development, always run**. Choosing saves it for the workspace and runs that request once.
 - From a terminal, `passport env set` places a resource. Anyone can say Production; anything looser needs an admin.
 
 ## A session page

@@ -46,7 +46,7 @@ Passport places a command the way the vendor's own CLI picks where it goes. The 
 
 Railway, Supabase, and Neon links hold an id. Once a resource is placed, the id decides: if the name in a link file differs from the one Passport saved, the environment was renamed, so it keeps its place and shows the new name. A name in a link file never makes anything looser: for an id nobody has placed, Passport asks your connected app for its real name and places it by that, so a linked Railway environment called `staging` is Staging. Until the app has named it, or when the name says nothing, it counts as Production until someone chooses. If a link file can't be read, the command counts as Production. A database URL is read only for its host: a local database is Development; Passport never sends or stores the URL, user, or password.
 
-Each decision says how Passport knows: "Runs: Staging is Hands-off (linked in this folder)." Each app's page has an **Environments** section with one row per resource and where it came from: a linked folder, a tool call, its name, what the app said (such as **Neon default branch**), or **Set by** whoever chose. A resource Passport couldn't place reads **Unplaced · treated as Production** until someone chooses. Anything Passport can't place counts as Production. **Needs attention** on Home lists only resources Passport couldn't place, one row per app: anyone can **Confirm all** to keep them Production, and an admin can choose each. When an approval is waiting on a resource nobody has placed, the request shows **This is: Production · Staging · Development**. Choosing saves it for the whole workspace and decides the action again, so it may run right away. Anyone can say Production; anything looser needs an admin. Changing an environment on the app's page or with `passport env set` applies to new actions only: a request that's already waiting keeps the environment it was raised with.
+Each decision says how Passport knows: "Runs: Staging is Hands-off (linked in this folder)." Each app's page has an **Environments** section with one row per resource and where it came from: a linked folder, a tool call, its name, what the app said (such as **Neon default branch**), or **Set by** whoever chose. A resource Passport couldn't place reads **Unplaced · treated as Production** until someone chooses. Anything Passport can't place counts as Production. **Needs attention** on Home lists only resources Passport couldn't place, one row per app: anyone can **Confirm all** to keep them Production, and an admin can choose each. When an approval is waiting on a resource nobody has placed, the ask offers **It's Staging, always run** and **It's Development, always run**. Choosing saves it for the whole workspace and runs the action once, and the next identical action runs without asking when Staging or Development allows it. Anyone can say Production; anything looser needs an admin. Changing an environment on the app's page or with `passport env set` applies to new actions only: a request that's already waiting keeps the environment it was raised with.
 
 Run `passport env` in a folder to see what Passport reads there. An app's **Environments** section lists a resource the first time an agent works in it, not when you connect the app ("Passport hasn't seen a Railway resource yet.").
 
@@ -85,7 +85,15 @@ When an exception lets something run that your preset would ask about, Passport 
 
 ## When Passport asks
 
-When an action needs you, you can **Approve once**, **Approve for this session**, **Always allow** (which saves an exception), or **Decline** with a note the agent receives. Many agents show the question right where you are working; it is also waiting in your [Inbox](https://passportmcp.com/#inbox). If you turned notifications on, you can approve or decline from the notification.
+When an action needs you, Passport shows one ask, the same in Passport, Slack, a notification, and your agent: who wants to do what ("Claude Code wants to deploy acme-worker"), where it lands, why Passport asked, what happens if it goes wrong (such as "Deploys can be rolled back in Railway." or "This can't be undone."), and the command itself. Your choices, in order, each only when it applies:
+
+- **Run once**: this action, this time.
+- **Run for this task**: the same action for the rest of the agent's session. Never offered for an irreversible action.
+- **It's Staging, always run** or **It's Development, always run**: when Passport couldn't place the resource, an admin can place it for the whole workspace, which also runs this action. Taking a resource out of Production takes a passkey check ([Confirm it's you](#confirm-its-you)), so the button says "· confirm it's you".
+- **Don't run**, with an optional note the agent receives.
+- **Stop {agent}**: for an agent token or cloud agent, pauses it until someone resumes it; for an agent on someone's computer, ends its session. The ask is declined too.
+
+**Always allow…** (which saves an exception, marked for review in Rules) is under **More** in Passport and Slack. Many agents show the question right where you are working; it is also waiting in your [Inbox](https://passportmcp.com/#inbox). If you turned notifications on, you can choose **Run once** or **Don't run** from the notification, and tapping it opens every choice.
 
 ### Confirm it's you
 
@@ -95,7 +103,7 @@ Saving a rule change that lets agents make Production changes with less checking
 
 ### On your phone
 
-Tapping a notification opens that request on its own screen: what the agent wants to do, where it lands, why Passport asked, and who is waiting, with **Approve** and **Decline** at the bottom of the screen. Approve is once; **More ways to approve** offers this session or **Always allow…**. After you answer, **Next request** opens the next one without reloading, and **All requests** shows the whole list. A request someone already answered, in Slack or anywhere else, says who answered it and how.
+Tapping a notification opens that request on its own screen as the same ask, with every choice. After you answer, **Next request** opens the next one without reloading, and **All requests** shows the whole list. A request someone already answered, in Slack or anywhere else, says who answered it and how.
 
 When your team routes a request to someone else, your own request says who it's waiting on, like "Waiting on Maya, on call". If nobody answers in time, it also goes to your admins.
 
