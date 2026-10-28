@@ -1,66 +1,45 @@
 ---
 title: "Passport"
-description: "Connect your work apps to AI assistants with one sign-in, clear access rules, and a record of every action."
+description: "Connect your work apps to AI agents with one sign-in, clear rules, and a record of every action."
 ---
 
-Open in Passport: [Home](https://passportmcp.com/#home)
+Open in Passport: [Work](https://passportmcp.com/#work)
 
-Passport gives Claude, Cursor, ChatGPT, Codex, and other AI assistants a safe way to use your work apps.
+Passport gives Claude, Cursor, ChatGPT, Codex, and other agents a safe way to use your work apps.
 
-Connect GitHub, Linear, Stripe, and other apps once. Passport keeps the credentials, applies your workspace rules, and records what happened. Your AI assistant never receives the provider password or token.
-
-You do not need to know how MCP works. Most people can get started from [Apps](https://passportmcp.com/#apps) and [Agents](https://passportmcp.com/#agents) in a few minutes.
+Connect GitHub, Linear, Stripe, and other apps once. Passport keeps the credentials, applies your rules, and records what happened. Your agent never receives the provider password, token, or key.
 
 <CardGroup cols={2}>
   <Card title="I want to use Passport" icon="user" href="/quickstart/member">
-    Connect an app, add your agent, and check your first action.
+    Connect an app, add your agent, and see your first task.
   </Card>
   <Card title="I manage the workspace" icon="building" href="/quickstart/admin">
-    Set up the workspace, invite people, and choose how apps are shared.
+    Set up the workspace, invite people, and set the rules.
   </Card>
 </CardGroup>
 
-## What Passport does
+## The four places
+
+Passport has four places in the left rail, or the bottom bar on a phone:
+
+- [Work](/member/work): what's waiting on you, what's running, and the record of every task and action.
+- [Agents](/member/agents): every agent that acts for you, whether it works, and how to add one.
+- [Apps](/member/apps): the apps your agents can reach, who can use them, and where their resources sit.
+- [Rules](/member/safety): what agents may do without asking, per environment.
+
+Your name, at the bottom left, opens the account menu. **Settings** is there for everyone, and owners on Pro and Enterprise also get [People](/admin/people-and-teams). See [Settings](/admin/settings).
+
+Links to older pages, such as Home, Inbox, or Sessions, still open the right place.
 
 <CardGroup cols={2}>
-  <Card title="Connect once" icon="plug">
-    Connect an app once and use it from every supported agent.
-  </Card>
-  <Card title="Keep credentials out of agents" icon="lock">
-    Passport stores provider credentials and calls apps on your behalf.
-  </Card>
-  <Card title="See what happened" icon="list">
-    Activity shows the person, agent, app, action, and outcome.
-  </Card>
-  <Card title="Add the right checks" icon="hand">
-    Personal Autopilot rules decide what runs and what asks first. Workspace controls can narrow access, block risky
-    content, and require review.
-  </Card>
-</CardGroup>
-
-## The two parts of Passport
-
-Most people use these pages:
-
-- [Home](/member/home): what's running, what needs you, and your week
-- [Inbox](/member/inbox): what waits on your decision, what needs fixing, and what you asked for
-- **Sessions**: see what your agents did, with every action under **All activity**
-- **Rules**: choose what agents do on their own and when they ask you
-- **Apps**: add and connect work apps
-- **Agents**: add Claude, Cursor, ChatGPT, Codex, or another agent
-- [Settings](/admin/settings): your account, your keys, and where you're signed in
-
-Pro and Enterprise admins also get **People** (with **Invitations** and **Adoption**), **Rules › Team**, **Apps › Setups**, and [Agents › Rollout](/admin/rollout), and switch **All activity** to **Everyone** to see the whole workspace. Enterprise adds **Agents › Discovered** and **Rules › Data checks**. Those controls do not change the everyday member flow.
-
-<CardGroup cols={2}>
-  <Card title="Get connected" icon="arrow-right" href="/quickstart/member">
-    Go from sign-in to your first recorded action.
-  </Card>
   <Card title="How Passport works" icon="sitemap" href="/concepts/model">
-    A plain-language guide to apps, agents, access, and Activity.
+    Apps, agents, access, rules, and the record, in plain words.
   </Card>
-  <Card title="Autopilot rules" icon="hand" href="/member/safety">
-    Choose how much agents do on their own in Production, Staging, and Development.
+  <Card title="Developer quickstart" icon="terminal" href="/quickstart/developer">
+    Set up every coding agent on your computer with one command.
+  </Card>
+  <Card title="Rules" icon="hand" href="/member/safety">
+    Choose what agents do on their own in Production, Staging, and Development.
   </Card>
   <Card title="Troubleshooting" icon="wrench" href="/troubleshooting">
     Fix missing apps, incomplete sign-in, or tools that show twice.

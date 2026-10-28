@@ -1,0 +1,86 @@
+---
+title: "Agents"
+description: "Add an agent, see whether each one works, stop it, and manage the tokens scripts and cloud agents use."
+---
+
+Open in Passport: [Agents](https://passportmcp.com/#agents)
+
+**Agents** lists everything that acts for you through Passport: coding agents on your computers, Claude.ai and ChatGPT, cloud agents, and the tokens scripts and jobs use. Owners switch **Mine** to **Everyone** to see every agent in the workspace.
+
+## The list
+
+Each row is one agent where it runs, such as Claude Code on Maya's MacBook, with when it was last used and one status chip:
+
+| Status | Means |
+| --- | --- |
+| **Active** | It has made requests through Passport. |
+| **Not used yet** | It's set up but hasn't made a request. |
+| **Needs sign-in** | Its Passport sign-in expired. |
+| **Stopped** | Someone stopped it. Its next action is refused. |
+
+A row has a button only when something needs doing: **Sign in again**, **Update** when a Passport CLI or local bridge is behind (see [Keep agents up to date](/member/updates)), or **Remove duplicate** when an agent is set up twice and shows each tool twice. Rows that need you come first.
+
+When you have more than one kind, filter with **All**, **On a computer**, **Cloud**, or **Tokens**.
+
+**Stop all my agents**, at the foot, asks first, then stops every agent of yours: each one's next action is refused. **Resume all** brings them back.
+
+## Add an agent
+
+**Add agent** asks what you're connecting:
+
+- **Coding agents on a computer**: Claude Code, Cursor, Codex, and more. Run one command in a terminal on that computer. It finds the agents there and connects them:
+
+  ```sh
+  npx passport-bridge@latest init
+  ```
+
+  They show up in Agents once they make their first request. See the [developer quickstart](/quickstart/developer) for what init changes. **Set one up by hand instead** lists every agent with its own steps.
+- **Claude.ai**: on the web, desktop, or phone. Passport shows the steps and the URL to paste.
+- **ChatGPT**: with developer mode. Passport shows the steps and the URL to paste.
+- **A cloud agent**: Codex cloud, Claude Code on the web, or GitHub Actions. Name it, pick where it runs, and Passport creates it with a token and the setup to paste there.
+- **A script or job**: an agent token for a script or CI job. Admins create these; anyone else is asked to ask an admin.
+- **Everyone on your team** (owners): enrollment keys and the channels that set up every computer at once. See [Roll out to your team](/admin/rollout).
+
+A new cloud agent or token opens on its own page, which shows the token once.
+
+## An agent's page
+
+Every row opens its agent's page. It shows only what applies.
+
+For an agent on a computer:
+
+- **Stop**, the page's one action. It asks first, then ends the agent's running tasks and refuses its next action. The agent can start a new task any time.
+- What needs fixing, such as a sign-in to renew or a duplicate setup.
+- **Recent tasks**: its last five tasks, and **All its work** to see the rest in [Work](/member/work).
+- **Connection**: the computer it runs on, with **Rename**, and **Update** when a newer Passport is available.
+- **Remove agent**, at the foot. It signs out every connection the agent holds. Its work stays in the record.
+
+For a cloud agent or a token:
+
+- **Stop** asks first, then refuses every action it tries until someone chooses **Resume**. Its tokens and rules stay as they are, and the page says who stopped it and when.
+- **Recent tasks**, as above.
+- **Connection**: what kind of agent it is, where it runs, whether it runs as itself or acts for a person, and who its asks go to.
+- **Credentials**: one row per live token, such as "Token ending 4f2a", with when it was made. **Rotate** and **Revoke** are in the row's menu, and **Create token** adds another. A new token is shown once.
+- **Remove agent**, at the foot. Every token it holds stops working.
+
+Only an agent's owner or an admin can change it. Everyone else sees the page read-only.
+
+## Agent tokens
+
+An agent token (`pak_…`) is what a script, CI job, or cloud agent uses to reach Passport. Set it as `PASSPORT_AGENT_KEY`, with `PASSPORT_ENDPOINT` for your workspace, in your CI secret store. See [Passport CLI](/quickstart/cli).
+
+A token **runs as itself**, or **acts for a person** with that person's access and a lifetime of 30 to 180 days.
+
+The person who creates a token owns it, and that decides three things:
+
+- **Asks.** The owner's [rules](/member/safety) govern the agent. An agent can't answer a prompt, so an action that needs a person waits in the owner's **Waiting on you** on [Work](/member/work), naming the agent that asked. When the owner answers, the agent's next try goes through. An answer is bound to the agent that asked.
+- **Rotation.** **Rotate** mints a replacement, shows it once, and stops the old one, optionally after a short overlap so running jobs can switch. The agent, its access, and its record stay as they were. An agent can hold up to five live tokens.
+- **Removal.** Revoking a token ends that credential; revoking an agent's last token removes the agent. Deactivating or removing the owner revokes every token they own, so move long-lived automation to someone else first.
+
+## Everyone
+
+Owners on Pro and Enterprise switch to **Everyone** to see every agent in the workspace, each row naming its person. Opening someone else's agent shows its recent tasks and connection, with **Stop** and **Remove**. To set up a whole team, use **Roll agents out with enrollment keys** at the foot of the list. See [Roll out to your team](/admin/rollout).
+
+## Agent names
+
+Passport uses the name or title an agent reports, falling back to its connection label, and keeps a reported version when there is one. Recognized agents keep Passport's standard name. Names are self-reported: claiming a recognized agent's name doesn't grant access. If an agent appears as **agent**, keep it open, ask it to list its Passport tools, then reload **Agents**.

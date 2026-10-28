@@ -5,16 +5,14 @@ description: "Fix incomplete sign-in, missing apps, tools that show twice, moved
 
 Open in Passport: [Agents](https://passportmcp.com/#agents)
 
-## An agent stays on "Setup pending"
+## An agent stays on "Not used yet"
 
-Passport marks an agent connected only after it observes real activity. Opening or copying the setup instructions is not enough.
+Passport marks an agent **Active** only after it sees a real request. Setting it up is not enough.
 
 1. Keep the agent open.
 2. Finish its browser sign-in.
 3. Ask it to list your Passport tools.
-4. Return to **Agents**, open the agent, and choose **Refresh** or **Troubleshoot**.
-
-Passport's agent-specific troubleshooting shows the exact check for Claude Code, Cursor, VS Code, Codex, Claude.ai, ChatGPT, and Passport CLI.
+4. Reload **Agents**.
 
 ## An agent has a generic or unfamiliar name
 
@@ -25,17 +23,17 @@ Passport shows **agent**.
 
 Ask the agent to list Passport tools, then refresh **Agents**. Review the
 agent's owner and Activity before disconnecting it. See
-[agent names](/admin/client-fleet#understand-agent-names).
+[agent names](/member/agents#agent-names).
 
-## An app is missing from one agent
+## An app is missing from an agent
 
-Open **Agents**, select that agent, and open **Limit apps for this agent**.
+Open **Apps**.
 
-- Turn on the app if it is available but hidden.
-- If it says **Not connected yet**, open **Apps** and finish the app connection.
-- If the app is not listed, you may not have access to it. Ask a workspace admin.
+- If the app says **Not connected** or **Reconnect**, choose that and finish the sign-in.
+- If it says **Waiting on admin**, your admin has a setup step to finish.
+- If the app isn't listed, you may not have access to it. Ask a workspace admin.
 
-After a visibility or access change, ask the agent to refresh its tools. Starting a new chat or session can also help agents that cache their tool list.
+Then ask the agent to refresh its tools. Starting a new chat or task also helps agents that cache their tool list.
 
 ## Tools appear twice
 
@@ -53,7 +51,7 @@ Add your Passport domain (or the full callback URL) to their allowed redirect se
 https://<your-passport-domain>/auth/connect-app/callback
 ```
 
-Admins can copy this from the app's setup screen under **Sign-in service** or **Callback URL**.
+Admins can copy it from **Set up** on the app's page.
 
 For Mintlify, add the callback URL to your MCP server's allowed OAuth redirect URIs in the Mintlify dashboard. This is different from the custom-domain DNS settings. If your organization has several Mintlify deployments, allow the redirect on each one or choose the intended deployment during consent.
 
@@ -69,11 +67,11 @@ This means the agent's Passport sign-in expired. It is separate from one app nee
 
 If Claude Desktop uses the **Local bridge**, ask Claude to reconnect Passport. The bridge stays available in a restricted recovery mode and exposes a **Reconnect Passport** action. Open its Passport link, confirm the device code, and finish browser sign-in. Passport restores the tools in the existing Claude session; you do not need to restart Claude.
 
-You can also open **Agents** and choose **Reconnect** on the **Claude Desktop** row. Other agents may need this route when they cannot present the recovery action in chat.
+You can also open **Agents** and choose **Sign in again** on the **Claude Desktop** row. Other agents may need this route when they cannot present the recovery action in chat.
 
 ## An agent says an app needs sign-in
 
-This means one app's sign-in expired, not the agent's Passport sign-in. It also shows in your [Inbox](/member/inbox#needs-attention) under **Needs attention**, with **Sign in again**. The agent should offer a **Connect** or **Reconnect** action. Depending on the agent, this appears as a built-in prompt or as a secure Passport link in the conversation.
+This means one app's sign-in expired, not the agent's Passport sign-in. It also shows under **To fix** on [Work](/member/work#to-fix). The agent should offer a **Connect** or **Reconnect** action. Depending on the agent, this appears as a built-in prompt or as a secure Passport link in the conversation.
 
 1. Open the link and confirm that it uses your Passport domain.
 2. Sign in to the provider in the browser. Do not paste a password, API key, or provider token into the chat.
@@ -96,19 +94,18 @@ Old links open the new place, so a bookmark keeps working:
 
 | Was | Now |
 | --- | --- |
-| Approvals | [Inbox](/member/inbox) |
-| Apps › Browse apps, App catalog | **Apps › Add an app** |
-| Guardrails | **Rules › Data checks** |
-| Inventory, Discover | **Agents › Discovered** |
-| Agents › Workspace agents | **Agents › Everyone** |
-| Rollout (its own page) | [Agents › Rollout](/admin/rollout) |
-| Settings › Admin activity | **Settings › Workspace › Admin activity** |
-| Settings › Safety, Settings › Access › Which agents can connect | **Rules › Team** |
-| Apps › Keys, the Keys tab in Settings | Each app's **Keys** section, or **Apps › Other keys** |
-| Manage tokens, agent tokens in Settings | [Agents](https://passportmcp.com/#agents?kind=token), filtered to **Tokens** |
-| Enrollment keys in Settings | **Agents › Rollout** |
-| Rules › Environments, Rules › Project scripts | Each app's **Environments** and **Project scripts** sections, or **Apps › Other projects** |
-| An app's Connections | The app's **Tools** section (tool review) and **Sign-in** tab |
+| Home, Inbox, Approvals | [Work › Now](/member/work#now) |
+| Sessions, a session, a project | [Work](/member/work): **History › Tasks**, or the task's page |
+| All activity, Activity | **Work › History › Actions** |
+| Agents › Rollout | **Agents › Add agent › Everyone on your team** |
+| Agents › Discovered, Inventory | **Agents** |
+| Settings › Keys, Apps › Keys | Each app's **Keys Passport holds**; agent tokens on their agent's page |
+| Settings › Safety, Rules › Team | **Rules**, switched to **Everyone** for owners |
+| Rules › Data checks, Guardrails | **Rules › Everyone › Data checks** (Enterprise) |
+| Apps › Setups, Team setups, Bundles, Workflows | **Apps** |
+| People › Invitations, Teams, Adoption | **People** |
+
+Insights and the alerts bell are gone. What needs fixing shows under **To fix** on Work.
 
 ## Rate limited
 
@@ -124,7 +121,7 @@ passport status
 passport search ""
 ```
 
-`doctor` checks the runtime, credential store, endpoint, sign-in, and protocol without printing credentials. If it asks you to sign in, run the `passport login` command shown for **Passport CLI** in [Agents › Add agent](https://passportmcp.com/#agents/add).
+`doctor` checks the runtime, credential store, endpoint, sign-in, and protocol without printing credentials. If it asks you to sign in, run the `passport login` command shown for **Passport CLI** in [Agents › Add agent](https://passportmcp.com/#agents?add=1).
 
 ## Passport CLI exits with an error code
 

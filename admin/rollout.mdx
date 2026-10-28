@@ -1,13 +1,13 @@
 ---
-title: "Roll out to your company"
+title: "Roll out to your team"
 description: "Put Passport in every agent with enrollment keys and the channels your company already runs, then track how far everyone got (Pro and Enterprise)."
 ---
 
-Open in Passport: [Agents › Rollout](https://passportmcp.com/#agents/rollout)
+Open in Passport: [Agents › Add agent › Everyone on your team](https://passportmcp.com/#agents?add=team)
 
-**Agents › Rollout** is where an admin puts Passport in every agent across the company, without anyone pasting a URL. It has three parts, top to bottom: **Progress**, **Enrollment keys**, and **Channels**. Rollout is part of Pro and Enterprise; on Free the tab explains it and links to **Settings › Billing**. Setting up only yourself? Use **Add agent** on [Agents](https://passportmcp.com/#agents) instead.
+**Everyone on your team**, under **Add agent** on [Agents](https://passportmcp.com/#agents), is where an owner puts Passport in every agent across the company, without anyone pasting a URL. It has three parts, top to bottom: **Progress**, **Enrollment keys**, and **Channels**. Rollout is part of Pro and Enterprise. Setting up only yourself? Choose **Coding agents on a computer** instead.
 
-The line under the header counts active enrollment keys, computers set up with them, computers whose guard is **On**, and how much of what the guard saw it could check, such as "94% checked".
+The line at the top counts active enrollment keys, computers set up with them, computers whose guard is **On**, and how much of what the guard saw it could check, such as "94% checked".
 
 ## Progress
 
@@ -17,17 +17,17 @@ The line under the header counts active enrollment keys, computers set up with t
 2. **Connected an agent**
 3. **Used a tool**
 
-Each step is a bar with "N of M people", counted against everyone in the rollout, invites included. Select a step to open the **People** list narrowed to whoever hasn't reached it (`#people?step=agent` or `#people?step=tool`); clear the filter with its chip. Before anyone is invited, Progress says "No rollout yet". For who is using Passport and how much, see [Adoption](/admin/people-and-teams#adoption).
+Each step is a bar with "N of M people", counted against everyone in the rollout, invites included. Before anyone is invited, Progress says "No rollout yet".
 
 ## Enrollment keys
 
 An enrollment key (`pek_…`) points an agent's sign-in at this workspace. It isn't secret and never grants access: people still sign in as themselves, and must be members or allowed to join.
 
-- **Create enrollment key** is the page's one action. Give the key an optional name, such as "Engineering laptops", and optionally limit it to one email domain, so only people whose email ends with that domain are pointed here.
+- **Create enrollment key** is the dialog's one action. Give the key an optional name, such as "Engineering laptops", and optionally limit it to one email domain, so only people whose email ends with that domain are pointed here.
 - Each key shows how many computers it set up. **Revoke key** makes sign-ins and scripts that use it stop pointing at this workspace; people already signed in stay connected.
 - With more than one active key, **Snippets use** picks which key the channel snippets below carry.
 
-Create and revoke enrollment keys here. Older links to enrollment keys in Settings open this page.
+Create and revoke enrollment keys here. Older links to Rollout open this dialog.
 
 ## Channels
 
@@ -46,14 +46,28 @@ Every snippet carries the selected enrollment key, so sign-in lands in this work
 
 ### Lock the guard on
 
-The Cursor, MDM, and script channels offer **Lock it**: Passport's guard and audit hooks go into each agent's managed settings, where people can't remove them. **Strict** also blocks a command when the guard can't run. See [Lock the guard on](/admin/client-fleet#lock-the-guard-on) for the files each agent uses, and the one-line command:
+The Cursor, MDM, and script channels offer **Lock it**: Passport's guard and audit hooks go into each agent's managed settings, where people can't remove them. **Strict** also blocks a command when the guard can't run. See [the files each agent uses](#the-files-each-agent-uses), or run the one-line command:
 
 ```sh
 sudo npx passport-bridge@latest init --org <key> --yes --lock [--strict]
 ```
 
-Computers where the guard is locked show **Locked** on **Agents**.
+`passport status` on a computer shows **Locked** once it's locked.
 
 ## Invites carry the key
 
-Invite emails include one line to set up agents from a terminal, `npx passport-bridge init --org <key>`. An invitee who signs in or runs it with the invited address joins without the link. See [Invitations](/admin/invitations).
+Invite emails include one line to set up agents from a terminal, `npx passport-bridge init --org <key>`. An invitee who signs in or runs it with the invited address joins without the link. See [Invite people](/admin/people-and-teams#invite-people).
+
+## The files each agent uses
+
+By default the guard lives in each person's own agent settings, so they can turn it off. **Lock it** puts Passport's guard and audit hooks in each agent's managed (system) settings instead, where people can't remove them. Managed settings run a small launcher owned by root at `/Library/Application Support/Passport/bin/passport` (macOS), `/opt/passport/bin/passport` (Linux), or `C:\ProgramData\Passport\bin\passport.cmd` (Windows). It hands off to each person's own Passport CLI; until that's set up, commands run as usual.
+
+| Agent | Lock it | Strict adds |
+| --- | --- | --- |
+| Claude Code | `hooks` in managed settings, or the drop-in `managed-settings.d/50-passport.json` ([settings](https://code.claude.com/docs/en/settings), [hooks](https://code.claude.com/docs/en/hooks)) | `allowManagedHooksOnly`, and `onFailure: "block"` on the guard |
+| Codex | Hooks in `requirements.toml` run from `managed_dir`, trusted by policy ([managed configuration](https://learn.chatgpt.com/docs/enterprise/managed-configuration)) | `allow_managed_hooks_only = true` |
+| Cursor | The system `hooks.json` ([hooks](https://cursor.com/docs/agent/hooks)) | `failClosed` on the guard |
+
+**Strict** runs only managed hooks, and blocks a command when the guard can't run (for example, before that person has set Passport up).
+
+The `--lock` command writes the launcher and each agent's file, merging with what's there: it replaces only Passport's own entries, and leaves a file it can't merge safely untouched with the fix (for example, managed settings that set `disableAllHooks`, or another `[hooks]` table in `requirements.toml`). Without administrator rights it writes nothing and lists the files to deploy. If you also use claude.ai server-managed settings, add `"managedSourcesBehavior": "merge"` so both apply.

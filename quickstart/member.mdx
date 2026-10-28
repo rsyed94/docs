@@ -1,6 +1,6 @@
 ---
 title: "Get connected"
-description: "Connect a work app, add your agent, and confirm your first Passport action."
+description: "Connect a work app, add your agent, and see your first task in Passport."
 ---
 
 Open in Passport: [Apps](https://passportmcp.com/#apps)
@@ -9,73 +9,60 @@ This is the shortest path from sign-in to a working agent. It works on Windows, 
 
 ## 1. Sign in
 
-Open your invite, or sign in at [passportmcp.com](https://passportmcp.com). If your company uses single sign-on, Passport will send you to your company's sign-in page.
+Open your invite, or sign in at [passportmcp.com](https://passportmcp.com). If your company uses single sign-on, Passport sends you to your company's sign-in page.
 
-After signing in, you should see **Home**, **Inbox**, **Sessions**, **Rules**, **Apps**, **Agents**, and **Settings**. [Home](/member/home) shows a **Get started** checklist until your first agent, app, and action are done. If your team published a setup for you, **Apps** gets a **Setups** tab.
+Passport opens on [Work](/member/work). The left rail has **Work**, **Agents**, **Apps**, and **Rules**; **Settings** is in the menu under your name.
 
 ## 2. Connect a work app
 
 Open [Apps](https://passportmcp.com/#apps).
 
-- Choose an app you already have access to and select **Connect**. To find one that isn't on your list, choose **Add an app**; each app there has its own page with **Add**, or **Ask an admin to add** when your workspace reviews new apps.
-- Complete the provider sign-in in the Passport Connect window.
-- If your workspace requires approval or company setup, Passport shows that instead of pretending the app is ready.
+- Choose **Connect** on an app you already have, or **Add app** to search for one. Each result shows **Add**, or **Ask an admin to add** when your workspace reviews new apps.
+- Finish the provider's sign-in in the window that opens.
+- If the app needs company setup first, Passport says so instead of pretending it's ready.
 
-Your provider credentials stay in Passport. They are not copied into Claude, Cursor, ChatGPT, Codex, or another agent.
-
-## When your agent asks you to connect again
-
-If an app was never connected or its sign-in expired, Passport can now let your AI agent show the next step right where you are working.
-
-- Some agents show a built-in **Connect** or **Reconnect** action.
-- Other agents show a secure Passport link in the conversation.
-- Open the link, confirm that it uses your Passport domain, and finish the provider sign-in in your browser.
-- Return to the agent when Passport says **All set**. The agent can retry the original task; it never receives your provider password or token.
-
-The link is short-lived and tied to your Passport account. Another signed-in person cannot use it to connect their account on your behalf.
+Your provider credentials stay in Passport. They're never copied into Claude, Cursor, ChatGPT, Codex, or another agent.
 
 ## 3. Add your agent
 
-Open [Agents › Add agent](https://passportmcp.com/#agents/add), then pick where you want to use Passport.
+Open [Agents](https://passportmcp.com/#agents) and choose **Add agent**:
 
-Passport shows current instructions for each agent:
+- **Coding agents on a computer**, such as Claude Code, Cursor, and Codex: run `npx passport-bridge@latest init` in a terminal on that computer. It finds the agents there and connects each one.
+- **Claude.ai** or **ChatGPT**: follow the steps Passport shows and paste the URL it gives you.
+- **A cloud agent**, or **A script or job**: Passport creates a token for it. See [Agents](/member/agents#add-an-agent).
 
-- **Cursor and VS Code** have one-click setup.
-- **Claude Code and Codex** use their own MCP command and browser sign-in.
-- **Claude Desktop, Claude.ai, and ChatGPT** use the MCP server URL Passport gives you.
-- **Terminal agents** can use [Passport CLI](/quickstart/cli). Scripts and CI use an agent token: **Add agent › A script or job** on [Agents](/admin/client-fleet#add-an-agent).
-- **Other agents** can copy the MCP server URL if they support remote MCP servers and browser sign-in.
+Each agent signs you in through your browser the first time. Never paste a provider token into your agent.
 
-Follow the steps in Passport and finish the browser sign-in. No provider token should be pasted into your agent.
+## 4. See it work
 
-<Note>
-  Setting up several agents on one computer? `npx passport-bridge@latest init` adds Passport to each of them in one
-  pass. If an agent's browser sign-in cannot reach a localhost, private, or self-hosted Passport server, choose **Local
-  bridge** in its setup instead.
-</Note>
-
-## 4. Confirm the connection
-
-Keep the agent open and ask:
+Ask your agent:
 
 > List my available Passport tools.
 
-In the setup guide, choose **Test connection**. Passport waits for the agent's first request, then says what it can reach, such as "Claude Code can see 13 apps and 172 tools". You can run the same test later from the agent's page in **Agents**. Once the agent makes its first successful call, Home's **Run one action** step shows **Done**, and the call is in **Sessions › All activity**.
+Then ask it to do something real. The agent shows **Active** on **Agents**, and its task shows on [Work](https://passportmcp.com/#work) under **Running**, then **Recent**. Open the task to see every action it took.
 
-If the test keeps waiting, finish the sign-in inside the agent, keep it open, and test again. See [Troubleshooting](/troubleshooting) for common fixes.
+If an ask comes up, it waits under **Waiting on you** on Work, and often in your agent too. See [When Passport asks](/member/safety#when-passport-asks).
+
+## When your agent asks you to connect again
+
+If an app was never connected or its sign-in expired, your agent can show the next step where you're working:
+
+- Some agents show a built-in **Connect** or **Reconnect** action.
+- Others show a secure Passport link in the conversation. Open it, check that it uses your Passport domain, and finish the provider's sign-in.
+- Return to the agent when Passport says **All set**. The agent can retry; it never receives your provider password or token.
+
+The link is short-lived and tied to your Passport account. Another signed-in person can't use it to connect their account on your behalf.
 
 ## Make it yours
 
-- Open a connected agent and use **Limit apps for this agent** to hide apps it does not need.
-- Open [Autopilot rules](/member/safety) to choose what agents do on their own and when they ask you.
-- Open [Sessions › All activity](https://passportmcp.com/#sessions/activity) to review what your agents did and whether each action ran, was blocked, or failed.
-- Open [Sessions](/member/sessions) to see your agents' work by project and pull request, with what needed attention first. Anything that needs your decision waits in your [Inbox](/member/inbox). A session leads with its outcome: what it shipped, its Production changes, what failed, and how each ask ended. If your admin turned on **Show what agents say they're doing**, Claude Code's own one-line description of each step labels it.
+- Open [Rules](/member/safety) to choose what agents do on their own and when they ask you.
+- Open [Work › History](https://passportmcp.com/#work?view=history) to search everything your agents did.
 
 <CardGroup cols={2}>
   <Card title="Passport CLI" icon="terminal" href="/quickstart/cli">
     Use Passport from a terminal agent, script, or CI job.
   </Card>
   <Card title="Troubleshooting" icon="wrench" href="/troubleshooting">
-    Fix sign-in, missing apps, or a duplicate compatibility connection.
+    Fix sign-in, missing apps, or tools that show twice.
   </Card>
 </CardGroup>

@@ -1,67 +1,55 @@
 ---
 title: "Slack, approvers, and exceptions"
-description: "Route approvals to the right people, answer them in Slack, require a second person for Production, lift a rule for one person, and learn from what you approve."
+description: "Answer asks in Slack, choose who approves Production, require a second person, and lift a rule for one person."
 ---
 
-Open in Passport: [Rules › Team › Approval routing](https://passportmcp.com/#rules/team?section=routing)
+Open in Passport: [Rules](https://passportmcp.com/#rules?scope=everyone)
 
-Autopilot asks a person only when a rule says so. These features decide who that person is, where they answer, and how the rules improve over time.
+Passport asks a person only when a rule says so. These settings decide who that person is and where they answer.
 
 ## Approvals in Slack
 
-An admin adds the Passport app to Slack from **Notifications** on [Settings › Account](https://passportmcp.com/#settings) with **Add to Slack**. After that:
+An admin adds the Passport app to Slack with **Add to Slack** under **Slack** in [Settings › Notifications](https://passportmcp.com/#settings/notifications). After that:
 
-- Each approval request arrives as a direct message to the person who can answer it, as the same ask Passport shows: who wants to do what, its environment (and **Irreversible**), the agent, the computer and folder, the command with secrets removed, why Passport asked, and what happens if it goes wrong.
-- **Run once**, **Run for this task**, **It's Staging, always run** (when it applies), and **Don't run** work right in Slack. Don't run asks for an optional note the agent sees. **Stop {agent}** and **Always allow…** (which opens Passport) are in the message's **⋯** menu. A Production change or delete, or anything irreversible, shows **Review in Passport** instead of Run once: approving it takes a passkey check in Passport ([Confirm it's you](/member/safety#confirm-its-you)). So does placing a resource out of Production. Buttons on messages posted before these labels keep working.
-- Admins can also post Production requests to a channel. Anyone can see them there; only people allowed to approve can answer.
-- When a request is decided anywhere (Passport, a phone notification, Slack, or a rule change), every Slack message for it updates in place, for example "Approved once by Maya in Slack".
+- Each ask arrives as a direct message to the person who can answer it, as the same ask Passport shows: who wants to do what, its environment, the agent, the command with secrets removed, why Passport asked, and what happens if it goes wrong.
+- **Run once**, **Run for this task**, **It's Staging, always run** (when it applies), and **Don't run** work right in Slack. **Stop {agent}** and **Always allow…** (which opens Passport) are in the message's **⋯** menu. A Production change or delete, or anything irreversible, shows **Review in Passport** instead of Run once, because approving it takes a passkey check ([Confirm it's you](/member/safety#confirm-its-you)).
+- Admins can also post Production asks to a **Production channel**. Anyone can see them there; only people allowed to approve can answer.
+- When an ask is answered anywhere, every Slack message for it updates in place, such as "Approved once by Maya in Slack".
 
-Passport finds each person in Slack by their Passport email. If Slack has no account with that email, Settings says so and requests still arrive in Passport. Each person can turn Slack messages off for themselves.
+Passport finds each person in Slack by their Passport email. If Slack has no account with that email, Settings says so and asks still arrive in Passport. Each person can turn Slack messages off for themselves. If the app is removed from Slack, Settings says so and an admin can reconnect it. A self-hosted Passport needs the Slack app configured by whoever runs it.
 
-If the app is removed from Slack or its access is revoked, Settings shows "Slack stopped working" and an admin can reconnect it. Self-hosted Passports need the Slack app configured by whoever runs them; until then Settings shows "Slack isn't set up on this Passport".
+## Production approvers
 
-## Approval routing
+**Rules** shows one line under the table about who approves Production asks, such as "Production approvers: Maya. Someone other than the requester must approve." Members see their own version, such as "You can approve your own agents' Production asks."
 
-On **Rules › Team**, **Approval routing** (Pro and up) decides who gets each team's approval requests. A route is one team (or everyone) in one environment, such as Support in Production:
+Owners switch Rules to **Everyone** and choose **Change** to set:
 
-- **Requests**: deletes and irreversible actions, or changes too.
-- **Send to**: one **Person**, a **Group** where any one of them can decide (people, or anyone on a team), **On call**, or the workspace **Admins**.
-- **On call** is a simple rotation: a list of people who take turns, handing off weekly on a day and time you choose, in your time zone. Changing the list keeps whoever is on call now on call. **Someone else covers this week** hands the rest of the week to another person; the rotation picks up again at the next handoff.
-- **If nobody answers**: after 15 minutes to 4 hours, the request also goes to every admin. **Only before it expires** keeps the long wait: a reminder after about 2 hours, and every admin about 4 hours before it expires.
+- **Who approves**: **Workspace admins**, **One person**, or **Any of a few people**. A workspace with an on-call rotation can keep **Whoever is on call**.
+- **Which asks**: **Deletes and irreversible actions**, or **Changes, deletes, and irreversible actions**.
+- **Someone other than the requester must approve**.
 
-A team's own route decides who gets its requests; without one, the route for everyone does. Routed people get a phone notification and, when Slack is connected, a direct message. The person whose agent asked sees who it's waiting on, like "Waiting on Maya, on call". Nobody is routed their own request: their turn passes to the next person on call, and a route that would reach only the requester goes to the admins.
-
-Each step is in admin activity (**Settings › Workspace › Admin activity**): where Passport sent the request and why, each reminder, and the escalation to admins.
+Routed people get a notification and, with Slack connected, a direct message. The person whose agent asked sees who it's waiting on, like "Waiting on Maya". Nobody is routed their own ask. Teams that had their own routes keep them, and the line says how many. If nobody answers in time, the ask also goes to every admin.
 
 ### Team review of Production deletes
 
-Without a route, once a workspace has a second person, a Delete or Irreversible action in Production (confirmed, or not placed yet and treated as Production) also goes to the workspace admins. With a route, it goes to the routed people instead. Either way the requester can still answer it themselves unless the route needs someone else; the first answer counts. Notifications, Slack, and the Inbox show who else has it.
+Once a workspace has a second person, a Delete or Irreversible action in Production (confirmed, or not placed yet and treated as Production) also goes to the Production approvers. The requester can still answer it themselves unless someone else must approve; the first answer counts.
 
-## Someone else must approve
+### Someone else must approve
 
-A Production route can say **Production deletes need someone else to approve** (or changes and deletes, when it covers changes). Workspaces that set Production approvers before routing keep them: each became a Production route with the same people and the same rule.
+With **Someone other than the requester must approve** on:
 
-- The person whose agent asked can't approve their own request, in Passport, Slack, a notification, or their agent's own prompt.
-- Any one of the routed people is enough. The request shows who it needs, like "Needs Maya or Sam" or "Needs you, on call".
-- The rule from the route for everyone applies to every team, even one with its own route.
-- Nothing these settings cover runs on its own in Production, whatever the presets or exceptions say. Blocks still block.
-- Undoing a covered Production action needs an approver too, even when it starts from Undo in Passport.
-- When Passport only guessed where a request runs, its requester can say it's Production but not anything looser. An approver who's an admin can place it with **It's Staging, always run**.
-
-## Asking someone to review
-
-From one of your work items in **Sessions**, **Ask someone to review** sends it to a teammate with an optional short note. It shows up on their Home under **Needs attention**, linking to the work, and they answer **Looks good** or with a short comment. Their answer shows up in your **Needs attention** until you dismiss it. The teammate can open the sessions you sent for a month. It's a quick second look, not a code review.
+- The person whose agent asked can't approve their own ask, in Passport, Slack, a notification, or their agent's own prompt.
+- Any one of the approvers is enough. The ask shows who it needs, like "Needs Maya or Sam".
+- Nothing it covers runs on its own in Production, whatever anyone's rules say. Blocks still block.
+- Undoing a covered Production action needs an approver too.
+- When Passport only guessed where an ask runs, its requester can say it's Production but not anything looser. An approver who's an admin can place it with **It's Staging, always run**.
 
 ## Exception requests
 
-When a team or workspace rule blocks something a member needs, they can **Request an exception** from the agent's message, a blocked row in a session, or the rule on the Rules page. They choose whether it should run or ask them first, for an hour, a day, or permanently, and say why.
+When a team or workspace rule blocks something a member needs, their agent can ask to lift it, with a one-line reason: for that one tool, for an hour or a day. An irreversible action can only be asked for as "ask first", never "run". The request is filed for the member, names the agent that wrote it, and waits for owners under **Waiting on you** on [Work](/member/work) as a **Rule request**.
 
-Admins answer in the [Inbox](/member/inbox), where each shows as a **Rule request** under **Waiting on you**: approve (optionally changing how long) or decline with a note. Approving adds a rule just for that person that lifts the one rule for that one action. Team floors and Production approvers still apply. The member gets an email either way.
-
-## Rule suggestions
-
-When someone approves the same action in the same environment three times in two weeks, Passport offers to make it an exception just for them: "You approved railway redeploy in Staging 6 times this week. Always run it here?" Production deletes, irreversible actions, and anything a team floor keeps asking about are never suggested. An accepted suggestion is an ordinary exception, recorded in Activity as **Rule added** with "From an approval suggestion". See [Learning from your approvals](/member/safety#learning-from-your-approvals).
+**Review** shows the request in one sentence, the reason, what it lifts, and where. **Approve** (optionally changing how long) adds a rule just for that person that lifts the one rule for that one action. **Decline** takes an optional note. Team minimums and Production approvers still apply. The member gets an email either way.
 
 ## Weekly summary
 
-Every Monday, people who had agent activity get a short email: what Passport handled for them, what they approved, what was blocked, and any suggestions. Admins get the workspace version with totals, new environments, and requests waiting for them. Turn it off with **Weekly summary email** under **Notifications** in **Settings › Account**. The same week is on Home as the [weekly report](/member/home#the-weekly-report).
+Every Monday, people who had agent activity get a short email: what Passport handled for them, what they approved, and what's new. Admins get the workspace version. Turn it off with **Weekly summary email** in [Settings › Notifications](https://passportmcp.com/#settings/notifications).

@@ -3,7 +3,7 @@ title: "SCIM provisioning"
 description: "Make your identity provider the source of truth for who is in the workspace, so deprovisioning a user instantly revokes their access everywhere."
 ---
 
-Open in Passport: [Settings › Advanced](https://passportmcp.com/#settings/advanced)
+Open in Passport: [Settings › Workspace](https://passportmcp.com/#settings/workspace)
 
 SCIM 2.0 lets your identity provider manage who belongs to the workspace and which teams they are on. The payoff is lifecycle control: deprovisioning a user in your IdP instantly revokes their access across every agent and every connected account. SCIM is available on the Enterprise plan.
 
@@ -17,11 +17,11 @@ The SCIM base URL for your workspace is:
 https://<your-passport-host>/scim/v2
 ```
 
-SCIM is off until you generate a bearer token. In Passport, open **Settings › Advanced** and generate a SCIM token under **SCIM provisioning**. The token is shown once, so copy it immediately. Point your IdP at the base URL above and authenticate with that token as an OAuth bearer token.
+SCIM is off until you generate a bearer token. In Passport, open **Settings › Workspace** and make a SCIM token under **SCIM provisioning**, in **Single sign-on and directory**. The token is shown once, so copy it immediately. Point your IdP at the base URL above and authenticate with that token as an OAuth bearer token.
 
 <Note>
   Generating the token requires the Enterprise plan. The token is stored as a one-way hash, so it cannot be recovered
-  later. Generate a new one to rotate; delete it to turn SCIM off.
+  later. Make a new one to rotate; turn SCIM off to delete it.
 </Note>
 
 ## What Passport implements

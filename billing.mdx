@@ -5,7 +5,7 @@ description: "What Free, Pro, and Enterprise include, how seats work, and how to
 
 Open in Passport: [Settings › Billing](https://passportmcp.com/#settings/billing)
 
-Passport has three plans. Every plan includes unlimited apps, the full app catalog, Apps and Agents, your own Activity, Autopilot rules, the Inbox, Passport CLI, and Passport's one MCP server URL. Free is for one person. Pro is the team plan: People, teams, team rules, Team setups, rollout, every agent in the workspace, and workspace-wide Activity. Enterprise adds company-wide controls for identity, data checks, discovered agents, catalog rules, and streaming to your SIEM.
+Passport has three plans. Every plan includes unlimited apps, the full app catalog, Work, Agents, Apps, and Rules, Passport CLI, and Passport's one MCP server URL. Free is for one person. Pro is the team plan: People, teams, team rules, rollout, and the whole workspace's agents and record. Enterprise adds company-wide controls for identity, data checks, and streaming to your SIEM.
 
 ## Plans
 
@@ -16,26 +16,23 @@ Passport has three plans. Every plan includes unlimited apps, the full app catal
   </Card>
   <Card title="Pro" icon="rocket">
     **$15 per person per month.** For teams. Everyone gets the same apps and rules in every agent. Unlimited people and
-    automations, the People page and teams, access rules and approval floors by team and person, Team setups with
-    bundles, rollout with enrollment keys, every agent in the workspace on **Agents › Everyone**, workspace-wide
-    Activity with CSV and JSONL export, alerts, and tool history.
+    automations, the People page and teams, access and team minimums by team and person, Production approvers,
+    rollout with enrollment keys, every agent in the workspace on **Agents › Everyone**, and the workspace's record
+    with CSV and JSONL export.
   </Card>
   <Card title="Enterprise" icon="building">
-    **$30 per person per month.** Everything in Pro, plus OIDC SSO; SCIM; discovered agents and their scans (`passport scan`);
-    custom data checks and runtime security; catalog review and rollout rules; agent policy; SIEM and OTLP streaming
-    with alert webhooks; a DPA on request; and annual invoicing. Still self-serve with a card.
+    **$30 per person per month.** Everything in Pro, plus OIDC SSO; SCIM; domain joining; custom data checks and runtime security; SIEM
+    and OTLP streaming; a DPA on request; and annual invoicing. Still self-serve with a card.
   </Card>
 </CardGroup>
 
 ## How apps work on each plan
 
-On Free and Pro, verified catalog apps are open: choose **Connect**, and Passport either finishes the connection or asks an admin when a shared company credential is required. There is no app limit on any plan.
+Verified catalog apps are open: choose **Add**, and Passport either finishes the connection or asks an admin when a shared company credential is required. On Enterprise, a workspace can review new apps first, and members see **Ask an admin to add**. There is no app limit on any plan.
 
-On Enterprise, admins can keep the catalog open, require review, or set rules by app, category, and team. Access usually starts read-only, and an app is not marked ready until required company setup is done.
+On every plan, workspace admins can finish technical setup (company API keys, OAuth clients, custom URLs, removing apps). Built-in secret scanning and each person's rules also stay on every plan. Pro adds access and team minimums by team and person, and the workspace's record with export. Enterprise adds custom data checks and streaming to your SIEM.
 
-On every plan, workspace admins can finish technical setup (company API keys, OAuth clients, custom URLs, removing apps). Built-in secret scanning and personal Autopilot rules also stay on every plan. Pro adds access rules by team and person, approval floors by team, and workspace-wide Activity export. Enterprise adds custom data checks, agent policy, and streaming to your SIEM.
-
-Passport CLI is included on every plan and uses the same rules and Activity as every other agent.
+Passport CLI is included on every plan and uses the same rules and record as every other agent.
 
 ## How seats are counted
 
@@ -63,14 +60,14 @@ If a workspace has more people than its plan allows, for example after a trial o
 
 Changing plans never deletes configuration. Settings that need a higher plan are kept but stop applying until that plan is active again.
 
-- **Enterprise to Pro:** SSO, SCIM, data checks, agent policy, domain joining, catalog rules, and streaming stop applying. People, teams, team rules, Team setups, and workspace-wide Activity keep working.
-- **Pro to Free:** Team setups, bundles, the People page, and workspace-wide Activity pause, and teams and setups are kept. A saved approval floor keeps applying, since it only tightens. Team and person access rules keep restricting access until an owner resets the app to workspace-wide read-only or full.
+- **Enterprise to Pro:** SSO, SCIM, custom data checks, domain joining, and streaming stop applying. People, teams, team rules, and the workspace's record keep working.
+- **Pro to Free:** the People page and the workspace's record pause, and teams are kept. A saved team minimum keeps applying, since it only tightens. Team and person access rules keep restricting access until an owner resets the app to workspace-wide read-only or full.
 
 ## Upgrade, change, or cancel
 
 <Steps>
   <Step title="Upgrade">
-    Open [Settings › Billing](https://passportmcp.com/#settings/billing) (on Free, the **Billing** card on **Settings › Account**) and upgrade. Stripe Checkout asks for a card.
+    Open [Settings › Billing](https://passportmcp.com/#settings/billing) and upgrade. Stripe Checkout asks for a card.
   </Step>
   <Step title="Change plan">
     Plan changes on an existing subscription go through the Stripe customer portal. Passport edits your one subscription
