@@ -64,7 +64,7 @@ Selected scope, team passes, and person overrides are part of Pro and Enterprise
   counts only when the tool name also looks read-only (prefixes such as `get_`, `list_`, `search_`). Anything not
   provably read-only counts as a write and is withheld under a read-only pass. A safety pack can only narrow this: a
   tool Passport's pack treats as a delete stays withheld even if the upstream calls it read-only. A class you set on the
-  app's **Tools** tab counts. The name heuristic is best-effort, not a guarantee that a tool is safe.
+  app's **Tools** section counts. The name heuristic is best-effort, not a guarantee that a tool is safe.
 </Note>
 
 Access is the first step of every decision, before any [Autopilot rule](/member/safety#how-a-decision-is-made): no exception, preset, or team floor gets past it. The same pass governs the app's tools, its CLI through the guard and `passport exec`, and **Rules › Test a command**.
@@ -77,7 +77,7 @@ With **Keep off until I approve** selected, a new tool stays off until you appro
 
 On every plan, a tool whose new definition looks like a poisoning attempt is switched off until you review it.
 
-Held tools are listed under **Review tool changes** on the app's **Tools** tab (`#apps/<app>/tools`), with what changed, and the [Inbox](/member/inbox#needs-attention) shows a **Review tools** row for each app with held tools. Select the ones to approve and turn them back on in one step. Flagged tools are approved one at a time. Until then, an agent that calls a held tool is told the app changed it and an admin review is pending, and Activity records the call as held for admin review rather than as a tool you switched off.
+Held tools are listed under **Review tool changes** in the app's **Tools** section (`#apps/<app>/tools`), with what changed, and the [Inbox](/member/inbox#needs-attention) shows a **Review tools** row for each app with held tools. Select the ones to approve and turn them back on in one step. Flagged tools are approved one at a time. Until then, an agent that calls a held tool is told the app changed it and an admin review is pending, and Activity records the call as held for admin review rather than as a tool you switched off.
 
 Apps that need an admin, for setup, repair, or tool review, show under **Needs attention** on the **Apps** page. The Inbox and Home's **Needs attention** show the same rows, and Home also lists everything else, such as idle agents.
 

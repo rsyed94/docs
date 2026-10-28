@@ -71,7 +71,7 @@ Press Enter for the recommended setup, or type `n` to go step by step: each step
 - **Agents** adds Passport's one address, `https://passportmcp.com/mcp`, to Claude Code, Codex, Cursor, and VS Code. Each agent signs you in through your browser the first time, so no key or token goes in its settings. An agent still on your workspace's own older address (`/w/ws_…/mcp`) or on a local bridge moves to the one address; **Agents** marks those with **Uses an old URL** until you do. For Claude Desktop, init copies the address for you to paste in **Settings › Connectors › Add custom connector**.
 - **Guard** applies your Autopilot rules to the commands agents run in your terminal, like `railway volume delete`. It can't see inside scripts, aliases, or `make` targets. See [the CLI hook](/member/cli-hook).
 - **Autopilot** sets how much agents can do on their own in Production, Staging, and Development, in every agent. Step by step asks once per environment, and only where your team leaves a choice. Change them any time in [Rules](https://passportmcp.com/#rules).
-- **Where** lists the environments Passport placed, by environment. Anything it can't place yet counts as Production until you place it in **Rules › Environments**.
+- **Where** lists the environments Passport placed, by environment. Anything it can't place yet counts as Production until you place it in the **Environments** section of its app's page.
 
 Run init again any time. The plan shows what's already set up and changes only what's missing, including after you press Ctrl-C. When nothing is missing, it says so and asks nothing.
 

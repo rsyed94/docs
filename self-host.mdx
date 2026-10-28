@@ -301,7 +301,7 @@ response procedure.
 | `PASSPORT_LOG`                                                                   | (unset)                                          | Set to `1` to enable per-request structured logging outside production.                                                                                                                           |
 
 Sentry is entirely optional for a self-hosted deployment. With both DSNs unset,
-no Sentry telemetry leaves the instance. Browser DSN, environment, sampling,
+no Sentry telemetry, feature-usage counts included, leaves the instance. Browser DSN, environment, sampling,
 and verification settings are read from the running service through
 `/api/browser-runtime-config.js`. Changing those settings requires updating the
 service environment, not rebuilding the browser assets.

@@ -9,29 +9,30 @@ This page covers **Agents** in both views. Everyone, admins included, manages th
 
 ## Manage your own agents
 
-Open **Agents** to see **Your agents**. Members and admins see the same page. There is one row for each agent on each computer: Claude Code, Claude Desktop, and Claude.ai are separate agents, and Claude Code on two laptops is two rows. Interactive Passport CLI profiles on one computer share one **Passport CLI** row. An agent that only has Passport's guard on a computer (say Codex, with no sign-in of its own) still gets its row, marked **Guard only**.
+Open **Agents** to see **Your agents**: one list of every agent you own, whatever kind it is. Members and admins see the same page.
 
-A working agent stays quiet: its row shows where it runs (for example **On Sam's MacBook**), how much of what the guard saw your rules could decide this week (for example **decides 82%**), and **Last used**, which opens **All activity** filtered to that agent. One chip says its state: **Sign-in expired**, or its guard: **On**, **Off**, **Outdated**, **Not trusted**, or **Locked** (see [Guard health](/member/cli-hook#guard-health)). A row only asks for something when there is one thing to fix, and the fix is on the row:
+- **On a computer**: Claude Code, Claude Desktop, Cursor, and the rest. There is one row for each agent on each computer: Claude Code, Claude Desktop, and Claude.ai are separate agents, and Claude Code on two laptops is two rows. Interactive Passport CLI profiles on one computer share one **Passport CLI** row.
+- **Cloud**: Codex cloud, Claude Code on the web, and GitHub Actions, running as an agent you own.
+- **Tokens**: an agent token a script, CI job, or hosted workflow uses instead of signing in.
 
-- **Reconnect** when an agent's Passport sign-in expired;
-- the guard's fix, such as `passport hook install --agent codex --guard --apply` or "Open Codex → /hooks and trust Passport's hooks.";
-- **Update** when a Passport CLI or local setup is behind the newest published version (see [Keep agents up to date](/member/updates));
-- **Remove duplicate** when a local setup shows the same tools twice next to a working account connection; or
-- **Disconnect** when an agent has not been used in 30 days.
+Each row says what kind of agent it is and where (for example **On Maya's MacBook Pro**, **Cloud · GitHub Actions**, **Token · runs as itself**, or **Token · acts for Priya**) and when it was last used. One chip says its state: **Active**, **Stopped**, **Needs sign-in**, or **Not used yet**. A row has a button only when something needs doing: **Reconnect** when its sign-in expired, **Update** when a Passport CLI or local setup is behind the newest version (see [Keep agents up to date](/member/updates)), or **Remove duplicate** when a local setup shows the same tools twice next to a working account connection. When agents need you to sign in again, a row at the top says how many, and **Show** narrows the list to them.
 
-Open an agent to:
+Filter the list with **All**, **On a computer**, **Cloud**, or **Tokens**; each shows its count. `#agents?kind=token` opens the Tokens filter. A token whose agent has no live token left leaves the list; **Revoked and expired** at the foot of the Tokens filter shows them.
 
-- **Test connection**: Passport checks that the agent's sign-in is valid and has been used (or waits for its first request), then says what it can reach, such as "Claude Code can see 13 apps and 172 tools";
-- see its guard on each computer it runs on, with how much it checked and when the computer last reported;
-- see each sign-in it uses, with a detail line such as "via Passport CLI on Sam's MacBook", and **Rename** that computer (only you see the name);
-- **Add a connection** on another computer; or **Disconnect** one sign-in immediately; and
-- **Limit apps for this agent** to hide some of your apps from it. The disclosure shows a line such as "Sees 3 of 13 apps" only when the agent is limited.
+### An agent's page
 
-**Add agent** opens on the agent your team setup recommends, or one a Discover scan found on your computer, and otherwise on Claude. Guided setups end with **Test connection**.
+Every row opens its agent's page (`#agents/mine/<agent>`, `#agents/cloud/<id>`, or `#agents/token/<id>`). It shows only what applies:
 
-## Automations
+- **Stop**, the page's one action, for the agent's owner and admins. It asks first. For a cloud agent or a token, every call the agent makes is refused until someone resumes it; its tokens and rules stay as they are, and a banner says who stopped it and when, with **Resume**. For an agent on a computer, Stop ends its current work and refuses its next request; its next session starts fresh. Everyone else sees the page read-only.
+- **Recent work**: its last five sessions, and **See all**, which opens Sessions filtered to that agent.
+- **Connection** (agents on a computer): **Test connection**, the fix for anything broken, its guard on each computer, each sign-in it uses (with **Rename** for that computer and **Disconnect** for one sign-in), and **Limit apps for this agent**.
+- **Tokens** (cloud agents and tokens): one row per live token with its last four characters, when it was created and last used, and when it expires. **Rotate** and **Revoke** are in the row's menu, and **Create token** adds another; a new token is shown once. Revoked and expired tokens fold into a disclosure. See [Agent tokens, their owners, and rotation](/admin/agents-and-access#agent-tokens-their-owners-and-rotation).
+- **Runs as**: whether it runs as itself or acts for a person, and who its approvals go to.
+- **Remove agent**, at the foot, after a confirm that says what stops.
 
-**Agents › Automations** shows how many agent tokens scripts, CI, and hosted workflows use, and **Manage tokens** opens them in [Settings › Keys](/admin/settings#agent-tokens), where owners and admins create, rotate, and revoke them. People who own an agent token but are not admins see only their own tokens there and can revoke them. See [Automation credentials](/admin/people-and-teams#automation-credentials).
+### Add an agent
+
+**Add agent** opens one dialog with three choices: **An agent you use** (it opens on the agent your team setup recommends, or one a Discover scan found, and otherwise on Claude; guided setups end with **Test connection**), **A cloud agent**, and **A script or job**, which creates an agent token. Owners and admins create tokens; anyone else is asked to ask an admin. A new cloud agent or token opens on its own page, which shows its token once.
 
 ## Manage the workspace
 
@@ -45,7 +46,7 @@ Open an agent to see its **connections**, one per person per computer. Each show
 
 Disconnecting cuts access right away, after a confirm that names the agent, person, and computer. Its owner must sign in again. The list shows real observed connections; opening setup instructions alone does not add a row.
 
-A person's page shows the same rows as their **Agents** page under **Agents**, with each guard state and fix. MCP servers people set up outside Passport are on [Agents › Discovered](/admin/discovered-agents).
+A person's page shows their agents on computers under **Agents**, with each guard state and fix. MCP servers people set up outside Passport are on [Agents › Discovered](/admin/discovered-agents).
 
 ## Understand agent names
 

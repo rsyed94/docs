@@ -256,7 +256,7 @@ OpenCode is a first-class policy identity too, but it is not listed in the **Add
 
 ## Headless, CI, and cron
 
-For scripts and CI, create an agent token in [Settings › Keys](https://passportmcp.com/#settings/keys?section=agent-tokens) (**Agents › Automations** links there), set `PASSPORT_AGENT_KEY` to it, and inject it and the workspace endpoint through your CI secret store. Environment mode works without `passport login` and writes no local credential file.
+For scripts and CI, create an agent token with **Add agent › A script or job** on [Agents](https://passportmcp.com/#agents/add/token), set `PASSPORT_AGENT_KEY` to it, and inject it and the workspace endpoint through your CI secret store. Environment mode works without `passport login` and writes no local credential file.
 
 ```sh
 export PASSPORT_AGENT_KEY='<agent-token>'

@@ -51,4 +51,4 @@ The Passport bridge and Passport CLI talk to your own Passport server and nothin
   not CLI network calls.
 </Note>
 
-Passport does not send telemetry or analytics to the vendor by default. When you self-host, the hosted service never touches your data.
+The bridge and CLI send no telemetry or analytics of their own. The hosted Passport service keeps feature-usage counts in Sentry, such as how many approval requests were answered and where; they carry only fixed categories, never names, email addresses, commands or content. A self-hosted server sends these counts, like all Sentry diagnostics, only when its operator sets a Sentry DSN. When you self-host, the hosted service never touches your data.

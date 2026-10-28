@@ -109,7 +109,7 @@ Each unplaced repository or environment shows once in Home's **Needs attention**
 
 Placing a target answers it for the whole workspace, for new actions from then on:
 
-- **Rules › Environments** lists every repository and environment agents have reached. Admins choose **Production**, **Staging**, or **Development** for each. **Set environments** on a session, a project, or the Production changes ledger opens it.
+- Each app's page lists, under **Environments**, every repository and environment agents have reached on it. Admins choose **Production**, **Staging**, or **Development** for each. **Set environments** on a session, a project, or the Production changes ledger opens Apps.
 - For a repository, choose **Production** if merging to its default branch deploys it, or **Staging** if it doesn't. With Staging, a push to `main` runs under Staging's preset; force pushes still ask.
 - When an approval is waiting on something nobody placed, it shows **This is: Production · Staging · Development**. Choosing saves it and decides that request again.
 - From a terminal, `passport env set` places a resource. Anyone can say Production; anything looser needs an admin.
@@ -159,7 +159,7 @@ Each project, such as a repository, has a page at `#projects/<project>`. Open it
 - **Live work**: work items with a session running now. Left out when nothing runs.
 - **Recent sessions**: the latest work items, with **See all** for the rest in Sessions.
 - **Production changes**: the change, delete, and irreversible actions that ran on confirmed Production in the last 7 days, by app and target, and how many were unplaced.
-- **Environments**: where the repository is placed (Production if merging to its default branch deploys it, Staging if it doesn't, or not placed yet), then each platform its changes reached, such as "Railway: Production, Staging". **Rules › Environments** places them; admins can **Place it** right there.
+- **Environments**: where the repository is placed (Production if merging to its default branch deploys it, Staging if it doesn't, or not placed yet), then each platform its changes reached, such as "Railway: Production, Staging". Each app's **Environments** section places them; admins can **Place it** right there.
 - **Rules**: the exceptions for the apps and commands its agents use, such as "Run railway up in Staging for you", and the project scripts saved for this repository. A rule for every app isn't listed here.
 
 On Pro and Enterprise, an admin who opens a project from **Everyone** sees everyone's work in it.
