@@ -3,7 +3,7 @@ title: "Managed API apps"
 description: "Connect provider APIs through the same Passport policy, safety, and audit layer as apps that use MCP servers."
 ---
 
-Open in Passport: [Apps › Add an app](https://passportmcp.com/#apps/add)
+Open in Passport: [Apps › Add app](https://passportmcp.com/#apps?add=1)
 
 An app is the same to people however Passport reaches the provider. It may use an upstream MCP server or a reviewed API driver. Both appear in **Apps**, use the same Connect experience, and are delivered to agents through the same Passport MCP endpoint.
 
@@ -15,7 +15,7 @@ The first managed API apps are:
 
 Passport can also load reviewed long-tail apps from an operator-configured provider adapter.
 
-For a system that has an OpenAPI spec but no reviewed driver and no MCP server (most internal services), an admin can [import the spec](/admin/openapi-import) instead. The imported operations become tools on an ordinary app and use the same control plane described below.
+Apps an admin imported from an OpenAPI spec use the same control plane described below.
 
 ## What stays the same
 
@@ -24,11 +24,11 @@ The transport does not change the control plane. Managed API actions use the sam
 - catalog request and admin approval flow
 - per-person OAuth connection and reconnect flow
 - Full, Read-only, and None passes
-- team, person, agent, and bundle visibility
+- team, person, and agent visibility
 - per-tool switches, action classes, and drift alerts
-- members' Autopilot rules and action-time approvals
+- members' rules and action-time approvals
 - argument and result data checks
-- Activity, admin activity, metrics, and health views
+- the record, admin changes, metrics, and health views
 - workspace, single-app, CLI, and hosted-agent surfaces
 
 If an API driver exposes resources or prompts, Passport namespaces and governs those with the same read pipeline used for MCP resources and prompts.

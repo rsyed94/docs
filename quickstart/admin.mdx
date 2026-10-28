@@ -1,68 +1,54 @@
 ---
 title: "Set up a workspace"
-description: "Connect the first app, add your agent, invite people, and confirm the setup."
+description: "Connect the first app, add your agent, invite people, and set the rules."
 ---
 
-Open in Passport: [Home › Get started](https://passportmcp.com/#home)
+Open in Passport: [Apps](https://passportmcp.com/#apps)
 
-Start here if you created the workspace. You will connect one useful app, prove the setup yourself, and then invite other people.
+Start here if you created the workspace. Connect one useful app, prove the setup yourself, then invite other people.
 
-Free keeps administration inside [Settings](/admin/settings). Pro adds **People** (once someone else joins), team rules on **Rules › Team**, **Setups** on **Apps**, [Rollout](/admin/rollout) on **Agents**, and **Everyone** views of **Sessions › All activity** and **Agents**. Enterprise adds **Agents › Discovered** and **Rules › Data checks**.
-
-Home's **Get started** checklist tracks the same first steps: connect an agent, add an app, pick your rules preset, and run one action. See [Home](/member/home#get-started).
+On Free, you're the workspace's admin. On Pro and Enterprise, admins are **owners**: they also get **People** in the account menu, and **Mine** or **Everyone** on Work, Agents, and Rules.
 
 ## 1. Connect an app
 
-Open [Apps › Add an app](https://passportmcp.com/#apps/add).
+Open [Apps](https://passportmcp.com/#apps) and choose **Add app**.
 
-- Pick an app you already use, or search for it.
-- Choose **Add**. The dialog explains any setup step, such as a shared key or an OAuth client.
-- Complete your own provider sign-in, or finish any company setup Passport asks for.
+- Search for an app you already use and choose **Add**.
+- Finish your own sign-in, or the setup step Passport asks for, such as a shared key or an OAuth client. The app's page has **Set up** for that.
 
-Every app has its own page, even before it's added, with what it can do and the tools it will expose.
-
-Verified catalog apps are self-service on Free and Pro. Enterprise can keep that flow open, require review, or apply catalog rules by app, category, publisher, and team.
+Verified catalog apps are self-service on Free and Pro. See [Apps](/member/apps).
 
 ## 2. Add your agent
 
-Open [Agents › Add agent](https://passportmcp.com/#agents/add) and follow the instructions Passport shows. The normal path uses the agent's own support for remote MCP servers and browser sign-in.
+Open [Agents](https://passportmcp.com/#agents) and choose **Add agent**. For coding agents, run the one command it shows on your computer:
 
-Ask the agent to list its Passport tools, then choose **Test connection** in the setup guide. Passport waits for the agent's first request and says what it can reach. Home's **Run one action** step turns **Done** once the agent makes a successful call.
+```sh
+npx passport-bridge@latest init
+```
 
-Do this before inviting the team. It proves the full connection and gives you a known-good example.
+Ask the agent to do something, then check that its task shows on [Work](https://passportmcp.com/#work). Do this before inviting the team. It proves the whole connection and gives you a known-good example.
 
 ## 3. Invite people
 
-- **Free:** inviting your first teammate starts a 30-day Pro trial for your team, with no card. After it, upgrade to Pro from the **Billing** card in [Settings](https://passportmcp.com/#settings) to add more people.
-- **Pro and Enterprise:** open **People** and choose **Invite people**. Pending invites and join requests are on [People › Invitations](/admin/invitations).
+On Pro and Enterprise, open **People** from the menu under your name and choose **Invite people**. Paste as many addresses as you like, pick a role and team, and Passport emails each one an invite. See [People and teams](/admin/people-and-teams).
 
-Add people individually or in a batch. Invites are tied to the intended email address and expire after 14 days. On Pro and Enterprise, assign roles and teams as part of the rollout.
+To set up every computer at once, use **Add agent › Everyone on your team** on Agents. See [Roll out to your team](/admin/rollout).
 
-See [People and teams](/admin/people-and-teams) for roles, deactivation, teams, and automation credentials. To put Passport in every agent across the company, use [Agents › Rollout](/admin/rollout).
+## 4. Set the rules
 
-## 4. Choose the right level of control
+Start with the defaults and watch real work on Work. Add controls when there's a clear need:
 
-You can start simple:
-
-- Personal [Autopilot rules](/member/safety) are available on every plan.
+- Each person's [Rules](/member/safety) decide what their agents do without asking, on every plan.
 - Built-in secret detection protects every plan.
-- Pro adds teams, access rules and approval floors by team and person, Team setups, every agent in the workspace on **Agents › Everyone**, and workspace-wide Activity with export.
-- Enterprise adds catalog review and rollout rules, agent policy, **Agents › Discovered** with scans for agents set up outside Passport, runtime security, custom data checks, SSO, SCIM, and streaming to your SIEM.
-
-Start with the default behavior, watch real usage in **All activity**, and add controls when there is a clear need.
-
-<Note>
-  Everyone can see their own actions in **Sessions › All activity**. Pro and Enterprise admins switch the same tab to
-  **Everyone** to review and export company-wide Activity, and can review privileged admin changes under
-  [Settings › Workspace › Admin activity](https://passportmcp.com/#settings/workspace).
-</Note>
+- Pro adds teams, **Who can use it** by team and person on each app, team minimums and **Production approvers** on **Rules › Everyone**, every agent on **Agents › Everyone**, and the workspace's record on **Work › Everyone**.
+- Enterprise adds custom [data checks](/admin/data-checks), [single sign-on](/enterprise/sso-oidc), [SCIM](/enterprise/scim), and [streaming to your SIEM](/enterprise/siem-export).
 
 <CardGroup cols={2}>
-  <Card title="App access and approvals" icon="key" href="/admin/approvals-and-requests">
-    Decide who can connect each app and what they can do.
+  <Card title="Apps" icon="key" href="/member/apps">
+    Decide who can use each app and what they can do.
   </Card>
   <Card title="Data checks" icon="filter" href="/admin/data-checks">
-    Understand secret checks, runtime security, and custom checks.
+    Secret checks and custom checks on what agents send and get back.
   </Card>
   <Card title="Plans and billing" icon="credit-card" href="/billing">
     Compare Free, Pro, and Enterprise.

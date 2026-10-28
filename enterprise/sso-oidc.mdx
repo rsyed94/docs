@@ -3,9 +3,9 @@ title: "Single sign-on (OIDC)"
 description: "Connect your workspace to your identity provider with OpenID Connect. Includes Okta and Microsoft Entra walkthroughs."
 ---
 
-Open in Passport: [Settings › Advanced](https://passportmcp.com/#settings/advanced)
+Open in Passport: [Settings › Workspace](https://passportmcp.com/#settings/workspace)
 
-Passport signs people in through your identity provider using OpenID Connect (authorization code with PKCE). Each workspace brings its own IdP, configured under **Single sign-on (OIDC)** on **Settings › Advanced**. Sign-in is available on the Enterprise plan.
+Passport signs people in through your identity provider using OpenID Connect (authorization code with PKCE). Each workspace brings its own IdP, configured under **Single sign-on (OIDC)** on **Settings › Workspace**. Sign-in is available on the Enterprise plan.
 
 ## How it works
 
@@ -47,7 +47,7 @@ The requested scopes are `openid email profile`.
     Create a web application (confidential client) with the redirect URI `https://<your-passport-host>/auth/callback`. Note the client ID and client secret.
   </Step>
   <Step title="Enter the details in Settings">
-    In Passport, open **Settings › Advanced** and set the issuer URL, client ID, and client secret. The secret is encrypted at rest. Save.
+    In Passport, open **Settings › Workspace** and set the issuer URL, client ID, and client secret. The secret is encrypted at rest. Save.
   </Step>
   <Step title="Test the sign-in">
     Sign out and visit the sign-in page. It should redirect to your IdP and return you signed in.
@@ -76,7 +76,7 @@ The requested scopes are `openid email profile`.
     From the app's General tab, copy the Client ID and Client secret. Your issuer is your Okta org URL, for example `https://your-org.okta.com`.
   </Step>
   <Step title="Enter them in Passport">
-    Paste the issuer, client ID, and secret into **Settings › Advanced** in Passport and save.
+    Paste the issuer, client ID, and secret into **Settings › Workspace** in Passport and save.
   </Step>
 </Steps>
 
@@ -96,7 +96,7 @@ The requested scopes are `openid email profile`.
     Your issuer is `https://login.microsoftonline.com/<tenant-id>/v2.0`. Use the tenant ID from the app's Overview page.
   </Step>
   <Step title="Enter them in Passport">
-    Paste the issuer, the Application (client) ID, and the client secret into **Settings › Advanced** in Passport and save.
+    Paste the issuer, the Application (client) ID, and the client secret into **Settings › Workspace** in Passport and save.
   </Step>
 </Steps>
 

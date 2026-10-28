@@ -35,7 +35,7 @@ The last line is the next step: [`init`](/quickstart/developer) connects those a
 ## What it never does
 
 - **Never shows a key.** Output names the kind of key and where it is. No part of the value is printed or saved, not even its first characters or a hash.
-- **Never sends a key.** Without a sign-in the scan reads files on your computer and nothing else, so nothing leaves it. Signed in to Passport, it also tells your workspace which MCP servers your agents use: each one's name and how it connects, never a key, path, or argument. Your admin sees them on [Agents › Discovered](/admin/discovered-agents), and the scan exits `5` when your workspace's policy doesn't allow one. `--check` (CI and pre-commit) never sends anything.
+- **Never sends a key.** Without a sign-in the scan reads files on your computer and nothing else, so nothing leaves it. Signed in to Passport, it also tells your workspace which MCP servers your agents use: each one's name and how it connects, never a key, path, or argument. The scan exits `5` when your workspace's policy doesn't allow one. `--check` (CI and pre-commit) never sends anything.
 - **Never changes anything.** It only reads, and it never follows a link out of the project folder.
 
 ## Where it looks

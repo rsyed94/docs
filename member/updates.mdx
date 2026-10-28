@@ -51,6 +51,6 @@ passport update on
 
 With updates off, **Update** on that computer's rows shows "Automatic updates are off on this computer." and the command to run. Setting `PASSPORT_AUTO_UPDATE=off` (for example on a managed computer or in CI) also stops the background checks. Passport never checks for updates in CI or from an agent token.
 
-## Update everyone (admins)
+## Update everyone (owners)
 
-On Pro and Enterprise, [Agents › Everyone](https://passportmcp.com/#agents?scope=everyone) says how many connections are out of date. **Update all N** asks every one of those computers that can update itself to install the new version on its next run. The line then says how many update on their next run, and how many need their owners to update by hand. Each request is recorded in admin activity, and so is each computer's result.
+On Pro and Enterprise, owners switch [Agents](https://passportmcp.com/#agents?scope=everyone) to **Everyone** to see which agents are behind: their rows say **Update available**. Each person updates their own from **Agents**, or with `npx passport-bridge@latest init` on that computer.

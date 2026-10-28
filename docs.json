@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Passport",
-  "description": "Connect your work apps to Claude, Cursor, ChatGPT, and more — safely, with a clear record of what happened.",
+  "description": "Connect your work apps to Claude, Cursor, ChatGPT, and more, with clear rules and a record of every action.",
   "colors": {
     "primary": "#C93A6B",
     "light": "#FF8A5C",
@@ -19,41 +19,31 @@
         "pages": ["index", "quickstart/developer", "quickstart/member", "quickstart/admin", "quickstart/cli"]
       },
       {
-        "group": "Using Passport",
+        "group": "In Passport",
+        "pages": ["member/work", "member/agents", "member/apps", "member/safety"]
+      },
+      {
+        "group": "How it works",
         "pages": [
           "concepts/model",
-          "member/home",
-          "member/inbox",
-          "member/ai-setup",
-          "member/safety",
-          "member/sessions",
           "member/undo",
-          "member/scan",
           "member/cli-hook",
+          "member/scan",
           "member/updates",
-          "admin/activity-and-audit",
           "concepts/status-words",
-          "billing",
           "troubleshooting"
         ]
       },
       {
         "group": "Manage a workspace",
         "pages": [
-          "admin/settings",
           "admin/people-and-teams",
-          "admin/invitations",
+          "admin/settings",
           "admin/rollout",
-          "admin/team-setups",
-          "admin/bundles",
-          "admin/approvals-and-requests",
           "admin/slack-and-approvers",
-          "admin/managed-api-integrations",
-          "admin/openapi-import",
-          "admin/agents-and-access",
           "admin/data-checks",
-          "admin/discovered-agents",
-          "admin/client-fleet"
+          "admin/managed-api-integrations",
+          "billing"
         ]
       },
       {
@@ -89,16 +79,68 @@
   },
   "redirects": [
     {
+      "source": "/member/home",
+      "destination": "/member/work"
+    },
+    {
+      "source": "/member/inbox",
+      "destination": "/member/work#waiting-on-you"
+    },
+    {
+      "source": "/member/sessions",
+      "destination": "/member/work#tasks"
+    },
+    {
+      "source": "/member/ai-setup",
+      "destination": "/member/agents"
+    },
+    {
+      "source": "/admin/activity-and-audit",
+      "destination": "/member/work#history"
+    },
+    {
+      "source": "/admin/client-fleet",
+      "destination": "/member/agents"
+    },
+    {
+      "source": "/admin/agents-and-access",
+      "destination": "/member/agents#agent-tokens"
+    },
+    {
+      "source": "/admin/approvals-and-requests",
+      "destination": "/member/apps"
+    },
+    {
+      "source": "/admin/team-setups",
+      "destination": "/member/agents"
+    },
+    {
+      "source": "/admin/bundles",
+      "destination": "/member/apps"
+    },
+    {
+      "source": "/admin/invitations",
+      "destination": "/admin/people-and-teams#invite-people"
+    },
+    {
+      "source": "/admin/discovered-agents",
+      "destination": "/member/scan"
+    },
+    {
+      "source": "/admin/openapi-import",
+      "destination": "/admin/managed-api-integrations"
+    },
+    {
       "source": "/admin/client-defaults",
-      "destination": "/admin/team-setups"
+      "destination": "/member/agents"
     },
     {
       "source": "/admin/discover",
-      "destination": "/admin/discovered-agents"
+      "destination": "/member/scan"
     },
     {
       "source": "/admin/inventory",
-      "destination": "/admin/discovered-agents"
+      "destination": "/member/scan"
     },
     {
       "source": "/admin/guardrails",

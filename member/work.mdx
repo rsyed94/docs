@@ -1,0 +1,124 @@
+---
+title: "Work"
+description: "What needs you now, what your agents are doing, and the record of everything they did."
+---
+
+Open in Passport: [Work](https://passportmcp.com/#work)
+
+**Work** is where Passport opens. It has two views: **Now**, for what needs you and what's running, and **History**, for every task and action. The number beside **Work** in the navigation is how many asks are waiting on you.
+
+## Now
+
+**Now** is the default view. It shows four sections, top to bottom, and hides any that are empty:
+
+- **Waiting on you**: asks and requests only you can answer.
+- **To fix**: things that are broken or about to stop working.
+- **Running**: tasks an agent is still working on, each with **Stop**.
+- **Recent**: your last five tasks. **All history** opens History.
+
+When nothing waits on you and nothing needs fixing, Now says "Nothing needs you." A new workspace says how to start: connect an agent, ask it to do something, and its work shows up here.
+
+### Waiting on you
+
+Each ask is one line: who wants to do what, its environment, and how long it has waited. **Review** opens the ask:
+
+- why Passport asked, such as "Production changes ask first"
+- the command or tool
+- the agent and the computer it runs on
+- where it lands: the app and its environment
+- what happens if it goes wrong, when Passport knows
+
+Then choose **Run once** or **Don't run**. **More choices** holds the rest, each only when it applies: **Run for this task**, **It's Staging, always run** to place a resource nobody placed yet, **Always allow…** to save a rule, and **Stop {agent}**. **See the whole task** opens the task that asked. See [When Passport asks](/member/safety#when-passport-asks).
+
+Requests from people wait here too: an **App request**, an **Access request** (such as **Full access to** an app), a **Rule request** for an exception, and calls on a **Shared account** that need an approver. **Review** shows what was asked and why, and lets you approve or decline it. A request someone else must answer reads **Waiting on someone else**.
+
+A link from your agent's prompt, Slack, or a notification opens Work with that ask first.
+
+### To fix
+
+Each row is one problem and opens the place that fixes it. For example:
+
+- an app needs you to sign in again
+- one of your agents needs to sign in again, or is set up twice
+- a computer still holds keys Passport could hold
+- an app can't connect for anyone, or added tools that wait for review (admins)
+
+### Running
+
+A task is running until its agent says it's done or it has been quiet for 30 minutes. **Stop** asks first, then ends the task: the agent's next action in it is refused. The agent can start a new task any time.
+
+## Tasks
+
+A **task** is one run of one agent, such as a Claude Code session. It is titled by its pull request, else its project and branch, else its agent. A row shows the agent, what's worth a glance (such as "2 asked · 1 blocked"), a **waiting** chip when an ask is open, and **Production** when it changed Production.
+
+One run is one task even when it used both the [CLI guard](/member/cli-hook) and app tools. Passport joins them when the agent names its session, or when the same person's same agent has exactly one guard task active in the last 30 minutes on that computer. Two runs at once, an agent token, or a different agent are never joined.
+
+### A task's page
+
+A task's page leads with its title, the agent and computer, when it ran, and a summary such as "14 actions · 1 asked". Its one action is **Stop** while it runs; afterwards it reads **Ended**. Below that:
+
+- **Facts**: the agent, the apps it used, and its pull request or branch.
+- **Waiting on you**: this task's open asks, with the same choices as on Now.
+- **Changed in Production**: every change, delete, or irreversible action that ran on Production.
+- **Everything it did**: every action, newest first, with **Show more**.
+
+Each row names the action, its app and target, its environment, and its outcome when it did more than run: **Asked**, **Approved**, **Declined**, **Blocked**, or **Failed**. A row with a backup has **Undo**. See [Backups and undo](/member/undo).
+
+If an admin turned on **Show what agents say they're doing**, a Claude Code row is labeled with the agent's own one-line description of the step. See [what the hook records](/member/cli-hook#what-it-records).
+
+## History
+
+**History** has one line of controls:
+
+- **Tasks** or **Actions**. Tasks lists every task by day, running ones first, with **Show earlier tasks**. Actions is the record: every action, newest first. An action's row opens its task.
+- A search box.
+- One filter: **Everything**, **Production**, **Asked**, **Blocked**, or **Undone**.
+- **Mine** or **Everyone**, for owners.
+
+**Export CSV**, under the Actions list, downloads what the list shows: your own actions, or the workspace's when an owner views **Everyone**.
+
+### Search
+
+Type words to match a pull request title, branch, project, folder, command, or app. Add filters in the same box:
+
+| Filter | Example | Finds |
+| --- | --- | --- |
+| `project:` | `project:acme-api` | A repository, else a folder name |
+| `pr:` | `pr:482` | A pull request by number |
+| `branch:` | `branch:fix/retry` | A branch |
+| `agent:` | `agent:claude-code` | One agent |
+| `app:` | `app:github` | One or more apps |
+| `cmd:` | `cmd:"gh pr merge"` | A command or tool |
+| `env:` | `env:unplaced` | `production`, `staging`, `development`, `other`, or `unplaced` |
+| `outcome:` | `outcome:failed` | `notable`, `failed`, `asked`, `blocked`, `declined`, `undone`, or `unchecked` |
+| `since:` | `since:7d` | `today`, `1h`, `6h`, `24h`, `7d`, `30d`, `90d`, or a date like `2026-10-01` |
+
+`env:production` means confirmed Production only; `env:unplaced` finds what Passport couldn't place. Commands match by program and verb, never their arguments, which Passport doesn't store. The address keeps the view and filters, so a link opens the same list.
+
+## Where an action lands
+
+Before Passport decides an action, it works out what the action reaches:
+
+- **Local**: installs, builds, tests, and the project's own files stay on your computer. They have no environment.
+- **Repository**: `git` and `gh` reads have no environment. Work on a branch is Development. Code that reaches the default branch, such as a push to `main` or `gh pr merge`, goes where your workspace placed that repository: Production if it deploys on merge, Staging if it doesn't.
+- **Shared service**: a deploy, a database, or an app tool lands in that service's environment, such as a Railway environment or a Vercel target. See [how Passport knows](/member/safety#how-passport-knows).
+
+An action is **unplaced** when it reaches something nobody placed yet. Unplaced actions are decided as Production and counted as Production changes, marked so you can tell them apart. Place a resource once in the **Environments** section of its app's page, or from an ask with **It's Staging, always run**. See [Environments](/member/apps#environments).
+
+## Exports for admins
+
+Owners can also export from the API:
+
+- `GET /export/activity.csv` and `GET /export/activity.jsonl`: the workspace's actions. They take the same `member`, `app`, `outcome`, `since`, and `q` filters as History, plus `department` for a team.
+- `GET /export/audit.csv`: privileged admin changes, such as access, roles, and data checks.
+- `GET /api/my/activity.csv`: your own actions, on every plan.
+
+Enterprise can stream both records to a SIEM or an OpenTelemetry collector. See [SIEM and OTLP export](/enterprise/siem-export).
+
+## From the terminal
+
+`passport sessions` lists your agents' recent tasks: status, agent, folder, when it started, and what Passport decided, such as `42 ran · 2 asked · 1 blocked`. Add `--status running` to narrow it and `--json` for scripts. `passport changes` lists what your agents changed in Production, newest first, over the last 7 days unless you add `--since 1h`. See [Passport CLI](/quickstart/cli#json-and-exit-code-contract).
+
+## Get notified
+
+Turn on **Approval alerts in this browser** in [Settings › Notifications](https://passportmcp.com/#settings/notifications) to get a notification for each ask that waits on you. Admins can also send asks to Slack. See [Notifications](/admin/settings#notifications) and [Approvals in Slack](/admin/slack-and-approvers#approvals-in-slack).

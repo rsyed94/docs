@@ -1,92 +1,93 @@
 ---
 title: "How Passport works"
-description: "A plain-language guide to workspaces, apps, agents, access, and Activity."
+description: "A plain-language guide to apps, agents, tasks, rules, and the record."
 ---
 
-Open in Passport: [Home](https://passportmcp.com/#home)
+Open in Passport: [Work](https://passportmcp.com/#work)
 
-Passport sits between an agent and the work app it wants to use. It keeps the app credential, checks access and Autopilot rules, makes the call, and records the outcome.
+Passport sits between an agent and the work app it wants to use. It keeps the app's credential, checks access and rules, makes the call, and records what happened.
 
-## The five things to know
+## The words to know
 
 ### Workspace
 
-A workspace is your team's private space in Passport. It holds people, apps, settings, and Activity. Workspaces are isolated from one another, and you can switch if you belong to more than one.
+Your team's private space in Passport. It holds people, apps, rules, and the record. Workspaces are isolated from one another.
 
-### Apps
+### App
 
-An app is something your agent can use through Passport, such as GitHub, Linear, Stripe, or Notion. Open [Apps](https://passportmcp.com/#apps) to add, connect, and manage them.
+Something your agents use through Passport, such as GitHub, Linear, Stripe, or Notion. Some apps connect through MCP, others through a reviewed API driver; Passport treats them the same. An app is also its vendor's CLI, so Railway's tools, the `railway` commands agents run through `passport exec`, and the Railway key you keep in Passport all belong to the Railway app. See [Apps](/member/apps).
 
-Some apps connect through MCP. Others use a reviewed API driver. Passport gives both the same sign-in, access, rules, and Activity, so most people do not need to care which technology is underneath.
+### Tool
 
-An app is also its vendor's CLI. Railway's tools, the `railway` commands agents run through `passport exec`, and the Railway key you keep in Passport all belong to the Railway app: its **Tools** section lists the commands too, its **Keys** section holds your key, its **Activity** tab includes the CLI, and its **Access** decides who may run it. AWS is a CLI app: it has no tools, just the AWS CLI with each person's key.
+What an app exposes, such as "create issue" or "delete branch". Each tool is one class of action: **Read**, **Change**, **Delete**, or **Irreversible**.
 
-### Agents
+### Agent
 
-An agent is where you use AI: Claude, Cursor, ChatGPT, VS Code, Codex, Passport CLI, or another MCP-compatible product. Open [Agents](https://passportmcp.com/#agents) to add one, see whether it's working, disconnect it, or choose which available apps it can see. On Pro and Enterprise, admins switch **Agents** to **Everyone** to see every agent in the workspace. On Enterprise, **Agents › Discovered** lists MCP servers that scans found set up outside Passport.
+Where you use AI: Claude Code, Cursor, Codex, Claude.ai, ChatGPT, a cloud agent, or a script with an agent token. See [Agents](/member/agents).
 
-### Access
+### Task
+
+One run of one agent, such as a Claude Code session, with every action it took. Tasks live on [Work](/member/work).
+
+### Rule
+
+What an agent may do without asking, per environment: run, ask you first, or never run. See [Rules](/member/safety).
+
+## Access
 
 Access answers one question: what may this person do with this app?
 
 <CardGroup cols={3}>
-  <Card title="Full" icon="unlock">
-    Every tool is available, Read through Irreversible.
+  <Card title="Full access" icon="unlock">
+    Every tool, Read through Irreversible.
   </Card>
   <Card title="Read-only" icon="glasses">
-    Only Read tools. The rest are hidden from the agent.
+    Only Read tools. The rest are hidden from agents.
   </Card>
-  <Card title="None" icon="ban">
-    The app is not shown to that person.
+  <Card title="No access" icon="ban">
+    The app isn't shown to that person.
   </Card>
 </CardGroup>
 
-Pro and Enterprise admins can set access for the workspace, a team, or a person. A more specific choice wins. A person's agent-level app selection can narrow access further, but can never grant more.
-
-### Activity
-
-Every call through Passport creates an Activity record with the person, agent, app, action, outcome, and timing. Everyone sees their own records in [Sessions › All activity](https://passportmcp.com/#sessions/activity). Pro and Enterprise admins switch it to **Everyone** for the workspace-wide log.
+Admins set it under **Who can use it** on each app's page, for everyone or, on Pro and Enterprise, per team and person. Access comes before every rule.
 
 ## What happens during a call
 
 <Steps>
   <Step title="Identify the person and agent">
-    Passport checks the signed-in person and the agent's sign-in.
+    Passport checks who is signed in and which agent is calling.
   </Step>
   <Step title="Apply access, then rules">
-    Access comes first: apps and tools the person may not use are hidden and blocked, and no rule can change that.
-    Then Autopilot exceptions, team floors, and presets run, block, or hold the action for approval.
+    Apps and tools the person may not use are hidden and blocked, and no rule can change that. Then rules run, block,
+    or hold the action for an answer.
   </Step>
-  <Step title="Inspect the request">Data checks inspect outgoing arguments before Passport contacts the app.</Step>
+  <Step title="Inspect the request">Data checks inspect what the agent sends before Passport contacts the app.</Step>
   <Step title="Call the app">Passport uses the connected account on the person's behalf.</Step>
   <Step title="Inspect and record the result">
-    Data checks inspect the result, then Passport writes Activity and returns the safe response.
+    Data checks inspect the result, then Passport records the action and returns the safe response.
   </Step>
 </Steps>
 
-## People, teams, and automation
+## People and roles
 
-- **Admins** manage the workspace and its rules.
+- **Owners** manage apps, people, rules, and the workspace. On Pro and Enterprise they get **People** and can switch Work, Agents, and Rules to **Everyone**. On Free, the one person in the workspace is its admin.
 - **Members** connect agents and use the apps available to them.
-- **Agents** are the AI tools connected to Passport, such as Claude Code, Codex, or Cursor.
-- **Agent tokens** connect scripts and CI through Passport CLI. They live on [Agents](/admin/client-fleet#manage-your-own-agents), each with its own page.
-- **Teams** let Pro and Enterprise admins apply access and team setups to a group instead of one person at a time.
+- **Teams** let owners give a group the same access and rules.
+- **Agent tokens** connect scripts and CI. Each belongs to the person who created it.
 
-Deactivating a person revokes their sessions, agents, and connected accounts immediately.
+Deactivating a person signs them out, stops their agent tokens, and disconnects their accounts right away.
 
-## Advanced building blocks
+## Advanced
 
-- A [bundle](/admin/bundles) combines a curated set of tools from several apps behind one URL.
-- [Tool discovery modes](/concepts/discovery) control how a large tool catalog is presented to an agent.
-- [Managed API apps](/admin/managed-api-integrations) connect reviewed provider APIs through the same Passport gateway.
+- [Tool discovery modes](/concepts/discovery) control how a large tool list is shown to an agent.
+- [Managed API apps](/admin/managed-api-integrations) connect reviewed provider APIs through the same gateway.
 
 <Accordion title="Technical connection URLs">
   | URL | Purpose |
   | --- | --- |
-  | `/mcp` | Whole workspace, for every agent and agent token. Sign-in picks the workspace. Add `?ws={workspace}` or `?enroll={key}` to pre-select one. |
+  | `/mcp` | The whole workspace, for every agent and agent token. Sign-in picks the workspace. Add `?ws={workspace}` or `?enroll={key}` to pre-select one. |
   | `/w/{workspace}/mcp` | An older address for the same thing. It keeps working; `passport init` moves agents to `/mcp`. |
-  | `/b/{bundleKey}/mcp` | One bundle, for setups installed from **Apps › Setups** |
 
-Add `https://passportmcp.com/mcp`. It connects to your workspace when you sign in, and an agent token names its workspace itself, so `PASSPORT_ENDPOINT` is the same URL. See [Passport CLI](/quickstart/cli). Pick which apps each agent sees on its page in **Agents**.
+Add `https://passportmcp.com/mcp`. It connects to your workspace when you sign in, and an agent token names its workspace itself, so `PASSPORT_ENDPOINT` is the same URL. See [Passport CLI](/quickstart/cli).
 
 </Accordion>

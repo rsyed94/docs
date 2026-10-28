@@ -3,11 +3,11 @@ title: "Passport CLI"
 description: "Use Passport from Claude Code, Codex CLI, OpenCode, scripts, CI, and cron."
 ---
 
-Open in Passport: [Agents › Add agent](https://passportmcp.com/#agents/add)
+Open in Passport: [Agents › Add agent](https://passportmcp.com/#agents?add=1)
 
 Setting up your own computer? `npx passport-bridge@latest init` does it in one pass: see the [developer quickstart](/quickstart/developer).
 
-Passport CLI is for terminal coding agents and automation. It reaches the same Passport as Claude, Cursor, and ChatGPT, with the same access rules, Autopilot rules, approvals, and Activity.
+Passport CLI is for terminal coding agents and automation. It reaches the same Passport as Claude, Cursor, and ChatGPT, with the same access, rules, approvals, and record.
 
 Prefer the normal **Add agent** setup for apps with a GUI (Cursor chat, VS Code chat, Claude Desktop, Claude.ai, ChatGPT). Claude Code and Codex CLI can use either path; using the CLI doesn't sign out any other agent.
 
@@ -122,7 +122,7 @@ Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer.
 | `passport init [--dry-run]`             | Set up this computer: one plan first, then one question. `--dry-run` shows the plan and changes nothing.                                                   |
 | `passport status`                       | Your setup on one screen: you, your workspace, and this computer; each agent's guard and its fix; Autopilot; apps; keys.                                   |
 | `passport wait <approval-id>`           | Wait for a person to decide an approval. While it is still waiting, prints the link and, on a terminal, a live countdown.                                  |
-| `passport sessions [--status <s>]`      | Your agents' recent sessions and what Passport decided, running ones first. See [Sessions](/member/sessions#from-the-terminal).                            |
+| `passport sessions [--status <s>]`      | Your agents' recent sessions and what Passport decided, running ones first. See [Work](/member/work#from-the-terminal).                            |
 | `passport exec -- <cli> [args…]`        | Run a vendor CLI with a key Passport holds. `--ask-again` asks again after a recent decline.                                                               |
 | `passport doctor`                       | Check Node, how your sign-in is stored, the server, your sign-in, and that this CLI and the server match. Never shows a key.                               |
 | `passport search [query]`               | Find tools you can run. With no words, lists every tool you can run, by app.                                                                               |
@@ -155,7 +155,7 @@ Waiting for Erin · 1:32 left
 
 Press Ctrl-C to stop waiting: the request stays open, and `passport wait <id>` picks it up again (exit `4`). A decline is said again on every retry for ten minutes, with who and when ("Declined 2 minutes ago by Erin: Not during the freeze."), instead of asking twice. Run the command with `--ask-again` to request again.
 
-`passport scan`, signed in, is how **Agents › Discovered** findings reach Passport; it is the only source. It is headless and cross-platform, which suits an onboarding script or a scheduled MDM job, and it reports limited configuration metadata only, never paths, commands or arguments, environment values, headers, credentials, endpoint paths or query strings, prompts, files, tool payloads, or traffic. `--check` (CI and pre-commit) never reports. `passport discover`, its old name, still works for one release. See [Discovered agents](/admin/discovered-agents#connections-outside-passport).
+`passport scan`, signed in, also tells your workspace which MCP servers your agents use. It is headless and cross-platform, which suits an onboarding script or a scheduled MDM job, and it reports limited configuration metadata only, never paths, commands or arguments, environment values, headers, credentials, endpoint paths or query strings, prompts, files, tool payloads, or traffic. `--check` (CI and pre-commit) never reports. `passport discover`, its old name, still works for one release. See [the scan](/member/scan).
 
 ## Diagnose and complete
 
@@ -256,7 +256,7 @@ OpenCode is a first-class policy identity too, but it is not listed in the **Add
 
 ## Headless, CI, and cron
 
-For scripts and CI, create an agent token with **Add agent › A script or job** on [Agents](https://passportmcp.com/#agents/add/token), set `PASSPORT_AGENT_KEY` to it, and inject it and the workspace endpoint through your CI secret store. Environment mode works without `passport login` and writes no local credential file.
+For scripts and CI, create an agent token with **Add agent › A script or job** on [Agents](https://passportmcp.com/#agents?add=token), set `PASSPORT_AGENT_KEY` to it, and inject it and the workspace endpoint through your CI secret store. Environment mode works without `passport login` and writes no local credential file.
 
 ```sh
 export PASSPORT_AGENT_KEY='<agent-token>'

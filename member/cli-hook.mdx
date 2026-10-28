@@ -5,7 +5,7 @@ description: "Let Claude Code, Codex, and Cursor report the command-line tools t
 
 Open in Passport: [Agents](https://passportmcp.com/#agents)
 
-Your agents do plenty of work that never goes through Passport: `gh pr create`, `git push`, `railway up`, `kubectl delete`. The Passport hook puts that work in the same Activity as everything else your agents do. With the guard on, Passport also applies your Autopilot rules to the commands it recognizes.
+Your agents do plenty of work that never goes through Passport: `gh pr create`, `git push`, `railway up`, `kubectl delete`. The Passport hook puts that work in the same record as everything else your agents do. With the guard on, Passport also applies your Autopilot rules to the commands it recognizes.
 
 ## Turn it on
 
@@ -45,7 +45,7 @@ Run: passport hook install --agent cursor --guard --apply
 
 ## Guard health
 
-Each agent on each computer has one guard state, the same on the **Agents** page, a person's page, Home, the alerts bell, the weekly email, and in `passport status`:
+Each agent on each computer has one guard state, which `passport status` prints:
 
 | State       | What it means                                                                            | Fix                                                     |
 | ----------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------- |
@@ -57,7 +57,7 @@ Each agent on each computer has one guard state, the same on the **Agents** page
 
 The Passport CLI reports these at most once a day: from a hook with time to spare, from `passport exec`, and from `passport status`. It sends flags only, never a command, a path, or a setting's value. For Codex it compares the hash Codex stored for Passport's hook in `~/.codex/config.toml` with the hook as written, the way Codex itself decides whether to run it. A report is your computer's own word, so treat it as visibility, not proof. A computer that keeps working but stops reporting for a week reads **Not reporting**.
 
-When an agent's guard turns off after being on, goes out of date, or isn't trusted, the person and workspace admins get an alert in the bell, linking to the agent. It clears itself once the fix is in.
+When an agent's guard turns off after being on, goes out of date, or isn't trusted, it shows under **To fix** on [Work](/member/work#to-fix), linking to the agent. It clears itself once the fix is in.
 
 ## Decided, placed, and blind
 
@@ -67,15 +67,13 @@ Passport counts what the guard saw on each computer, per agent and per day, and 
 - **Placed**: Passport knows what kind of action it is and where it lands, but can't allow it, such as the project's own scripts (`node scripts/build.mjs`, `make test`, or a package script that runs them) or a vendor command with a variable in it.
 - **Blind**: Passport couldn't tell what it does: a program it doesn't know, a script outside the project, a package it doesn't know, SQL from a file (`psql -f`), or a one-liner (`node -e`, `python -c`).
 
-Each agent row on **Agents**, each person on **People**, each team, [Agents › Rollout](/admin/rollout), and Home show the share your rules could decide over the last week, such as "decides 82%". An agent's page also names the three programs it was most often blind to, such as "Not checked: python3 ×12, node ×3". A session shows its own counts, such as "468 checked · 12 not checked · 3 could reach Production". `passport status` prints the week's line. Computers on a CLI before 0.24.0 don't sort their commands: what they couldn't read counts as not checked, and their rows show "468 checked · 12 not checked" instead of a share.
+`passport status` prints the share your rules could decide over the last week, such as "decides 82%", and the summary in [Roll out to your team](/admin/rollout) shows the workspace's share, such as "94% checked". Computers on a CLI before 0.24.0 don't sort their commands: what they couldn't read counts as not checked.
 
-The week's blind commands list in two places: your scripts, which you can tell Passport about, under **Not checked** in **Apps › Other projects** (a blind script doesn't say which repository it came from), and inline code and programs Passport doesn't read yet, which only show what they are, under **Passport can't read these yet** in **Rules**. Inline code (`python3 -c`, `node -e`, a heredoc) is checked for side effects first, and only what Passport still can't read counts as not checked.
-
-When a session that changed confirmed Production had blind commands, the agent's owner and admins get an alert, at most once a week per computer, and the weekly email has a Coverage section. Open the agent's [sessions](/member/sessions#what-passport-saw) to see what Passport couldn't tell.
+Inline code (`python3 -c`, `node -e`, a heredoc) is checked for side effects first, and only what Passport still can't read counts as not checked. To teach Passport one of your scripts, see [Tell Passport what a script does](#tell-passport-what-a-script-does).
 
 ## What the guard does
 
-Before each shell command, the guard reads it on your computer and decides from your Autopilot rules, the same rules your apps follow in Passport, so a command and a tool that do the same thing get the same answer. It works out the environment the way the vendor's own CLI does: a flag first, such as Railway's `--environment` or Vercel's `--prod`, then the folder's link, then the vendor's default. A linked environment nobody has placed yet is read by the name your connected app gives it, so a Railway environment called `staging` is Staging; the name in a link file on your computer never counts. A command with no environment it can place counts as Production. See [how Passport knows](/member/safety#how-passport-knows).
+Before each shell command, the guard reads it on your computer and decides from your [rules](/member/safety), the same rules your apps follow in Passport, so a command and a tool that do the same thing get the same answer. It works out the environment the way the vendor's own CLI does: a flag first, such as Railway's `--environment` or Vercel's `--prod`, then the folder's link, then the vendor's default. A linked environment nobody has placed yet is read by the name your connected app gives it, so a Railway environment called `staging` is Staging; the name in a link file on your computer never counts. A command with no environment it can place counts as Production. See [how Passport knows](/member/safety#how-passport-knows).
 
 When a rule says to ask first, your agent asks you. Its own prompt only has its built-in choices, so the reason line carries the ask in one go and ends with a short link to every other choice (Run for this task, It's Staging, always run, Stop):
 
@@ -123,7 +121,7 @@ A command the guard doesn't recognize, or one it can't read with confidence (scr
 
 ## Everyday commands
 
-Your agent's own work in the project folder counts as **Development**, so with the default Hands-off preset it runs without a prompt: tests, builds, linters, formatters, package scripts, `git commit`, and deletes Passport backs up first, such as `rm -rf build` (Claude Code), `git reset --hard`, or `git branch -D`; see [Backups on your computer](/member/undo#backups-on-your-computer). Deletes Passport can't back up ask unless you turn on **Run deletes without a backup** for Development. The project folder is the repository root, or the folder your agent works in.
+Your agent's own work in the project folder counts as **Development**, so with Development's default, **Ask only for irreversible**, it runs without a prompt: tests, builds, linters, formatters, package scripts, `git commit`, and deletes Passport backs up first, such as `rm -rf build` (Claude Code), `git reset --hard`, or `git branch -D`; see [Backups on your computer](/member/undo#backups-on-your-computer). Deletes Passport can't back up ask unless you turn on **Run deletes Passport can't back up** in **Rules**. The project folder is the repository root, or the folder your agent works in.
 
 | Command                                             | Counts as                                                      |
 | --------------------------------------------------- | -------------------------------------------------------------- |
@@ -140,9 +138,9 @@ Your agent's own work in the project folder counts as **Development**, so with t
 | `rm -rf ~/`, `rm -rf /`, deleting the whole project | Irreversible, always asks                                      |
 | `sudo …`                                            | Always asks                                                    |
 
-Symlinks count where they point, `cd` inside a command is followed, and writing to your keys or shell startup files counts as a delete. Try any command on the **Rules** page or with `passport rules test "npm test"`.
+Symlinks count where they point, `cd` inside a command is followed, and writing to your keys or shell startup files counts as a delete. Try any command with `passport rules test "npm test"`.
 
-Code that reaches a repository's default branch only reaches people if that repository deploys when you merge. The first push to a repository's default branch shows it in the **Environments** section of its host's app page, such as [GitHub's](https://passportmcp.com/#apps/github/environments), treated as Production until you choose: keep **Production** for a repository that deploys on merge, or choose **Staging** for one that doesn't. A force push to it asks either way, because Staging asks before deletes.
+Code that reaches a repository's default branch only reaches people if that repository deploys when you merge. The first push to a repository's default branch shows it in the **Environments** section of its host's app page, such as [GitHub's](https://passportmcp.com/#apps/github?section=environments), treated as Production until you choose: keep **Production** for a repository that deploys on merge, or choose **Staging** for one that doesn't. A force push to it asks either way, because Staging asks before deletes.
 
 ## Fewer prompts, even offline
 
@@ -190,15 +188,15 @@ passport keys move
 passport exec -- railway up -e staging
 ```
 
-`keys move` asks about each key (`[y/N]`, so Enter keeps it), stores it in Passport, and signs that CLI out on your computer. `passport keys move railway` moves only that one. If Passport already holds a different key for that CLI, every agent that uses it would switch, so you type the CLI's name to replace it (`Type railway to confirm, or press Enter to cancel:`); anything else keeps the key in Passport and leaves this computer signed in. Only you, at a terminal, can replace a key: with `--yes` or without a terminal nothing is replaced, and `keys move` says `Replacing a key in Passport needs you at a terminal.` and `Run: passport keys move railway`. A replacement alerts you and your admins ("Railway key in Passport was replaced from Laptop by Maya. Undo."), is in the audit trail, and can be undone for seven days from the alert or the app's **Keys** section. Signing out removes only the key: your project links, current team, profiles, and other settings stay. `.env` files stay as they are, since your apps need them. `passport exec` asks Passport before each command; when your rules allow it, the key reaches only that command, short-lived for GitHub (with the GitHub App installed), AWS, and Cloudflare where the key allows it. In Claude Code, the guard sends commands for those CLIs through `passport exec` for you. If Passport can't be reached, nothing runs.
+`keys move` asks about each key (`[y/N]`, so Enter keeps it), stores it in Passport, and signs that CLI out on your computer. `passport keys move railway` moves only that one. If Passport already holds a different key for that CLI, every agent that uses it would switch, so you type the CLI's name to replace it (`Type railway to confirm, or press Enter to cancel:`); anything else keeps the key in Passport and leaves this computer signed in. Only you, at a terminal, can replace a key: with `--yes` or without a terminal nothing is replaced, and `keys move` says `Replacing a key in Passport needs you at a terminal.` and `Run: passport keys move railway`. A replacement alerts you and your admins and is in the audit trail. Signing out removes only the key: your project links, current team, profiles, and other settings stay. `.env` files stay as they are, since your apps need them. `passport exec` asks Passport before each command; when your rules allow it, the key reaches only that command, short-lived for GitHub (with the GitHub App installed), AWS, and Cloudflare where the key allows it. In Claude Code, the guard sends commands for those CLIs through `passport exec` for you. If Passport can't be reached, nothing runs.
 
-Each key lives on its app's page, in its **Keys** section (`#apps/<app>/keys`): when it was added, when agents last used it, and whether it's due for rotation, with **Rotate**, and **Remove** in the row's menu. Computers that still hold a key for that app are listed there too ("Still on Laptop. Run passport keys move there."). In [Apps](https://passportmcp.com/#apps), the app's row says **Key in Passport** and flags one that stopped working or is back on a computer. An app Passport knows that you haven't added, such as Railway, is still a row in **Your apps** when it holds something of yours ("CLI · 1 key · 3 to place"), and its page has these sections and **Add** for its tools. **Other keys** on Apps is only for a CLI Passport doesn't know. Admins also see who keeps a key for that app, whether it works, and when agents last used it, never the key itself. Agent tokens are on [Agents](https://passportmcp.com/#agents?kind=token).
+Each key lives on its app's page, in its **Keys** section (`#apps/<app>?section=keys`): when it was added, when agents last used it, and whether it's due for rotation, with **Rotate** and **Remove from Passport** in the row's menu. Computers that still hold a key for that app are listed there too ("Still on Laptop. Run passport keys move there."). In [Apps](https://passportmcp.com/#apps), the app's row names the keys Passport holds and flags one that stopped working. An app Passport knows that you haven't added, such as Railway, is still a row in **Your apps** when it holds something of yours ("CLI · 1 key · 3 to place"), and its page has these sections and **Add** for its tools. Agent tokens are on [Agents](https://passportmcp.com/#agents?kind=token).
 
 ### Rotate a key
 
-Each key's row says how old it is ("Added 120 days ago"). When a key gets older than your workspace allows (90 days unless an admin picks another time under **Keys in Passport** on [Settings › Access](https://passportmcp.com/#settings/access)), or a data check catches its value in a tool call, **Home** shows one line under **Needs attention**, like "Your Railway key is 120 days old. Rotate it.", with a **Rotate** button.
+Each key's row says how old it is ("Added 120 days ago"). When a key gets older than your workspace allows (90 days by default), or a data check catches its value in a tool call, its row says it's due for rotation.
 
-**Rotate** (on Home, or on the key's row) opens three steps:
+**Rotate**, in the key's row menu, opens three steps:
 
 1. **Make a new key** at the provider. The dialog links to the exact page, such as Railway's account tokens or GitHub's personal access tokens.
 2. **Paste it.** The field is masked, and Passport never shows the value again. Passport checks the new key with one harmless read at the provider, like asking who the key belongs to. Only if that works does it replace the old key, in one step. If the provider refuses it, or Passport can't reach the provider, your old key stays exactly as it was.
@@ -210,9 +208,9 @@ From a terminal:
 passport keys rotate railway
 ```
 
-It shows where to make the new key, asks for it without showing what you type, checks it the same way, and prints where to revoke the old one. It only runs with you at the terminal, never from a script. After a rotation from the CLI, the old key stays restorable from the key's row for seven days, and you and your admins get an alert.
+It shows where to make the new key, asks for it without showing what you type, checks it the same way, and prints where to revoke the old one. It only runs with you at the terminal, never from a script. After a rotation from the CLI, you and your admins get an alert.
 
-Admins see how old each person's keys are, and which need rotating, in the app's **Keys** section and in **People**, on the person's **Apps** tab. They never see a key, and only its owner can rotate it. Each rotation is in the audit trail: who, which app, and when, never the value.
+Admins never see a key, and only its owner can rotate it. Each rotation is in the audit trail: who, which app, and when, never the value.
 
 ### Keep typing the CLI yourself
 
@@ -255,17 +253,17 @@ A kept CLI signs in as usual, Passport never removes it, and it isn't counted as
 
 ## Guard required
 
-On Pro, an admin can require the guard for a team under **Team rules** on [Rules › Team](https://passportmcp.com/#rules/team?section=floors). With **Required**, `passport exec` runs only for an agent whose computer reported its guard On (or Locked) in the last 48 hours; otherwise the command stops with "Blocked by Passport: guard required" and the fix, and its session row reads **Blocked · Guard required**. **Report only** shows those agents on **Agents** without stopping anything. Tools your agents call through Passport are always checked by Passport itself, so this applies to `passport exec`.
+On Pro and Enterprise, an owner can require the guard for everyone or one team with **Require the guard**, under **Safeguards** on [Rules](https://passportmcp.com/#rules?scope=everyone) switched to **Everyone**. With **Required**, `passport exec` runs only for an agent whose computer reported its guard On (or Locked) in the last 48 hours; otherwise the command stops with "Blocked by Passport: guard required" and the fix, and its row on the task reads **Blocked**. **Report only** flags computers without the guard and blocks nothing. Tools your agents call through Passport are always checked by Passport itself, so this applies to `passport exec`.
 
-## Ended sessions
+## Stopped tasks
 
-When you (or an admin) end an agent's session on its **Sessions** page, the guard refuses the next command in that session, even one it would let run on its own, with "Session ended by Maya at 14:05 UTC. Start a new session to continue." Other sessions and other computers keep running. Before such a command, the guard asks Passport whether the session ended at most every 15 seconds per session, waits at most 300 ms, and remembers an ended session without asking again. If Passport doesn't answer in time, the command runs as it would have: the guard is a guardrail, not a security boundary. Plain reads the launcher answers on its own (see Speed) still run. Everything that reaches Passport under an ended session, tool calls and `passport exec` included, is refused there.
+When you (or an owner) choose **Stop** on a task in [Work](/member/work), the guard refuses the next command in that task, even one it would let run on its own, with "Session ended by Maya at 14:05 UTC. Start a new session to continue." Other sessions and other computers keep running. Before such a command, the guard asks Passport whether the session ended at most every 15 seconds per session, waits at most 300 ms, and remembers an ended session without asking again. If Passport doesn't answer in time, the command runs as it would have: the guard is a guardrail, not a security boundary. Plain reads the launcher answers on its own (see Speed) still run. Everything that reaches Passport under an ended session, tool calls and `passport exec` included, is refused there.
 
 ## Speed
 
 Passport should never slow your agents down. Plain reads and local checks, such as `ls`, `cat`, `rg`, `git status`, `git diff`, `cargo check`, and `pytest`, are answered by the `passport` launcher itself in about 10 ms, without starting Node, whenever your rules would answer them the same way anyway. Anything else, or any doubt (another program in a pipe, a redirect, a path outside the project, a symlink, a hidden file), gets the full guard. After a command, the hook queues its report and returns at once; it never waits on the network.
 
-`passport status` and Home show what Passport cost you today:
+`passport status` shows what Passport cost you today:
 
 ```
 Passport adds ~20 ms per action and asked you twice today. 412 actions ran on their own.
@@ -281,7 +279,7 @@ When an agent runs the project's own code, the guard reads what it runs and deci
 - `make deploy`: the target's recipe, after its prerequisites, with the Makefile's variables filled in once
 - `npm run deploy`, `npm test`, `pnpm deploy`, `yarn deploy`: the package script, with its `pre` and `post` scripts
 
-Each line is decided like a command you typed, and the strictest one wins. `./deploy.sh` that runs `railway up --environment production` asks first, and says where it came from: "Passport: railway up changes Production (from --environment, in deploy.sh)." In **Sessions**, that row reads `railway up · from deploy.sh`.
+Each line is decided like a command you typed, and the strictest one wins. `./deploy.sh` that runs `railway up --environment production` asks first, and says where it came from: "Passport: railway up changes Production (from --environment, in deploy.sh)."
 
 A script the guard can follow to the end, every line understood, is **checked**. One it can't (a line with a variable it can't resolve, a `case`, a program it doesn't know, more than 256 KB, more than 30 ms of reading) is **Partly checked**: risky lines it did recognize still ask or block, but it never runs on Passport's say-so. In a command with several parts, each part is checked on its own, such as "1 checked · 1 partly checked". After the command, the hook reads the script again; if it changed in between, the row says **Changed after the check**.
 
@@ -289,14 +287,14 @@ Python and JavaScript files aren't read yet. Tell Passport what one does instead
 
 ### Tell Passport what a script does
 
-From a **Partly checked** or **Not checked** row in **Sessions**, or a script under **Not checked** in **Apps › Other projects**, choose **Tell Passport what this does** (in Sessions, the first row for each program offers it; open any other row to find it there), or run:
+Tell Passport with `passport actions add`:
 
 ```sh
 passport actions add scripts/deploy.py --environment production --class change
 passport actions add make seed --environment staging --class delete
 ```
 
-Passport then checks that script as a Change in Production (or whatever you said), with your presets and exceptions deciding as for any command. A project script never runs on its own say-so. You can say Production for a change, delete, or irreversible script; anything looser waits for an admin in the **Project scripts** section of the repository host's app page (GitHub's for a repository on GitHub, grouped by repository), or **Apps › Other projects** for a repository on a host Passport doesn't know. When the script changes, the row there says **Changed since set** and the guard reads it again until someone sets it. Inline code and programs Passport doesn't read yet have nothing stable to describe, so they stay in **Rules**.
+Passport then checks that script as a Change in Production (or whatever you said), with your rules deciding as for any command. A project script never runs on its own say-so. You can say Production for a change, delete, or irreversible script; anything looser waits for an admin in the **Project scripts** section of the repository host's app page (GitHub's for a repository on GitHub, grouped by repository), where **Add script** adds more. When the script changes, the row there says **Changed since set** and the guard reads it again until someone sets it. Inline code and programs Passport doesn't read yet have nothing stable to describe.
 
 A repository can keep its own list in `.passport/actions.toml`:
 
@@ -329,19 +327,19 @@ After each shell command, the hook sends Passport only:
 - for Claude Code sessions, token numbers: see [Token usage](#token-usage)
 - only if an admin turns on **Show what agents say they're doing** (off by default), and only from Claude Code: the agent's own one-line description of the command, such as "Run the bridge tests"
 
-The description is redacted on your computer before it's queued. It becomes one line of at most 80 characters, a path becomes its last name (`cliHook.ts`), and a link becomes its host. If it contains anything the approval summary would hide, such as a key, a token, or a long opaque value, or an email address, nothing is sent at all. Other agents don't give a description, so they send none. Passport keeps it with the activity row for 90 days, shows it as the row's label in Sessions, and uses the first change's description as the session's goal. Turning the setting off stops Passport keeping new ones right away and hides the ones it kept.
+The description is redacted on your computer before it's queued. It becomes one line of at most 80 characters, a path becomes its last name (`cliHook.ts`), and a link becomes its host. If it contains anything the approval summary would hide, such as a key, a token, or a long opaque value, or an email address, nothing is sent at all. Other agents don't give a description, so they send none. Passport keeps it with the action for 90 days and shows it as the action's label in Work. Turning the setting off stops Passport keeping new ones right away and hides the ones it kept.
 
 Each finding becomes one activity row under its app, such as **GitHub CLI** or **Git**, with everyday commands under **Shell**. The action reads like "railway redeploy". A blocked command shows as blocked. In Claude Code, a command Passport asked about is one row: "asked first, then ran" if you approved it, or "asked first, not run" about 30 minutes after you declined it. In Cursor, the ask and the run are separate rows.
 
 ## Token usage
 
-For Claude Code sessions, Passport shows how many tokens a session used and its **API-equivalent cost**: what those tokens would cost at Anthropic's API list prices. It's an estimate, not what you paid; a Claude subscription or a company plan is priced differently. Sessions show it in the summary, work items on **Sessions** add up their sessions, and Home shows the week's total.
+For Claude Code tasks, Passport records how many tokens a task used and its **API-equivalent cost**: what those tokens would cost at Anthropic's API list prices. It's an estimate, not what you paid; a Claude subscription or a company plan is priced differently.
 
 To get the numbers, `passport hook flush` (which runs in the background, never while your agent waits) reads the session's transcript file on your computer, the one Claude Code keeps under `~/.claude/projects/`, including its subagents' files. It keeps only the input, output, cache-read, and cache-write token counts of each reply and the model's name, and sends those with the session's identifier. It never sends, and Passport never stores, what was said, tool calls, or file contents; lines without token numbers aren't even parsed. It remembers how far it read each file in `~/.passport/usage/`, readable only by you.
 
 A model Passport has no price for shows tokens only. Codex and Cursor don't give hooks token numbers, so their sessions show none.
 
-It's on by default. An admin turns it off for the workspace with **Token usage per session** on [Settings › Workspace](https://passportmcp.com/#settings/workspace). To turn it off on one computer, set `PASSPORT_TOKEN_USAGE=off` in the environment your agent runs in.
+It's on by default. An admin turns it off for the workspace with **Token usage per task** in [Settings › Workspace](https://passportmcp.com/#settings/workspace). To turn it off on one computer, set `PASSPORT_TOKEN_USAGE=off` in the environment your agent runs in.
 
 ## What it never records
 
@@ -364,4 +362,4 @@ passport hook uninstall --agent claude-code --apply           # guard and audit
 
 This removes only Passport's entries. To pause both for one session instead, set `PASSPORT_HOOK_DISABLED=1`.
 
-See also [Activity and audit](/admin/activity-and-audit).
+See also [Work](/member/work).

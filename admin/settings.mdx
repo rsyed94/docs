@@ -1,63 +1,43 @@
 ---
 title: "Settings"
-description: "What each Settings tab holds: Account, Workspace, Access, Billing, and Advanced."
+description: "What each part of Settings holds: Account, Notifications, Workspace, and Billing."
 ---
 
 Open in Passport: [Settings](https://passportmcp.com/#settings)
 
-**Settings** sits at the bottom of the sidebar, and the account menu under your name opens **Account settings** too. Everyone gets **Account**. Admins on Pro and Enterprise also get **Workspace**, **Access**, **Billing**, and **Advanced**. Each tab has its own address, such as [`#settings/workspace`](https://passportmcp.com/#settings/workspace), so a link opens the right one.
+**Settings** is in the menu under your name, at the bottom left. Everyone gets **Account** and **Notifications**. Admins also get **Workspace** and **Billing**. Each part has its own address, such as [`#settings/workspace`](https://passportmcp.com/#settings/workspace).
 
-Rules don't live here. What agents may do is on [Rules](/member/safety), and workspace policy is on **Rules › Team**.
+What agents may do lives in [Rules](/member/safety), not here. Keys Passport holds for you live on each app's page, and agent tokens on their agent's page.
 
 ## Account
 
-Your own controls, on every plan:
+- Your name, role, and workspace.
+- **Theme**: **Light**, **Dark**, or **System**.
+- **Security**: your passkeys, which Passport uses to [confirm it's you](/member/safety#confirm-its-you). Without one, Passport emails you a code.
+- **Signed-in browsers**: every browser signed in as you, each with **Sign out**, and **Sign out everywhere else**. Signing out never stops your agents.
 
-- **Notifications**: **Approval alerts in this browser** (see [browser notifications](/admin/approvals-and-requests#browser-approval-notifications)), **Weekly summary email**, and **Slack**. An admin adds Passport to Slack here with **Add to Slack**; then each person can turn **Approval requests in Slack** off for themselves. See [Approvals in Slack](/admin/slack-and-approvers#approvals-in-slack).
-- **Appearance**: light, dark, or follow your system.
-- **Where you're signed in**: every browser and computer signed in to Passport, each with a way to sign it out.
+## Notifications
 
-On Free, the owner's Account tab also has **Billing** and a **Workspace** card. **Manage workspace** there opens the [workspace page](https://passportmcp.com/#workspace): its name, invitations, ownership, and, under **Advanced**, **Workspace backup** and account lifecycle.
+- **Approval alerts in this browser**: a notification for each ask that waits on you. Allow notifications when your browser asks, then use **Send test** to check it reaches this device. Each browser needs its own permission. On iPhone or iPad, add Passport to your Home Screen, open it from there, and turn alerts on there.
+- **Slack**: an admin adds the Passport app with **Add to Slack**. After that, asks arrive as direct messages, and each person can turn Slack messages off for themselves. Admins can also pick a **Production channel** where Production asks are posted. See [Approvals in Slack](/admin/slack-and-approvers#approvals-in-slack).
+- **Weekly summary email**: every Monday, what Passport handled for you, what you approved, and what's new. Admins get the workspace version.
 
-## Keys moved
-
-Settings has no Keys tab. The vendor keys Passport holds for you, such as Railway or GitHub, live on each app's page, in its **Keys** section, even for an app you haven't added; **Apps › Other keys** holds keys for a CLI Passport doesn't know (see [Keys in Passport](/member/cli-hook#keys-in-passport)). Agent tokens (`pak_…`) live with their agents on [Agents](/admin/client-fleet#manage-your-own-agents), and enrollment keys (`pek_…`) on [Agents › Rollout](/admin/rollout#enrollment-keys). Old links to the Keys tab (`#settings/keys`, `#keys`, and each `?section=`) open where those keys live and say so.
+A notification carries a generic reminder, never the action's arguments or account details. Open it to review the ask in Passport. If it expired or someone already answered, Passport shows that instead of taking a second answer.
 
 ## Workspace
 
+For admins:
+
 - **Workspace name**.
-- **Sessions**: [**Show what agents say they're doing**](/admin/activity-and-audit#what-agents-say-theyre-doing) (off by default), and **Token usage per session** (on by default; see [token usage](/member/cli-hook#token-usage)).
-- **Admin activity**: **View activity** opens every privileged change, such as access policy, approvals, team edits, data checks, and revocations, with who did it and when. See [Admin activity](/admin/activity-and-audit#admin-activity).
-- **Workspace backup**: download a full backup for recovery and support.
-
-## Access
-
-- **Joining**: **Copy sign-in link**, a link to **People**, and on Enterprise, who may join: invite-only, or anyone who verifies an email on your **Company email domains**, and whether the workspace is **Discoverable by your team**. See [Who can join](/admin/people-and-teams#who-can-join).
-- **Which agents can connect**: a link to [Rules › Team](https://passportmcp.com/#rules/team?section=agents), where it's set.
-- **Keys in Passport**: how many days before a key asks to be rotated (90 by default).
-- **Approval defaults**: a link to [Rules › Team](https://passportmcp.com/#rules/team?section=floors) for team floors and who approves Production deletes.
+- **Joining**: **Copy sign-in link**, and a link to People. On Enterprise, **Who can join**: invite-only, or anyone who verifies an email on your company domains. See [Who can join](/admin/people-and-teams#who-can-join).
+- **Single sign-on and directory** (Enterprise): [single sign-on (OIDC)](/enterprise/sso-oidc) and [SCIM provisioning](/enterprise/scim).
+- **Record and backup**:
+  - **Show what agents say they're doing** (off by default): Claude Code's one-line description of each command becomes its label in Work. The description is shortened on the computer, and one containing anything that looks like a key, token, or email address is never sent. Passport keeps it for 90 days. Turning it off stops new ones and hides the ones it kept.
+  - **Token usage per task** (on by default): Claude Code tasks show their tokens and API-equivalent cost. Only numbers leave the computer. See [token usage](/member/cli-hook#token-usage).
+  - **Stream to OpenTelemetry** and **Stream to your SIEM** (Enterprise). See [SIEM and OTLP export](/enterprise/siem-export).
+  - **Workspace backup**: the whole workspace as one JSON file. It holds encrypted credentials, so store it as a secret.
+- **Danger zone**: **Delete this workspace**, after typing its name.
 
 ## Billing
 
-Your plan, people and automation counts, and the trial if one is running. Upgrade with Stripe Checkout, or change plans and cancel through the Stripe customer portal. See [Plans and billing](/billing).
-
-## Advanced
-
-- **Alerts**: an **Alert webhook** that gets a one-line message when a data check fires or an app's tools change, with a test send.
-- **Enterprise**: [single sign-on (OIDC)](/enterprise/sso-oidc), [SCIM provisioning](/enterprise/scim), exports of Activity (CSV and JSONL), and [OTLP and SIEM export](/enterprise/siem-export). A self-hosted Passport also shows **Secrets at rest**.
-- **Danger zone**: **Delete this workspace**, after typing its name.
-
-## Where things moved
-
-| Was | Now |
-| --- | --- |
-| Settings › Admin activity | **Settings › Workspace › Admin activity** |
-| Settings › Safety | [Rules](https://passportmcp.com/#rules) (admins: **Rules › Team**) |
-| Settings › Access › Which agents can connect | **Rules › Team › Which agents can connect** |
-| Settings › Automation | **Agents**, filtered to **Tokens** |
-| The Keys tab in Settings: keys Passport holds for you, Apps › Keys | Each app's **Keys** section (**Apps › Other keys** for a CLI Passport doesn't know) |
-| The Keys tab in Settings: agent tokens | **Agents**, filtered to **Tokens**; each token is on its agent's page |
-| The Keys tab in Settings: enrollment keys | **Agents › Rollout** |
-| Rules › Environments, Rules › Project scripts | Each app's **Environments** and **Project scripts** sections (**Apps › Other projects** for scripts no known app hosts) |
-
-Old links to these places open the new one.
+For admins: your plan, people and automation counts, and the trial if one is running. Upgrade through Stripe Checkout, or change plans and cancel through the Stripe customer portal. A self-hosted Passport has no Billing. See [Plans and billing](/billing).

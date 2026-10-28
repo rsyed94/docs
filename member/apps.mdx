@@ -1,0 +1,88 @@
+---
+title: "Apps"
+description: "Add and connect apps, see who can use each one, place its resources, and hold its keys."
+---
+
+Open in Passport: [Apps](https://passportmcp.com/#apps)
+
+**Apps** is what your agents can reach through Passport, such as GitHub, Linear, Railway, or Stripe. Passport holds each app's credential and calls the app for your agents, so they never get the password, token, or key.
+
+An app is also its vendor's CLI. Railway's tools, the `railway` commands agents run through `passport exec`, and the Railway key you keep in Passport all belong to the Railway app. AWS is a CLI app: it has no tools, just the AWS CLI with each person's key.
+
+## Your apps
+
+**Your apps** lists each app with one chip when something is off: **Not connected**, **Reconnect**, **Waiting on admin**, or **Key stopped working**. Beside it is where its resources sit, such as "Production · Staging · 1 to place", and the keys Passport holds for it. A row has **Connect** or **Reconnect** when that's the fix.
+
+Owners also see **Workspace apps**: apps in the workspace they haven't connected themselves, with how many people have, and **Paused** or **Needs repair** when that applies.
+
+## Add an app
+
+**Add app** opens a search of the app catalog. Each app shows what you can do: **Add**, **Ask an admin to add** when your workspace reviews new apps, or **Added** when it's already yours. Adding one opens the app's own sign-in in a new window; finish there and the app is ready.
+
+Not in the catalog? **Not listed? Add it by its MCP server URL** takes the address, an optional name, and for members an optional note for your admin. Passport connects, finds its tools, and scans them.
+
+Some apps need a one-time company setup before anyone can connect, such as a shared key or an OAuth client. Passport says so instead of offering a sign-in that can't work, and an admin finishes it from the app's page.
+
+## An app's page
+
+An app's page leads with one line on its state and one action: **Connect**, **Reconnect**, or **Add** for you, and **Set up**, **Repair**, or **Edit setup** for admins. Its sections hide when they're empty.
+
+### Connection
+
+Your account for the app. With more than one, each has **Sign in again**, **Rename**, **Make default**, and **Disconnect** in its menu, and you can add another. An app an admin connected for everyone reads **Workspace account**.
+
+### Who can use it
+
+For admins. **People** is **Everyone**, including people who join later, or **Teams and people** you add. **Access** is **Full access** or **Read-only**, for all of them or per team and person:
+
+- **Full access**: every tool, Read through Irreversible.
+- **Read-only**: only Read tools. The rest are hidden from agents, and a call to one is blocked.
+- No access: the app isn't shown.
+
+A tool counts as Read only when Passport can tell it is. Anything else counts as a change and is withheld under Read-only. Access comes before every rule: nothing in [Rules](/member/safety) gets past it.
+
+### Environments
+
+Every resource agents have reached on this app, such as a Railway environment or a repository, and where it sits: **Production**, **Staging**, or **Development**. A resource nobody placed reads **Not placed · treated as Production**. Admins place each one with its select; everyone else sees "Ask an admin to change where these sit."
+
+A repository is Production if merging to its default branch deploys it, or Staging if it doesn't. Placing a resource answers it for the whole workspace, for new actions from then on. Moving one out of Production takes a passkey check. See [how Passport knows](/member/safety#how-passport-knows).
+
+A resource shows up here the first time an agent works in it, not when you connect the app.
+
+### Keys Passport holds
+
+For an app with a CLI, the keys Passport holds for it, each with when it was added and whether it needs rotating. **Rotate** and **Remove from Passport** are in the row's menu. A computer that still holds a key reads **Still on** that computer, with the command to move it: `passport keys move`. See [Keys in Passport](/member/cli-hook#keys-in-passport).
+
+### Project scripts
+
+For a repository host, such as GitHub: what your workspace has said about scripts the guard can't read on its own, such as `deploy.py`, grouped by repository. Each says its environment and class, who set it, and **Changed since set** when the script changed. **Add script** adds one. Anyone can say Production for a change or worse; anything looser is **Proposed** until an admin approves it. See [Scripts](/member/cli-hook#scripts).
+
+### Tools
+
+How many tools the app has by class, with every tool and its state under it:
+
+- **Allowed**: your agents can use it, and calls run without asking.
+- **Asks**: your agents can use it, but a person approves each call.
+- **Withheld**: your access, an admin's switch, or a rule keeps it from your agents.
+
+When the app adds or changes tools, they stay off until an admin reviews them, unless a change is low risk: a read tool that only gains optional parameters or new wording, and passes Passport's checks. Admins see a line saying how many wait, with **Review**. Review lists each one as **New**, **Changed**, or **Flagged**, with **Turn on** or **Keep off**, and **Turn on all** (or only the unflagged ones). A tool whose new description looks like a poisoning attempt is flagged and stays off until reviewed. Until then, an agent that calls a held tool is told an admin review is pending.
+
+### Remove the app
+
+Admins find **Remove {app} from the workspace** at the foot of the page. It asks first. Agents lose its tools and everyone's connection to it is removed; what they already did stays in the record.
+
+## Set up an app
+
+**Set up** (admins) chooses how the app signs in:
+
+- **Each person connects their own** account, through the provider's sign-in or your own OAuth app.
+- **One shared account** for everyone, through an API key or a company sign-in.
+- **No sign-in**, for apps that don't need one.
+
+Where the provider needs your own OAuth client, the dialog shows the callback URL to register. **Check connection** confirms Passport can reach the app. An app on sample data says so, and **Go live** switches it to people's real accounts.
+
+## Requests
+
+When your workspace reviews new apps, **Ask an admin to add** files a request. Agents can file requests too, with a one-line reason, when a rule blocks them or a task needs an app the person doesn't have. A request names the agent that filed it, never installs or grants anything, and waits for an admin under **Waiting on you** on [Work](/member/work). For someone with **Read-only**, an agent can ask for **Full access**; approving it gives Full to exactly the people who asked.
+
+See also [Managed API apps](/admin/managed-api-integrations).
