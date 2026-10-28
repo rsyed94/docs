@@ -19,7 +19,7 @@ An app is something your agent can use through Passport, such as GitHub, Linear,
 
 Some apps connect through MCP. Others use a reviewed API driver. Passport gives both the same sign-in, access, rules, and Activity, so most people do not need to care which technology is underneath.
 
-An app is also its vendor's CLI. Railway's tools, the `railway` commands agents run through `passport exec`, and the Railway key you keep in Passport all belong to the Railway app: its **Tools** tab lists the commands too, its **Keys** tab holds your key, its **Activity** tab includes the CLI, and its **Access** decides who may run it. AWS is a CLI app: it has no tools, just the AWS CLI with each person's key.
+An app is also its vendor's CLI. Railway's tools, the `railway` commands agents run through `passport exec`, and the Railway key you keep in Passport all belong to the Railway app: its **Tools** section lists the commands too, its **Keys** section holds your key, its **Activity** tab includes the CLI, and its **Access** decides who may run it. AWS is a CLI app: it has no tools, just the AWS CLI with each person's key.
 
 ### Agents
 
@@ -69,7 +69,7 @@ Every call through Passport creates an Activity record with the person, agent, a
 - **Admins** manage the workspace and its rules.
 - **Members** connect agents and use the apps available to them.
 - **Agents** are the AI tools connected to Passport, such as Claude Code, Codex, or Cursor.
-- **Agent tokens** connect scripts and CI through Passport CLI. They live in [Settings › Keys](/admin/settings#keys).
+- **Agent tokens** connect scripts and CI through Passport CLI. They live on [Agents](/admin/client-fleet#manage-your-own-agents), each with its own page.
 - **Teams** let Pro and Enterprise admins apply access and team setups to a group instead of one person at a time.
 
 Deactivating a person revokes their sessions, agents, and connected accounts immediately.

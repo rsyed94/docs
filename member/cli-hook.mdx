@@ -69,7 +69,7 @@ Passport counts what the guard saw on each computer, per agent and per day, and 
 
 Each agent row on **Agents**, each person on **People**, each team, [Agents › Rollout](/admin/rollout), and Home show the share your rules could decide over the last week, such as "decides 82%". An agent's page also names the three programs it was most often blind to, such as "Not checked: python3 ×12, node ×3". A session shows its own counts, such as "468 checked · 12 not checked · 3 could reach Production". `passport status` prints the week's line. Computers on a CLI before 0.24.0 don't sort their commands: what they couldn't read counts as not checked, and their rows show "468 checked · 12 not checked" instead of a share.
 
-**Rules › Environments › Project scripts** lists the week's blind commands in two groups: your scripts, which you can tell Passport about, and inline code and programs Passport doesn't read yet, which only show what they are. Inline code (`python3 -c`, `node -e`, a heredoc) is checked for side effects first, and only what Passport still can't read counts as not checked.
+The week's blind commands list in two places: your scripts, which you can tell Passport about, under **Not checked** in **Apps › Other projects** (a blind script doesn't say which repository it came from), and inline code and programs Passport doesn't read yet, which only show what they are, under **Passport can't read these yet** in **Rules**. Inline code (`python3 -c`, `node -e`, a heredoc) is checked for side effects first, and only what Passport still can't read counts as not checked.
 
 When a session that changed confirmed Production had blind commands, the agent's owner and admins get an alert, at most once a week per computer, and the weekly email has a Coverage section. Open the agent's [sessions](/member/sessions#what-passport-saw) to see what Passport couldn't tell.
 
@@ -140,7 +140,7 @@ Your agent's own work in the project folder counts as **Development**, so with t
 
 Symlinks count where they point, `cd` inside a command is followed, and writing to your keys or shell startup files counts as a delete. Try any command on the **Rules** page or with `passport rules test "npm test"`.
 
-Code that reaches a repository's default branch only reaches people if that repository deploys when you merge. The first push to a repository's default branch shows it in [Rules › Environments](https://passportmcp.com/#rules?section=environments), treated as Production until you choose: keep **Production** for a repository that deploys on merge, or choose **Staging** for one that doesn't. A force push to it asks either way, because Staging asks before deletes.
+Code that reaches a repository's default branch only reaches people if that repository deploys when you merge. The first push to a repository's default branch shows it in the **Environments** section of its host's app page, such as [GitHub's](https://passportmcp.com/#apps/github/environments), treated as Production until you choose: keep **Production** for a repository that deploys on merge, or choose **Staging** for one that doesn't. A force push to it asks either way, because Staging asks before deletes.
 
 ## Fewer prompts, even offline
 
@@ -177,7 +177,7 @@ Most decisions happen on your computer from rules synced in the last hour, and t
 
 Your access to an app in Passport covers its CLI too. If you have **No access** to Railway, every `railway` command an agent runs through the guard or `passport exec` is blocked with `You don't have access to Railway in Passport. Ask an admin: passport request railway --reason "<why>"` and a link to the app's **Access** tab. **Read-only** access runs only commands that read; anything that changes or deletes is blocked, and the message names `passport request railway --full --reason "<why>"` to ask for Full access. You can also ask from the app's page in Passport: **Ask for Full access** on its Overview (Pro and Enterprise). A CLI whose app isn't in your workspace works from its key, as before. This covers the CLIs `passport exec` runs: `railway`, `gh` (GitHub), `vercel`, `wrangler` (Cloudflare), `supabase`, `stripe`, `aws`, `neonctl` (Neon), and `flyctl` (Fly.io).
 
-AWS has no MCP server to connect, so an admin adds **AWS** from the catalog as a CLI app: no sign-in and no tools, just who may run `aws` and how. Its **Tools** tab lists common commands by class. Reads such as `aws s3 ls` run; changes follow your rules; commands that open access (`iam attach-role-policy`, `s3api put-bucket-policy`) ask like a delete; and terminating an instance or deleting a bucket, table, or database in Production is **Irreversible**. The **AWS Knowledge** docs app is a separate app and never decides who may run `aws`.
+AWS has no MCP server to connect, so an admin adds **AWS** from the catalog as a CLI app: no sign-in and no tools, just who may run `aws` and how. Its **Tools** section lists common commands by class. Reads such as `aws s3 ls` run; changes follow your rules; commands that open access (`iam attach-role-policy`, `s3api put-bucket-policy`) ask like a delete; and terminating an instance or deleting a bucket, table, or database in Production is **Irreversible**. The **AWS Knowledge** docs app is a separate app and never decides who may run `aws`.
 
 ## Keys in Passport
 
@@ -188,9 +188,9 @@ passport keys move
 passport exec -- railway up -e staging
 ```
 
-`keys move` asks about each key (`[y/N]`, so Enter keeps it), stores it in Passport, and signs that CLI out on your computer. `passport keys move railway` moves only that one. If Passport already holds a different key for that CLI, every agent that uses it would switch, so you type the CLI's name to replace it (`Type railway to confirm, or press Enter to cancel:`); anything else keeps the key in Passport and leaves this computer signed in. Only you, at a terminal, can replace a key: with `--yes` or without a terminal nothing is replaced, and `keys move` says `Replacing a key in Passport needs you at a terminal.` and `Run: passport keys move railway`. A replacement alerts you and your admins ("Railway key in Passport was replaced from Laptop by Maya. Undo."), is in the audit trail, and can be undone for seven days from the alert or the app's **Keys** tab. Signing out removes only the key: your project links, current team, profiles, and other settings stay. `.env` files stay as they are, since your apps need them. `passport exec` asks Passport before each command; when your rules allow it, the key reaches only that command, short-lived for GitHub (with the GitHub App installed), AWS, and Cloudflare where the key allows it. In Claude Code, the guard sends commands for those CLIs through `passport exec` for you. If Passport can't be reached, nothing runs.
+`keys move` asks about each key (`[y/N]`, so Enter keeps it), stores it in Passport, and signs that CLI out on your computer. `passport keys move railway` moves only that one. If Passport already holds a different key for that CLI, every agent that uses it would switch, so you type the CLI's name to replace it (`Type railway to confirm, or press Enter to cancel:`); anything else keeps the key in Passport and leaves this computer signed in. Only you, at a terminal, can replace a key: with `--yes` or without a terminal nothing is replaced, and `keys move` says `Replacing a key in Passport needs you at a terminal.` and `Run: passport keys move railway`. A replacement alerts you and your admins ("Railway key in Passport was replaced from Laptop by Maya. Undo."), is in the audit trail, and can be undone for seven days from the alert or the app's **Keys** section. Signing out removes only the key: your project links, current team, profiles, and other settings stay. `.env` files stay as they are, since your apps need them. `passport exec` asks Passport before each command; when your rules allow it, the key reaches only that command, short-lived for GitHub (with the GitHub App installed), AWS, and Cloudflare where the key allows it. In Claude Code, the guard sends commands for those CLIs through `passport exec` for you. If Passport can't be reached, nothing runs.
 
-[Settings › Keys](https://passportmcp.com/#settings/keys) lists every key Passport holds for you, with any computer that still holds keys and the command to move them, beside your agent tokens (and, for admins, enrollment keys). Rotate or remove a key there or on its app: in **Apps**, the app's row says **Key in Passport** and flags one that stopped working or is back on a computer, and the app's **Keys** tab holds your key too. Admins also see who keeps a key for that app, whether it works, and when agents last used it, never the key itself.
+Each key lives on its app's page, in its **Keys** section (`#apps/<app>/keys`): when it was added, when agents last used it, and whether it's due for rotation, with **Rotate**, and **Remove** in the row's menu. Computers that still hold a key for that app are listed there too ("Still on Laptop. Run passport keys move there."). In [Apps](https://passportmcp.com/#apps), the app's row says **Key in Passport** and flags one that stopped working or is back on a computer. An app Passport knows that you haven't added, such as Railway, is still a row in **Your apps** when it holds something of yours ("CLI · 1 key · 3 to place"), and its page has these sections and **Add** for its tools. **Other keys** on Apps is only for a CLI Passport doesn't know. Admins also see who keeps a key for that app, whether it works, and when agents last used it, never the key itself. Agent tokens are on [Agents](https://passportmcp.com/#agents?kind=token).
 
 ### Rotate a key
 
@@ -210,7 +210,7 @@ passport keys rotate railway
 
 It shows where to make the new key, asks for it without showing what you type, checks it the same way, and prints where to revoke the old one. It only runs with you at the terminal, never from a script. After a rotation from the CLI, the old key stays restorable from the key's row for seven days, and you and your admins get an alert.
 
-Admins see how old each person's keys are, and which need rotating, on the app's **Keys** tab and in **People**, on the person's **Apps** tab. They never see a key, and only its owner can rotate it. Each rotation is in the audit trail: who, which app, and when, never the value.
+Admins see how old each person's keys are, and which need rotating, in the app's **Keys** section and in **People**, on the person's **Apps** tab. They never see a key, and only its owner can rotate it. Each rotation is in the audit trail: who, which app, and when, never the value.
 
 ### Keep typing the CLI yourself
 
@@ -234,7 +234,7 @@ In a terminal, the CLI gets the terminal itself, so colors, prompts, and progres
 
 ### Keys back on a computer
 
-After a move, the CLI remembers where each key was (the file, the field names, the file's size and time, never a value or a hash of one). Once a day it checks those files, and if a key Passport holds is back on that computer, the key reads **Back on &lt;computer&gt;** on its app's **Keys** tab and row in Apps, with an alert: "A Railway key is on Priya's MacBook Pro again." The fix is the same move: `passport keys move`. Once the key is gone again, by either route, the next daily check clears it.
+After a move, the CLI remembers where each key was (the file, the field names, the file's size and time, never a value or a hash of one). Once a day it checks those files, and if a key Passport holds is back on that computer, the key reads **Back on &lt;computer&gt;** on its app's **Keys** section and row in Apps, with an alert: "A Railway key is on Priya's MacBook Pro again." The fix is the same move: `passport keys move`. Once the key is gone again, by either route, the next daily check clears it.
 
 Keys usually come back because a CLI was signed in again. While Passport holds a working key for that CLI, the guard answers an agent's `railway login` (in Claude Code, Codex, and Cursor) with "Passport holds your Railway key; run it through Passport", and so does the shim when you type it. `keys move` also signs out a browser sign-in Passport can't hold itself (Railway, Vercel, Wrangler) when it already holds a working key for that CLI.
 
@@ -287,14 +287,14 @@ Python and JavaScript files aren't read yet. Tell Passport what one does instead
 
 ### Tell Passport what a script does
 
-From a **Partly checked** or **Not checked** row in **Sessions**, or a script under **Your scripts, not checked** in **Rules › Environments › Project scripts**, choose **Tell Passport what this does** (in Sessions, the first row for each program offers it; open any other row to find it there), or run:
+From a **Partly checked** or **Not checked** row in **Sessions**, or a script under **Not checked** in **Apps › Other projects**, choose **Tell Passport what this does** (in Sessions, the first row for each program offers it; open any other row to find it there), or run:
 
 ```sh
 passport actions add scripts/deploy.py --environment production --class change
 passport actions add make seed --environment staging --class delete
 ```
 
-Passport then checks that script as a Change in Production (or whatever you said), with your presets and exceptions deciding as for any command. A project script never runs on its own say-so. You can say Production for a change, delete, or irreversible script; anything looser waits for an admin in **Rules › Environments › Project scripts**. When the script changes, the row there says **Changed since set** and the guard reads it again until someone sets it. That page keeps your scripts apart from inline code and programs Passport doesn't read yet, which have nothing stable to describe.
+Passport then checks that script as a Change in Production (or whatever you said), with your presets and exceptions deciding as for any command. A project script never runs on its own say-so. You can say Production for a change, delete, or irreversible script; anything looser waits for an admin in the **Project scripts** section of the repository host's app page (GitHub's for a repository on GitHub, grouped by repository), or **Apps › Other projects** for a repository on a host Passport doesn't know. When the script changes, the row there says **Changed since set** and the guard reads it again until someone sets it. Inline code and programs Passport doesn't read yet have nothing stable to describe, so they stay in **Rules**.
 
 A repository can keep its own list in `.passport/actions.toml`:
 

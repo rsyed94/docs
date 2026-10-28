@@ -1,11 +1,11 @@
 ---
 title: "Settings"
-description: "What each Settings tab holds: Account, Keys, Workspace, Access, Billing, and Advanced."
+description: "What each Settings tab holds: Account, Workspace, Access, Billing, and Advanced."
 ---
 
 Open in Passport: [Settings](https://passportmcp.com/#settings)
 
-**Settings** sits at the bottom of the sidebar, and the account menu under your name opens **Account settings** and **Keys** too. Everyone gets **Account** and **Keys**. Admins on Pro and Enterprise also get **Workspace**, **Access**, **Billing**, and **Advanced**. Each tab has its own address, such as [`#settings/keys`](https://passportmcp.com/#settings/keys), so a link opens the right one.
+**Settings** sits at the bottom of the sidebar, and the account menu under your name opens **Account settings** too. Everyone gets **Account**. Admins on Pro and Enterprise also get **Workspace**, **Access**, **Billing**, and **Advanced**. Each tab has its own address, such as [`#settings/workspace`](https://passportmcp.com/#settings/workspace), so a link opens the right one.
 
 Rules don't live here. What agents may do is on [Rules](/member/safety), and workspace policy is on **Rules › Team**.
 
@@ -19,35 +19,9 @@ Your own controls, on every plan:
 
 On Free, the owner's Account tab also has **Billing** and a **Workspace** card. **Manage workspace** there opens the [workspace page](https://passportmcp.com/#workspace): its name, invitations, ownership, and, under **Advanced**, **Workspace backup** and account lifecycle.
 
-## Keys
+## Keys moved
 
-**Settings › Keys** (`#settings/keys`, or the short link `#keys`) holds every kind of key. **What each kind of key is for** at the top explains them:
-
-| Kind | What it is | Who sees it |
-| --- | --- | --- |
-| **Keys Passport holds for you** | Your vendor keys, such as Railway or GitHub. Agents use them through `passport exec` after your rules decide, and never see the value. | Everyone, their own |
-| **Agent tokens** (`pak_…`) | What scripts, CI, and hosted workflows use to reach Passport without a person signing in. | Admins manage all; members see and revoke the tokens they own |
-| **Enrollment keys** (`pek_…`) | Point an agent's sign-in at this workspace. Not secret, and they grant no access. | Admins, on Pro and Enterprise |
-
-### Keys Passport holds for you
-
-Each key shows how old it is. **Rotate** or **Update** replaces it, **Remove** is under **More**, and **Undo** restores the previous key while a replacement can still be undone. A computer that still holds keys Passport could hold gets its own row, with the command to move them:
-
-```sh
-passport keys move
-```
-
-It stores each key the computer holds in Passport and signs that CLI out there. See [Keys in Passport](/member/cli-hook#keys-in-passport). Each key also shows on its app's **Keys** tab.
-
-### Agent tokens
-
-Admins choose **Create token**, then **Rotate** or **Revoke** (under **More**) on each one; revoked and expired tokens fold into a disclosure. A token is shown once. An agent can hold up to five live tokens, so a rotation can overlap. Members see only the tokens they own, each with **Revoke**. **Agents › Automations** links here. See [Agent tokens, their owners, and rotation](/admin/agents-and-access#agent-tokens-their-owners-and-rotation).
-
-### Enrollment keys
-
-The same list as [Agents › Rollout](/admin/rollout#enrollment-keys), where the channel snippets use them.
-
-Links can open one section: `#settings/keys?section=app-keys`, `agent-tokens`, `enrollment-keys`, or `guidance`.
+Settings has no Keys tab. The vendor keys Passport holds for you, such as Railway or GitHub, live on each app's page, in its **Keys** section, even for an app you haven't added; **Apps › Other keys** holds keys for a CLI Passport doesn't know (see [Keys in Passport](/member/cli-hook#keys-in-passport)). Agent tokens (`pak_…`) live with their agents on [Agents](/admin/client-fleet#manage-your-own-agents), and enrollment keys (`pek_…`) on [Agents › Rollout](/admin/rollout#enrollment-keys). Old links to the Keys tab (`#settings/keys`, `#keys`, and each `?section=`) open where those keys live and say so.
 
 ## Workspace
 
@@ -80,7 +54,10 @@ Your plan, people and automation counts, and the trial if one is running. Upgrad
 | Settings › Admin activity | **Settings › Workspace › Admin activity** |
 | Settings › Safety | [Rules](https://passportmcp.com/#rules) (admins: **Rules › Team**) |
 | Settings › Access › Which agents can connect | **Rules › Team › Which agents can connect** |
-| Settings › Automation | **Agents › Automations**, which links to **Settings › Keys › Agent tokens** |
-| Apps › Keys | **Settings › Keys** |
+| Settings › Automation | **Agents**, filtered to **Tokens** |
+| The Keys tab in Settings: keys Passport holds for you, Apps › Keys | Each app's **Keys** section (**Apps › Other keys** for a CLI Passport doesn't know) |
+| The Keys tab in Settings: agent tokens | **Agents**, filtered to **Tokens**; each token is on its agent's page |
+| The Keys tab in Settings: enrollment keys | **Agents › Rollout** |
+| Rules › Environments, Rules › Project scripts | Each app's **Environments** and **Project scripts** sections (**Apps › Other projects** for scripts no known app hosts) |
 
 Old links to these places open the new one.
