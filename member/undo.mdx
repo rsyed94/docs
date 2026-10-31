@@ -27,7 +27,7 @@ Variable values and table rows are encrypted and deleted after 7 days. Branches 
 
 - **Ask only for irreversible:** a delete runs only once its backup is taken. If Passport can't take one, it asks you instead: "Couldn't take a backup first, so Passport is asking." This covers deletes an agent runs from the shell too: the ones Passport backs up on your computer run (see below), and others, such as `kubectl delete`, ask. To let those deletes run without a backup in Development, Staging, or Other apps, turn on **Run deletes Passport can't back up** under **Safeguards** in **Rules**. It's off by default, and it isn't offered for Production.
 - **Ask before changes** and **Ask before deletes:** deletes ask as before. The request says whether Passport will take a backup right before it runs.
-- A specific rule that always runs an action, or **Run for this task**, skips the ask, not the backup: Passport still takes one first wherever it can. When no backup was possible, it runs anyway.
+- A specific rule that always runs an action, or **For this task**, skips the ask, not the backup: Passport still takes one first wherever it can. When no backup was possible, it runs anyway.
 
 ## Backups on your computer
 
