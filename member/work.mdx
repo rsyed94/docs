@@ -28,7 +28,7 @@ Each ask is one line: who wants to do what, its environment, and how long it has
 - where it lands: the app and its environment
 - what happens if it goes wrong, when Passport knows
 
-Then choose **Run once** or **Don't run**, or the **For this task** choice above them, which names what it allows. **More choices** holds the rest, each only when it applies: **It's Staging, always run** to place a resource nobody placed yet, **Always allow…** to save a rule, and **Stop {agent}**. **See the whole task** opens the task that asked. See [When Passport asks](/member/safety#when-passport-asks).
+The buttons along the bottom are **More choices**, **Don't run**, **For this task** (when it's offered), and **Run once**. One line above them says what **For this task** allows, such as "For this task runs Railway changes in Staging without asking until the task ends." **More choices** holds the rest, each only when it applies: **It's Staging, always run** to place a resource nobody placed yet, **Always allow…** to save a rule, and **Stop {agent}**. **See the whole task** opens the task that asked. See [When Passport asks](/member/safety#when-passport-asks).
 
 Requests from people wait here too: an **App request**, an **Access request** (such as **Full access to** an app), a **Rule request** for an exception, and calls on a **Shared account** that need an approver. **Review** shows what was asked and why, and lets you approve or decline it. A request someone else must answer reads **Waiting on someone else**.
 
@@ -56,7 +56,7 @@ A task is running until its agent says it's done or it has been quiet for 30 min
 
 ## Tasks
 
-A **task** is one run of one agent, such as a Claude Code session. It is titled by its pull request, else its project and branch, else its agent. A row shows the agent, what's worth a glance (such as "2 asked · 1 blocked"), a **waiting** chip when an ask is open, and **Production** when it changed Production.
+A **task** is one run of one agent, such as a Claude Code session. It is titled by its pull request, else its project and branch, else its agent. The title follows the newest branch it worked on, including one it pushed from another worktree. A row shows the agent, what's worth a glance (such as "2 asked · 1 blocked"), a **waiting** chip when an ask is open, and **Production** when it changed Production.
 
 One run is one task even when it used both the [CLI guard](/member/cli-hook) and app tools. Passport joins them when the agent names its session, or when the same person's same agent has exactly one guard task active in the last 30 minutes on that computer. Two runs at once, an agent token, or a different agent are never joined.
 
