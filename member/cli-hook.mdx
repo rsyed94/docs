@@ -59,15 +59,15 @@ The Passport CLI reports these at most once a day: from a hook with time to spar
 
 When an agent's guard turns off after being on, goes out of date, or isn't trusted, it shows under **To fix** on [Work](/member/work#to-fix), linking to the agent. It clears itself once the fix is in.
 
-## Decided, placed, and blind
+## Decided, placed, and not checked
 
 Passport counts what the guard saw on each computer, per agent and per day, and sorts every command into one of three buckets:
 
 - **Decided**: Passport recognized every part, so your rules could answer it, such as `git status` or `railway up --environment staging`.
 - **Placed**: Passport knows what kind of action it is and where it lands, but can't allow it, such as the project's own scripts (`node scripts/build.mjs`, `make test`, or a package script that runs them) or a vendor command with a variable in it.
-- **Blind**: Passport couldn't tell what it does: a program it doesn't know, a script outside the project, a package it doesn't know, SQL from a file (`psql -f`), or a one-liner (`node -e`, `python -c`).
+- **Not checked**: the command ran, but Passport couldn't tell what it does: a program it doesn't know, a script outside the project, a package it doesn't know, SQL from a file (`psql -f`), or a one-liner (`node -e`, `python -c`).
 
-`passport status` prints the share your rules could decide over the last week, such as "decides 82%", and the summary in [Roll out to your team](/admin/rollout) shows the workspace's share, such as "94% checked". Computers on a CLI before 0.24.0 don't sort their commands: what they couldn't read counts as not checked.
+`passport status` prints the share your rules could decide over the last week and how many weren't checked, such as "Rules could decide 82% of commands Passport saw this week · 1,204 not checked", with a link to those commands on Work. The summary in [Roll out to your team](/admin/rollout) shows the workspace's share, such as "94% checked". Computers on a CLI before 0.24.0 don't sort their commands: what they couldn't read counts as not checked.
 
 Inline code (`python3 -c`, `node -e`, a heredoc) is checked for side effects first, and only what Passport still can't read counts as not checked. When commands Passport couldn't check ran in sessions that reached Production in the last week, **To fix** on Work says how many and opens exactly those commands under **Not checked**. To teach Passport one of your scripts, see [Tell Passport what a script does](#tell-passport-what-a-script-does).
 
@@ -340,9 +340,10 @@ After each shell command, the hook sends Passport only:
 - for everyday commands, where they landed (Development, Other apps, Production), never a path. Allowed work in your project is only counted, not recorded one by one
 - what kind of command it was: read, write, destructive, api, sql, http, or unknown. Passport shows it as one class: Read, Change, Delete, or Irreversible
 - whether the command succeeded, how long it took, and the name of the folder you were in
+- the repository's name and branch for the folder you were in, and after a `git push` that worked, the branch it pushed (not the default branch) and its repository's name, so a task is titled by the work it pushed even from another worktree. Never a remote or a URL
 - your agent's session identifier, so a run hangs together, and when the session starts and ends, with the model's name and whether someone is at the keyboard when the agent says so
 - when the guard stepped in, whether it asked first or blocked the command
-- counts of the commands the guard saw, by bucket, and the name of the program behind each blind command (`python3`, never a path or a script's name)
+- counts of the commands the guard saw, by bucket, and the name of the program behind each command it couldn't check (`python3`, never a path or a script's name)
 - for a command read from a project script, the script's name (`deploy.sh`, `make deploy`), how many parts were checked or partly checked, and for a part it couldn't check, a hash keyed with a salt that never leaves your computer, so Passport can suggest telling it what that script does
 - for Claude Code sessions, token numbers: see [Token usage](#token-usage)
 - when a vendor CLI failed because its sign-in on your computer expired, which CLI (`railway`). The hook reads the last 4 KB of what the command printed on your computer to tell, and never sends it
