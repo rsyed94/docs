@@ -11,7 +11,7 @@ Open in Passport: [Work](https://passportmcp.com/#work)
 
 **Now** is the default view. It shows four sections, top to bottom, and hides any that are empty:
 
-- **Waiting on you**: asks and requests only you can answer.
+- **Waiting on you**: asks and requests only you can answer, and agents stuck on a sign-in.
 - **To fix**: things that are broken or about to stop working.
 - **Running**: tasks an agent is still working on, each with **Stop**.
 - **Recent**: your last five tasks. **All history** opens History.
@@ -28,11 +28,13 @@ Each ask is one line: who wants to do what, its environment, and how long it has
 - where it lands: the app and its environment
 - what happens if it goes wrong, when Passport knows
 
-Then choose **Run once** or **Don't run**. **More choices** holds the rest, each only when it applies: **Run for this task**, **It's Staging, always run** to place a resource nobody placed yet, **Always allow…** to save a rule, and **Stop {agent}**. **See the whole task** opens the task that asked. See [When Passport asks](/member/safety#when-passport-asks).
+Then choose **Run once** or **Don't run**, or the **For this task** choice above them, which names what it allows. **More choices** holds the rest, each only when it applies: **It's Staging, always run** to place a resource nobody placed yet, **Always allow…** to save a rule, and **Stop {agent}**. **See the whole task** opens the task that asked. See [When Passport asks](/member/safety#when-passport-asks).
 
 Requests from people wait here too: an **App request**, an **Access request** (such as **Full access to** an app), a **Rule request** for an exception, and calls on a **Shared account** that need an approver. **Review** shows what was asked and why, and lets you approve or decline it. A request someone else must answer reads **Waiting on someone else**.
 
 A link from your agent's prompt, Slack, or a notification opens Work with that ask first.
+
+When an agent's command fails because a CLI's sign-in on its computer expired, and Passport doesn't hold your key for that CLI, Waiting on you shows it: "Claude Code can't sign in to Railway", naming the computer when Passport knows it. **Add key** opens the app's page to add your key. Passport checks it with the app first and keeps it only if the app accepts it. The row goes once it's there; agents then run that CLI through Passport and don't need the sign-in. You also get a notification, at most once every six hours per CLI. When Passport already holds your key, the agent is told to run the command through Passport and nothing waits on you.
 
 ### To fix
 
@@ -42,10 +44,15 @@ Each row is one problem and opens the place that fixes it. For example:
 - one of your agents needs to sign in again, or is set up twice
 - a computer still holds keys Passport could hold
 - an app can't connect for anyone, or added tools that wait for review (admins)
+- agents left things running, such as a Supabase branch or an RDS instance, with about what they cost a month when Passport knows a list price
+- new errors after your agent deployed to Production (see [Watch after a deploy](#watch-after-a-deploy))
+- a repository's AGENTS.md or CLAUDE.md has rules Passport can enforce (admins; see [Rules from your repositories](/member/safety#rules-from-your-repositories))
+
+**Agents left 4 things running** opens the list, by app: what each is, the task that made it, when, and about what it costs. Copy the command that removes it, then **Mark removed** (or mark one you keep). Something counts once its task ended, or a day after it was made, and leaves the list when an agent removes it. Prices are public list price floors as of October 2026; a kind without one shows no price, and the total then says "at least".
 
 ### Running
 
-A task is running until its agent says it's done or it has been quiet for 30 minutes. **Stop** asks first, then ends the task: the agent's next action in it is refused. The agent can start a new task any time.
+A task is running until its agent says it's done or it has been quiet for 30 minutes. Its row says **Deploying to Staging** while it holds a deploy, and "2 allowed" when you approved actions for the task. **Stop** asks first, then ends the task: the agent's next action in it is refused. The agent can start a new task any time.
 
 ## Tasks
 
@@ -58,11 +65,17 @@ One run is one task even when it used both the [CLI guard](/member/cli-hook) and
 A task's page leads with its title, the agent and computer, when it ran, and a summary such as "14 actions · 1 asked". Its one action is **Stop** while it runs; afterwards it reads **Ended**. Below that:
 
 - **Facts**: the agent, the apps it used, and its pull request or branch.
+- **Allowed for this task**, while it runs: what you approved **For this task**, such as "Railway changes in Staging · By you, 10:42 AM · ends with the task". **Revoke** is in each row's menu and asks once, in place.
 - **Waiting on you**: this task's open asks, with the same choices as on Now.
+- **Left running**: what this task made and didn't remove, once it ended.
 - **Changed in Production**: every change, delete, or irreversible action that ran on Production.
 - **Everything it did**: every action, newest first, with **Show more**.
 
-Each row names the action, its app and target, its environment, and its outcome when it did more than run: **Asked**, **Approved**, **Declined**, **Blocked**, or **Failed**. A row with a backup has **Undo**. See [Backups and undo](/member/undo).
+A row also says when it waited for another agent's deploy ("Waited 40 s while Codex deployed to Staging") or didn't run because of one. Each row names the action, its app and target, its environment, and its outcome when it did more than run: **Asked**, **Approved**, **Declined**, **Blocked**, or **Failed**. A row with a backup has **Undo**. See [Backups and undo](/member/undo). **Sign-in failed** marks a command that failed because the CLI's sign-in on the computer expired, and "failed 6 times in a row" a command the agent kept retrying.
+
+### Watch after a deploy
+
+When your agent deploys to Production (`railway up`, `vercel deploy --prod`, `wrangler deploy`, `flyctl deploy`, `supabase db push` or `functions deploy`, or an app's deploy or rollback tool), Passport watches for 15 minutes. It reads Sentry and the platform's deploys as you, with your own connections, at 2, 5, 10, and 15 minutes. The line under the deploy's row says **Watching for errors**, then **No new errors in 15 min**, or **Couldn't check for errors** and why (such as Sentry isn't connected). New Sentry issues first seen since the deploy, or a failed deploy, turn the row red with **Open in Sentry**, and **Roll back** when Passport can roll it back (Railway: to the deployment before). You also get one notification and a row in **To fix**, and your agent hears it on its next step in that task, with the issue's id and title only.
 
 If an admin turned on **Show what agents say they're doing**, a Claude Code row is labeled with the agent's own one-line description of the step. See [what the hook records](/member/cli-hook#what-it-records).
 
@@ -117,7 +130,7 @@ Enterprise can stream both records to a SIEM or an OpenTelemetry collector. See 
 
 ## From the terminal
 
-`passport sessions` lists your agents' recent tasks: status, agent, folder, when it started, and what Passport decided, such as `42 ran · 2 asked · 1 blocked`. Add `--status running` to narrow it and `--json` for scripts. `passport changes` lists what your agents changed in Production, newest first, over the last 7 days unless you add `--since 1h`. See [Passport CLI](/quickstart/cli#json-and-exit-code-contract).
+`passport tasks` lists your agents' recent tasks: status, agent, folder, when it started, and what Passport decided, such as `42 ran · 2 asked · 1 blocked`. Add `--status running` to narrow it and `--json` for scripts. `passport changes` lists what your agents changed in Production, newest first, over the last 7 days unless you add `--since 1h`. See [Passport CLI](/quickstart/cli#json-and-exit-code-contract).
 
 ## Get notified
 

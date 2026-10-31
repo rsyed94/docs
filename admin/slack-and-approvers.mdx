@@ -12,7 +12,7 @@ Passport asks a person only when a rule says so. These settings decide who that 
 An admin adds the Passport app to Slack with **Add to Slack** under **Slack** in [Settings › Notifications](https://passportmcp.com/#settings/notifications). After that:
 
 - Each ask arrives as a direct message to the person who can answer it, as the same ask Passport shows: who wants to do what, its environment, the agent, the command with secrets removed, why Passport asked, and what happens if it goes wrong.
-- **Run once**, **Run for this task**, **It's Staging, always run** (when it applies), and **Don't run** work right in Slack. **Stop {agent}** and **Always allow…** (which opens Passport) are in the message's **⋯** menu. A Production change or delete, or anything irreversible, shows **Review in Passport** instead of Run once, because approving it takes a passkey check ([Confirm it's you](/member/safety#confirm-its-you)).
+- **Run once**, **For this task** (named by what it allows, such as "Railway changes in Staging for this task"), **It's Staging, always run** (when it applies), and **Don't run** work right in Slack. **Stop {agent}** and **Always allow…** (which opens Passport) are in the message's **⋯** menu. A Production change or delete, or anything irreversible, shows **Review in Passport** instead of Run once, because approving it takes a passkey check ([Confirm it's you](/member/safety#confirm-its-you)).
 - Admins can also post Production asks to a **Production channel**. Anyone can see them there; only people allowed to approve can answer.
 - When an ask is answered anywhere, every Slack message for it updates in place, such as "Approved once by Maya in Slack".
 

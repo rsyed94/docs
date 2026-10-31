@@ -44,7 +44,7 @@ Passport places a command the way the vendor's own CLI picks where it goes. The 
 
 Railway, Supabase, and Neon links hold an id. Once a resource is placed, the id decides, so a renamed environment keeps its place. A name in a link file never makes anything looser: for an id nobody placed, Passport asks your connected app for its real name. If a link file can't be read, the command counts as Production. A database URL is read only for its host: a local database is Development. Passport never sends or stores the URL, user, or password.
 
-Each decision says how Passport knows: "Runs: Staging is Hands-off (linked in this folder)." Each app's page lists its resources under **Environments**, where an admin places them. When an ask waits on a resource nobody placed, it offers **It's Staging, always run** and **It's Development, always run**: choosing saves it for the workspace and runs the action once. Anyone can say Production; anything looser needs an admin. A change applies to new actions only. Run `passport env` in a folder to see what Passport reads there.
+Each decision says how Passport knows: "Runs: Staging changes run on their own (linked in this folder)." Each app's page lists its resources under **Environments**, where an admin places them. When an ask waits on a resource nobody placed, it offers **It's Staging, always run** and **It's Development, always run**: choosing saves it for the workspace and runs the action once. Anyone can say Production; anything looser needs an admin. A change applies to new actions only. Run `passport env` in a folder to see what Passport reads there.
 
 ## By environment
 
@@ -68,6 +68,7 @@ Below the table, one line says who approves Production asks, such as "Production
 
 - **When Passport can't be reached**: what the CLI guard does when it can't reach Passport. **Ask** (the default), **Block**, or **Run**. An unattended agent or Codex can't ask, so Ask blocks there. Run never applies to irreversible actions or to anything your team requires. See [When Passport can't be reached](/member/cli-hook#when-passport-cant-be-reached).
 - **Run deletes Passport can't back up**: shown for rows on **Ask only for irreversible** other than Production. On, those deletes run without a backup; off, they ask first.
+- **Stop retry loops**: on by default. When the same command fails 5 times in a row in one task, the guard asks before it runs again; with nobody there to ask (and on Codex), it blocks it. From the 3rd failure the agent is told to stop retrying and read the error.
 
 ## Specific rules
 
@@ -75,13 +76,19 @@ A specific rule runs, asks about, or never runs one action, an app, or a class o
 
 The most specific rule wins, the strictest wins among equals, and a block always wins. Your list also shows rules your team or the whole workspace set for you.
 
+### Rules from your repositories
+
+When an agent session starts in a repository, the [CLI guard](/member/cli-hook) reads its AGENTS.md and CLAUDE.md on your computer and looks for lines that say never to run a command Passport recognizes, such as "Never run `railway up`." Admins see each line, exactly as written and with the file it came from, at the top of **Specific rules**. **Enforce** adds a block for that command in that repository only; **Dismiss** keeps it from coming back. When an agent tries it there, the guard says "Blocked by this repo's AGENTS.md: Never run `railway up`." Only the line is sent, never the rest of the file.
+
+At the start of each Claude Code session, the guard also tells the agent, in a few lines, what is true for the folder: where Production is, which keys Passport holds, what the repository's rules block, and what your Production rules ask.
+
 ## Everyone
 
 Owners switch **Rules** to **Everyone** for what binds the whole workspace:
 
 - **By environment** sets each team's minimum, or everyone's. Pick the team in **Whose**. **Anyone chooses** sets no minimum.
 - **Production approvers**, with **Change**. See [Production approvers](/admin/slack-and-approvers#production-approvers).
-- **Safeguards**: **Require the guard**, for everyone or one team. See [Guard required](/member/cli-hook#guard-required).
+- **Safeguards**: **Require the guard**, for everyone or one team. See [Guard required](/member/cli-hook#guard-required). **One deploy at a time** (on unless you turn it off) makes agents take turns deploying to, or migrating, the same Staging or Production target. See [One deploy at a time](/member/cli-hook#one-deploy-at-a-time).
 - **Specific rules** for teams, the workspace, and other people.
 - **Data checks**, on Enterprise. See [Data checks](/admin/data-checks).
 
@@ -90,13 +97,15 @@ Owners switch **Rules** to **Everyone** for what binds the whole workspace:
 When an action needs you, Passport shows one ask, the same in Passport, Slack, a notification, and your agent: who wants to do what ("Claude Code wants to deploy acme-worker"), where it lands, why Passport asked, what happens if it goes wrong (such as "Deploys can be rolled back in Railway." or "This can't be undone."), and the command. Your choices, each only when it applies:
 
 - **Run once**: this action, this time.
-- **Run for this task**: the same action for the rest of the agent's task. Never offered for an irreversible action.
+- **For this task**, named by what it allows, such as **Railway changes in Staging for this task**: every action of that kind, on that app, in that environment, runs without asking until the task ends (its agent says it's done, it's quiet for 30 minutes, you stop it, or 12 hours pass). Never offered for an irreversible action or a Production delete. The task's page lists what it allows, and **Revoke** takes effect on the agent's next command.
 - **It's Staging, always run** or **It's Development, always run**: places a resource nobody placed, for the whole workspace, and runs this action.
 - **Always allow…**: saves a specific rule.
 - **Don't run**, with an optional note the agent receives.
 - **Stop {agent}**: for an agent token or cloud agent, stops it until someone resumes it; for an agent on a computer, ends its task. The ask is declined too.
 
-In Passport, **Run once** and **Don't run** are the buttons and the rest are under **More choices**. Many agents show the question right where you're working; it also waits in **Waiting on you** on [Work](https://passportmcp.com/#work). With notifications on, you can choose **Run once** or **Don't run** from the notification, and opening it shows every choice.
+In Passport, **Run once** and **Don't run** are the buttons, **For this task** sits right above them, and the rest are under **More choices**. Many agents show the question right where you're working; it also waits in **Waiting on you** on [Work](https://passportmcp.com/#work). With notifications on, you can choose **Run once**, **For this task**, or **Don't run** from the notification, and opening it shows every choice.
+
+An agent can also ask up front for what its plan needs: "Claude Code wants, for this task: Railway changes in Staging, Supabase changes in Development", with its reason. **Approve all** allows each one for the task; **Decline** allows none. Agents ask with `passport request --task "railway changes in staging"` or, over MCP, `passport_request_access` with `duration: "task"`.
 
 ### Confirm it's you
 

@@ -51,7 +51,7 @@ A resource shows up here the first time an agent works in it, not when you conne
 
 ### Keys Passport holds
 
-For an app with a CLI, the keys Passport holds for it, each with when it was added and whether it needs rotating. **Rotate** and **Remove from Passport** are in the row's menu. A computer that still holds a key reads **Still on** that computer, with the command to move it: `passport keys move`. See [Keys in Passport](/member/cli-hook#keys-in-passport).
+For an app with a CLI, the keys Passport holds for it. First, the workspace's **Production key**: the key agents get for a Production command after your rules allow it, so nobody's computer needs one. Admins add, replace, and remove it here; everyone sees who added it and how often it was used. See [Production keys](/member/cli-hook#production-keys). Then your own keys, each with when it was added and whether it needs rotating. **Rotate** and **Remove from Passport** are in the row's menu. A computer that still holds a key reads **Still on** that computer, with the command to move it: `passport keys move`. See [Keys in Passport](/member/cli-hook#keys-in-passport).
 
 ### Project scripts
 

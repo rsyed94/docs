@@ -40,9 +40,9 @@ Passport setup
   Done       ✓ GitHub connected
   Kept       – Your Railway key stays on this computer. Move it any time.
                Run: passport keys move
-  Autopilot  Production   Careful    reads run, changes ask
-             Staging      Balanced   reads and changes run, deletes ask
-             Development  Hands-off  everything except irreversible runs
+  Autopilot  Production   Ask before changes
+             Staging      Ask before deletes
+             Development  Ask only for irreversible
 
 Use the recommended setup? (n to choose step by step) [Y/n]
 
@@ -70,7 +70,7 @@ Press Enter for the recommended setup, or type `n` to go step by step: each step
 - **Keys** stay on your computer in the recommended setup. Step by step, init offers to move each CLI sign-in into Passport and sign that CLI out on your computer (`[y/N]`, so Enter keeps the key). Only the key is removed; project links and other CLI settings stay. If Passport already holds a different key for that CLI, init asks whether to replace it. The closing list names the keys that moved and where to rotate each old one. See [Keys in Passport](/member/cli-hook#keys-in-passport).
 - **Agents** adds Passport's one address, `https://passportmcp.com/mcp`, to Claude Code, Codex, Cursor, and VS Code. Each agent signs you in through your browser the first time, so no key or token goes in its settings. An agent still on your workspace's own older address (`/w/ws_…/mcp`) or on a local bridge moves to the one address. For Claude Desktop, init copies the address for you to paste in **Settings › Connectors › Add custom connector**.
 - **Guard** applies your rules to the commands agents run in your terminal, like `railway volume delete`. It can't see inside scripts, aliases, or `make` targets. See [the CLI hook](/member/cli-hook).
-- **Autopilot** sets how much agents can do on their own in Production, Staging, and Development, in every agent. In **Rules** these read **Ask before changes** (Careful), **Ask before deletes** (Balanced), and **Ask only for irreversible** (Hands-off). Step by step asks once per environment, and only where your team leaves a choice. Change them any time in [Rules](https://passportmcp.com/#rules).
+- **Autopilot** sets how much agents can do on their own in Production, Staging, and Development, in every agent. The terminal and **Rules** name them the same: **Ask before changes**, **Ask before deletes**, and **Ask only for irreversible**. Step by step asks once per environment, and only where your team leaves a choice. Change them any time in [Rules](https://passportmcp.com/#rules).
 - **Where** lists the environments Passport placed, by environment. Anything it can't place yet counts as Production until you place it in the **Environments** section of its app's page.
 
 Run init again any time. The plan shows what's already set up and changes only what's missing, including after you press Ctrl-C. When nothing is missing, it says so and asks nothing.
