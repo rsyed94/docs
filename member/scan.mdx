@@ -25,17 +25,21 @@ Passport scan: 4 keys your agents can reach
   low     Stripe test key          ~/.config/stripe/config.toml
 
 Agents on this computer: Claude Code, Cursor
+Passport can hold these for your agents: Railway, GitHub, Stripe.
+Move them into Passport: passport keys move
 Nothing left this computer.
 
 Give agents access without these keys: npx passport-bridge@latest init
 ```
 
+The CLI keys near the end are the same list `passport status` and **Work › To fix** show, with the same step: `passport keys move`. Passport can't hold npm tokens yet, so an npm token in `~/.npmrc` gets its own line telling you to run `npm logout` when you aren't publishing.
+
 The last line is the next step: [`init`](/quickstart/developer) connects those apps through Passport so your agents don't need the keys. It isn't shown when the scan finds nothing.
 
 ## What it never does
 
-- **Never shows a key.** Output names the kind of key and where it is. No part of the value is printed or saved, not even its first characters or a hash.
-- **Never sends a key.** Without a sign-in the scan reads files on your computer and nothing else, so nothing leaves it. Signed in to Passport, it also tells your workspace which MCP servers your agents use: each one's name and how it connects, never a key, path, or argument. The scan exits `5` when your workspace's policy doesn't allow one. `--check` (CI and pre-commit) never sends anything.
+- **Never shows a key.** Output names the kind of key and where it is. No part of the value is printed or saved, not even its first characters. Signed in, `--verbose` and `--json` give each CLI key a fingerprint (`fp_…`) so you can tell two keys apart: a hash keyed with a secret made on your computer that never leaves it, so nobody can test a guess against it.
+- **Never sends a key.** Without a sign-in the scan reads files on your computer and nothing else, so nothing leaves it. Signed in to Passport, it says what it sends, then sends it: your computer's name, each MCP server's name and how it connects (a host, or a command like `npx`), and how many keys each app has on your computer, so **To fix** matches. Never env values, arguments, paths, fingerprints, or keys. The scan exits `5` when your workspace's policy doesn't allow an MCP server. `--local`, and `--check` (CI and pre-commit), send nothing.
 - **Never changes anything.** It only reads, and it never follows a link out of the project folder.
 
 ## Where it looks
@@ -68,6 +72,7 @@ The same key found in several places is listed once. Add `--verbose` to see ever
 | `--path <folder>` | Scan this project's `.env` files instead of the current folder's. |
 | `--verbose` | List every place each key was found, and every file the scan couldn't read. |
 | `--check` | Check files only, not the shell environment, and exit with code 5 when any high or medium key is found. |
+| `--local` | Send nothing to Passport, even when you're signed in. |
 | `--json` | Print one JSON document instead of the report. |
 
 ## Use it in CI or a pre-commit hook
@@ -97,11 +102,22 @@ The command exits 0 when it finds nothing high or medium, and 5 when it does. Wi
   ],
   "agents": ["Claude Code", "Cursor"],
   "unreadable": 0,
-  "checked": ["agent-configs", "cli-sign-ins", "shell-environment", "env-files"]
+  "checked": ["agent-configs", "cli-sign-ins", "shell-environment", "env-files"],
+  "keys": [
+    {
+      "vendor": "railway",
+      "name": "Railway",
+      "label": "Railway account token",
+      "location": "~/.railway/config.json",
+      "holdable": true,
+      "kept": false,
+      "step": "Move it into Passport: passport keys move railway"
+    }
+  ]
 }
 ```
 
-`version` changes only when a field changes meaning. `unreadable` counts files the scan found but couldn't read.
+`keys` is the CLI keys Passport could hold (and npm's token), the list `passport status` shows; signed in, each has a `fingerprint`. `version` changes only when a field changes meaning. `unreadable` counts files the scan found but couldn't read.
 
 ## Next
 

@@ -22,13 +22,13 @@ When nothing waits on you and nothing needs fixing, Now says "Nothing needs you.
 
 Each ask is one line: who wants to do what, its environment, and how long it has waited. **Review** opens the ask:
 
-- why Passport asked, such as "Production changes ask first"
+- why Passport asked, such as "Production writes ask first"
 - the command or tool
 - the agent and the computer it runs on
 - where it lands: the app and its environment
 - what happens if it goes wrong, when Passport knows
 
-The buttons along the bottom are **More choices**, **Don't run**, **For this task** (when it's offered), and **Run once**. One line above them says what **For this task** allows, such as "For this task runs Railway changes in Staging without asking until the task ends." **More choices** holds the rest, each only when it applies: **It's Staging, always run** to place a resource nobody placed yet, **Always allow…** to save a rule, and **Stop {agent}**. **See the whole task** opens the task that asked. See [When Passport asks](/member/safety#when-passport-asks).
+The buttons along the bottom are **More choices**, **Don't run**, **For this task** (when it's offered), and **Run once**. One line above them says what **For this task** allows, such as "For this task runs Railway writes in Staging without asking until the task ends." **More choices** holds the rest, each only when it applies: **It's Staging, always run** to place a resource nobody placed yet, **Always allow…** to save a rule, and **Stop {agent}**. **See the whole task** opens the task that asked. See [When Passport asks](/member/safety#when-passport-asks).
 
 Requests from people wait here too: an **App request**, an **Access request** (such as **Full access to** an app), a **Rule request** for an exception, and calls on a **Shared account** that need an approver. **Review** shows what was asked and why, and lets you approve or decline it. A request someone else must answer reads **Waiting on someone else**.
 
@@ -52,11 +52,13 @@ Each row is one problem and opens the place that fixes it. For example:
 
 ### Running
 
-A task is running until its agent says it's done or it has been quiet for 30 minutes. Its row says **Deploying to Staging** while it holds a deploy, and "2 allowed" when you approved actions for the task. **Stop** asks first, then ends the task: the agent's next action in it is refused. The agent can start a new task any time.
+A task is running until its agent says it's done or it has been quiet for 30 minutes. Its row says **Deploying to Staging** while it holds a deploy, and "2 allowed" when you approved actions for the task. **Stop** asks first, then ends the task: Claude Code stops now; any other agent can't run anything else in it. The agent can start a new task any time.
 
 ## Tasks
 
-A **task** is one run of one agent, such as a Claude Code session. It is titled by its pull request, else its project and branch, else its agent. The title follows the newest branch it worked on, including one it pushed from another worktree. A row shows the agent, what's worth a glance (such as "2 asked · 1 blocked"), a **waiting** chip when an ask is open, and **Production** when it changed Production.
+A **task** is one run of one agent, such as a Claude Code session. It is titled by its pull request, else its project and branch, else its agent. The title follows the newest branch it worked on, including one it pushed from another worktree. Passport finds a pull request with your own GitHub connection in Passport and keeps it on the task once found, so it stays on every load; a pull request the agent opened, merged, or pushed to shows a moment after the command. Its open or merged state refreshes every few minutes. A row shows the agent, what's worth a glance (such as "2 asked · 1 blocked"), a **waiting** chip when an ask is open, and **Production** when it changed Production.
+
+A **project** is the repository (`owner/name`), so every clone and worktree of it is one project. A folder with no repository is named by the vendor project it links to, such as "Fly acme-api", else by its folder, labelled "(folder)". Each action counts for the branch and project of the folder it actually ran in, so an agent that `cd`s into another worktree feeds that branch's task. Filtered to one project, Work says where it ships: "Ships to Railway mcp-passport / production · Supabase Bridge", from the folders' links and where its commands landed. Needs Passport CLI 0.33.0 or later.
 
 One run is one task even when it used both the [CLI guard](/member/cli-hook) and app tools. Passport joins them when the agent names its session, or when the same person's same agent has exactly one guard task active in the last 30 minutes on that computer. Two runs at once, an agent token, or a different agent are never joined.
 
@@ -65,10 +67,10 @@ One run is one task even when it used both the [CLI guard](/member/cli-hook) and
 A task's page leads with its title, the agent and computer, when it ran, and a summary such as "14 actions · 1 asked". Its one action is **Stop** while it runs; afterwards it reads **Ended**. Below that:
 
 - **Facts**: the agent, the apps it used, and its pull request or branch.
-- **Allowed for this task**, while it runs: what you approved **For this task**, such as "Railway changes in Staging · By you, 10:42 AM · ends with the task". **Revoke** is in each row's menu and asks once, in place.
+- **Allowed for this task**, while it runs: what you approved **For this task**, such as "Railway writes in Staging · By you, 10:42 AM · ends with the task". **Revoke** is in each row's menu and asks once, in place.
 - **Waiting on you**: this task's open asks, with the same choices as on Now.
 - **Left running**: what this task made and didn't remove, once it ended.
-- **Changed in Production**: every change, delete, or irreversible action that ran on Production.
+- **Changed in Production**: every write, delete, or irreversible action that ran on Production.
 - **Everything it did**: every action, newest first, with **Show more**.
 
 A row also says when it waited for another agent's deploy ("Waited 40 s while Codex deployed to Staging") or didn't run because of one. Each row names the action, its app and target, its environment, and its outcome when it did more than run: **Asked**, **Approved**, **Declined**, **Blocked**, or **Failed**. A row with a backup has **Undo**. See [Backups and undo](/member/undo). **Sign-in failed** marks a command that failed because the CLI's sign-in on the computer expired, and "failed 6 times in a row" a command the agent kept retrying.
@@ -100,7 +102,7 @@ Type words to match a pull request title, branch, project, folder, command, or a
 
 | Filter | Example | Finds |
 | --- | --- | --- |
-| `project:` | `project:acme-api` | A repository, else a folder name |
+| `project:` | `project:acme/api` | A repository (`owner/name` or its name), else a folder name |
 | `pr:` | `pr:482` | A pull request by number |
 | `branch:` | `branch:fix/retry` | A branch |
 | `agent:` | `agent:claude-code` | One agent |
@@ -120,7 +122,7 @@ Before Passport decides an action, it works out what the action reaches:
 - **Repository**: `git` and `gh` reads have no environment. Work on a branch is Development. Code that reaches the default branch, such as a push to `main` or `gh pr merge`, goes where your workspace placed that repository: Production if it deploys on merge, Staging if it doesn't.
 - **Shared service**: a deploy, a database, or an app tool lands in that service's environment, such as a Railway environment or a Vercel target. See [how Passport knows](/member/safety#how-passport-knows).
 
-An action is **unplaced** when it reaches something nobody placed yet. Unplaced actions are decided as Production and counted as Production changes, marked so you can tell them apart. Place a resource once in the **Environments** section of its app's page, or from an ask with **It's Staging, always run**. See [Environments](/member/apps#environments).
+An action is **unplaced** when it reaches something nobody placed yet. Unplaced actions are decided as Production and counted as Production writes, marked so you can tell them apart. Place a resource once in the **Environments** section of its app's page, or from an ask with **It's Staging, always run**. See [Environments](/member/apps#environments).
 
 ## Exports for admins
 

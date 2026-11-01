@@ -56,7 +56,7 @@ sudo npx passport-bridge@latest init --org <key> --yes --lock [--strict]
 
 ## Invites carry the key
 
-Invite emails include one line to set up agents from a terminal, `npx passport-bridge init --org <key>`. An invitee who signs in or runs it with the invited address joins without the link. See [Invite people](/admin/people-and-teams#invite-people).
+Invite emails include one line to set up agents from a terminal, `npx passport-bridge@latest init`, which signs the invitee in. Run at a terminal without `--yes`, `init --org <key>` also signs the person in; scripts and MDM keep `--yes`. An invitee who signs in or runs it with the invited address joins without the link. See [Invite people](/admin/people-and-teams#invite-people).
 
 ## The files each agent uses
 

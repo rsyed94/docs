@@ -25,8 +25,8 @@ Variable values and table rows are encrypted and deleted after 7 days. Branches 
 
 ## How backups change decisions
 
-- **Ask only for irreversible:** a delete runs only once its backup is taken. If Passport can't take one, it asks you instead: "Couldn't take a backup first, so Passport is asking." This covers deletes an agent runs from the shell too: the ones Passport backs up on your computer run (see below), and others, such as `kubectl delete`, ask. To let those deletes run without a backup in Development, Staging, or Other apps, turn on **Run deletes Passport can't back up** under **Safeguards** in **Rules**. It's off by default, and it isn't offered for Production.
-- **Ask before changes** and **Ask before deletes:** deletes ask as before. The request says whether Passport will take a backup right before it runs.
+- **Ask if irreversible:** a delete runs only once its backup is taken. If Passport can't take one, it asks you instead: "Couldn't take a backup first, so Passport is asking." This covers deletes an agent runs from the shell too: the ones Passport backs up on your computer run (see below), and others, such as `kubectl delete`, ask. To let those deletes run without a backup in Development, Staging, or Other apps, turn on **Run deletes Passport can't back up** under **Safeguards** in **Rules**. It's off by default, and it isn't offered for Production.
+- **Ask before writes** and **Ask before deletes:** deletes ask as before. The request says whether Passport will take a backup right before it runs.
 - A specific rule that always runs an action, or **For this task**, skips the ask, not the backup: Passport still takes one first wherever it can. When no backup was possible, it runs anyway.
 
 ## Backups on your computer
@@ -42,7 +42,7 @@ Right before an agent runs one of these from the shell, the guard keeps a backup
 
 Folders a build or an install makes again need no backup: `rm -r` of `node_modules`, `dist`, `build`, `out`, `.next`, `.nuxt`, `.turbo`, `.cache`, `coverage`, `__pycache__`, `.pytest_cache`, `.gradle`, `target` (beside a `Cargo.toml` or `pom.xml`), `.venv` or `venv` (beside a requirements or `pyproject.toml` file), and `vendor` (beside a `composer.json` or `go.mod`) inside the project, or a `git clean -x` or `-X` that removes only what's inside them, runs and its row says **Regenerable, not backed up**. When git tracks any file inside such a folder, Passport treats it like any other folder and takes the usual backup. A `git clean -x` or `-X` that removes those folders and other ignored files too keeps a backup of the others only, runs, and its row says **Backed up (build folders not backed up)**; when the others are over the snapshot limit, it asks.
 
-So with **Ask only for irreversible**, these run instead of asking. Passport skips the backup, and the command asks as usual, when it can't keep an exact copy: the line uses a pattern, a variable, `~`, a redirect, or more than one command; the path is outside the project and your home folder, in agent settings, or on another disk; it's a device or a mount point; or it's large (over 10,000 files or 512 MB for the trash, 5,000 files or 256 MB for git). Only Claude Code lets Passport move files to the trash, so in Codex and Cursor `rm` asks.
+So with **Ask if irreversible**, these run instead of asking. Passport skips the backup, and the command asks as usual, when it can't keep an exact copy: the line uses a pattern, a variable, `~`, a redirect, or more than one command; the path is outside the project and your home folder, in agent settings, or on another disk; it's a device or a mount point; or it's large (over 10,000 files or 512 MB for the trash, 5,000 files or 256 MB for git). Only Claude Code lets Passport move files to the trash, so in Codex and Cursor `rm` asks.
 
 To see what was saved, and put one back:
 
@@ -74,6 +74,6 @@ passport undo --last
 passport undo <action-id> --yes
 ```
 
-Agents can call `passport_undo`. An undo from the terminal or an agent is decided like a change in that environment, so in Production it asks you first.
+Agents can call `passport_undo`. An undo from the terminal or an agent is decided like a write in that environment, so in Production it asks you first.
 
 When your team needs someone else to approve Production deletes, the undo of a Production delete goes to them too, whether you start it in Passport, the terminal, or an agent. Undo again once they approve. See [Production approvers](/admin/slack-and-approvers#production-approvers).
