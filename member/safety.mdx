@@ -5,7 +5,7 @@ description: "What your agents may do without asking, per environment, and what 
 
 Open in Passport: [Rules](https://passportmcp.com/#rules)
 
-**Rules** decides every action your agents take through Passport, instantly. It asks you only when a rule says so, and every decision names its cause, such as "Asked: Production changes ask first." Most rules come from your answers to asks, so the page is mostly a readout you correct.
+**Rules** decides every action your agents take through Passport, instantly. It asks you only when a rule says so, and every decision names its cause, such as "Asked: Production writes ask first." Most rules come from your answers to asks, so the page is mostly a readout you correct.
 
 ## How a decision is made
 
@@ -23,7 +23,7 @@ An irreversible action always asks unless a specific rule names that exact actio
 Each action is one of four classes:
 
 - **Read**: looks at something.
-- **Change**: creates or edits.
+- **Write**: creates or edits.
 - **Delete**: removes or overwrites. Rollbacks, secret changes, and schema migrations count.
 - **Irreversible**: can't be taken back even with a backup, such as sending money or email, force-pushing the default branch, or deleting a repository.
 
@@ -44,30 +44,30 @@ Passport places a command the way the vendor's own CLI picks where it goes. The 
 
 Railway, Supabase, and Neon links hold an id. Once a resource is placed, the id decides, so a renamed environment keeps its place. A name in a link file never makes anything looser: for an id nobody placed, Passport asks your connected app for its real name. If a link file can't be read, the command counts as Production. A database URL is read only for its host: a local database is Development. Passport never sends or stores the URL, user, or password.
 
-Each decision says how Passport knows: "Runs: Staging changes run on their own (linked in this folder)." Each app's page lists its resources under **Environments**, where an admin places them. When an ask waits on a resource nobody placed, it offers **It's Staging, always run** and **It's Development, always run**: choosing saves it for the workspace and runs the action once. Anyone can say Production; anything looser needs an admin. A change applies to new actions only. Run `passport env` in a folder to see what Passport reads there.
+Each decision says how Passport knows: "Runs: Staging writes run on their own (linked in this folder)." Each app's page lists its resources under **Environments**, where an admin places them. When an ask waits on a resource nobody placed, it offers **It's Staging, always run** and **It's Development, always run**: choosing saves it for the workspace and runs the action once. Anyone can say Production; anything looser needs an admin. A change applies to new actions only. Run `passport env` in a folder to see what Passport reads there.
 
 ## By environment
 
 The table at the top of **Rules** has one row per environment and one choice per row:
 
-| Choice | Reads | Changes | Deletes | Irreversible |
+| Choice | Reads | Writes | Deletes | Irreversible |
 | --- | --- | --- | --- | --- |
-| **Ask before changes** | Run | Ask | Ask | Ask |
+| **Ask before writes** | Run | Ask | Ask | Ask |
 | **Ask before deletes** | Run | Run | Ask | Ask |
-| **Ask only for irreversible** | Run | Run | Run | Ask |
+| **Ask if irreversible** | Run | Run | Run | Ask |
 
-The rows are **Production**, **Staging**, **Development**, **Not placed**, and **Other apps** when you use them. **Not placed** can't be set: anything Passport can't place counts as Production. The defaults are **Production: Ask before changes**, **Staging: Ask before deletes**, **Development: Ask only for irreversible**, and **Other apps: Ask before deletes**. Each change saves as you make it.
+The rows are **Production**, **Staging**, **Development**, **Not placed**, and **Other apps** when you use them. **Not placed** can't be set: anything Passport can't place counts as Production. The defaults are **Production: Ask before writes**, **Staging: Ask before deletes**, **Development: Ask if irreversible**, and **Other apps: Ask before deletes**. Each change saves as you make it.
 
-Your team may require a minimum for an environment, such as "Your team requires at least “Ask before changes”." Looser choices are off the table there; you can always pick something stricter.
+Your team may require a minimum for an environment, such as "Your team requires at least “Ask before writes”." Looser choices are off the table there; you can always pick something stricter.
 
-With **Ask only for irreversible**, a delete runs only when Passport can take a backup first; otherwise it asks: "Couldn't take a backup first, so Passport is asking." From the shell, the guard backs up everyday deletes on your computer first, such as `rm` in the project (Claude Code), `git reset --hard`, `git clean`, dropped stashes, and branch deletes, so those run. Deleting folders a build makes again, such as `node_modules`, `dist`, or `.next`, runs with nothing to back up. See [Backups and undo](/member/undo).
+With **Ask if irreversible**, a delete runs only when Passport can take a backup first; otherwise it asks: "Couldn't take a backup first, so Passport is asking." From the shell, the guard backs up everyday deletes on your computer first, such as `rm` in the project (Claude Code), `git reset --hard`, `git clean`, dropped stashes, and branch deletes, so those run. Deleting folders a build makes again, such as `node_modules`, `dist`, or `.next`, runs with nothing to back up. See [Backups and undo](/member/undo).
 
 Below the table, one line says who approves Production asks, such as "Production deletes need someone else to approve: Maya." It shows once your workspace has a second person. See [Production approvers](/admin/slack-and-approvers#production-approvers).
 
 ## Safeguards
 
-- **When Passport can't be reached**: what the CLI guard does when it can't reach Passport. **Ask** (the default), **Block**, or **Run**. An unattended agent or Codex can't ask, so Ask blocks there. Run never applies to irreversible actions or to anything your team requires. See [When Passport can't be reached](/member/cli-hook#when-passport-cant-be-reached).
-- **Run deletes Passport can't back up**: shown for rows on **Ask only for irreversible** other than Production. On, those deletes run without a backup; off, they ask first.
+- **When Passport can't be reached**: what the CLI guard does when it can't reach Passport, outside Production. **Ask** (the default), **Block**, or **Run**. Production writes always block until Passport is back. An unattended agent or Codex can't ask, so Ask blocks there. Run never applies to irreversible actions or to anything your team requires. See [When Passport can't be reached](/member/cli-hook#when-passport-cant-be-reached).
+- **Run deletes Passport can't back up**: shown for rows on **Ask if irreversible** other than Production. On, those deletes run without a backup; off, they ask first.
 - **Stop retry loops**: on by default. When the same command fails 5 times in a row in one task, the guard asks before it runs again; with nobody there to ask (and on Codex), it blocks it. From the 3rd failure the agent is told to stop retrying and read the error.
 
 ## Specific rules
@@ -97,7 +97,7 @@ Owners switch **Rules** to **Everyone** for what binds the whole workspace:
 When an action needs you, Passport shows one ask, the same in Passport, Slack, a notification, and your agent: who wants to do what ("Claude Code wants to deploy acme-worker"), where it lands, why Passport asked, what happens if it goes wrong (such as "Deploys can be rolled back in Railway." or "This can't be undone."), and the command. Your choices, each only when it applies:
 
 - **Run once**: this action, this time.
-- **For this task**, named by what it allows, such as **Railway changes in Staging for this task**: every action of that kind, on that app, in that environment, runs without asking until the task ends (its agent says it's done, it's quiet for 30 minutes, you stop it, or 12 hours pass). Never offered for an irreversible action or a Production delete. The task's page lists what it allows, and **Revoke** takes effect on the agent's next command.
+- **For this task**, named by what it allows, such as **Railway writes in Staging for this task**: every action of that kind, on that app, in that environment, runs without asking until the task ends (its agent says it's done, it's quiet for 30 minutes, you stop it, or 12 hours pass). Never offered for an irreversible action or a Production delete. The task's page lists what it allows, and **Revoke** takes effect on the agent's next command.
 - **It's Staging, always run** or **It's Development, always run**: places a resource nobody placed, for the whole workspace, and runs this action.
 - **Always allow…**: saves a specific rule.
 - **Don't run**, with an optional note the agent receives.
@@ -105,13 +105,13 @@ When an action needs you, Passport shows one ask, the same in Passport, Slack, a
 
 In Passport, the buttons are **Don't run**, **For this task** (when it's offered, with one line above them saying what it allows), and **Run once**; the rest are under **More choices**. Many agents show the question right where you're working; it also waits in **Waiting on you** on [Work](https://passportmcp.com/#work). With notifications on, you can choose **Run once**, **For this task**, or **Don't run** from the notification, and opening it shows every choice.
 
-An agent can also ask up front for what its plan needs: "Claude Code wants, for this task: Railway changes in Staging, Supabase changes in Development", with its reason. **Approve all** allows each one for the task; **Decline** allows none. Agents ask with `passport request --task "railway changes in staging"` or, over MCP, `passport_request_access` with `duration: "task"`.
+An agent can also ask up front for what its plan needs: "Claude Code wants, for this task: Railway writes in Staging, Supabase writes in Development", with its reason. **Approve all** allows each one for the task; **Decline** allows none. Agents ask with `passport request --task "railway writes in staging"` or, over MCP, `passport_request_access` with `duration: "task"`.
 
 ### Confirm it's you
 
-Approving a Production change or delete, or anything irreversible, takes a fresh check that it's you: Passport opens **Confirm it's you**, and you use your passkey or choose **Email me a code instead**. You add passkeys under **Security** in [Settings › Account](https://passportmcp.com/#settings/account). These asks are approved in Passport only: Slack offers **Review in Passport**. Your own agent's prompt can still approve a Production change you asked for at your keyboard, but never an irreversible action. Declining never needs a check.
+Approving a Production write or delete, or anything irreversible, takes a fresh check that it's you: Passport opens **Confirm it's you**, and you use your passkey or choose **Email me a code instead**. You add passkeys under **Security** in [Settings › Account](https://passportmcp.com/#settings/account). These asks are approved in Passport only: Slack offers **Review in Passport**. Your own agent's prompt can still approve a Production write you asked for at your keyboard, but never an irreversible action. Declining never needs a check.
 
-Saving a rule change that lets agents make Production changes with less checking takes the same check, such as a looser Production choice, a lower team minimum, removing a block, or placing a resource out of Production. Changes that tighten, or touch only Staging, Development, or reads, save as they are. The CLI and API can't show the check, so they're refused with a link to change it in Passport.
+Saving a rule change that lets agents make Production writes with less checking takes the same check, such as a looser Production choice, a lower team minimum, removing a block, or placing a resource out of Production. Changes that tighten, or touch only Staging, Development, or reads, save as they are. The CLI and API can't show the check, so they're refused with a link to change it in Passport.
 
 ### How long an ask waits
 
