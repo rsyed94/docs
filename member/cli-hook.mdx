@@ -147,7 +147,7 @@ Your agent's own work in the project folder counts as **Development**, so with D
 | `rm -rf ~/`, `rm -rf /`, deleting the whole project | Irreversible, always asks                                      |
 | `sudo …`                                            | Always asks                                                    |
 
-Symlinks count where they point, `cd` inside a command is followed, and writing to your keys or shell startup files counts as a delete. Try any command with `passport rules test "npm test"`.
+Symlinks count where they point, `cd` inside a command is followed, and writing to your keys or shell startup files counts as a delete. Try any command with `passport rules test "npm test"`. Signed out, it answers with Passport's recommended rules, decided on your computer with nothing sent, so you can see what Passport would do before you sign up.
 
 Code that reaches a repository's default branch only reaches people if that repository deploys when you merge. The first push to a repository's default branch shows it in the **Environments** section of its host's app page, such as [GitHub's](https://passportmcp.com/#apps/github?section=environments), treated as Production until you choose: keep **Production** for a repository that deploys on merge, or choose **Staging** for one that doesn't. A force push to it asks either way, because Staging asks before deletes.
 
@@ -211,6 +211,8 @@ Each key lives on its app's page, in its **Keys** section (`#apps/<app>?section=
 A production key belongs to your workspace, not a person. Passport holds it and hands it to an agent for one command that lands in Production, after your rules allow that command, so nobody's computer needs it. A teammate with no key of their own can ship to Production once someone approves; someone who leaves takes nothing with them.
 
 Admins add one on the app's page, in **Keys Passport holds**: **Production key** › **Add key**. Make a key at the provider that reaches Production, paste it, and Passport checks it with the provider before saving it. **Replace** and **Remove** are in the row's menu. Everyone sees that it's there, who added it, and how often agents used it this week; nobody sees the value. Every app with a CLI can have one except GitHub, whose workspace key is the GitHub App.
+
+Use the narrowest key that still reaches Production: a Railway project token for the production environment, a Fly.io deploy token, a Stripe restricted key, a GitLab project or group token. The dialog says what each provider's broad keys reach and, for Railway, links to your project's tokens page when Passport knows the project. Where the provider's check can tell, Passport flags a broad key on its row, for example "Account token: reaches every project · Replace with a project token". It does this for Railway account tokens, Stripe secret keys, AWS root user keys, and GitLab personal tokens; other providers don't say, so Passport doesn't guess.
 
 `passport exec` uses it only for a command Passport has placed in Production: a flag, a placed link, or a resource's name. A command in a resource nobody placed yet uses your own key, and if you have none it says `Passport isn't sure qa is Production, so it didn't use the Railway production key. Place it in Apps › Railway.` Staging and Development always use your own key. A Railway project token works in one environment, so Passport uses it only for commands that land there. A Stripe test-mode key is refused: Production takes a live-mode key.
 
@@ -319,7 +321,7 @@ Each line is decided like a command you typed, and the strictest one wins. `./de
 
 A script the guard can follow to the end, every line understood, is **checked**. One it can't (a line with a variable it can't resolve, a `case`, a program it doesn't know, more than 256 KB, more than 30 ms of reading) is **Partly checked**: risky lines it did recognize still ask or block, but it never runs on Passport's say-so. In a command with several parts, each part is checked on its own, such as "1 checked · 1 partly checked". After the command, the hook reads the script again; if it changed in between, the row says **Changed after the check**.
 
-Python and JavaScript files aren't read yet. Tell Passport what one does instead (below).
+Python and JavaScript files aren't read yet. Tell Passport what one does instead (below). Everyday tools are read for what they are: `tsc`, `vite build`, `vitest`, `jest`, `node --test`, `playwright test`, `eslint`, and `prettier`, with or without `npx`; a coverage tool like `c8` or `nyc` by the command it runs; and a test file run directly, such as `node test/cart.test.mjs`.
 
 ### Tell Passport what a script does
 
@@ -329,6 +331,8 @@ Tell Passport with `passport actions add`:
 passport actions add scripts/deploy.py --environment production --class write
 passport actions add make seed --environment staging --class delete
 ```
+
+Most unread scripts are local work: a build or a code generator. To teach those in one go, run `passport actions add --local` in the project, or use **Teach all local scripts** on Work's Not checked list. Both show the list first and save only what you confirm, as a Write in Development. A script whose name sounds live (deploy, release, migrate…) or that runs a vendor CLI is left out, to teach on its own.
 
 Passport then checks that script as a Write in Production (or whatever you said), with your rules deciding as for any command. A project script never runs on its own say-so. You can say Production for a write, delete, or irreversible script; anything looser waits for an admin in the **Project scripts** section of the repository host's app page (GitHub's for a repository on GitHub, grouped by repository), where **Add script** adds more. When the script changes, the row there says **Changed since set** and the guard reads it again until someone sets it. Inline code and programs Passport doesn't read yet have nothing stable to describe.
 

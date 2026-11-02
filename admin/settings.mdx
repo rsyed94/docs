@@ -14,13 +14,24 @@ What agents may do lives in [Rules](/member/safety), not here. Keys Passport hol
 - Your name, role, and workspace.
 - **Theme**: **Light**, **Dark**, or **System**.
 - **Security**: your passkeys, which Passport uses to [confirm it's you](/member/safety#confirm-its-you). Without one, Passport emails you a code.
-- **Signed-in browsers**: every browser signed in as you, each with **Sign out**, and **Sign out everywhere else**. Signing out never stops your agents.
+- **Signed-in browsers**: every browser signed in as you, each with **Sign out**, and **Sign out everywhere else**. A browser you don't use for 30 days is signed out on its own. Signing out never stops your agents, and the 30 days don't apply to the CLI or agent tokens.
 
 ## Notifications
 
-- **Approval alerts in this browser**: a notification for each ask that waits on you. Allow notifications when your browser asks, then use **Send test** to check it reaches this device. Each browser needs its own permission. On iPhone or iPad, add Passport to your Home Screen, open it from there, and turn alerts on there.
-- **Slack**: an admin adds the Passport app with **Add to Slack**. After that, asks arrive as direct messages, and each person can turn Slack messages off for themselves. Admins can also pick a **Production channel** where Production asks are posted. See [Approvals in Slack](/admin/slack-and-approvers#approvals-in-slack).
+The top line says where asks waiting on you reach you right now, such as "Asks reach you by browser alert and email." When nothing does, it says so and why, for example "Browser alerts are off and Slack isn't connected, so asks wait until you open Passport."
+
+**Asks waiting on you**, when an agent or a teammate needs your answer:
+
+- **Alerts in this browser**: a notification for each ask. Allow notifications when your browser asks, then use **Send test** to check it reaches this device. Each browser needs its own permission. On iPhone or iPad, add Passport to your Home Screen, open it from there, and turn alerts on there.
+- **Slack**: where the Passport Slack app is available, an admin adds it with **Add to Slack** on this page. After that, asks arrive as direct messages, and each person can turn Slack messages off for themselves. Admins can also pick a **Production channel** where Production asks are posted. Slack isn't turned on for hosted workspaces yet. There, the row says so, and asks reach you as browser alerts and by email. See [Approvals in Slack](/admin/slack-and-approvers#approvals-in-slack).
+- **Email**: **When nothing else reaches me** (the default: only while no browser alert or Slack message reaches you), **Every ask**, or **Never**. Each email links to the ask in Passport.
+
+**Updates by email**:
+
+- **Answers to your requests**: an email when an admin approves or declines an exception or app you asked for.
 - **Weekly summary email**: every Monday, what Passport handled for you, what you approved, and what's new. Admins get the workspace version.
+
+Without email on your Passport, the email choices don't appear.
 
 A notification carries a generic reminder, never the action's arguments or account details. Open it to review the ask in Passport. If it expired or someone already answered, Passport shows that instead of taking a second answer.
 
@@ -40,4 +51,4 @@ For admins:
 
 ## Billing
 
-For admins: your plan, people and automation counts, and the trial if one is running. Upgrade through Stripe Checkout, or change plans and cancel through the Stripe customer portal. A self-hosted Passport has no Billing. See [Plans and billing](/billing).
+For admins: one line weighing value against cost, such as "Last 30 days: About 38 hours saved, plus $47 a month · Passport costs $60 a month". The estimate is the same [value receipt](/member/work) Work shows, over 30 days for the whole workspace; hover it for how it was counted. The cost is the plan's list price for the people it bills. Then your plan, people and automation counts, and the trial if one is running. Upgrade through Stripe Checkout, or change plans and cancel through the Stripe customer portal. A self-hosted Passport has no Billing. See [Plans and billing](/billing).
