@@ -70,6 +70,10 @@ Below the table, one line says who approves Production asks, such as "Production
 - **Run deletes Passport can't back up**: shown for rows on **Ask if irreversible** other than Production. On, those deletes run without a backup; off, they ask first.
 - **Stop retry loops**: on by default. When the same command fails 5 times in a row in one task, the guard asks before it runs again; with nobody there to ask (and on Codex), it blocks it. From the 3rd failure the agent is told to stop retrying and read the error.
 
+## Suggested
+
+When you approve the same read or write in the same environment three times in two weeks, and never declined it there, **Suggested** offers to stop asking: **Always run** adds a rule just for you, in that environment only; **Not now** waits for three more approvals. Passport never suggests this for a delete or an irreversible action, in any environment, and never where a team minimum keeps it asking. The weekly summary and the CLI link here.
+
 ## Specific rules
 
 A specific rule runs, asks about, or never runs one action, an app, or a class of actions, in one environment or all of them. Most come from answering an ask with **Always allow…**. Each row says what it does, such as "Run railway redeploy", its environment, where it came from ("You, from an answer · Oct 25"), who it covers when that isn't just you, and **Until** a date when it expires. **New** marks rules learned this week, listed first. **Remove** asks first.
@@ -94,7 +98,7 @@ Owners switch **Rules** to **Everyone** for what binds the whole workspace:
 
 ## When Passport asks
 
-When an action needs you, Passport shows one ask, the same in Passport, Slack, a notification, and your agent: who wants to do what ("Claude Code wants to deploy acme-worker"), where it lands, why Passport asked, what happens if it goes wrong (such as "Deploys can be rolled back in Railway." or "This can't be undone."), and the command. Your choices, each only when it applies:
+When an action needs you, Passport shows one ask, the same in Passport, a notification, Slack (where your workspace has it), and your agent: who wants to do what ("Claude Code wants to deploy acme-worker"), where it lands, why Passport asked, what happens if it goes wrong (such as "Deploys can be rolled back in Railway." or "This can't be undone."), and the command. Your choices, each only when it applies:
 
 - **Run once**: this action, this time.
 - **For this task**, named by what it allows, such as **Railway writes in Staging for this task**: every action of that kind, on that app, in that environment, runs without asking until the task ends (its agent says it's done, it's quiet for 30 minutes, you stop it, or 12 hours pass). Never offered for an irreversible action or a Production delete. The task's page lists what it allows, and **Revoke** takes effect on the agent's next command.
@@ -109,7 +113,7 @@ An agent can also ask up front for what its plan needs: "Claude Code wants, for 
 
 ### Confirm it's you
 
-Approving a Production write or delete, or anything irreversible, takes a fresh check that it's you: Passport opens **Confirm it's you**, and you use your passkey or choose **Email me a code instead**. You add passkeys under **Security** in [Settings › Account](https://passportmcp.com/#settings/account). These asks are approved in Passport only: Slack offers **Review in Passport**. Your own agent's prompt can still approve a Production write you asked for at your keyboard, but never an irreversible action. Declining never needs a check.
+Approving a Production write or delete, or anything irreversible, takes a fresh check that it's you: Passport opens **Confirm it's you**, and you use your passkey or choose **Email me a code instead**. You add passkeys under **Security** in [Settings › Account](https://passportmcp.com/#settings/account). These asks are approved in Passport only: notifications, emails, and Slack (where your workspace has it) open Passport with **Review in Passport**. Your own agent's prompt can still approve a Production write you asked for at your keyboard, but never an irreversible action. Declining never needs a check.
 
 Saving a rule change that lets agents make Production writes with less checking takes the same check, such as a looser Production choice, a lower team minimum, removing a block, or placing a resource out of Production. Changes that tighten, or touch only Staging, Development, or reads, save as they are. The CLI and API can't show the check, so they're refused with a link to change it in Passport.
 

@@ -1,6 +1,6 @@
 ---
 title: "Slack, approvers, and exceptions"
-description: "Answer asks in Slack, choose who approves Production, require a second person, and lift a rule for one person."
+description: "Answer asks in Slack where it's available, choose who approves Production, require a second person, and lift a rule for one person."
 ---
 
 Open in Passport: [Rules](https://passportmcp.com/#rules?scope=everyone)
@@ -9,14 +9,16 @@ Passport asks a person only when a rule says so. These settings decide who that 
 
 ## Approvals in Slack
 
-An admin adds the Passport app to Slack with **Add to Slack** under **Slack** in [Settings › Notifications](https://passportmcp.com/#settings/notifications). After that:
+Slack works where the Passport Slack app is turned on. It isn't turned on for hosted workspaces yet. On a self-hosted Passport, whoever runs it sets up the app (`SLACK_CLIENT_ID`, `SLACK_CLIENT_SECRET`, and `SLACK_SIGNING_SECRET`). Where Slack isn't available, the **Slack** row in [Settings › Notifications](https://passportmcp.com/#settings/notifications) says so, and asks reach people as browser alerts and by email instead. See [Notifications](/admin/settings#notifications).
+
+Where it's available, an admin adds the Passport app to Slack with **Add to Slack** under **Slack** in Settings › Notifications. Members see that their admin hasn't added it yet. After an admin adds it:
 
 - Each ask arrives as a direct message to the person who can answer it, as the same ask Passport shows: who wants to do what, its environment, the agent, the command with secrets removed, why Passport asked, and what happens if it goes wrong.
 - **Run once**, **For this task** (named by what it allows, such as "Railway writes in Staging for this task"), **It's Staging, always run** (when it applies), and **Don't run** work right in Slack. **Stop {agent}** and **Always allow…** (which opens Passport) are in the message's **⋯** menu. A Production write or delete, or anything irreversible, shows **Review in Passport** instead of Run once, because approving it takes a passkey check ([Confirm it's you](/member/safety#confirm-its-you)).
 - Admins can also post Production asks to a **Production channel**. Anyone can see them there; only people allowed to approve can answer.
 - When an ask is answered anywhere, every Slack message for it updates in place, such as "Approved once by Maya in Slack".
 
-Passport finds each person in Slack by their Passport email. If Slack has no account with that email, Settings says so and asks still arrive in Passport. Each person can turn Slack messages off for themselves. If the app is removed from Slack, Settings says so and an admin can reconnect it. A self-hosted Passport needs the Slack app configured by whoever runs it.
+Passport finds each person in Slack by their Passport email. If Slack has no account with that email, Settings says so, and asks reach that person as browser alerts and by email. Each person can turn Slack messages off for themselves. If the app is removed from Slack, Settings says so and an admin can reconnect it.
 
 ## Production approvers
 
@@ -28,7 +30,7 @@ Owners switch Rules to **Everyone** and choose **Change** to set:
 - **Which asks**: **Deletes and irreversible actions**, or **Writes, deletes, and irreversible actions**.
 - **Someone other than the requester must approve**.
 
-Routed people get a notification and, with Slack connected, a direct message. The person whose agent asked sees who it's waiting on, like "Waiting on Maya". Nobody is routed their own ask. Teams that had their own routes keep them, and the line says how many. If nobody answers in time, the ask also goes to every admin.
+Routed people get the ask wherever it reaches them: a browser alert, a Slack direct message where Slack is connected, or an email when nothing else reaches them (see [Notifications](/admin/settings#notifications)). The person whose agent asked sees who it's waiting on, like "Waiting on Maya". Nobody is routed their own ask. Teams that had their own routes keep them, and the line says how many. If nobody answers in time, the ask also goes to every admin.
 
 ### Team review of Production asks
 
@@ -48,8 +50,8 @@ With **Someone other than the requester must approve** on:
 
 When a team or workspace rule blocks something a member needs, their agent can ask to lift it, with a one-line reason: for that one tool, for an hour or a day. An irreversible action can only be asked for as "ask first", never "run". The request is filed for the member, names the agent that wrote it, and waits for owners under **Waiting on you** on [Work](/member/work) as a **Rule request**.
 
-**Review** shows the request in one sentence, the reason, what it lifts, and where. **Approve** (optionally changing how long) adds a rule just for that person that lifts the one rule for that one action. **Decline** takes an optional note. Team minimums and Production approvers still apply. The member gets an email either way.
+**Review** shows the request in one sentence, the reason, what it lifts, and where. **Approve** (optionally changing how long) adds a rule just for that person that lifts the one rule for that one action. **Decline** takes an optional note. Team minimums and Production approvers still apply. The member gets an email either way, unless they turned off **Answers to your requests** in [Settings › Notifications](https://passportmcp.com/#settings/notifications).
 
 ## Weekly summary
 
-Every Monday, people who had agent activity get a short email: what Passport handled for them, what they approved, and what's new. Admins get the workspace version. Turn it off with **Weekly summary email** in [Settings › Notifications](https://passportmcp.com/#settings/notifications).
+Every Monday, people who had agent activity get a short email. One line says what Passport saved them, then **Saved you**, then **Needs attention**: how often their agents asked first, split into approved, declined, still waiting, and expired (the parts add up), what waits on Work now, environments to place, and suggestions to answer in Rules. Admins also get **Workspace** when someone else worked that week. Passport never suggests running a delete or an irreversible action without asking, in any environment. Turn it off with **Weekly summary email** in [Settings › Notifications](https://passportmcp.com/#settings/notifications).

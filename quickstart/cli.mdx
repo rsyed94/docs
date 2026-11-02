@@ -13,7 +13,7 @@ Prefer the normal **Add agent** setup for apps with a GUI (Cursor chat, VS Code 
 
 ## Install and sign in
 
-Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer.
+Works on Windows, Linux, and macOS. Needs Node.js 20 or newer.
 
 <Tabs>
   <Tab title="Windows (PowerShell)">
@@ -122,7 +122,7 @@ Works on Windows, Linux, and macOS. Needs Node.js 22.23.2 or newer.
 | `passport init [--dry-run]`             | Set up this computer: one plan first, then one question. `--dry-run` shows the plan and changes nothing.                                                   |
 | `passport status`                       | Start here. Your setup on one screen: you, your workspace, and this computer; each agent's guard and its fix; Autopilot; apps; keys, and any also on this computer. |
 | `passport wait <approval-id>`           | Wait for a person to decide an approval. While it is still waiting, prints the link and, on a terminal, a live countdown.                                  |
-| `passport tasks [--status <s>]`         | Your agents' recent tasks and what Passport decided, running ones first. See [Work](/member/work#from-the-terminal).                               |
+| `passport changes [--history]`          | Work in your terminal: what needs you, what's working, waiting, and done today. See [Work](/member/work#from-the-terminal).                         |
 | `passport exec -- <cli> [args…]`        | Run a vendor CLI with a key Passport holds. `--ask-again` asks again after a recent decline.                                                               |
 | `passport doctor`                       | When a command fails: check Node, how your sign-in is stored, the server, your sign-in, and that this CLI and the server match. Never shows a key.          |
 | `passport search [query]`               | Find tools you can run. With no words, lists every tool you can run, by app.                                                                               |
@@ -175,7 +175,9 @@ passport doctor --json
 fields. `passport ready --json` runs the local, authentication, server, and
 exact CLI-protocol preflight and returns `ready`, `ok`, auth/profile context,
 `server`, and `checks`; gate on its `ready` value and exit code rather than
-parsing human output. Not signed in, `doctor` and `ready` exit 2.
+parsing human output. Not signed in, `doctor` and `ready` exit 2. On a computer
+with nothing set up yet, `status`, `doctor`, and `ready` point at `passport init`
+instead of `passport login`: it signs you in and turns on the guard.
 
 Install generated completion in the standard location for your shell:
 

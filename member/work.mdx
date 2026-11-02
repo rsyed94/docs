@@ -32,7 +32,7 @@ The buttons along the bottom are **More choices**, **Don't run**, **For this tas
 
 Requests from people wait here too: an **App request**, an **Access request** (such as **Full access to** an app), a **Rule request** for an exception, and calls on a **Shared account** that need an approver. **Review** shows what was asked and why, and lets you approve or decline it. A request someone else must answer reads **Waiting on someone else**.
 
-A link from your agent's prompt, Slack, or a notification opens Work with that ask first.
+A link from your agent's prompt, a notification, an email, or Slack opens Work with that ask first.
 
 When an agent's command fails because a CLI's sign-in on its computer expired, and Passport doesn't hold your key for that CLI, Waiting on you shows it: "Claude Code can't sign in to Railway", naming the computer when Passport knows it. **Add key** opens the app's page to add your key. Passport checks it with the app first and keeps it only if the app accepts it. The row goes once it's there; agents then run that CLI through Passport and don't need the sign-in. You also get a notification, at most once every six hours per CLI. When Passport already holds your key, the agent is told to run the command through Passport and nothing waits on you.
 
@@ -77,7 +77,7 @@ A row also says when it waited for another agent's deploy ("Waited 40 s while Co
 
 ### Links to the real thing
 
-A row links to what the action made or touched in the vendor's own app, such as **PR #894**, **Run 41210596791**, **Deployment**, or **Supabase**. Links open in a new tab, and a folded row links its newest action's. They come from what the CLI printed (read on your computer, including when Passport runs it with your key through `passport exec`; in a terminal of your own, exec leaves the output alone and only what your computer knows applies), from what your computer already knows (a `gh pr merge 12` in a GitHub checkout, the folder's linked Supabase or Railway project), and from an app tool's result, such as GitHub's `create_pull_request`. A `git push` links its pull request once Passport knows it, else the compare page. Only URLs that match Passport's list of vendor pages (GitHub, Railway, Vercel, Supabase, Sentry, Neon, Fly, Cloudflare, Stripe, and the AWS console) leave your computer, and never one with a token or a signature in it. Nothing else the command printed does. `passport changes` and `passport tasks <id>` print the first link under each row. It needs Passport CLI 0.32.0 or later.
+A row links to what the action made or touched in the vendor's own app, such as **PR #894**, **Run 41210596791**, **Deployment**, or **Supabase**. Links open in a new tab, and a folded row links its newest action's. They come from what the CLI printed (read on your computer, including when Passport runs it with your key through `passport exec`; in a terminal of your own, exec leaves the output alone and only what your computer knows applies), from what your computer already knows (a `gh pr merge 12` in a GitHub checkout, the folder's linked Supabase or Railway project), and from an app tool's result, such as GitHub's `create_pull_request`. A `git push` links its pull request once Passport knows it, else the compare page. Only URLs that match Passport's list of vendor pages (GitHub, Railway, Vercel, Supabase, Sentry, Neon, Fly, Cloudflare, Stripe, and the AWS console) leave your computer, and never one with a token or a signature in it. Nothing else the command printed does. `passport tasks <id>` prints the first link under each row. It needs Passport CLI 0.32.0 or later.
 
 ### Watch after a deploy
 
@@ -136,8 +136,8 @@ Enterprise can stream both records to a SIEM or an OpenTelemetry collector. See 
 
 ## From the terminal
 
-`passport tasks` lists your agents' recent tasks: status, agent, folder, when it started, and what Passport decided, such as `42 ran · 2 asked · 1 blocked`. Add `--status running` to narrow it and `--json` for scripts. `passport changes` lists what your agents changed in Production, newest first, over the last 7 days unless you add `--since 1h`. See [Passport CLI](/quickstart/cli#json-and-exit-code-contract).
+`passport changes` is Work in your terminal, with the same groups, counts, and words: **Needs attention**, **Working now**, **Waiting**, and **Done today**. Add `--history`, or a filter such as `--since 7d`, `--project acme-api`, or `--env production`, to list every change by day, as History does. `passport tasks` prints the same list, and `passport tasks <id>` opens one task. Add `--json` for scripts. See [Passport CLI](/quickstart/cli#json-and-exit-code-contract).
 
 ## Get notified
 
-Turn on **Approval alerts in this browser** in [Settings › Notifications](https://passportmcp.com/#settings/notifications) to get a notification for each ask that waits on you. Admins can also send asks to Slack. See [Notifications](/admin/settings#notifications) and [Approvals in Slack](/admin/slack-and-approvers#approvals-in-slack).
+[Settings › Notifications](https://passportmcp.com/#settings/notifications) says where asks waiting on you reach you. Turn on **Alerts in this browser** to get a notification for each one. When no browser alert or Slack message reaches you, Passport emails the ask instead, unless you chose otherwise. Where the Passport Slack app is available (not yet on hosted workspaces), admins can also send asks to Slack. See [Notifications](/admin/settings#notifications) and [Approvals in Slack](/admin/slack-and-approvers#approvals-in-slack).
