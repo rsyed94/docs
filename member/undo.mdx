@@ -19,7 +19,7 @@ Passport only backs up actions it can see: app tools, the production toolkit, an
 | Supabase | SQL that deletes, updates, or empties up to 5 tables of up to 1,000 rows, and pausing a project | A copy of those tables' rows, or the project's state | Restores the rows in one transaction, or restores the project |
 | Neon | SQL that changes data or schema | A branch made from the target branch right before the SQL ran | Restores the branch from it and keeps the state it replaced as a branch for 7 days |
 
-Not backed up: Railway volume, service, and environment deletes (Railway removes a volume's backups with it and can't restore the others), Neon branch deletes and resets, Supabase branch deletes and resets, and schema changes on Supabase. Irreversible actions never get a backup, because they can't be taken back even with one.
+Not backed up: Railway volume, service, and environment deletes (Railway removes a volume's backups with it and can't restore the others), Neon branch deletes and resets, Supabase branch deletes and resets, and schema changes on Supabase. Irreversible actions never get a backup, because they can't be taken back even with one. With no backup to fall back on, these ask first in Production on every preset, unless you wrote a specific rule that always runs them or chose **For this task**.
 
 Variable values and table rows are encrypted and deleted after 7 days. Branches Passport made on Neon are removed after 7 days (Neon also expires them on its own), or as soon as you undo. Neon won't delete or reset a branch that has backups under it, so when you delete or reset one, Passport removes its own backups of that branch first and the action's row says how many.
 
