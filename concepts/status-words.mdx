@@ -3,7 +3,7 @@ title: "Status words"
 description: "What each status word in Passport means, in one sentence."
 ---
 
-Open in Passport: [Work](https://passportmcp.com/#work)
+Open in Passport: [Activity](https://passportmcp.com/#activity)
 
 Passport uses one word for each status, and a word means the same thing on every page, in the CLI, and in these docs. Hover a status in the app to read its definition.
 
@@ -32,6 +32,7 @@ Every count names its window beside it, such as **Last 7 days**. A **Production 
 | **Ask before writes** | Reads run on their own, and writes and deletes ask first. |
 | **Ask before deletes** | Reads and writes run on their own, and deletes ask first. |
 | **Ask if irreversible** | Everything runs on its own except irreversible actions, which always ask. |
+| **Full autopilot** | Everything runs on its own, irreversible actions included, and nothing asks. |
 | **Observe** | Data checks record what they match but let the action run. |
 | **Enforce** | Data checks block high-confidence threats and record the rest. |
 | **Flagged** | A data check matched this action and recorded it without blocking it. |

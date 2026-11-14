@@ -1,6 +1,6 @@
 ---
 title: "Troubleshooting"
-description: "Fix incomplete sign-in, missing apps, tools that show twice, moved pages, and common CLI errors."
+description: "Fix incomplete sign-in, missing apps, tools that show twice, and common CLI errors."
 ---
 
 Open in Passport: [Agents](https://passportmcp.com/#agents)
@@ -17,13 +17,12 @@ Passport marks an agent **Active** only after it sees a real request. Setting it
 ## An agent has a generic or unfamiliar name
 
 Dynamic agents can report their own MCP name, title, and version. Passport
-shows that context in **Agents** and on **Work**; it does not use the claimed
-name to grant access. If the agent supplies no usable identity or connection
+shows that context in **Agents**; it does not use the claimed name to grant
+access. If the agent supplies no usable identity or connection
 label, Passport shows **agent**.
 
 Ask the agent to list Passport tools, then refresh **Agents**. Review the
-agent's owner and its actions (**Work › History › Actions**) before
-disconnecting it. See
+agent's owner and its actions before disconnecting it. See
 [agent names](/member/agents#agent-names).
 
 ## An app is missing from an agent
@@ -72,7 +71,7 @@ You can also open **Agents** and choose **Sign in again** on the **Claude Deskto
 
 ## An agent says an app needs sign-in
 
-This means one app's sign-in expired, not the agent's Passport sign-in. It also shows under **To fix** on [Work](/member/work#to-fix). The agent should offer a **Connect** or **Reconnect** action. Depending on the agent, this appears as a built-in prompt or as a secure Passport link in the conversation.
+This means one app's sign-in expired, not the agent's Passport sign-in. The agent should offer a **Connect** or **Reconnect** action. Depending on the agent, this appears as a built-in prompt or as a secure Passport link in the conversation.
 
 1. Open the link and confirm that it uses your Passport domain.
 2. Sign in to the provider in the browser. Do not paste a password, API key, or provider token into the chat.
@@ -88,25 +87,6 @@ A deactivated person cannot sign in or use Passport. You may see:
 - On the sign-in page: "Your account has been deactivated. Contact your workspace admin."
 
 An admin can reactivate you in **People**. Then sign in again and reconnect any accounts that need it.
-
-## A page moved
-
-Old links open the new place, so a bookmark keeps working:
-
-| Was | Now |
-| --- | --- |
-| Home, Inbox, Approvals | [Work › Now](/member/work#now) |
-| Sessions, a session, a project | [Work](/member/work): **History › Tasks**, or the task's page |
-| All activity, Activity | **Work › History › Actions** |
-| Agents › Rollout | **Agents › Add agent › Everyone on your team** |
-| Agents › Discovered, Inventory | **Agents** |
-| Settings › Keys, Apps › Keys | Each app's **Keys Passport holds**; agent tokens on their agent's page |
-| Settings › Safety, Rules › Team | **Rules**, switched to **Everyone** for owners |
-| Rules › Data checks, Guardrails | **Rules › Everyone › Data checks** (Enterprise) |
-| Apps › Setups, Team setups, Bundles, Workflows | **Apps** |
-| People › Invitations, Teams, Adoption | **People** |
-
-Insights and the alerts bell are gone. What needs fixing shows under **To fix** on Work.
 
 ## Rate limited
 

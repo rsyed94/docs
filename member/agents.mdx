@@ -12,7 +12,6 @@ Open in Passport: [Agents](https://passportmcp.com/#agents)
 On **Everyone**, owners first see whether the team routes its agents' work through Passport, for the workspace's first four weeks (then the last four):
 
 - **Production through Passport**: of the agents' Production actions (writes, deletes, and irreversible actions, including targets not placed yet), the share Passport decided before they ran. The rest ran without a check because the guard was off or couldn't read the command.
-- **Asks**: asks per day, and the median time from an ask to a person's answer in Passport.
 - **Active each week**: people and agents that took at least one action, week by week.
 - **Keys Passport holds**: keys Passport holds against keys still found on people's computers.
 
@@ -50,7 +49,6 @@ When you have more than one kind, filter with **All**, **On a computer**, **Clou
 - **ChatGPT**: with developer mode. Passport shows the steps and the URL to paste.
 - **A cloud agent**: Codex cloud, Claude Code on the web, or GitHub Actions. Name it, pick where it runs, and Passport creates it with a token and the setup to paste there.
 - **A script or job**: an agent token for a script or CI job. Admins create these; anyone else is asked to ask an admin.
-- **Everyone on your team** (owners): enrollment keys and the channels that set up every computer at once. See [Roll out to your team](/admin/rollout).
 
 A new cloud agent or token opens on its own page, which shows the token once.
 
@@ -62,7 +60,7 @@ For an agent on a computer:
 
 - **Stop**, the page's one action. It asks first, then ends the agent's running tasks and refuses its next action. The agent can start a new task any time.
 - What needs fixing, such as a sign-in to renew or a duplicate setup.
-- **Recent tasks**: its last five tasks, and **All its work** to see the rest in [Work](/member/work).
+- **Recent tasks**: its last five tasks.
 - **Connection**: the computer it runs on, with **Rename**, and **Update** when a newer Passport is available.
 - **Remove agent**, at the foot. It signs out every connection the agent holds. Its work stays in the record.
 
@@ -70,7 +68,7 @@ For a cloud agent or a token:
 
 - **Stop** asks first, then refuses every action it tries until someone chooses **Resume**. Its tokens and rules stay as they are, and the page says who stopped it and when.
 - **Recent tasks**, as above.
-- **Connection**: what kind of agent it is, where it runs, whether it runs as itself or acts for a person, and who its asks go to.
+- **Connection**: what kind of agent it is, where it runs, and whether it runs as itself or acts for a person.
 - **Credentials**: one row per live token, such as "Token ending 4f2a", with when it was made. **Rotate** and **Revoke** are in the row's menu, and **Create token** adds another. A new token is shown once.
 - **Remove agent**, at the foot. Every token it holds stops working.
 
@@ -84,13 +82,13 @@ A token **runs as itself**, or **acts for a person** with that person's access a
 
 The person who creates a token owns it, and that decides three things:
 
-- **Asks.** The owner's [rules](/member/safety) govern the agent. An agent can't answer a prompt, so an action that needs a person waits in the owner's **Waiting on you** on [Work](/member/work), naming the agent that asked. When the owner answers, the agent's next try goes through. An answer is bound to the agent that asked.
+- **Rules.** The owner's rules govern the agent. An agent can't answer a prompt, so an action that would need a person is blocked.
 - **Rotation.** **Rotate** mints a replacement, shows it once, and stops the old one, optionally after a short overlap so running jobs can switch. The agent, its access, and its record stay as they were. An agent can hold up to five live tokens.
 - **Removal.** Revoking a token ends that credential; revoking an agent's last token removes the agent. Deactivating or removing the owner revokes every token they own, so move long-lived automation to someone else first.
 
 ## Everyone
 
-Owners on Pro and Enterprise switch to **Everyone** to see every agent in the workspace, each row naming its person. Opening someone else's agent shows its recent tasks and connection, with **Stop** and **Remove**. To set up a whole team, use **Roll agents out with enrollment keys** at the foot of the list. See [Roll out to your team](/admin/rollout).
+Owners on Pro and Enterprise switch to **Everyone** to see every agent in the workspace, each row naming its person. Opening someone else's agent shows its recent tasks and connection, with **Stop** and **Remove**.
 
 ## Agent names
 
