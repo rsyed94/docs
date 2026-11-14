@@ -1,9 +1,9 @@
 ---
 title: "How Passport works"
-description: "A plain-language guide to apps, agents, tasks, rules, and the record."
+description: "A plain-language guide to apps, agents, access, rules, and the record."
 ---
 
-Open in Passport: [Work](https://passportmcp.com/#work)
+Open in Passport: [Activity](https://passportmcp.com/#activity)
 
 Passport sits between an agent and the work app it wants to use. It keeps the app's credential, checks access and rules, makes the call, and records what happened.
 
@@ -27,11 +27,11 @@ Where you use AI: Claude Code, Cursor, Codex, Claude.ai, ChatGPT, a cloud agent,
 
 ### Task
 
-One run of one agent, such as a Claude Code session, with every action it took. Tasks live on [Work](/member/work).
+One run of one agent, such as a Claude Code session, with every action it took.
 
 ### Rule
 
-What an agent may do without asking, per environment: run, ask you first, or never run. See [Rules](/member/safety).
+What an agent may do: Passport runs an action your rules allow and blocks the rest.
 
 ## Access
 
@@ -49,7 +49,7 @@ Access answers one question: what may this person do with this app?
   </Card>
 </CardGroup>
 
-Admins set it under **Who can use it** on each app's page, for everyone or, on Pro and Enterprise, per team and person. Access comes before every rule.
+Admins set it under **Who can use it** on each app's page, for everyone or, on Pro and Enterprise, per person. Access comes before every rule.
 
 ## What happens during a call
 
@@ -58,8 +58,8 @@ Admins set it under **Who can use it** on each app's page, for everyone or, on P
     Passport checks who is signed in and which agent is calling.
   </Step>
   <Step title="Apply access, then rules">
-    Apps and tools the person may not use are hidden and blocked, and no rule can change that. Then rules run, block,
-    or hold the action for an answer.
+    Apps and tools the person may not use are hidden and blocked, and no rule can change that. Then rules run or
+    block the action.
   </Step>
   <Step title="Inspect the request">Data checks inspect what the agent sends before Passport contacts the app.</Step>
   <Step title="Call the app">Passport uses the connected account on the person's behalf.</Step>
@@ -70,9 +70,8 @@ Admins set it under **Who can use it** on each app's page, for everyone or, on P
 
 ## People and roles
 
-- **Owners** manage apps, people, rules, and the workspace. On Pro and Enterprise they get **People** and can switch Work, Agents, and Rules to **Everyone**. On Free, the one person in the workspace is its admin.
+- **Owners** manage apps, people, rules, and the workspace. On Pro and Enterprise they get **People** and can switch Agents to **Everyone**. On Free, the one person in the workspace is its admin.
 - **Members** connect agents and use the apps available to them.
-- **Teams** let owners give a group the same access and rules.
 - **Agent tokens** connect scripts and CI. Each belongs to the person who created it.
 
 Deactivating a person signs them out, stops their agent tokens, and disconnects their accounts right away.

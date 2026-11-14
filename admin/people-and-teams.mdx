@@ -1,6 +1,6 @@
 ---
-title: "People and teams"
-description: "Invite people, answer join requests, manage teams, roles, and deactivation (Pro and Enterprise)."
+title: "People"
+description: "Invite people, answer join requests, manage roles, and deactivate people (Pro and Enterprise)."
 ---
 
 Open in Passport: [People](https://passportmcp.com/#people)
@@ -9,7 +9,7 @@ Open in Passport: [People](https://passportmcp.com/#people)
 
 ## Invite people
 
-**Invite people** is the page's one action. Paste or type addresses, as many as you like, in any shape: one per line, separated by commas or spaces, or `Name <address>`. Pick a role, **Member** or **Admin**, and a team if you have teams, then invite. Each person gets an email with a link to join, or, when Passport can't send email, you get a sign-in link to share.
+**Invite people** is the page's one action. Paste or type addresses, as many as you like, in any shape: one per line, separated by commas or spaces, or `Name <address>`. Pick a role, **Member** or **Admin**, then invite. Each person gets an email with a link to join, or, when Passport can't send email, you get a sign-in link to share.
 
 Each invite is tied to the address it was sent to and expires after 14 days. The email also has one line to set up agents from a terminal, `npx passport-bridge@latest init`, which signs them in; an invitee who signs in or runs it with the invited address joins without the link.
 
@@ -24,15 +24,14 @@ Each invite is tied to the address it was sent to and expires after 14 days. The
 
 ## The list
 
-Filter by team (**All teams** or one team) and by status: **Active**, **Invited**, or **Deactivated**. Each row shows a person's role, team, how many agents they have, and when they were last active. **Manage teams** creates, renames, and deletes teams.
+Filter by status: **Active**, **Invited**, or **Deactivated**. Each row shows a person's role, how many agents they have, and when they were last active.
 
 ## A person's page
 
 Open a person for their page:
 
 - **Agents**: their agents, with **Needs sign-in** or **Not used yet** when that applies.
-- **Work**: their recent tasks, and **All their work** to see the rest in Work.
-- **Access**: their **Role** and **Team**, each saved as you change it. Then **Deactivate** or **Reactivate**, and **Remove**.
+- **Access**: their **Role**, saved as you change it. Then **Deactivate** or **Reactivate**, and **Remove**.
 
 ## Roles
 
@@ -41,11 +40,7 @@ Open a person for their page:
 | **Owner** | Manage apps, people, rules, and the workspace. The first person in a workspace is an owner. |
 | **Member** | Connect their agents and use the apps they have access to. |
 
-Invites call the owner role **Admin**. A workspace always keeps at least one owner: Passport won't let the last one step down, be deactivated, or be removed. Changing someone's team so their Production minimum gets looser takes a passkey check. See [Confirm it's you](/member/safety#confirm-its-you).
-
-## Teams
-
-A team groups people so apps and rules can apply to all of them: **Who can use it** on an app's page, and team minimums and **Require the guard** on **Rules › Everyone**. Renaming a team keeps its access and rules. Deleting one asks first.
+Invites call the owner role **Admin**. A workspace always keeps at least one owner: Passport won't let the last one step down, be deactivated, or be removed.
 
 ## Who can join
 

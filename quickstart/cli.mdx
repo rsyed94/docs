@@ -7,7 +7,7 @@ Open in Passport: [Agents › Add agent](https://passportmcp.com/#agents?add=1)
 
 Setting up your own computer? `npx passport-bridge@latest init` does it in one pass: see the [developer quickstart](/quickstart/developer).
 
-Passport CLI is for terminal coding agents and automation. It reaches the same Passport as Claude, Cursor, and ChatGPT, with the same access, rules, approvals, and record.
+Passport CLI is for terminal coding agents and automation. It reaches the same Passport as Claude, Cursor, and ChatGPT, with the same access, rules, and record.
 
 Prefer the normal **Add agent** setup for apps with a GUI (Cursor chat, VS Code chat, Claude Desktop, Claude.ai, ChatGPT). Claude Code and Codex CLI can use either path; using the CLI doesn't sign out any other agent.
 
@@ -122,7 +122,7 @@ Works on Windows, Linux, and macOS. Needs Node.js 20 or newer.
 | `passport init [--dry-run]`             | Set up this computer: one plan first, then one question. `--dry-run` shows the plan and changes nothing.                                                   |
 | `passport status`                       | Start here. Your setup on one screen: you, your workspace, and this computer; each agent's guard and its fix; Autopilot; apps; keys, and any also on this computer. |
 | `passport wait <approval-id>`           | Wait for a person to decide an approval. While it is still waiting, prints the link and, on a terminal, a live countdown.                                  |
-| `passport changes [--history]`          | Work in your terminal: what needs you, what's working, waiting, and done today. See [Work](/member/work#from-the-terminal).                         |
+| `passport changes [--history]`          | What needs you, what's working, waiting, and done today. `--history` lists every change by day.                                                     |
 | `passport exec -- <cli> [args…]`        | Run a vendor CLI with a key Passport holds. `--ask-again` asks again after a recent decline.                                                               |
 | `passport doctor`                       | When a command fails: check Node, how your sign-in is stored, the server, your sign-in, and that this CLI and the server match. Never shows a key.          |
 | `passport search [query]`               | Find tools you can run. With no words, lists every tool you can run, by app.                                                                               |
@@ -143,19 +143,6 @@ Works on Windows, Linux, and macOS. Needs Node.js 20 or newer.
 Every command accepts `--profile`, `--json`, `--timeout`, `--quiet`, and `--caller`.
 
 On a terminal, output wraps to your window (at least 40 columns) and a line that updates in place, like a countdown, always fits on one row. Piped output never wraps and has no color, so scripts read the same lines at any width. `NO_COLOR` turns color off, and `--json` output only ever gains fields.
-
-### Waiting for a person
-
-When your rules ask first, `passport exec` and `passport wait` print the approval link right away, then keep one line up to date on a terminal:
-
-```text
-Passport: railway redeploy writes to Production.
-Approve it on your phone or open:
-https://passportmcp.com/#approvals?approval=apr_…&workspace=ws_…
-Waiting for Erin · 1:32 left
-```
-
-Press Ctrl-C to stop waiting: the request stays open, and `passport wait <id>` picks it up again (exit `4`). A decline is said again on every retry for ten minutes, with who and when ("Declined 2 minutes ago by Erin: Not during the freeze."), instead of asking twice. Run the command with `--ask-again` to request again.
 
 `passport scan`, signed in, also tells your workspace which MCP servers your agents use. It is headless and cross-platform, which suits an onboarding script or a scheduled MDM job, and it reports limited configuration metadata only, never paths, commands or arguments, environment values, headers, credentials, endpoint paths or query strings, prompts, files, tool payloads, or traffic. `--check` (CI and pre-commit) never reports. `passport discover`, its old name, still works for one release. See [the scan](/member/scan).
 

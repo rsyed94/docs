@@ -1,13 +1,13 @@
 ---
 title: "Set up a workspace"
-description: "Connect the first app, add your agent, invite people, and set the rules."
+description: "Connect the first app, add your agent, and invite people."
 ---
 
 Open in Passport: [Apps](https://passportmcp.com/#apps)
 
 Start here if you created the workspace. Connect one useful app, prove the setup yourself, then invite other people.
 
-On Free, you're the workspace's admin. On Pro and Enterprise, admins are **owners**: they also get **People** in the account menu, and **Mine** or **Everyone** on Work, Agents, and Rules.
+On Free, you're the workspace's admin. On Pro and Enterprise, admins are **owners**: they also get **People** in the account menu, and **Mine** or **Everyone** on Agents.
 
 ## 1. Connect an app
 
@@ -26,29 +26,23 @@ Open [Agents](https://passportmcp.com/#agents) and choose **Add agent**. For cod
 npx passport-bridge@latest init
 ```
 
-Ask the agent to do something, then check that its task shows on [Work](https://passportmcp.com/#work). Do this before inviting the team. It proves the whole connection and gives you a known-good example.
+Ask the agent to do something, then check that it shows **Active** on Agents. Do this before inviting the team. It proves the whole connection and gives you a known-good example.
 
 ## 3. Invite people
 
-On Pro and Enterprise, open **People** from the menu under your name and choose **Invite people**. Paste as many addresses as you like, pick a role and team, and Passport emails each one an invite. See [People and teams](/admin/people-and-teams).
+On Pro and Enterprise, open **People** from the menu under your name and choose **Invite people**. Paste as many addresses as you like, pick a role, and Passport emails each one an invite. See [People](/admin/people-and-teams).
 
-To set up every computer at once, use **Add agent › Everyone on your team** on Agents. See [Roll out to your team](/admin/rollout).
+## 4. Add controls
 
-## 4. Set the rules
+Start with the defaults and watch real work. Add controls when there's a clear need:
 
-Start with the defaults and watch real work on Work. Add controls when there's a clear need:
-
-- Each person's [Rules](/member/safety) decide what their agents do without asking, on every plan.
 - Built-in secret detection protects every plan.
-- Pro adds teams, **Who can use it** by team and person on each app, team minimums and **Production approvers** on **Rules › Everyone**, every agent on **Agents › Everyone**, and the workspace's record on **Work › Everyone**.
-- Enterprise adds custom [data checks](/admin/data-checks), [single sign-on](/enterprise/sso-oidc), [SCIM](/enterprise/scim), and [streaming to your SIEM](/enterprise/siem-export).
+- Pro adds **Who can use it** by person on each app, and every agent on **Agents › Everyone**.
+- Enterprise adds [single sign-on](/enterprise/sso-oidc), [SCIM](/enterprise/scim), and [streaming to your SIEM](/enterprise/siem-export).
 
 <CardGroup cols={2}>
   <Card title="Apps" icon="key" href="/member/apps">
     Decide who can use each app and what they can do.
-  </Card>
-  <Card title="Data checks" icon="filter" href="/admin/data-checks">
-    Secret checks and custom checks on what agents send and get back.
   </Card>
   <Card title="Plans and billing" icon="credit-card" href="/billing">
     Compare Free, Pro, and Enterprise.

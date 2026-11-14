@@ -7,13 +7,12 @@ Open in Passport: [Settings](https://passportmcp.com/#settings)
 
 **Settings** is in the menu under your name, at the bottom left. Everyone gets **Account** and **Notifications**. Admins also get **Workspace** and **Billing**. Each part has its own address, such as [`#settings/workspace`](https://passportmcp.com/#settings/workspace).
 
-What agents may do lives in [Rules](/member/safety), not here. Keys Passport holds for you live on each app's page, and agent tokens on their agent's page.
+Keys Passport holds for you live on each app's page, and agent tokens on their agent's page.
 
 ## Account
 
 - Your name, role, and workspace.
 - **Theme**: **Light**, **Dark**, or **System**.
-- **Security**: your passkeys, which Passport uses to [confirm it's you](/member/safety#confirm-its-you). Without one, Passport emails you a code.
 - **Signed-in browsers**: every browser signed in as you, each with **Sign out**, and **Sign out everywhere else**. A browser you don't use for 30 days is signed out on its own. Signing out never stops your agents, and the 30 days don't apply to the CLI or agent tokens.
 
 ## Notifications
@@ -23,13 +22,12 @@ The top line says where asks waiting on you reach you right now, such as "Asks r
 **Asks waiting on you**, when an agent or a teammate needs your answer:
 
 - **Alerts in this browser**: a notification for each ask. Allow notifications when your browser asks, then use **Send test** to check it reaches this device. Each browser needs its own permission. On iPhone or iPad, add Passport to your Home Screen, open it from there, and turn alerts on there.
-- **Slack**: where the Passport Slack app is available, an admin adds it with **Add to Slack** on this page. After that, asks arrive as direct messages, and each person can turn Slack messages off for themselves. Admins can also pick a **Production channel** where Production asks are posted. Slack isn't turned on for hosted workspaces yet. There, the row says so, and asks reach you as browser alerts and by email. See [Approvals in Slack](/admin/slack-and-approvers#approvals-in-slack).
+- **Slack**: where the Passport Slack app is available, an admin adds it with **Add to Slack** on this page. After that, asks arrive as direct messages, and each person can turn Slack messages off for themselves. Admins can also pick a **Production channel** where Production asks are posted. Slack isn't turned on for hosted workspaces yet. There, the row says so, and asks reach you as browser alerts and by email.
 - **Email**: **When nothing else reaches me** (the default: only while no browser alert or Slack message reaches you), **Every ask**, or **Never**. Each email links to the ask in Passport.
 
 **Updates by email**:
 
-- **Answers to your requests**: an email when an admin approves or declines an exception or app you asked for.
-- **Weekly summary email**: every Monday, what Passport handled for you, what you approved, and what's new. Admins get the workspace version.
+- **Answers to your requests**: an email when an admin approves or declines an app you asked for.
 
 Without email on your Passport, the email choices don't appear.
 
@@ -43,12 +41,22 @@ For admins:
 - **Joining**: **Copy sign-in link**, and a link to People. On Enterprise, **Who can join**: invite-only, or anyone who verifies an email on your company domains. See [Who can join](/admin/people-and-teams#who-can-join).
 - **Single sign-on and directory** (Enterprise): [single sign-on (OIDC)](/enterprise/sso-oidc) and [SCIM provisioning](/enterprise/scim).
 - **Record and backup**:
-  - **Show what agents say they're doing** (off by default): Claude Code's one-line description of each command becomes its label in Work. The description is shortened on the computer, and one containing anything that looks like a key, token, or email address is never sent. Passport keeps it for 90 days. Turning it off stops new ones and hides the ones it kept.
+  - **Show what agents say they're doing** (off by default): Claude Code's one-line description of each command becomes its label in the record. The description is shortened on the computer, and one containing anything that looks like a key, token, or email address is never sent. Passport keeps it for 90 days. Turning it off stops new ones and hides the ones it kept.
   - **Token usage per task** (on by default): Claude Code tasks show their tokens and API-equivalent cost. Only numbers leave the computer. See [token usage](/member/cli-hook#token-usage).
   - **Stream to OpenTelemetry** and **Stream to your SIEM** (Enterprise). See [SIEM and OTLP export](/enterprise/siem-export).
   - **Workspace backup**: the whole workspace as one JSON file. It holds encrypted credentials, so store it as a secret.
 - **Danger zone**: **Delete this workspace**, after typing its name.
 
+## Exports
+
+Owners can export the record from the API:
+
+- `GET /export/activity.csv` and `GET /export/activity.jsonl`: the workspace's actions, with `member`, `app`, `outcome`, `since`, and `q` filters.
+- `GET /export/audit.csv`: privileged admin changes, such as access and roles.
+- `GET /api/my/activity.csv`: your own actions, on every plan.
+
+Enterprise can stream both records to a SIEM or an OpenTelemetry collector. See [SIEM and OTLP export](/enterprise/siem-export).
+
 ## Billing
 
-For admins: one line weighing value against cost, such as "Last 30 days: About 38 hours saved, plus $47 a month · Passport costs $60 a month". The estimate is the same [value receipt](/member/work) Work shows, over 30 days for the whole workspace; hover it for how it was counted. The cost is the plan's list price for the people it bills. Then your plan, people and automation counts, and the trial if one is running. Upgrade through Stripe Checkout, or change plans and cancel through the Stripe customer portal. A self-hosted Passport has no Billing. See [Plans and billing](/billing).
+For admins: one line weighing value against cost, such as "Last 30 days: About 38 hours saved, plus $47 a month · Passport costs $60 a month". The estimate covers 30 days for the whole workspace; hover it for how it was counted. The cost is the plan's list price for the people it bills. Then your plan, people and automation counts, and the trial if one is running. Upgrade through Stripe Checkout, or change plans and cancel through the Stripe customer portal. A self-hosted Passport has no Billing. See [Plans and billing](/billing).

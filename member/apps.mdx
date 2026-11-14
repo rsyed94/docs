@@ -17,7 +17,7 @@ Owners also see **Workspace apps**: apps in the workspace they haven't connected
 
 ## Add an app
 
-**Add app** opens a search of the app catalog. Each app shows what you can do: **Add**, **Ask an admin to add** when your workspace reviews new apps, or **Added** when it's already yours. Adding one opens the app's own sign-in in a new window; finish there and the app is ready. An app an admin adds gives everyone **Full access** (your rules still ask before Production writes); one a member adds, or any app added under catalog rules, starts **Read-only** until an admin changes it.
+**Add app** opens a search of the app catalog. Each app shows what you can do: **Add**, **Ask an admin to add** when your workspace reviews new apps, or **Added** when it's already yours. Adding one opens the app's own sign-in in a new window; finish there and the app is ready. An app an admin adds gives everyone **Full access** (your rules still apply); one a member adds, or any app added under catalog rules, starts **Read-only** until an admin changes it.
 
 Not in the catalog? **Not listed? Add it by its MCP server URL** takes the address, an optional name, and for members an optional note for your admin. Passport connects, finds its tools, and scans them.
 
@@ -33,21 +33,21 @@ Your account for the app. With more than one, each has **Sign in again**, **Rena
 
 ### Who can use it
 
-For admins. **People** is **Everyone**, including people who join later, or **Teams and people** you add. **Access** is **Full access** or **Read-only**, for all of them or per team and person:
+For admins. **People** is **Everyone**, including people who join later, or the people you add. **Access** is **Full access** or **Read-only**, for all of them or per person:
 
 - **Full access**: every tool, Read through Irreversible.
 - **Read-only**: only Read tools. The rest are hidden from agents, and a call to one is blocked.
 - No access: the app isn't shown.
 
-A tool counts as Read only when Passport can tell it is. Anything else counts as a write and is withheld under Read-only. Access comes before every rule: nothing in [Rules](/member/safety) gets past it.
+A tool counts as Read only when Passport can tell it is. Anything else counts as a write and is withheld under Read-only. Access comes before every rule: no rule gets past it.
 
 ### Environments
 
 Every target on this app, such as a Railway environment, a Vercel target, a Neon branch, or a repository, and where it sits: **Production**, **Staging**, or **Development**. The list fills itself: Passport reads your connected apps in the background (read-only) and places each target by the vendor's own words, such as "Railway calls it production" or "Neon's default branch", grouped by the project or account it belongs to, with the services that run there. A choice someone made always wins.
 
-A target nothing places reads **Not placed · treated as Production**, with one question: "Is acme-api / blue Production, Staging or Development?" Answer once and it applies to everyone. Admins answer with its select; everyone else sees "Ask an admin to change where these sit." When any target needs a place, **To fix** on Work shows one item for all of them.
+A target nothing places reads **Not placed · treated as Production**, with one question: "Is acme-api / blue Production, Staging or Development?" Answer once and it applies to everyone. Admins answer with its select; everyone else sees "Ask an admin to change where these sit."
 
-A repository is Production if merging to its default branch deploys it, or Staging if it doesn't. Placing a resource answers it for the whole workspace, for new actions from then on. Moving one out of Production takes a passkey check. See [how Passport knows](/member/safety#how-passport-knows).
+A repository is Production if merging to its default branch deploys it, or Staging if it doesn't. Placing a resource answers it for the whole workspace, for new actions from then on.
 
 A resource shows up here the first time an agent works in it, not when you connect the app.
 
@@ -85,6 +85,6 @@ Where the provider needs your own OAuth client, the dialog shows the callback UR
 
 ## Requests
 
-When your workspace reviews new apps, **Ask an admin to add** files a request. Agents can file requests too, with a one-line reason, when a rule blocks them or a task needs an app the person doesn't have. A request names the agent that filed it, never installs or grants anything, and waits for an admin under **Waiting on you** on [Work](/member/work). For someone with **Read-only**, an agent can ask for **Full access**; approving it gives Full to exactly the people who asked.
+When your workspace reviews new apps, **Ask an admin to add** files a request. Agents can file requests too, with a one-line reason, when a rule blocks them or a task needs an app the person doesn't have. A request names the agent that filed it, never installs or grants anything, and waits for an admin. For someone with **Read-only**, an agent can ask for **Full access**; approving it gives Full to exactly the people who asked.
 
 See also [Managed API apps](/admin/managed-api-integrations).

@@ -9,3 +9,6 @@ drafts/
 # Repo-only operator and archive material (never customer docs)
 *.md
 **/*.md
+
+# Repo-only design research and mockups (HTML copies of private artifacts)
+design/

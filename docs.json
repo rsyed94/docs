@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Passport",
-  "description": "Give agents production. Keep your keys. Passport sits between your apps and your agents: deletes and production writes ask first, and every action is on the record.",
+  "description": "Give agents production. Keep your keys. Passport sits between your apps and your agents: your rules decide what runs, and every action is on the record.",
   "colors": {
     "primary": "#C93A6B",
     "light": "#FF8A5C",
@@ -16,17 +16,25 @@
     "groups": [
       {
         "group": "Start here",
-        "pages": ["index", "quickstart/developer", "quickstart/member", "quickstart/admin", "quickstart/cli"]
+        "pages": [
+          "index",
+          "quickstart/developer",
+          "quickstart/member",
+          "quickstart/admin",
+          "quickstart/cli"
+        ]
       },
       {
         "group": "In Passport",
-        "pages": ["member/work", "member/agents", "member/apps", "member/safety"]
+        "pages": [
+          "member/agents",
+          "member/apps"
+        ]
       },
       {
         "group": "How it works",
         "pages": [
           "concepts/model",
-          "member/undo",
           "member/cli-hook",
           "member/scan",
           "member/updates",
@@ -39,24 +47,31 @@
         "pages": [
           "admin/people-and-teams",
           "admin/settings",
-          "admin/rollout",
-          "admin/slack-and-approvers",
-          "admin/data-checks",
           "admin/managed-api-integrations",
           "billing"
         ]
       },
       {
         "group": "Enterprise security",
-        "pages": ["enterprise/sso-oidc", "enterprise/scim", "enterprise/siem-export"]
+        "pages": [
+          "enterprise/sso-oidc",
+          "enterprise/scim",
+          "enterprise/siem-export"
+        ]
       },
       {
         "group": "Self-hosting",
-        "pages": ["self-host", "security/network"]
+        "pages": [
+          "self-host",
+          "security/network"
+        ]
       },
       {
         "group": "Technical reference",
-        "pages": ["concepts/discovery", "benchmarks/context-efficiency"]
+        "pages": [
+          "concepts/discovery",
+          "benchmarks/context-efficiency"
+        ]
       }
     ]
   },
@@ -80,15 +95,15 @@
   "redirects": [
     {
       "source": "/member/home",
-      "destination": "/member/work"
+      "destination": "/"
     },
     {
       "source": "/member/inbox",
-      "destination": "/member/work#waiting-on-you"
+      "destination": "/concepts/model"
     },
     {
       "source": "/member/sessions",
-      "destination": "/member/work#tasks"
+      "destination": "/concepts/model"
     },
     {
       "source": "/member/ai-setup",
@@ -96,7 +111,7 @@
     },
     {
       "source": "/admin/activity-and-audit",
-      "destination": "/member/work#history"
+      "destination": "/admin/settings#exports"
     },
     {
       "source": "/admin/client-fleet",
@@ -144,7 +159,31 @@
     },
     {
       "source": "/admin/guardrails",
-      "destination": "/admin/data-checks"
+      "destination": "/concepts/model"
+    },
+    {
+      "source": "/member/work",
+      "destination": "/concepts/model"
+    },
+    {
+      "source": "/member/safety",
+      "destination": "/concepts/model"
+    },
+    {
+      "source": "/member/undo",
+      "destination": "/concepts/model"
+    },
+    {
+      "source": "/admin/slack-and-approvers",
+      "destination": "/admin/settings#notifications"
+    },
+    {
+      "source": "/admin/rollout",
+      "destination": "/member/agents"
+    },
+    {
+      "source": "/admin/data-checks",
+      "destination": "/concepts/model"
     }
   ]
 }

@@ -24,9 +24,9 @@ The transport does not change the control plane. Managed API actions use the sam
 - catalog request and admin approval flow
 - per-person OAuth connection and reconnect flow
 - Full, Read-only, and None passes
-- team, person, and agent visibility
+- person and agent visibility
 - per-tool switches, action classes, and drift alerts
-- members' rules and action-time approvals
+- members' rules
 - argument and result data checks
 - the record, admin changes, metrics, and health views
 - workspace, single-app, CLI, and hosted-agent surfaces
@@ -81,4 +81,4 @@ Passport authenticates itself to the relay with the provider token. The member c
 
 ## Compatibility
 
-Existing app records and URLs are unchanged. The stored `apps` aggregate remains stable; older records infer their protocol from their existing kind. Managed API apps are additive, so agents, bundles, and passes keep working without migration.
+Existing app records and URLs are unchanged. The stored `apps` aggregate remains stable; older records infer their protocol from their existing kind. Managed API apps are additive, so agents and passes keep working without migration.
