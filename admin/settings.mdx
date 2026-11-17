@@ -7,7 +7,7 @@ Open in Passport: [Settings](https://passportmcp.com/#settings)
 
 **Settings** is in the menu under your name, at the bottom left. Everyone gets **Account** and **Notifications**. Admins also get **Workspace** and **Billing**. Each part has its own address, such as [`#settings/workspace`](https://passportmcp.com/#settings/workspace).
 
-Keys Passport holds for you live on each app's page, and agent tokens on their agent's page.
+Agent tokens live on their agent's page.
 
 ## Account
 
@@ -42,7 +42,7 @@ For admins:
 - **Single sign-on and directory** (Enterprise): [single sign-on (OIDC)](/enterprise/sso-oidc) and [SCIM provisioning](/enterprise/scim).
 - **Record and backup**:
   - **Show what agents say they're doing** (off by default): Claude Code's one-line description of each command becomes its label in the record. The description is shortened on the computer, and one containing anything that looks like a key, token, or email address is never sent. Passport keeps it for 90 days. Turning it off stops new ones and hides the ones it kept.
-  - **Token usage per task** (on by default): Claude Code tasks show their tokens and API-equivalent cost. Only numbers leave the computer. See [token usage](/member/cli-hook#token-usage).
+  - **Token usage per task** (on by default): Claude Code tasks show their tokens and API-equivalent cost. Only numbers leave the computer. See [token usage](/member/cli-hook#what-it-records).
   - **Stream to OpenTelemetry** and **Stream to your SIEM** (Enterprise). See [SIEM and OTLP export](/enterprise/siem-export).
   - **Workspace backup**: the whole workspace as one JSON file. It holds encrypted credentials, so store it as a secret.
 - **Danger zone**: **Delete this workspace**, after typing its name.
