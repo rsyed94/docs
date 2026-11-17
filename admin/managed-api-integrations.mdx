@@ -7,15 +7,11 @@ Open in Passport: [Apps › Add app](https://passportmcp.com/#apps?add=1)
 
 An app is the same to people however Passport reaches the provider. It may use an upstream MCP server or a reviewed API driver. Both appear in **Apps**, use the same Connect experience, and are delivered to agents through the same Passport MCP endpoint.
 
-The first managed API apps are:
+The managed API app is:
 
 - **GitHub API**: repositories, code search, issues, comments, and pull requests
-- **Google Workspace**: Gmail, Drive, and Calendar
-- **Slack API**: channels, messages, threads, users, reactions, and direct messages
 
-Passport can also load reviewed long-tail apps from an operator-configured provider adapter.
-
-Apps an admin imported from an OpenAPI spec use the same control plane described below.
+Passport's other apps are GitHub's, Supabase's and Railway's own MCP servers. Every other app was removed on November 17, 2026, to be rebuilt.
 
 ## What stays the same
 
@@ -35,7 +31,7 @@ If an API driver exposes resources or prompts, Passport namespaces and governs t
 
 ## OAuth setup
 
-Each provider needs an OAuth client whose callback is:
+GitHub needs an OAuth client whose callback is:
 
 ```text
 https://<your-passport-host>/auth/connect-app/callback
@@ -46,10 +42,6 @@ The hosted service can configure a managed OAuth client with:
 ```text
 PASSPORT_OAUTH_GITHUB_API_CLIENT_ID
 PASSPORT_OAUTH_GITHUB_API_CLIENT_SECRET
-PASSPORT_OAUTH_GOOGLE_WORKSPACE_CLIENT_ID
-PASSPORT_OAUTH_GOOGLE_WORKSPACE_CLIENT_SECRET
-PASSPORT_OAUTH_SLACK_API_CLIENT_ID
-PASSPORT_OAUTH_SLACK_API_CLIENT_SECRET
 ```
 
 When a managed client is absent, an admin can add the provider-issued client ID and secret in the app setup. Members then connect their own accounts through the same consent screen. Provider access and refresh tokens are encrypted at rest and are never returned to the agent.
@@ -58,26 +50,6 @@ When a managed client is absent, an admin can add the provider-issued client ID 
   Choose the provider scopes required by the actions you enable. Passport's passes and approvals narrow what an agent
   can invoke, but they do not replace least-privilege OAuth scopes at the provider.
 </Note>
-
-## Provider-backed catalog
-
-Self-hosted operators can supply a non-secret manifest in `PASSPORT_CONNECTOR_PROVIDER_CATALOG` and configure the provider relay with `PASSPORT_CONNECTOR_PROVIDER_URL` and `PASSPORT_CONNECTOR_PROVIDER_TOKEN`.
-
-The manifest fixes the connector identity, OAuth endpoints, action schemas, read/write/destructive annotations, and optional resources/prompts capabilities before request time. Passport refuses insecure OAuth endpoints and does not accept provider-supplied action definitions dynamically during an AI call.
-
-The relay contract uses these paths:
-
-| Path                                                    | Purpose                                   |
-| ------------------------------------------------------- | ----------------------------------------- |
-| `/v1/connectors/{providerKey}/execute`                  | Execute a reviewed action                 |
-| `/v1/connectors/{providerKey}/identity`                 | Resolve a provider-verified account label |
-| `/v1/connectors/{providerKey}/resources/list`           | List resources when advertised            |
-| `/v1/connectors/{providerKey}/resources/templates/list` | List resource templates                   |
-| `/v1/connectors/{providerKey}/resources/read`           | Read one resource                         |
-| `/v1/connectors/{providerKey}/prompts/list`             | List prompts when advertised              |
-| `/v1/connectors/{providerKey}/prompts/get`              | Build one prompt                          |
-
-Passport authenticates itself to the relay with the provider token. The member credential is sent only inside the bounded relay request and is never logged. Provider responses are size-limited and validated before they reach the shared governance pipeline.
 
 ## Compatibility
 

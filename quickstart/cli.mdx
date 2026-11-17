@@ -256,7 +256,7 @@ export PASSPORT_ENDPOINT='https://passportmcp.com/mcp'
 
 passport status --json
 passport search "failed builds" --json
-passport run sentry_list_issues '{"status":"unresolved"}' --json
+passport run github_list_pull_requests '{"owner":"acme","repo":"web"}' --json
 passport version --json
 passport ready --json
 ```
