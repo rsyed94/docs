@@ -66,7 +66,7 @@ Before each shell command, the guard reads it on your computer and asks Passport
 A block refuses the command at once and names the rule:
 
 ```
-Blocked by your company's Passport policy: Delete the repository on acme/web (rule: Block every Delete action in the workspace). This action isn't allowed. Don't retry or work around it; tell the user what you were trying to do.
+Blocked by your company's Passport policy: Delete the repository on acme/web (rule: Block every Delete action in the workspace). This action isn't allowed. Don't retry or work around it; tell the user what you were trying to do. They can see why at https://passport.example/b/cpe_123
 ```
 
 Nothing waits for a person, and your agent doesn't retry. It tells you what it was trying to do. In Passport, an admin chooses **Keep blocked** or **Always allow**, which adds an Allow rule for that action on that resource. A platform in observe mode records what a rule would block and lets the command run.
