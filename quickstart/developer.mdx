@@ -1,6 +1,6 @@
 ---
 title: "Developer quickstart"
-description: "Let Claude Code, Codex, and Cursor use Railway, Vercel, GitHub, and Stripe through Passport, without holding your keys. Two commands."
+description: "Let Claude Code, Codex, and Cursor use Railway, Supabase, and GitHub through Passport, without holding your keys. Two commands."
 ---
 
 Open in Passport: [Agents](https://passportmcp.com/#agents)
@@ -26,11 +26,11 @@ Needs Node.js 20 or newer. Init looks at everything first and shows one plan. No
 ```text
 Passport setup
 
-  Scan       3 keys your agents can reach: GitHub, Railway, and Stripe
+  Scan       3 keys your agents can reach: GitHub, Railway, and Supabase
   Sign in    Opening your browser. Confirm code HJKT-WQRM.
              ✓ Signed in to Maya's workspace
 
-  Plan       Connect Railway and Stripe on one sign-in page
+  Plan       Connect Railway and Supabase on one sign-in page
              Add Passport to Claude Code and Cursor
              Turn on the guard in Claude Code and Cursor, so Passport checks
              each shell command first
@@ -42,12 +42,12 @@ Passport setup
 Use the recommended setup? (n to choose step by step) [Y/n]
 
   Apps       Opening one sign-in page for both. Press Enter to stop waiting.
-             ✓ Railway   ✓ Stripe
+             ✓ Railway   ✓ Supabase
   Agents     ✓ Claude Code   ✓ Cursor
   Guard      ✓ On in Claude Code and Cursor
 
 Done.
-  ✓ Railway and Stripe connected to Passport
+  ✓ Railway and Supabase connected to Passport
   ✓ Passport added to Claude Code and Cursor
   ✓ Guard on in Claude Code and Cursor
 
@@ -58,7 +58,7 @@ services.
 Press Enter for the recommended setup, or type `n` to go step by step: each step then asks on its own, and you can skip any of them.
 
 - **Sign in** creates your workspace if you're new. Already signed in on this computer? Init uses that sign-in.
-- **Apps** covers Railway, Vercel, Supabase, Cloudflare, GitHub, and Stripe when it finds a key or the app's CLI. If your workspace reviews new apps first, init says so and your admin gets the request. With no apps found, step by step lets you pick some.
+- **Apps** covers Railway, Supabase, and GitHub when it finds a key or the app's CLI. If your workspace reviews new apps first, init says so and your admin gets the request. With no apps found, step by step lets you pick some.
 - **Keys** stay on your computer: Passport doesn't hold keys, so your CLIs keep their own sign-ins and Passport decides each command first. Init lists the keys it found, so you know where an agent could read one. See [Keys and passport exec](/member/cli-hook#keys-and-passport-exec).
 - **Agents** adds Passport's one address, `https://passportmcp.com/mcp`, to Claude Code, Codex, Cursor, and VS Code. Each agent signs you in through your browser the first time, so no key or token goes in its settings. An agent still on your workspace's own older address (`/w/ws_…/mcp`) or on a local bridge moves to the one address. For Claude Desktop, init copies the address for you to paste in **Settings › Connectors › Add custom connector**.
 - **Guard** applies your rules to the commands agents run in your terminal, like `railway volume delete`. It can't see inside scripts, aliases, or `make` targets. See [the CLI hook](/member/cli-hook).

@@ -5,9 +5,9 @@ description: "Add and connect apps, see who can use each one, place its resource
 
 Open in Passport: [Apps](https://passportmcp.com/#apps)
 
-**Apps** is what your agents can reach through Passport, such as GitHub, Linear, Railway, or Stripe. Passport holds each app's credential and calls the app for your agents, so they never get the password, token, or key.
+**Apps** is what your agents can reach through Passport: GitHub, Railway, and Supabase. Passport holds each app's credential and calls the app for your agents, so they never get the password, token, or key.
 
-An app is also its vendor's CLI. Railway's tools and the `railway` commands agents run belong to the Railway app. AWS is a CLI app: it has no tools, just the AWS CLI, run with each person's own sign-in.
+An app is also its vendor's CLI. Railway's tools and the `railway` commands agents run belong to the Railway app.
 
 ## Your apps
 
@@ -18,8 +18,6 @@ Owners also see **Workspace apps**: apps in the workspace they haven't connected
 ## Add an app
 
 **Add app** opens a search of the app catalog. Each app shows what you can do: **Add**, **Ask an admin to add** when your workspace reviews new apps, or **Added** when it's already yours. Adding one opens the app's own sign-in in a new window; finish there and the app is ready. An app an admin adds gives everyone **Full access** (your rules still apply); one a member adds, or any app added under catalog rules, starts **Read-only** until an admin changes it.
-
-Not in the catalog? **Not listed? Add it by its MCP server URL** takes the address, an optional name, and for members an optional note for your admin. Passport connects, finds its tools, and scans them.
 
 Some apps need a one-time company setup before anyone can connect, such as a shared key or an OAuth client. Passport says so instead of offering a sign-in that can't work, and an admin finishes it from the app's page.
 
@@ -43,7 +41,7 @@ A tool counts as Read only when Passport can tell it is. Anything else counts as
 
 ### Environments
 
-Every target on this app, such as a Railway environment, a Vercel target, a Neon branch, or a repository, and where it sits: **Production**, **Staging**, or **Development**. The list fills itself: Passport reads your connected apps in the background (read-only) and places each target by the vendor's own words, such as "Railway calls it production" or "Neon's default branch", grouped by the project or account it belongs to, with the services that run there. A choice someone made always wins.
+Every target on this app, such as a Railway environment, a Supabase branch, or a repository, and where it sits: **Production**, **Staging**, or **Development**. The list fills itself: Passport reads your connected apps in the background (read-only) and places each target by the vendor's own words, such as "Railway calls it production" or "Neon's default branch", grouped by the project or account it belongs to, with the services that run there. A choice someone made always wins.
 
 A target nothing places reads **Not placed · treated as Production**, with one question: "Is acme-api / blue Production, Staging or Development?" Answer once and it applies to everyone. Admins answer with its select; everyone else sees "Ask an admin to change where these sit."
 

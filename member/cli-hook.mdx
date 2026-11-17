@@ -60,7 +60,6 @@ When an agent's guard turns off after being on, goes out of date, or isn't trust
 Before each shell command, the guard reads it on your computer and asks Passport about it when your rules could apply. Passport answers with your workspace's Allow or Block rules (nothing is blocked until an admin adds a Block), the same rules your agents' tool calls through Passport follow, so a command and a tool that do the same thing get the same answer. It asks about:
 
 - a `gh`, `git push`, `railway` or `supabase` command that changes something on a platform your workspace connected in Passport, such as a push to a protected branch, a merge, a deploy or a migration;
-- a write or delete of another vendor CLI your workspace added in Passport (`vercel rm`, `wrangler delete`), decided by its verb;
 - a command that can't be undone on this computer, such as deleting your home folder, the disk or the project folder.
 
 A block refuses the command at once and names the rule:
