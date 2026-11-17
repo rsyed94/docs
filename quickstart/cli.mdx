@@ -120,10 +120,10 @@ Works on Windows, Linux, and macOS. Needs Node.js 20 or newer.
 | Command                                 | Purpose                                                                                                                                                    |
 | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `passport init [--dry-run]`             | Set up this computer: one plan first, then one question. `--dry-run` shows the plan and changes nothing.                                                   |
-| `passport status`                       | Start here. Your setup on one screen: you, your workspace, and this computer; each agent's guard and its fix; Autopilot; apps; keys, and any also on this computer. |
+| `passport status`                       | Start here. Your setup on one screen: you, your workspace, and this computer; each agent's guard and its fix; Autopilot; apps; the CLI keys on this computer. |
 | `passport wait <approval-id>`           | Wait for a person to decide an approval. While it is still waiting, prints the link and, on a terminal, a live countdown.                                  |
 | `passport changes [--history]`          | What needs you, what's working, waiting, and done today. `--history` lists every change by day.                                                     |
-| `passport exec -- <cli> [args…]`        | Run a vendor CLI with a key Passport holds. `--ask-again` asks again after a recent decline.                                                               |
+| `passport exec -- <cli> [args…]`        | Run a vendor CLI after Passport decides, with your own sign-in.                                           |
 | `passport doctor`                       | When a command fails: check Node, how your sign-in is stored, the server, your sign-in, and that this CLI and the server match. Never shows a key.          |
 | `passport search [query]`               | Find tools you can run. With no words, lists every tool you can run, by app.                                                                               |
 | `passport describe <tool>`              | Print a tool's class (Read, Write, Delete, or Irreversible), description, and full parameters schema. JSON also exposes `name` and `inputSchema` aliases. |

@@ -1,6 +1,6 @@
 ---
 title: "Agents"
-description: "Add an agent, see whether each one works, stop it, and manage the tokens scripts and cloud agents use."
+description: "Add an agent, see whether each one works, stop it, and manage the tokens scripts and jobs use."
 ---
 
 Open in Passport: [Agents](https://passportmcp.com/#agents)
@@ -13,7 +13,6 @@ On **Everyone**, owners first see whether the team routes its agents' work throu
 
 - **Production through Passport**: of the agents' Production actions (writes, deletes, and irreversible actions, including targets not placed yet), the share Passport decided before they ran. The rest ran without a check because the guard was off or couldn't read the command.
 - **Active each week**: people and agents that took at least one action, week by week.
-- **Keys Passport holds**: keys Passport holds against keys still found on people's computers.
 
 **By project** repeats them for each repository the agents worked in.
 
@@ -47,10 +46,9 @@ When you have more than one kind, filter with **All**, **On a computer**, **Clou
   They show up in Agents once they make their first request. See the [developer quickstart](/quickstart/developer) for what init changes. **Set one up by hand instead** lists every agent with its own steps.
 - **Claude.ai**: on the web, desktop, or phone. Passport shows the steps and the URL to paste.
 - **ChatGPT**: with developer mode. Passport shows the steps and the URL to paste.
-- **A cloud agent**: Codex cloud, Claude Code on the web, or GitHub Actions. Name it, pick where it runs, and Passport creates it with a token and the setup to paste there.
-- **A script or job**: an agent token for a script or CI job. Admins create these; anyone else is asked to ask an admin.
+- **A script or job**: an agent token for a script, CI job, or cloud agent. Admins create these; anyone else is asked to ask an admin.
 
-A new cloud agent or token opens on its own page, which shows the token once.
+A new token opens on its own page, which shows the token once. Cloud agents made before v1 stay listed with where they run.
 
 ## An agent's page
 

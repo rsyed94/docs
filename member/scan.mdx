@@ -25,14 +25,13 @@ Passport scan: 4 keys your agents can reach
   low     Stripe test key          ~/.config/stripe/config.toml
 
 Agents on this computer: Claude Code, Cursor
-Passport can hold these for your agents: Railway, GitHub, Stripe.
-Move them into Passport: passport keys move
+CLI keys on this computer, which stay: Railway, GitHub, Stripe.
 Nothing left this computer.
 
-Give agents access without these keys: npx passport-bridge@latest init
+Put your agents under your company's rules: npx passport-bridge@latest init
 ```
 
-The CLI keys near the end are the same list `passport status` shows, with the same step: `passport keys move`. Passport can't hold npm tokens yet, so an npm token in `~/.npmrc` gets its own line telling you to run `npm logout` when you aren't publishing.
+The CLI keys near the end are the same list `passport status` shows. They stay on your computer: Passport doesn't hold keys, so your CLIs keep their own sign-ins and Passport decides each command first ([Keys and passport exec](/member/cli-hook#keys-and-passport-exec)). An npm token in `~/.npmrc` gets its own line telling you to run `npm logout` when you aren't publishing.
 
 The last line is the next step: [`init`](/quickstart/developer) connects those apps through Passport so your agents don't need the keys. When the scan finds nothing and Passport isn't set up on your computer yet, it ends with `Turn on the guard for your agents: passport init` instead.
 
@@ -111,13 +110,13 @@ The command exits 0 when it finds nothing high or medium, and 5 when it does. Wi
       "location": "~/.railway/config.json",
       "holdable": true,
       "kept": false,
-      "step": "Move it into Passport: passport keys move railway"
+      "step": "Stays on this computer: Passport doesn't hold keys in v1."
     }
   ]
 }
 ```
 
-`keys` is the CLI keys Passport could hold (and npm's token), the list `passport status` shows; signed in, each has a `fingerprint`. `version` changes only when a field changes meaning. `unreadable` counts files the scan found but couldn't read.
+`keys` is the CLI keys found on this computer (and npm's token), the list `passport status` shows; signed in, each has a `fingerprint`. `version` changes only when a field changes meaning. `unreadable` counts files the scan found but couldn't read.
 
 ## Next
 
